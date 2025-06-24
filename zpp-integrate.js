@@ -22,7 +22,7 @@
     // Configuration
     const config = {
         phoneNumber: '912026134806',
-        message: 'नमस्कार! मला पुणे जिल्हा परिषदेच्या सेवांबद्दल माहिती हवी आहे. / Hello! I need information about Pune Zilla Panchayat services.',
+        message: 'नमस्कार! मला पुणे जिल्हा परिषदेच्या सेवांबद्दल माहिती हवी आहे. / Hello! I need information about Pune Zilla Parishad services.',
         qrApiUrl: 'https://bwipjs-api.metafloor.com/?bcid=qrcode&text=',
         position: 'bottom-right',
         autoShow: true,
@@ -30,7 +30,7 @@
         primaryColor: '#25D366',      // WhatsApp Green
         secondaryColor: '#128C7E',    // WhatsApp Dark Green
         poweredBy: {
-            text: 'Powered by WoW-Strategies',
+            text: 'Powered by WoW-Strategies Pvt. Ltd.',
             url: 'https://wow-strategies.com/'
         }
     };
@@ -88,7 +88,7 @@
                             🤖 पुणे जिप AI सहाय्यक
                         </div>
                         <div style="font-size:14px;opacity:0.95;line-height:1.4">
-                            पुणे जिल्हा परिषद | Pune Zilla Panchayat<br>
+                            पुणे जिल्हा परिषद | Pune Zilla Parishad<br>
                             <small>सेवा • पारदर्शकता • जबाबदारी</small>
                         </div>
                         <button onclick="toggleZPPModal()" style="position:absolute;top:50%;right:50px;transform:translateY(-50%);background:rgba(255,255,255,0.2);border:none;color:white;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;transition:all 0.3s ease;display:flex;align-items:center;justify-content:center" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">×</button>

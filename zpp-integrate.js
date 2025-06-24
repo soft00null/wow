@@ -1,81 +1,97 @@
 /**
- * Pune ZP AI WhatsApp Chatbot Widget
- * Embedded Widget for Government Website Integration
- * Version: 2.0.0
+ * Pune Zilla Panchayat AI WhatsApp Integration Widget
+ * File: zpp-integrate.js
+ * Version: 3.0.0
  * Date: 2025-06-24
  * Author: soft00null
+ * URL: https://wow-strategies.com/zpp-integrate.js
+ * 
+ * Optimized for Government Website Integration
+ * Features: AI Chatbot, QR Code, Bilingual Support, Analytics
  */
 
-(function() {
+(function(window, document, undefined) {
     'use strict';
     
-    // Widget Configuration
-    const PUNE_ZP_CONFIG = {
-        // WhatsApp Configuration
-        phoneNumber: '912026134806',
-        defaultMessage: 'नमस्कार! मला पुणे जिल्हा परिषदेच्या सेवांबद्दल माहिती हवी आहे। / Hello! I need information about Pune Zilla Panchayat services.',
+    // Prevent multiple initializations
+    if (window.ZPPWidget) {
+        console.warn('ZPP Widget already initialized');
+        return;
+    }
+    
+    // Configuration Object
+    const ZPP_CONFIG = {
+        // Core Settings
+        version: '3.0.0',
+        widget_id: 'zpp_widget_' + Date.now(),
         
-        // AI Chatbot Configuration
-        botName: 'पुणे जिप AI सहाय्यक / Pune ZP AI Assistant',
-        department: 'पुणे जिल्हा परिषद / Pune Zilla Panchayat',
+        // WhatsApp Configuration
+        phone: '912026134806',
+        message: {
+            marathi: 'नमस्कार! मला पुणे जिल्हा परिषदेच्या सेवांबद्दल माहिती हवी आहे.',
+            english: 'Hello! I need information about Pune Zilla Panchayat services.',
+            combined: 'नमस्कार! मला पुणे जिल्हा परिषदेच्या सेवांबद्दल माहिती हवी आहे. / Hello! I need information about Pune Zilla Panchayat services.'
+        },
+        
+        // UI Configuration
+        theme: {
+            primary: '#FF6B35',      // ZP Orange
+            secondary: '#2E8B57',    // Government Green
+            accent: '#1565C0',       // Blue
+            success: '#4CAF50',      // Green
+            warning: '#FF9800',      // Amber
+            error: '#F44336'         // Red
+        },
         
         // Widget Settings
         position: 'bottom-right',
-        primaryColor: '#FF6B35', // Pune ZP Orange
-        secondaryColor: '#2E8B57', // Government Green
-        language: 'bilingual', // Marathi + English
+        size: 'medium',
+        language: 'bilingual',
+        auto_show: true,
+        show_badge: true,
+        working_hours: true,
         
         // QR Code API
-        qrApiUrl: 'https://bwipjs-api.metafloor.com/?bcid=qrcode&text=',
+        qr_api: 'https://bwipjs-api.metafloor.com/?bcid=qrcode&text=',
         
-        // Features
-        showNotification: true,
-        autoShow: true,
-        showWorkingHours: true,
-        enableAnalytics: true,
-        
-        // Working Hours
-        workingHours: {
-            enabled: true,
+        // Working Hours (IST)
+        office_hours: {
             timezone: 'Asia/Kolkata',
-            schedule: {
-                monday: { start: '10:00', end: '18:00' },
-                tuesday: { start: '10:00', end: '18:00' },
-                wednesday: { start: '10:00', end: '18:00' },
-                thursday: { start: '10:00', end: '18:00' },
-                friday: { start: '10:00', end: '18:00' },
-                saturday: { start: '10:00', end: '14:00' },
-                sunday: { closed: true }
-            }
-        }
-    };
-
-    // Utility Functions
-    const Utils = {
-        // Create unique ID
-        generateId: () => 'pzp_' + Math.random().toString(36).substr(2, 9),
-        
-        // Check if element exists
-        elementExists: (id) => document.getElementById(id) !== null,
-        
-        // Get current time in IST
-        getCurrentTimeIST: () => {
-            return new Date().toLocaleString('en-IN', {
-                timeZone: 'Asia/Kolkata',
-                hour12: false
-            });
+            monday: { start: '10:00', end: '18:00' },
+            tuesday: { start: '10:00', end: '18:00' },
+            wednesday: { start: '10:00', end: '18:00' },
+            thursday: { start: '10:00', end: '18:00' },
+            friday: { start: '10:00', end: '18:00' },
+            saturday: { start: '10:00', end: '14:00' },
+            sunday: { closed: true }
         },
         
-        // Check working hours
-        isWorkingHours: () => {
-            if (!PUNE_ZP_CONFIG.workingHours.enabled) return true;
-            
+        // Analytics
+        analytics: {
+            enabled: true,
+            ga4: true,
+            custom: true
+        }
+    };
+    
+    // Utility Functions
+    const Utils = {
+        // Generate unique ID
+        uid: () => 'zpp_' + Math.random().toString(36).substr(2, 9),
+        
+        // Get current IST time
+        getISTTime: () => {
             const now = new Date();
-            const istTime = new Date(now.toLocaleString('en-US', {timeZone: 'Asia/Kolkata'}));
-            const day = istTime.toLocaleDateString('en-US', {weekday: 'lowercase'});
-            const currentTime = istTime.getHours() * 100 + istTime.getMinutes();
+            return new Date(now.toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
+        },
+        
+        // Check if office is open
+        isOfficeOpen: () => {
+            const now = Utils.getISTTime();
+            const day = now.toLocaleDateString('en-US', {weekday: 'lowercase'});
+            const currentTime = now.getHours() * 100 + now.getMinutes();
             
-            const schedule = PUNE_ZP_CONFIG.workingHours.schedule[day];
+            const schedule = ZPP_CONFIG.office_hours[day];
             if (!schedule || schedule.closed) return false;
             
             const startTime = parseInt(schedule.start.replace(':', ''));
@@ -84,513 +100,642 @@
             return currentTime >= startTime && currentTime <= endTime;
         },
         
+        // Format time for display
+        formatTime: (time24) => {
+            const [hours, minutes] = time24.split(':');
+            const hour = parseInt(hours);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const hour12 = hour % 12 || 12;
+            return `${hour12}:${minutes} ${ampm}`;
+        },
+        
         // Analytics tracking
         track: (event, data = {}) => {
-            if (!PUNE_ZP_CONFIG.enableAnalytics) return;
+            if (!ZPP_CONFIG.analytics.enabled) return;
             
             // Google Analytics 4
-            if (typeof gtag !== 'undefined') {
+            if (typeof gtag !== 'undefined' && ZPP_CONFIG.analytics.ga4) {
                 gtag('event', event, {
-                    event_category: 'Pune_ZP_WhatsApp_Widget',
-                    event_label: data.label || 'user_interaction',
-                    custom_parameter_1: data.extra || null
+                    event_category: 'ZPP_WhatsApp_Widget',
+                    event_label: data.label || 'interaction',
+                    custom_parameter_1: data.extra,
+                    page_title: document.title,
+                    page_location: window.location.href
                 });
             }
             
-            // Custom analytics
-            if (typeof _paq !== 'undefined') {
-                _paq.push(['trackEvent', 'Pune ZP Widget', event, data.label]);
+            // Custom analytics endpoint (if available)
+            if (ZPP_CONFIG.analytics.custom && window.dataLayer) {
+                window.dataLayer.push({
+                    event: 'zpp_widget_interaction',
+                    widget_event: event,
+                    widget_data: data,
+                    timestamp: new Date().toISOString()
+                });
             }
             
-            console.log('📊 Pune ZP Widget Analytics:', event, data);
+            // Console logging for debugging
+            console.log(`📊 ZPP Widget: ${event}`, data);
+        },
+        
+        // Device detection
+        isMobile: () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+        
+        // Create element helper
+        createElement: (tag, className, innerHTML) => {
+            const el = document.createElement(tag);
+            if (className) el.className = className;
+            if (innerHTML) el.innerHTML = innerHTML;
+            return el;
         }
     };
-
-    // Widget Class
-    class PuneZPWhatsAppWidget {
+    
+    // Main Widget Class
+    class ZPPWhatsAppWidget {
         constructor() {
-            this.widgetId = Utils.generateId();
             this.isOpen = false;
-            this.isWorkingHours = Utils.isWorkingHours();
+            this.isOfficeOpen = Utils.isOfficeOpen();
+            this.widgetId = Utils.uid();
             
-            // Prevent multiple instances
-            if (Utils.elementExists('pune-zp-whatsapp-widget')) {
-                console.warn('Pune ZP WhatsApp Widget already exists!');
-                return;
-            }
-            
+            // Initialize widget
             this.init();
         }
-
+        
         init() {
+            // Wait for DOM to be ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => this.setup());
+            } else {
+                this.setup();
+            }
+        }
+        
+        setup() {
             this.injectStyles();
             this.createWidget();
             this.bindEvents();
             this.setupAutoShow();
-            Utils.track('widget_initialized', { timestamp: Utils.getCurrentTimeIST() });
+            
+            Utils.track('widget_initialized', {
+                label: 'startup',
+                extra: {
+                    version: ZPP_CONFIG.version,
+                    office_open: this.isOfficeOpen,
+                    device: Utils.isMobile() ? 'mobile' : 'desktop'
+                }
+            });
         }
-
+        
         injectStyles() {
-            const styles = `
-                <style id="pune-zp-widget-styles">
-                    /* Pune ZP WhatsApp Widget Styles */
-                    .pzp-widget * {
-                        margin: 0;
-                        padding: 0;
-                        box-sizing: border-box;
-                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            const styleId = 'zpp-widget-styles';
+            if (document.getElementById(styleId)) return;
+            
+            const css = `
+                /* ZPP WhatsApp Widget Styles */
+                .zpp-widget * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+                }
+                
+                .zpp-widget {
+                    position: fixed;
+                    ${ZPP_CONFIG.position.includes('bottom') ? 'bottom' : 'top'}: 24px;
+                    ${ZPP_CONFIG.position.includes('right') ? 'right' : 'left'}: 24px;
+                    z-index: 2147483647;
+                    font-size: 14px;
+                    line-height: 1.4;
+                }
+                
+                .zpp-btn {
+                    width: 64px;
+                    height: 64px;
+                    background: linear-gradient(135deg, ${ZPP_CONFIG.theme.primary} 0%, ${ZPP_CONFIG.theme.secondary} 100%);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    box-shadow: 0 8px 32px rgba(255, 107, 53, 0.3);
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    position: relative;
+                    overflow: hidden;
+                    border: none;
+                    outline: none;
+                }
+                
+                .zpp-btn:hover {
+                    transform: scale(1.1);
+                    box-shadow: 0 12px 48px rgba(255, 107, 53, 0.4);
+                }
+                
+                .zpp-btn:active {
+                    transform: scale(0.95);
+                }
+                
+                .zpp-btn::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: radial-gradient(circle at center, rgba(255,255,255,0.3) 0%, transparent 70%);
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                }
+                
+                .zpp-btn:hover::before {
+                    opacity: 1;
+                }
+                
+                .zpp-icon {
+                    font-size: 28px;
+                    color: white;
+                    transition: transform 0.3s ease;
+                    z-index: 1;
+                }
+                
+                .zpp-btn:hover .zpp-icon {
+                    transform: rotate(15deg) scale(1.1);
+                }
+                
+                .zpp-badge {
+                    position: absolute;
+                    top: -6px;
+                    right: -6px;
+                    background: ${ZPP_CONFIG.theme.error};
+                    color: white;
+                    border-radius: 50%;
+                    width: 22px;
+                    height: 22px;
+                    font-size: 10px;
+                    font-weight: 700;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    animation: zpp-pulse 2s infinite;
+                    border: 2px solid white;
+                    box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3);
+                }
+                
+                @keyframes zpp-pulse {
+                    0%, 100% { transform: scale(1); opacity: 1; }
+                    50% { transform: scale(1.2); opacity: 0.8; }
+                }
+                
+                .zpp-modal {
+                    position: absolute;
+                    ${ZPP_CONFIG.position.includes('bottom') ? 'bottom' : 'top'}: 80px;
+                    ${ZPP_CONFIG.position.includes('right') ? 'right' : 'left'}: 0;
+                    width: 400px;
+                    max-width: calc(100vw - 32px);
+                    background: white;
+                    border-radius: 24px;
+                    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+                    transform: translateY(16px) scale(0.9);
+                    opacity: 0;
+                    visibility: hidden;
+                    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                    overflow: hidden;
+                    border: 1px solid rgba(0, 0, 0, 0.05);
+                }
+                
+                .zpp-modal.active {
+                    transform: translateY(0) scale(1);
+                    opacity: 1;
+                    visibility: visible;
+                }
+                
+                .zpp-header {
+                    background: linear-gradient(135deg, ${ZPP_CONFIG.theme.primary} 0%, ${ZPP_CONFIG.theme.secondary} 100%);
+                    color: white;
+                    padding: 24px;
+                    position: relative;
+                    overflow: hidden;
+                }
+                
+                .zpp-header::before {
+                    content: '';
+                    position: absolute;
+                    top: -50%;
+                    left: -50%;
+                    width: 200%;
+                    height: 200%;
+                    background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+                    background-size: 24px 24px;
+                    animation: zpp-float 20s linear infinite;
+                }
+                
+                @keyframes zpp-float {
+                    0% { transform: translate(0, 0); }
+                    100% { transform: translate(-24px, -24px); }
+                }
+                
+                .zpp-header-content {
+                    position: relative;
+                    z-index: 1;
+                }
+                
+                .zpp-title {
+                    font-size: 20px;
+                    font-weight: 700;
+                    margin-bottom: 8px;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                }
+                
+                .zpp-subtitle {
+                    font-size: 14px;
+                    opacity: 0.95;
+                    line-height: 1.5;
+                }
+                
+                .zpp-status {
+                    position: absolute;
+                    top: 20px;
+                    right: 20px;
+                    background: ${this.isOfficeOpen ? ZPP_CONFIG.theme.success : ZPP_CONFIG.theme.warning};
+                    color: white;
+                    padding: 6px 12px;
+                    border-radius: 16px;
+                    font-size: 11px;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+                
+                .zpp-close {
+                    position: absolute;
+                    top: 50%;
+                    right: 60px;
+                    transform: translateY(-50%);
+                    background: rgba(255, 255, 255, 0.2);
+                    border: none;
+                    color: white;
+                    width: 36px;
+                    height: 36px;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    font-size: 18px;
+                    transition: all 0.3s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    outline: none;
+                }
+                
+                .zpp-close:hover {
+                    background: rgba(255, 255, 255, 0.3);
+                    transform: translateY(-50%) rotate(90deg);
+                }
+                
+                .zpp-body {
+                    padding: 24px;
+                    background: #fafbfc;
+                }
+                
+                .zpp-options {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 16px;
+                    margin-bottom: 24px;
+                }
+                
+                .zpp-option {
+                    display: flex;
+                    align-items: center;
+                    gap: 16px;
+                    padding: 20px;
+                    background: white;
+                    border: 2px solid #e1e5e9;
+                    border-radius: 16px;
+                    text-decoration: none;
+                    color: #2c3e50;
+                    transition: all 0.3s ease;
+                    position: relative;
+                    overflow: hidden;
+                }
+                
+                .zpp-option::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: -100%;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.05), transparent);
+                    transition: left 0.6s ease;
+                }
+                
+                .zpp-option:hover {
+                    border-color: ${ZPP_CONFIG.theme.primary};
+                    background: #fff8f5;
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 32px rgba(255, 107, 53, 0.15);
+                }
+                
+                .zpp-option:hover::before {
+                    left: 100%;
+                }
+                
+                .zpp-option-icon {
+                    font-size: 32px;
+                    width: 48px;
+                    text-align: center;
+                    color: ${ZPP_CONFIG.theme.primary};
+                    flex-shrink: 0;
+                }
+                
+                .zpp-option-content h3 {
+                    font-size: 16px;
+                    font-weight: 600;
+                    color: #2c3e50;
+                    margin-bottom: 4px;
+                }
+                
+                .zpp-option-content p {
+                    font-size: 13px;
+                    color: #6c757d;
+                    line-height: 1.4;
+                    margin: 0;
+                }
+                
+                .zpp-qr-section {
+                    background: white;
+                    border-radius: 20px;
+                    padding: 24px;
+                    text-align: center;
+                    border: 2px solid #e1e5e9;
+                    position: relative;
+                    overflow: hidden;
+                }
+                
+                .zpp-qr-section::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: linear-gradient(45deg, transparent 49%, rgba(255, 107, 53, 0.02) 50%, transparent 51%);
+                    pointer-events: none;
+                }
+                
+                .zpp-qr-title {
+                    font-size: 16px;
+                    font-weight: 600;
+                    color: #2c3e50;
+                    margin-bottom: 16px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                }
+                
+                .zpp-qr-container {
+                    display: inline-block;
+                    padding: 16px;
+                    background: #f8f9fa;
+                    border-radius: 20px;
+                    transition: transform 0.3s ease;
+                    border: 3px dashed #dee2e6;
+                    position: relative;
+                }
+                
+                .zpp-qr-container:hover {
+                    transform: scale(1.05);
+                    border-color: ${ZPP_CONFIG.theme.primary};
+                    background: #fff8f5;
+                }
+                
+                .zpp-qr-code {
+                    width: 160px;
+                    height: 160px;
+                    border-radius: 12px;
+                    display: block;
+                    transition: all 0.3s ease;
+                }
+                
+                .zpp-qr-code:hover {
+                    transform: scale(1.02);
+                }
+                
+                .zpp-qr-instructions {
+                    font-size: 12px;
+                    color: #6c757d;
+                    margin-top: 16px;
+                    line-height: 1.5;
+                    max-width: 280px;
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+                
+                .zpp-footer {
+                    padding: 20px 24px;
+                    background: #f1f3f4;
+                    border-top: 1px solid #e1e5e9;
+                    text-align: center;
+                    font-size: 12px;
+                    color: #6c757d;
+                    line-height: 1.4;
+                }
+                
+                .zpp-footer strong {
+                    color: #2c3e50;
+                }
+                
+                /* Responsive Design */
+                @media (max-width: 480px) {
+                    .zpp-widget {
+                        ${ZPP_CONFIG.position.includes('right') ? 'right' : 'left'}: 16px;
+                        bottom: 16px;
                     }
                     
-                    .pzp-widget {
-                        position: fixed;
-                        ${PUNE_ZP_CONFIG.position.includes('bottom') ? 'bottom' : 'top'}: 20px;
-                        ${PUNE_ZP_CONFIG.position.includes('right') ? 'right' : 'left'}: 20px;
-                        z-index: 999999;
-                        font-size: 14px;
+                    .zpp-modal {
+                        width: calc(100vw - 32px);
+                        ${ZPP_CONFIG.position.includes('right') ? 'right' : 'left'}: -8px;
                     }
                     
-                    .pzp-button {
-                        width: 65px;
-                        height: 65px;
-                        background: linear-gradient(135deg, ${PUNE_ZP_CONFIG.primaryColor}, ${PUNE_ZP_CONFIG.secondaryColor});
-                        border-radius: 50%;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        cursor: pointer;
-                        box-shadow: 0 6px 25px rgba(255, 107, 53, 0.4);
-                        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                        position: relative;
-                        overflow: hidden;
-                        border: 3px solid rgba(255, 255, 255, 0.2);
+                    .zpp-btn {
+                        width: 56px;
+                        height: 56px;
                     }
                     
-                    .pzp-button:hover {
-                        transform: scale(1.1) rotate(5deg);
-                        box-shadow: 0 8px 30px rgba(255, 107, 53, 0.6);
+                    .zpp-icon {
+                        font-size: 24px;
                     }
                     
-                    .pzp-button::before {
-                        content: '';
-                        position: absolute;
-                        top: -50%;
-                        left: -50%;
-                        width: 200%;
-                        height: 200%;
-                        background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-                        transform: rotate(45deg);
-                        transition: all 0.5s;
-                        opacity: 0;
-                    }
-                    
-                    .pzp-button:hover::before {
-                        animation: shimmer 0.6s ease-in-out;
-                    }
-                    
-                    @keyframes shimmer {
-                        0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
-                        50% { opacity: 1; }
-                        100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
-                    }
-                    
-                    .pzp-icon {
-                        font-size: 30px;
-                        color: white;
-                        transition: transform 0.3s ease;
-                    }
-                    
-                    .pzp-button:hover .pzp-icon {
-                        transform: scale(1.1);
-                    }
-                    
-                    .pzp-badge {
-                        position: absolute;
-                        top: -8px;
-                        right: -8px;
-                        background: #FF3333;
-                        color: white;
-                        border-radius: 50%;
-                        width: 24px;
-                        height: 24px;
-                        font-size: 11px;
-                        font-weight: bold;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        animation: pulse 2s infinite;
-                        border: 2px solid white;
-                    }
-                    
-                    @keyframes pulse {
-                        0%, 100% { transform: scale(1); }
-                        50% { transform: scale(1.2); }
-                    }
-                    
-                    .pzp-modal {
-                        position: absolute;
-                        ${PUNE_ZP_CONFIG.position.includes('bottom') ? 'bottom' : 'top'}: 85px;
-                        ${PUNE_ZP_CONFIG.position.includes('right') ? 'right' : 'left'}: 0;
-                        width: 380px;
-                        max-width: calc(100vw - 30px);
-                        background: white;
-                        border-radius: 24px;
-                        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-                        transform: translateY(20px) scale(0.8);
-                        opacity: 0;
-                        visibility: hidden;
-                        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                        overflow: hidden;
-                        border: 1px solid rgba(255, 107, 53, 0.2);
-                    }
-                    
-                    .pzp-modal.active {
-                        transform: translateY(0) scale(1);
-                        opacity: 1;
-                        visibility: visible;
-                    }
-                    
-                    .pzp-header {
-                        background: linear-gradient(135deg, ${PUNE_ZP_CONFIG.primaryColor}, ${PUNE_ZP_CONFIG.secondaryColor});
-                        color: white;
-                        padding: 25px 20px;
-                        position: relative;
-                        overflow: hidden;
-                    }
-                    
-                    .pzp-header::before {
-                        content: '';
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        right: 0;
-                        bottom: 0;
-                        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="30" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="70" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="70" cy="80" r="2.5" fill="rgba(255,255,255,0.05)"/></svg>');
-                    }
-                    
-                    .pzp-header-content {
-                        position: relative;
-                        z-index: 1;
-                    }
-                    
-                    .pzp-title {
-                        font-size: 18px;
-                        font-weight: 700;
-                        margin-bottom: 8px;
-                        display: flex;
-                        align-items: center;
-                        gap: 10px;
-                    }
-                    
-                    .pzp-subtitle {
-                        font-size: 13px;
-                        opacity: 0.95;
-                        line-height: 1.4;
-                    }
-                    
-                    .pzp-status {
-                        position: absolute;
-                        top: 20px;
-                        right: 20px;
-                        background: ${Utils.isWorkingHours() ? '#4CAF50' : '#FF9800'};
-                        color: white;
-                        padding: 4px 8px;
-                        border-radius: 12px;
-                        font-size: 10px;
-                        font-weight: 600;
-                    }
-                    
-                    .pzp-close {
-                        position: absolute;
-                        top: 50%;
-                        right: 50px;
-                        transform: translateY(-50%);
-                        background: rgba(255, 255, 255, 0.2);
-                        border: none;
-                        color: white;
-                        width: 32px;
-                        height: 32px;
-                        border-radius: 50%;
-                        cursor: pointer;
-                        font-size: 16px;
-                        transition: all 0.3s ease;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                    }
-                    
-                    .pzp-close:hover {
-                        background: rgba(255, 255, 255, 0.3);
-                        transform: translateY(-50%) rotate(90deg);
-                    }
-                    
-                    .pzp-body {
-                        padding: 25px 20px;
-                        background: #fafafa;
-                    }
-                    
-                    .pzp-options {
-                        display: flex;
-                        flex-direction: column;
-                        gap: 12px;
-                        margin-bottom: 20px;
-                    }
-                    
-                    .pzp-option {
-                        display: flex;
-                        align-items: center;
-                        gap: 15px;
-                        padding: 16px;
-                        background: white;
-                        border: 2px solid #e0e0e0;
-                        border-radius: 16px;
-                        text-decoration: none;
-                        color: #333;
-                        transition: all 0.3s ease;
-                        position: relative;
-                        overflow: hidden;
-                    }
-                    
-                    .pzp-option::before {
-                        content: '';
-                        position: absolute;
-                        top: 0;
-                        left: -100%;
-                        width: 100%;
-                        height: 100%;
-                        background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.1), transparent);
-                        transition: left 0.5s;
-                    }
-                    
-                    .pzp-option:hover {
-                        border-color: ${PUNE_ZP_CONFIG.primaryColor};
-                        background: #fff8f5;
-                        transform: translateY(-3px);
-                        box-shadow: 0 8px 25px rgba(255, 107, 53, 0.15);
-                    }
-                    
-                    .pzp-option:hover::before {
-                        left: 100%;
-                    }
-                    
-                    .pzp-option-icon {
-                        font-size: 28px;
-                        width: 45px;
-                        text-align: center;
-                        color: ${PUNE_ZP_CONFIG.primaryColor};
-                    }
-                    
-                    .pzp-option-content h3 {
-                        font-size: 16px;
-                        font-weight: 600;
-                        color: #2c3e50;
-                        margin-bottom: 4px;
-                    }
-                    
-                    .pzp-option-content p {
-                        font-size: 12px;
-                        color: #7f8c8d;
-                        line-height: 1.3;
-                    }
-                    
-                    .pzp-qr-section {
-                        background: white;
-                        border-radius: 16px;
-                        padding: 20px;
-                        text-align: center;
-                        border: 1px solid #e0e0e0;
-                    }
-                    
-                    .pzp-qr-title {
-                        font-size: 14px;
-                        color: #555;
-                        margin-bottom: 15px;
-                        font-weight: 600;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        gap: 8px;
-                    }
-                    
-                    .pzp-qr-container {
-                        display: inline-block;
-                        padding: 15px;
-                        background: #f9f9f9;
-                        border-radius: 16px;
-                        transition: transform 0.3s ease;
-                        border: 2px dashed #ddd;
-                    }
-                    
-                    .pzp-qr-container:hover {
-                        transform: scale(1.05);
-                        border-color: ${PUNE_ZP_CONFIG.primaryColor};
-                    }
-                    
-                    .pzp-qr-code {
+                    .zpp-qr-code {
                         width: 140px;
                         height: 140px;
-                        border-radius: 12px;
-                        display: block;
                     }
                     
-                    .pzp-qr-instructions {
-                        font-size: 11px;
-                        color: #666;
-                        margin-top: 12px;
-                        line-height: 1.4;
+                    .zpp-header,
+                    .zpp-body {
+                        padding: 20px;
                     }
                     
-                    .pzp-footer {
-                        padding: 15px 20px;
-                        background: #f0f0f0;
-                        border-top: 1px solid #e0e0e0;
-                        text-align: center;
-                        font-size: 11px;
-                        color: #666;
+                    .zpp-option {
+                        padding: 16px;
                     }
                     
-                    /* Responsive Design */
-                    @media (max-width: 480px) {
-                        .pzp-widget {
-                            ${PUNE_ZP_CONFIG.position.includes('right') ? 'right' : 'left'}: 15px;
-                            bottom: 15px;
-                        }
-                        
-                        .pzp-modal {
-                            width: calc(100vw - 30px);
-                            ${PUNE_ZP_CONFIG.position.includes('right') ? 'right' : 'left'}: -10px;
-                        }
-                        
-                        .pzp-button {
-                            width: 60px;
-                            height: 60px;
-                        }
-                        
-                        .pzp-icon {
-                            font-size: 26px;
-                        }
-                        
-                        .pzp-qr-code {
-                            width: 120px;
-                            height: 120px;
-                        }
+                    .zpp-qr-section {
+                        padding: 20px;
+                    }
+                }
+                
+                /* High contrast mode support */
+                @media (prefers-contrast: high) {
+                    .zpp-modal {
+                        border: 2px solid #000;
                     }
                     
-                    /* Dark mode support */
-                    @media (prefers-color-scheme: dark) {
-                        .pzp-modal {
-                            background: #2c2c2c;
-                            border-color: #444;
-                        }
-                        
-                        .pzp-body {
-                            background: #333;
-                        }
-                        
-                        .pzp-option {
-                            background: #3c3c3c;
-                            border-color: #555;
-                            color: #fff;
-                        }
-                        
-                        .pzp-option:hover {
-                            background: #444;
-                        }
-                        
-                        .pzp-qr-section {
-                            background: #3c3c3c;
-                            border-color: #555;
-                        }
-                        
-                        .pzp-footer {
-                            background: #2a2a2a;
-                            border-color: #444;
-                            color: #aaa;
-                        }
+                    .zpp-option {
+                        border: 2px solid #000;
+                    }
+                }
+                
+                /* Reduced motion support */
+                @media (prefers-reduced-motion: reduce) {
+                    .zpp-btn,
+                    .zpp-modal,
+                    .zpp-option,
+                    .zpp-qr-container {
+                        transition: none !important;
                     }
                     
-                    /* Print styles */
-                    @media print {
-                        .pzp-widget {
-                            display: none !important;
-                        }
+                    .zpp-badge {
+                        animation: none !important;
                     }
-                </style>
+                }
+                
+                /* Print styles */
+                @media print {
+                    .zpp-widget {
+                        display: none !important;
+                    }
+                }
+                
+                /* Dark mode support */
+                @media (prefers-color-scheme: dark) {
+                    .zpp-modal {
+                        background: #2d3748;
+                        border-color: #4a5568;
+                    }
+                    
+                    .zpp-body {
+                        background: #374151;
+                    }
+                    
+                    .zpp-option {
+                        background: #4a5568;
+                        border-color: #6b7280;
+                        color: #f7fafc;
+                    }
+                    
+                    .zpp-option:hover {
+                        background: #5a6470;
+                    }
+                    
+                    .zpp-qr-section {
+                        background: #4a5568;
+                        border-color: #6b7280;
+                    }
+                    
+                    .zpp-footer {
+                        background: #374151;
+                        border-color: #4a5568;
+                        color: #d1d5db;
+                    }
+                    
+                    .zpp-qr-title {
+                        color: #f7fafc;
+                    }
+                }
             `;
             
-            document.head.insertAdjacentHTML('beforeend', styles);
+            const style = Utils.createElement('style', null, css);
+            style.id = styleId;
+            document.head.appendChild(style);
         }
-
+        
         createWidget() {
-            const workingStatus = this.isWorkingHours ? 
-                'ऑनलाइन / Online' : 
-                'ऑफलाइन / Offline';
+            const workingStatus = this.isOfficeOpen ? 
+                'सक्रिय / Active' : 
+                'बंद / Closed';
             
-            const whatsappUrl = `https://wa.me/${PUNE_ZP_CONFIG.phoneNumber}?text=${encodeURIComponent(PUNE_ZP_CONFIG.defaultMessage)}`;
-            const webWhatsappUrl = `https://web.whatsapp.com/send?phone=${PUNE_ZP_CONFIG.phoneNumber}&text=${encodeURIComponent(PUNE_ZP_CONFIG.defaultMessage)}`;
-            const qrCodeUrl = `${PUNE_ZP_CONFIG.qrApiUrl}${encodeURIComponent(whatsappUrl)}`;
+            const whatsappUrl = `https://wa.me/${ZPP_CONFIG.phone}?text=${encodeURIComponent(ZPP_CONFIG.message.combined)}`;
+            const webWhatsappUrl = `https://web.whatsapp.com/send?phone=${ZPP_CONFIG.phone}&text=${encodeURIComponent(ZPP_CONFIG.message.combined)}`;
+            const qrCodeUrl = `${ZPP_CONFIG.qr_api}${encodeURIComponent(whatsappUrl)}`;
+            
+            const workingHoursText = this.getWorkingHoursText();
             
             const widgetHTML = `
-                <div class="pzp-widget" id="pune-zp-whatsapp-widget">
-                    <div class="pzp-button" id="pzp-button">
-                        <div class="pzp-icon">💬</div>
-                        ${PUNE_ZP_CONFIG.showNotification ? '<div class="pzp-badge">AI</div>' : ''}
-                    </div>
+                <div class="zpp-widget" id="${this.widgetId}">
+                    <button class="zpp-btn" id="zpp-btn" aria-label="Open WhatsApp Chat">
+                        <div class="zpp-icon">💬</div>
+                        ${ZPP_CONFIG.show_badge ? '<div class="zpp-badge">AI</div>' : ''}
+                    </button>
                     
-                    <div class="pzp-modal" id="pzp-modal">
-                        <div class="pzp-header">
-                            <div class="pzp-status">${workingStatus}</div>
-                            <div class="pzp-header-content">
-                                <div class="pzp-title">
-                                    🤖 ${PUNE_ZP_CONFIG.botName}
+                    <div class="zpp-modal" id="zpp-modal" role="dialog" aria-labelledby="zpp-title" aria-modal="true">
+                        <div class="zpp-header">
+                            <div class="zpp-status">${workingStatus}</div>
+                            <div class="zpp-header-content">
+                                <div class="zpp-title" id="zpp-title">
+                                    🤖 पुणे जिप AI सहाय्यक
                                 </div>
-                                <div class="pzp-subtitle">
-                                    ${PUNE_ZP_CONFIG.department}<br>
-                                    सेवा, पारदर्शकता, जबाबदारी
+                                <div class="zpp-subtitle">
+                                    पुणे जिल्हा परिषद | Pune Zilla Panchayat<br>
+                                    सेवा • पारदर्शकता • जबाबदारी
                                 </div>
                             </div>
-                            <button class="pzp-close" id="pzp-close">✕</button>
+                            <button class="zpp-close" id="zpp-close" aria-label="Close dialog">×</button>
                         </div>
                         
-                        <div class="pzp-body">
-                            <div class="pzp-options">
-                                <a href="${whatsappUrl}" class="pzp-option" target="_blank" rel="noopener noreferrer">
-                                    <div class="pzp-option-icon">📱</div>
-                                    <div class="pzp-option-content">
-                                        <h3>मोबाइल चॅट / Mobile Chat</h3>
-                                        <p>तुमच्या फोनवर AI चॅटबॉटशी गप्पा मारा</p>
+                        <div class="zpp-body">
+                            <div class="zpp-options">
+                                <a href="${whatsappUrl}" class="zpp-option" target="_blank" rel="noopener noreferrer" aria-label="Start mobile chat">
+                                    <div class="zpp-option-icon">📱</div>
+                                    <div class="zpp-option-content">
+                                        <h3>मोबाइल चॅट | Mobile Chat</h3>
+                                        <p>तुमच्या स्मार्टफोनवर AI चॅटबॉटशी संवाद साधा</p>
                                     </div>
                                 </a>
                                 
-                                <a href="${webWhatsappUrl}" class="pzp-option" target="_blank" rel="noopener noreferrer">
-                                    <div class="pzp-option-icon">💻</div>
-                                    <div class="pzp-option-content">
-                                        <h3>वेब चॅट / Web Chat</h3>
-                                        <p>संगणकावर WhatsApp Web वापरा</p>
+                                <a href="${webWhatsappUrl}" class="zpp-option" target="_blank" rel="noopener noreferrer" aria-label="Start web chat">
+                                    <div class="zpp-option-icon">💻</div>
+                                    <div class="zpp-option-content">
+                                        <h3>वेब चॅट | Web Chat</h3>
+                                        <p>संगणकावर WhatsApp Web द्वारे चॅट करा</p>
                                     </div>
                                 </a>
                             </div>
                             
-                            <div class="pzp-qr-section">
-                                <div class="pzp-qr-title">
-                                    📷 QR कोड स्कॅन करा / Scan QR Code
+                            <div class="zpp-qr-section">
+                                <div class="zpp-qr-title">
+                                    📱 QR कोड स्कॅन करा | Scan QR Code
                                 </div>
-                                <div class="pzp-qr-container">
+                                <div class="zpp-qr-container">
                                     <img src="${qrCodeUrl}" 
                                          alt="Pune ZP WhatsApp QR Code" 
-                                         class="pzp-qr-code"
+                                         class="zpp-qr-code"
                                          loading="lazy"
                                          onerror="this.style.display='none';">
                                 </div>
-                                <div class="pzp-qr-instructions">
-                                    WhatsApp उघडा → Menu → QR स्कॅन करा<br>
-                                    Open WhatsApp → Menu → Scan QR Code
+                                <div class="zpp-qr-instructions">
+                                    <strong>स्कॅन करण्याचे टप्पे:</strong><br>
+                                    WhatsApp उघडा → मेनू → QR स्कॅन करा<br>
+                                    <em>Open WhatsApp → Menu → Scan QR Code</em>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="pzp-footer">
-                            🕒 कार्यालयीन वेळ: सोम-शुक्र 10:00-18:00, शनि 10:00-14:00<br>
-                            Working Hours: Mon-Fri 10AM-6PM, Sat 10AM-2PM
+                        <div class="zpp-footer">
+                            <strong>🕒 कार्यालयीन वेळ | Office Hours:</strong><br>
+                            ${workingHoursText}
                         </div>
                     </div>
                 </div>
@@ -598,19 +743,29 @@
             
             document.body.insertAdjacentHTML('beforeend', widgetHTML);
         }
-
-        bindEvents() {
-            const button = document.getElementById('pzp-button');
-            const modal = document.getElementById('pzp-modal');
-            const closeBtn = document.getElementById('pzp-close');
+        
+        getWorkingHoursText() {
+            const hours = ZPP_CONFIG.office_hours;
+            const weekdayHours = `${Utils.formatTime(hours.monday.start)} - ${Utils.formatTime(hours.monday.end)}`;
+            const saturdayHours = `${Utils.formatTime(hours.saturday.start)} - ${Utils.formatTime(hours.saturday.end)}`;
             
-            // Button click
+            return `सोम-शुक्र ${weekdayHours}, शनि ${saturdayHours}<br>Mon-Fri ${weekdayHours}, Sat ${saturdayHours}`;
+        }
+        
+        bindEvents() {
+            const button = document.getElementById('zpp-btn');
+            const modal = document.getElementById('zpp-modal');
+            const closeBtn = document.getElementById('zpp-close');
+            
+            if (!button || !modal || !closeBtn) return;
+            
+            // Button click event
             button.addEventListener('click', (e) => {
                 e.stopPropagation();
                 this.toggleModal();
             });
             
-            // Close button
+            // Close button event
             closeBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 this.closeModal();
@@ -630,25 +785,31 @@
                 }
             });
             
-            // Track link clicks
-            modal.querySelectorAll('.pzp-option').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    const linkType = link.href.includes('web.whatsapp.com') ? 'web_chat' : 'mobile_chat';
-                    Utils.track('chat_link_clicked', { 
+            // Track option clicks
+            modal.querySelectorAll('.zpp-option').forEach(option => {
+                option.addEventListener('click', (e) => {
+                    const linkType = option.href.includes('web.whatsapp.com') ? 'web_chat' : 'mobile_chat';
+                    Utils.track('chat_option_clicked', {
                         label: linkType,
-                        extra: Utils.getCurrentTimeIST()
+                        extra: {
+                            office_open: this.isOfficeOpen,
+                            timestamp: new Date().toISOString()
+                        }
                     });
                 });
             });
             
-            // Handle visibility change
+            // Handle page visibility changes
             document.addEventListener('visibilitychange', () => {
                 if (document.hidden && this.isOpen) {
                     this.closeModal();
                 }
             });
+            
+            // Handle window resize
+            window.addEventListener('resize', this.handleResize.bind(this));
         }
-
+        
         toggleModal() {
             if (this.isOpen) {
                 this.closeModal();
@@ -656,84 +817,123 @@
                 this.openModal();
             }
         }
-
+        
         openModal() {
-            const modal = document.getElementById('pzp-modal');
-            const button = document.getElementById('pzp-button');
-            const badge = button.querySelector('.pzp-badge');
+            const modal = document.getElementById('zpp-modal');
+            const button = document.getElementById('zpp-btn');
+            const badge = button?.querySelector('.zpp-badge');
+            
+            if (!modal || !button) return;
             
             modal.classList.add('active');
+            button.style.transform = 'scale(0.9)';
             this.isOpen = true;
-            button.style.transform = 'scale(0.95)';
             
             // Hide notification badge
             if (badge) {
                 badge.style.display = 'none';
             }
             
-            Utils.track('modal_opened', { 
+            // Focus management for accessibility
+            modal.focus();
+            
+            Utils.track('modal_opened', {
                 label: 'user_interaction',
-                extra: Utils.getCurrentTimeIST()
+                extra: {
+                    office_open: this.isOfficeOpen,
+                    device: Utils.isMobile() ? 'mobile' : 'desktop'
+                }
             });
         }
-
+        
         closeModal() {
-            const modal = document.getElementById('pzp-modal');
-            const button = document.getElementById('pzp-button');
+            const modal = document.getElementById('zpp-modal');
+            const button = document.getElementById('zpp-btn');
+            
+            if (!modal || !button) return;
             
             modal.classList.remove('active');
-            this.isOpen = false;
             button.style.transform = 'scale(1)';
+            this.isOpen = false;
             
-            Utils.track('modal_closed', { 
-                label: 'user_interaction',
-                extra: Utils.getCurrentTimeIST()
+            Utils.track('modal_closed', {
+                label: 'user_interaction'
             });
         }
-
+        
+        handleResize() {
+            if (Utils.isMobile()) {
+                const modal = document.getElementById('zpp-modal');
+                if (modal) {
+                    modal.style.width = `${window.innerWidth - 32}px`;
+                }
+            }
+        }
+        
         setupAutoShow() {
-            if (!PUNE_ZP_CONFIG.autoShow) return;
+            if (!ZPP_CONFIG.auto_show) return;
             
-            // Auto-show after 5 seconds for first-time visitors
-            const hasSeenWidget = localStorage.getItem('pune_zp_widget_seen');
+            // Check if user has seen the widget before
+            const hasSeenWidget = localStorage.getItem('zpp_widget_seen');
             
             if (!hasSeenWidget) {
                 setTimeout(() => {
-                    const button = document.getElementById('pzp-button');
+                    const button = document.getElementById('zpp-btn');
                     if (button && !this.isOpen) {
-                        button.style.animation = 'pulse 1.5s ease-in-out 3';
-                        localStorage.setItem('pune_zp_widget_seen', 'true');
-                        Utils.track('auto_show_triggered', { label: 'first_visit' });
+                        button.style.animation = 'zpp-pulse 1.5s ease-in-out 3';
+                        localStorage.setItem('zpp_widget_seen', 'true');
+                        
+                        Utils.track('auto_show_triggered', {
+                            label: 'first_visit',
+                            extra: { timestamp: new Date().toISOString() }
+                        });
                     }
                 }, 5000);
             }
         }
-    }
-
-    // Initialize Widget
-    function initPuneZPWidget() {
-        // Check if DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => {
-                new PuneZPWhatsAppWidget();
-            });
-        } else {
-            new PuneZPWhatsAppWidget();
+        
+        // Public API methods
+        show() { this.openModal(); }
+        hide() { this.closeModal(); }
+        toggle() { this.toggleModal(); }
+        destroy() {
+            const widget = document.getElementById(this.widgetId);
+            const styles = document.getElementById('zpp-widget-styles');
+            if (widget) widget.remove();
+            if (styles) styles.remove();
         }
     }
+    
+    // Initialize widget
+    function initializeZPPWidget() {
+        try {
+            const widget = new ZPPWhatsAppWidget();
+            
+            // Expose public API
+            window.ZPPWidget = {
+                instance: widget,
+                show: () => widget.show(),
+                hide: () => widget.hide(),
+                toggle: () => widget.toggle(),
+                destroy: () => widget.destroy(),
+                config: ZPP_CONFIG,
+                version: ZPP_CONFIG.version
+            };
+            
+            console.log(`🚀 ZPP WhatsApp Widget v${ZPP_CONFIG.version} loaded successfully!`);
+            
+        } catch (error) {
+            console.error('❌ ZPP Widget initialization failed:', error);
+        }
+    }
+    
+    // Auto-initialize when script loads
+    initializeZPPWidget();
+    
+})(window, document);
 
-    // Public API
-    window.PuneZPWidget = {
-        init: initPuneZPWidget,
-        config: PUNE_ZP_CONFIG,
-        version: '2.0.0'
-    };
-
-    // Auto-initialize
-    initPuneZPWidget();
-
-    console.log('🚀 Pune ZP AI WhatsApp Widget v2.0.0 initialized successfully!');
-    console.log('📱 Ready for government website integration');
-    console.log('🤖 AI Chatbot enabled for citizen services');
-
-})();
+// Performance monitoring
+if (typeof performance !== 'undefined' && performance.mark) {
+    performance.mark('zpp-widget-end');
+    performance.measure('zpp-widget-load-time', 'zpp-widget-start', 'zpp-widget-end');
+}

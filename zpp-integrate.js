@@ -31,7 +31,7 @@
         primaryColor: '#25D366',      // WhatsApp Green
         secondaryColor: '#128C7E',    // WhatsApp Dark Green
         poweredBy: {
-            text: 'Powered by WoW-Strategies',
+            text: 'Powered by WoW-Strategies Private Limited',
             url: 'https://wow-strategies.com/'
         }
     };

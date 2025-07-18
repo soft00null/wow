@@ -23,17 +23,8 @@
     const config = {
         phoneNumber: '912026134806',
         message: 'नमस्कार! मला पुणे जिल्हा परिषदेच्या सेवांबद्दल माहिती हवी आहे. / Hello! I need information about Pune Zilla Panchayat services.',
-        
         // Government CDN QR Code Image
-        qrCodeImage: 'https://cdnbbsr.s3waas.gov.in/s3be1df9a5d08724971f64a511e24fc904/uploads/2025/07/202507181659754709.png',
-        
-        // Fallback QR APIs (in case government CDN is unavailable)
-        qrApiUrl: 'https://bwipjs-api.metafloor.com/?bcid=qrcode&text=',
-        qrBackupApis: [
-            'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=',
-            'https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl='
-        ],
-        
+        qrImageUrl: 'https://cdnbbsr.s3waas.gov.in/s3be1df9a5d08724971f64a511e24fc904/uploads/2025/07/202507181659754709.png',
         position: 'bottom-right',
         autoShow: true,
         showNotification: true,
@@ -110,189 +101,60 @@
             `;
             qrContainer.appendChild(loadingDiv);
             
-            // Try to load government CDN QR code first
-            const tryLoadQR = () => {
-                const img = new Image();
-                img.crossOrigin = 'anonymous';
+            // Load government CDN QR code
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            
+            img.onload = () => {
+                // Success! Replace loading with image
+                qrContainer.innerHTML = '';
+                img.style.cssText = `
+                    width: 150px;
+                    height: 150px;
+                    border-radius: 12px;
+                    display: block;
+                    transition: all 0.3s ease;
+                `;
+                img.alt = 'Pune ZP WhatsApp QR Code';
+                qrContainer.appendChild(img);
                 
-                img.onload = () => {
-                    // Success! Replace loading with government QR image
-                    qrContainer.innerHTML = '';
-                    img.style.cssText = `
-                        width: 150px;
-                        height: 150px;
-                        border-radius: 12px;
-                        display: block;
-                        transition: all 0.3s ease;
-                        object-fit: contain;
-                        background: white;
-                        padding: 5px;
-                    `;
-                    img.alt = 'Pune Zilla Panchayat WhatsApp QR Code';
-                    img.title = 'Scan to chat with Pune ZP AI Assistant';
-                    qrContainer.appendChild(img);
-                    
-                    // Add hover effect
-                    qrContainer.addEventListener('mouseenter', () => {
-                        qrContainer.style.borderColor = config.primaryColor;
-                        qrContainer.style.background = '#f0f9f4';
-                        qrContainer.style.transform = 'scale(1.02)';
-                        img.style.transform = 'scale(1.02)';
-                    });
-                    
-                    qrContainer.addEventListener('mouseleave', () => {
-                        qrContainer.style.borderColor = '#dee2e6';
-                        qrContainer.style.background = '#f8f9fa';
-                        qrContainer.style.transform = 'scale(1)';
-                        img.style.transform = 'scale(1)';
-                    });
-                    
-                    // Add click to enlarge functionality
-                    qrContainer.addEventListener('click', () => {
-                        utils.showQRModal(img.src);
-                    });
-                    
-                    console.log('✅ Government CDN QR Code loaded successfully');
-                };
+                // Add hover effect
+                qrContainer.addEventListener('mouseenter', () => {
+                    qrContainer.style.borderColor = config.primaryColor;
+                    qrContainer.style.background = '#f0f9f4';
+                    qrContainer.style.transform = 'scale(1.02)';
+                    img.style.transform = 'scale(1.02)';
+                });
                 
-                img.onerror = () => {
-                    console.warn('❌ Government CDN QR Code failed, trying fallback...');
-                    utils.loadFallbackQR(qrContainer, whatsappUrl);
-                };
+                qrContainer.addEventListener('mouseleave', () => {
+                    qrContainer.style.borderColor = '#dee2e6';
+                    qrContainer.style.background = '#f8f9fa';
+                    qrContainer.style.transform = 'scale(1)';
+                    img.style.transform = 'scale(1)';
+                });
                 
-                // Load government CDN QR code
-                img.src = config.qrCodeImage;
+                console.log('✅ Government CDN QR Code loaded successfully');
             };
             
-            // Start loading
-            setTimeout(tryLoadQR, 100);
+            img.onerror = () => {
+                console.warn('❌ Government CDN QR Code failed to load, showing fallback');
+                // Fallback if government CDN fails
+                qrContainer.innerHTML = `
+                    <div style="text-align: center; color: #6c757d; font-size: 12px; padding: 20px;">
+                        <div style="font-size: 48px; margin-bottom: 10px;">📱</div>
+                        <div style="margin-bottom: 10px;"><strong>QR Code unavailable</strong></div>
+                        <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer" 
+                           style="color: ${config.primaryColor}; text-decoration: none; font-weight: 600; font-size: 14px;">
+                            Click here to chat directly
+                        </a>
+                    </div>
+                `;
+            };
+            
+            // Set the government CDN image source
+            img.src = config.qrImageUrl;
             
             return qrContainer;
-        },
-        
-        // Fallback QR code generation
-        loadFallbackQR: (container, whatsappUrl) => {
-            const encodedUrl = encodeURIComponent(whatsappUrl);
-            const fallbackUrls = [
-                `${config.qrApiUrl}${encodedUrl}`,
-                `${config.qrBackupApis[0]}${encodedUrl}`,
-                `${config.qrBackupApis[1]}${encodedUrl}`
-            ];
-            
-            let currentIndex = 0;
-            
-            const tryFallback = () => {
-                if (currentIndex >= fallbackUrls.length) {
-                    // All failed, show manual link
-                    container.innerHTML = `
-                        <div style="text-align: center; color: #6c757d; font-size: 12px; padding: 20px;">
-                            <div style="font-size: 48px; margin-bottom: 10px;">📱</div>
-                            <div style="margin-bottom: 10px;"><strong>QR Code unavailable</strong></div>
-                            <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer" 
-                               style="color: ${config.primaryColor}; text-decoration: none; font-weight: 600; font-size: 14px;">
-                                Click here to chat directly
-                            </a>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                const img = new Image();
-                img.crossOrigin = 'anonymous';
-                
-                img.onload = () => {
-                    container.innerHTML = '';
-                    img.style.cssText = `
-                        width: 150px;
-                        height: 150px;
-                        border-radius: 12px;
-                        display: block;
-                        transition: all 0.3s ease;
-                    `;
-                    img.alt = 'Pune ZP WhatsApp QR Code';
-                    container.appendChild(img);
-                    console.log(`✅ Fallback QR API ${currentIndex + 1} loaded successfully`);
-                };
-                
-                img.onerror = () => {
-                    console.warn(`❌ Fallback QR API ${currentIndex + 1} failed`);
-                    currentIndex++;
-                    setTimeout(tryFallback, 500);
-                };
-                
-                img.src = fallbackUrls[currentIndex];
-            };
-            
-            tryFallback();
-        },
-        
-        // Show QR code in modal for better visibility
-        showQRModal: (qrSrc) => {
-            const modal = document.createElement('div');
-            modal.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.8);
-                z-index: 9999999;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-            `;
-            
-            const qrImage = document.createElement('img');
-            qrImage.src = qrSrc;
-            qrImage.style.cssText = `
-                max-width: 90%;
-                max-height: 90%;
-                width: 300px;
-                height: 300px;
-                object-fit: contain;
-                background: white;
-                padding: 20px;
-                border-radius: 20px;
-                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            `;
-            
-            const closeText = document.createElement('div');
-            closeText.style.cssText = `
-                position: absolute;
-                top: 20px;
-                right: 20px;
-                color: white;
-                font-size: 24px;
-                cursor: pointer;
-                width: 40px;
-                height: 40px;
-                background: rgba(0, 0, 0, 0.5);
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-family: Arial, sans-serif;
-            `;
-            closeText.innerHTML = '×';
-            
-            modal.appendChild(qrImage);
-            modal.appendChild(closeText);
-            document.body.appendChild(modal);
-            
-            // Close on click
-            modal.addEventListener('click', () => {
-                document.body.removeChild(modal);
-            });
-            
-            // Close on escape key
-            const escHandler = (e) => {
-                if (e.key === 'Escape') {
-                    document.body.removeChild(modal);
-                    document.removeEventListener('keydown', escHandler);
-                }
-            };
-            document.addEventListener('keydown', escHandler);
         }
     };
     
@@ -355,8 +217,7 @@
                             <div style="font-size:12px;color:#6c757d;margin-top:16px;line-height:1.4;max-width:280px;margin-left:auto;margin-right:auto">
                                 <strong>स्कॅन करण्याचे टप्पे:</strong><br>
                                 WhatsApp उघडा → मेनू → QR स्कॅन करा<br>
-                                <em>Open WhatsApp → Menu → Scan QR Code</em><br>
-                                <small style="color:#999;font-style:italic">Click QR code to enlarge</small>
+                                <em>Open WhatsApp → Menu → Scan QR Code</em>
                             </div>
                         </div>
                     </div>
@@ -453,8 +314,8 @@
             }
             
             console.log('🚀 ZPP WhatsApp Widget v3.5.0 loaded successfully!');
-            console.log('🏛️ Using Government CDN QR Code');
-            console.log('📱 WordPress Compatible with Enhanced Features');
+            console.log('📱 Using Government CDN QR Code');
+            console.log('🖼️ QR Image: ' + config.qrImageUrl);
             console.log('⚡ Powered by WoW-Strategies Private Limited');
             
         } catch (error) {
@@ -548,10 +409,7 @@
                 qrContainer.appendChild(qrElement);
             }
         },
-        showQRModal: () => {
-            // Show QR in fullscreen modal
-            utils.showQRModal(config.qrCodeImage);
-        }
+        getQRImageUrl: () => config.qrImageUrl
     };
     
     // Initialize when DOM is ready

@@ -1,12 +1,12 @@
 /**
  * Pune Zilla Panchayat AI WhatsApp Integration Widget
  * File: zpp-integrate.js
- * Version: 3.3.0 - WhatsApp Colors
- * Date: 2025-06-24
+ * Version: 3.4.0 - WordPress Compatible
+ * Date: 2025-07-18
  * Author: soft00null
  * URL: https://wow-strategies.com/zpp-integrate.js
  * 
- * Simple, Elegant, Minimalistic yet Powerful
+ * WordPress Compatible with QR Code Fixes
  * Powered by WoW-Strategies Private Limited
  */
 
@@ -22,15 +22,21 @@
     // Configuration
     const config = {
         phoneNumber: '912026134806',
-        message: 'नमस्कार! मला पुणे जिल्हा परिषदेच्या सेवांबद्दल माहिती हवी आहे. / Hello! I need information about Pune Zilla Parishad services.',
+        message: 'नमस्कार! मला पुणे जिल्हा परिषदेच्या सेवांबद्दल माहिती हवी आहे. / Hello! I need information about Pune Zilla Panchayat services.',
         qrApiUrl: 'https://bwipjs-api.metafloor.com/?bcid=qrcode&text=',
+        // Backup QR APIs for WordPress compatibility
+        qrBackupApis: [
+            'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=',
+            'https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=',
+            'https://qr-generator.qrcode.studio/qr/custom?download=true&file=png&data='
+        ],
         position: 'bottom-right',
         autoShow: true,
         showNotification: true,
         primaryColor: '#25D366',      // WhatsApp Green
         secondaryColor: '#128C7E',    // WhatsApp Dark Green
         poweredBy: {
-            text: 'Powered by WoW-Strategies Pvt. Ltd.',
+            text: 'Powered by WoW-Strategies',
             url: 'https://wow-strategies.com/'
         }
     };
@@ -63,6 +69,120 @@
             } catch (error) {
                 return true; // Default to open if check fails
             }
+        },
+        
+        // Generate QR code URL with fallbacks
+        generateQRCode: (text) => {
+            const encodedText = encodeURIComponent(text);
+            return {
+                primary: `${config.qrApiUrl}${encodedText}`,
+                backup1: `${config.qrBackupApis[0]}${encodedText}`,
+                backup2: `${config.qrBackupApis[1]}${encodedText}`,
+                backup3: `${config.qrBackupApis[2]}${encodedText}`
+            };
+        },
+        
+        // Create QR code with multiple fallbacks
+        createQRCodeElement: (whatsappUrl) => {
+            const qrUrls = utils.generateQRCode(whatsappUrl);
+            let currentIndex = 0;
+            const urls = [qrUrls.primary, qrUrls.backup1, qrUrls.backup2, qrUrls.backup3];
+            
+            const qrContainer = document.createElement('div');
+            qrContainer.style.cssText = `
+                display: inline-block;
+                padding: 16px;
+                background: #f8f9fa;
+                border-radius: 16px;
+                border: 3px dashed #dee2e6;
+                transition: all 0.3s ease;
+                position: relative;
+                min-height: 182px;
+                min-width: 182px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            `;
+            
+            // Loading indicator
+            const loadingDiv = document.createElement('div');
+            loadingDiv.style.cssText = `
+                color: #6c757d;
+                font-size: 14px;
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            `;
+            loadingDiv.innerHTML = `
+                <div style="width: 30px; height: 30px; border: 3px solid #e9ecef; border-top: 3px solid ${config.primaryColor}; border-radius: 50%; animation: qrSpin 1s linear infinite;"></div>
+                <div>Loading QR Code...</div>
+            `;
+            qrContainer.appendChild(loadingDiv);
+            
+            // Try to load QR code
+            const tryLoadQR = () => {
+                if (currentIndex >= urls.length) {
+                    // All failed, show manual link
+                    qrContainer.innerHTML = `
+                        <div style="text-align: center; color: #6c757d; font-size: 12px; padding: 20px;">
+                            <div style="font-size: 48px; margin-bottom: 10px;">📱</div>
+                            <div style="margin-bottom: 10px;"><strong>QR Code unavailable</strong></div>
+                            <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer" 
+                               style="color: ${config.primaryColor}; text-decoration: none; font-weight: 600; font-size: 14px;">
+                                Click here to chat directly
+                            </a>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                
+                img.onload = () => {
+                    // Success! Replace loading with image
+                    qrContainer.innerHTML = '';
+                    img.style.cssText = `
+                        width: 150px;
+                        height: 150px;
+                        border-radius: 12px;
+                        display: block;
+                        transition: all 0.3s ease;
+                    `;
+                    img.alt = 'Pune ZP WhatsApp QR Code';
+                    qrContainer.appendChild(img);
+                    
+                    // Add hover effect
+                    qrContainer.addEventListener('mouseenter', () => {
+                        qrContainer.style.borderColor = config.primaryColor;
+                        qrContainer.style.background = '#f0f9f4';
+                        qrContainer.style.transform = 'scale(1.02)';
+                        img.style.transform = 'scale(1.02)';
+                    });
+                    
+                    qrContainer.addEventListener('mouseleave', () => {
+                        qrContainer.style.borderColor = '#dee2e6';
+                        qrContainer.style.background = '#f8f9fa';
+                        qrContainer.style.transform = 'scale(1)';
+                        img.style.transform = 'scale(1)';
+                    });
+                };
+                
+                img.onerror = () => {
+                    console.warn(`QR API ${currentIndex + 1} failed, trying next...`);
+                    currentIndex++;
+                    setTimeout(tryLoadQR, 500); // Delay before trying next
+                };
+                
+                img.src = urls[currentIndex];
+            };
+            
+            // Start loading
+            setTimeout(tryLoadQR, 100);
+            
+            return qrContainer;
         }
     };
     
@@ -71,6 +191,7 @@
         const isOfficeOpen = utils.isOfficeHours();
         const statusText = isOfficeOpen ? 'Online' : 'Offline';
         const statusColor = isOfficeOpen ? '#4CAF50' : '#FF9800';
+        const whatsappUrl = `https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(config.message)}`;
         
         const widgetHTML = `
             <div class="zpp-widget" style="position:fixed;${config.position.includes('bottom')?'bottom':'top'}:20px;${config.position.includes('right')?'right':'left'}:20px;z-index:999999;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
@@ -88,7 +209,7 @@
                             🤖 पुणे जिप AI सहाय्यक
                         </div>
                         <div style="font-size:14px;opacity:0.95;line-height:1.4">
-                            पुणे जिल्हा परिषद | Pune Zilla Parishad<br>
+                            पुणे जिल्हा परिषद | Pune Zilla Panchayat<br>
                             <small>सेवा • पारदर्शकता • जबाबदारी</small>
                         </div>
                         <button onclick="toggleZPPModal()" style="position:absolute;top:50%;right:50px;transform:translateY(-50%);background:rgba(255,255,255,0.2);border:none;color:white;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;transition:all 0.3s ease;display:flex;align-items:center;justify-content:center" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">×</button>
@@ -98,7 +219,7 @@
                     <div style="padding:24px">
                         <!-- Chat Options -->
                         <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:24px">
-                            <a href="https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(config.message)}" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;gap:16px;padding:18px;background:#f8f9fa;border:2px solid #e9ecef;border-radius:16px;text-decoration:none;color:#2c3e50;transition:all 0.3s ease;position:relative;overflow:hidden" onmouseover="this.style.borderColor='${config.primaryColor}';this.style.background='#f0f9f4';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='#e9ecef';this.style.background='#f8f9fa';this.style.transform='translateY(0)'">
+                            <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;gap:16px;padding:18px;background:#f8f9fa;border:2px solid #e9ecef;border-radius:16px;text-decoration:none;color:#2c3e50;transition:all 0.3s ease;position:relative;overflow:hidden" onmouseover="this.style.borderColor='${config.primaryColor}';this.style.background='#f0f9f4';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='#e9ecef';this.style.background='#f8f9fa';this.style.transform='translateY(0)'">
                                 <div style="font-size:28px;color:${config.primaryColor};width:44px;text-align:center">📱</div>
                                 <div>
                                     <div style="font-size:16px;font-weight:600;margin-bottom:3px;color:#2c3e50">मोबाइल चॅट | Mobile Chat</div>
@@ -120,9 +241,7 @@
                             <div style="font-size:16px;font-weight:600;color:#2c3e50;margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:8px">
                                 📱 QR कोड स्कॅन करा | Scan QR Code
                             </div>
-                            <div style="display:inline-block;padding:16px;background:#f8f9fa;border-radius:16px;border:3px dashed #dee2e6;transition:all 0.3s ease" onmouseover="this.style.borderColor='${config.primaryColor}';this.style.background='#f0f9f4';this.style.transform='scale(1.02)'" onmouseout="this.style.borderColor='#dee2e6';this.style.background='#f8f9fa';this.style.transform='scale(1)'">
-                                <img src="${config.qrApiUrl}${encodeURIComponent('https://wa.me/' + config.phoneNumber + '?text=' + config.message)}" alt="Pune ZP WhatsApp QR Code" style="width:150px;height:150px;border-radius:12px;display:block" loading="lazy" onerror="this.style.display='none'">
-                            </div>
+                            <div id="qr-code-container"></div>
                             <div style="font-size:12px;color:#6c757d;margin-top:16px;line-height:1.4;max-width:280px;margin-left:auto;margin-right:auto">
                                 <strong>स्कॅन करण्याचे टप्पे:</strong><br>
                                 WhatsApp उघडा → मेनू → QR स्कॅन करा<br>
@@ -145,6 +264,10 @@
                 @keyframes zppPulse { 
                     0%, 100% { transform: scale(1); opacity: 1; } 
                     50% { transform: scale(1.2); opacity: 0.8; } 
+                }
+                @keyframes qrSpin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
                 }
                 @media (max-width: 480px) { 
                     .zpp-modal { 
@@ -191,6 +314,16 @@
             // Insert widget HTML
             container.innerHTML = createWidget();
             
+            // Create QR code after DOM insertion
+            setTimeout(() => {
+                const qrContainer = document.getElementById('qr-code-container');
+                if (qrContainer) {
+                    const whatsappUrl = `https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(config.message)}`;
+                    const qrElement = utils.createQRCodeElement(whatsappUrl);
+                    qrContainer.appendChild(qrElement);
+                }
+            }, 100);
+            
             // Auto-show animation
             if (config.autoShow) {
                 setTimeout(() => {
@@ -208,8 +341,9 @@
                 }, 5000);
             }
             
-            console.log('🚀 ZPP WhatsApp Widget v3.3.0 loaded successfully!');
-            console.log('📱 Powered by WoW-Strategies Private Limited');
+            console.log('🚀 ZPP WhatsApp Widget v3.4.0 loaded successfully!');
+            console.log('📱 WordPress Compatible with QR Code Fixes');
+            console.log('⚡ Powered by WoW-Strategies Private Limited');
             
         } catch (error) {
             console.error('❌ ZPP Widget initialization failed:', error);
@@ -277,7 +411,7 @@
     
     // Public API
     window.ZPPWidget = {
-        version: '3.3.0',
+        version: '3.4.0',
         config: config,
         show: () => {
             const modal = document.getElementById('zppModal');
@@ -291,7 +425,17 @@
                 toggleZPPModal();
             }
         },
-        toggle: () => toggleZPPModal()
+        toggle: () => toggleZPPModal(),
+        refreshQR: () => {
+            // Manual QR refresh function
+            const qrContainer = document.getElementById('qr-code-container');
+            if (qrContainer) {
+                qrContainer.innerHTML = '';
+                const whatsappUrl = `https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(config.message)}`;
+                const qrElement = utils.createQRCodeElement(whatsappUrl);
+                qrContainer.appendChild(qrElement);
+            }
+        }
     };
     
     // Initialize when DOM is ready

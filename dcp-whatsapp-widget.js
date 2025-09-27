@@ -1,12 +1,12 @@
 /**
- * Divisional Commissioner Pune AI WhatsApp Integration Widget
- * File: dc-pune-integrate.js
- * Version: 4.0.0 - Professional Government Edition
+ * Divisional Commissioner Pune AI Chat Widget
+ * File: dc-pune-chat-widget.js
+ * Version: 5.0.0 - Professional Healthcare-Style Interface
  * Date: 2025-09-27
  * Author: soft00null
- * URL: https://wow-strategies.com/dc-pune-integrate.js
+ * URL: https://wow-strategies.com/dc-pune-chat-widget.js
  * 
- * WordPress Compatible with Enhanced UI/UX
+ * Healthcare-inspired UI with Docgram-style chat interface
  * Powered by WoW-Strategies Private Limited
  */
 
@@ -14,8 +14,8 @@
     'use strict';
     
     // Prevent multiple initializations
-    if (window.DCPuneWidget) {
-        console.warn('DC Pune Widget already initialized');
+    if (window.DCPuneChatWidget) {
+        console.warn('DC Pune Chat Widget already initialized');
         return;
     }
     
@@ -23,12 +23,12 @@
     const config = {
         phoneNumber: '919226556203',
         message: 'Hi! I need assistance from Divisional Commissioner Pune.',
-        qrCodeUrl: 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=',
         position: 'bottom-right',
         autoShow: true,
         autoPopupDelay: 3000,
-        primaryColor: '#25D366',
-        secondaryColor: '#075E54',
+        primaryColor: '#4F46E5', // Professional indigo
+        secondaryColor: '#6366F1',
+        accentColor: '#10B981', // Success green
         governmentColor: '#FF9933',
         poweredBy: {
             text: 'Powered by WoW-Strategies Private Limited',
@@ -36,707 +36,787 @@
         }
     };
     
-    // Utility functions
-    const utils = {
-        getCurrentISTTime: () => {
-            try {
-                const now = new Date();
-                return new Date(now.toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
-            } catch (error) {
-                return new Date();
-            }
-        },
-        
-        isOfficeHours: () => {
-            try {
-                const now = utils.getCurrentISTTime();
-                const day = now.getDay();
-                const hour = now.getHours();
-                const minute = now.getMinutes();
-                const currentTime = hour * 100 + minute;
-                
-                // Government office hours: Mon-Fri 10:00-17:30, Sat 10:00-14:00
-                if (day === 0) return false; // Sunday closed
-                if (day >= 1 && day <= 5) return currentTime >= 1000 && currentTime <= 1730;
-                if (day === 6) return currentTime >= 1000 && currentTime <= 1400;
-                
-                return false;
-            } catch (error) {
-                return true;
-            }
-        },
-        
-        generateQRCode: (phoneNumber, message) => {
-            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-            return `${config.qrCodeUrl}${encodeURIComponent(whatsappUrl)}`;
-        }
-    };
-    
     // Create widget HTML
     const createWidget = () => {
-        const isOfficeOpen = utils.isOfficeHours();
-        const statusText = isOfficeOpen ? 'Available' : 'After Hours';
-        const statusColor = isOfficeOpen ? '#4CAF50' : '#FF9800';
-        const whatsappUrl = `https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(config.message)}`;
-        const qrCodeImage = utils.generateQRCode(config.phoneNumber, config.message);
-        
         const widgetHTML = `
-            <div class="dc-widget" id="dcWidget">
-                <!-- Main Button -->
-                <div class="dc-button" id="dcButton">
-                    <div class="dc-button-inner">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
-                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.688"/>
+            <div class="dcw-container" id="dcwContainer">
+                <!-- Main Floating Button -->
+                <div class="dcw-floating-btn" id="dcwFloatingBtn">
+                    <div class="dcw-btn-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+                            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+                            <circle cx="12" cy="10" r="1"/>
+                            <circle cx="8" cy="10" r="1"/>
+                            <circle cx="16" cy="10" r="1"/>
                         </svg>
-                        <span class="dc-button-text">AI Assistant</span>
                     </div>
-                    <div class="dc-badge-ai">AI</div>
-                    <div class="dc-pulse-ring"></div>
+                    <div class="dcw-btn-badge">AI</div>
+                    <div class="dcw-btn-pulse"></div>
                 </div>
                 
-                <!-- Notification Bubble -->
-                <div class="dc-notification" id="dcNotification">
-                    <div class="dc-notification-close" onclick="DCPuneWidget.closeNotification()">×</div>
-                    <div class="dc-notification-avatar">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="${config.secondaryColor}">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
-                        </svg>
-                    </div>
-                    <div class="dc-notification-content">
-                        <div class="dc-notification-title">Divisional Commissioner Pune</div>
-                        <div class="dc-notification-message">
-                            👋 Hello! I'm your AI Assistant. Need help with government services? Click to chat!
+                <!-- Chat Bubble Notification -->
+                <div class="dcw-chat-bubble" id="dcwChatBubble">
+                    <div class="dcw-bubble-close" onclick="DCPuneChatWidget.closeBubble()">×</div>
+                    <div class="dcw-bubble-header">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%234F46E5'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E" alt="AI Assistant" class="dcw-bubble-avatar">
+                        <div class="dcw-bubble-info">
+                            <div class="dcw-bubble-name">DC Pune AI Assistant</div>
+                            <div class="dcw-bubble-status">
+                                <span class="dcw-status-dot"></span>
+                                Online 24/7
+                            </div>
                         </div>
                     </div>
+                    <div class="dcw-bubble-message">
+                        👋 Hi! I'm your AI Assistant for Divisional Commissioner Pune. I'm here 24/7 to help with government services, certificates, complaints, and more. How can I support you today?
+                    </div>
+                    <div class="dcw-bubble-actions">
+                        <button class="dcw-bubble-btn dcw-btn-primary" onclick="DCPuneChatWidget.open()">
+                            Start Chat
+                        </button>
+                        <button class="dcw-bubble-btn dcw-btn-secondary" onclick="DCPuneChatWidget.closeBubble()">
+                            Later
+                        </button>
+                    </div>
                 </div>
                 
-                <!-- Main Modal -->
-                <div class="dc-modal" id="dcModal">
-                    <div class="dc-modal-inner">
-                        <!-- Header -->
-                        <div class="dc-modal-header">
-                            <div class="dc-modal-header-content">
-                                <div class="dc-modal-logo">
-                                    <div class="dc-ashoka-chakra">
-                                        <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
-                                            <circle cx="12" cy="12" r="10" fill="none" stroke="white" stroke-width="2"/>
-                                            <circle cx="12" cy="12" r="2" fill="white"/>
-                                            <g transform="translate(12,12)">
-                                                ${Array.from({length: 24}, (_, i) => `
-                                                    <line x1="0" y1="-3" x2="0" y2="-8" stroke="white" stroke-width="1" transform="rotate(${i * 15})"/>
-                                                `).join('')}
-                                            </g>
-                                        </svg>
-                                    </div>
+                <!-- Main Chat Window -->
+                <div class="dcw-chat-window" id="dcwChatWindow">
+                    <div class="dcw-chat-container">
+                        <!-- Chat Header -->
+                        <div class="dcw-chat-header">
+                            <div class="dcw-header-left">
+                                <div class="dcw-header-avatar">
+                                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E" alt="DC Pune">
+                                    <span class="dcw-avatar-status"></span>
                                 </div>
-                                <div class="dc-modal-title-group">
-                                    <h3 class="dc-modal-title">Divisional Commissioner Pune</h3>
-                                    <div class="dc-modal-subtitle">AI-Powered Government Assistant</div>
-                                    <div class="dc-modal-status">
-                                        <span class="dc-status-indicator" style="background: ${statusColor}"></span>
-                                        <span class="dc-status-text">${statusText}</span>
-                                    </div>
+                                <div class="dcw-header-info">
+                                    <div class="dcw-header-title">Divisional Commissioner Pune</div>
+                                    <div class="dcw-header-subtitle">AI Assistant • Available 24/7</div>
                                 </div>
                             </div>
-                            <button class="dc-modal-close" onclick="DCPuneWidget.close()">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                                </svg>
-                            </button>
+                            <div class="dcw-header-actions">
+                                <button class="dcw-header-btn" onclick="DCPuneChatWidget.minimize()" title="Minimize">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M19 13H5v-2h14v2z"/>
+                                    </svg>
+                                </button>
+                                <button class="dcw-header-btn" onclick="DCPuneChatWidget.close()" title="Close">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         
-                        <!-- Body -->
-                        <div class="dc-modal-body">
-                            <!-- AI Features Section -->
-                            <div class="dc-ai-features">
-                                <div class="dc-ai-feature">
-                                    <div class="dc-ai-icon">🤖</div>
-                                    <div class="dc-ai-text">24/7 AI Support</div>
-                                </div>
-                                <div class="dc-ai-feature">
-                                    <div class="dc-ai-icon">🌐</div>
-                                    <div class="dc-ai-text">Multi-language</div>
-                                </div>
-                                <div class="dc-ai-feature">
-                                    <div class="dc-ai-icon">⚡</div>
-                                    <div class="dc-ai-text">Instant Response</div>
-                                </div>
+                        <!-- AI Capabilities Banner -->
+                        <div class="dcw-ai-banner">
+                            <div class="dcw-ai-feature">
+                                <span class="dcw-ai-icon">🤖</span>
+                                <span class="dcw-ai-label">AI Powered</span>
                             </div>
-                            
-                            <!-- Quick Actions -->
-                            <div class="dc-quick-actions">
-                                <h4 class="dc-section-title">Quick Services</h4>
-                                <div class="dc-action-grid">
-                                    <button class="dc-action-btn" onclick="DCPuneWidget.sendMessage('I need information about certificates')">
-                                        <span class="dc-action-icon">📜</span>
-                                        <span class="dc-action-label">Certificates</span>
-                                    </button>
-                                    <button class="dc-action-btn" onclick="DCPuneWidget.sendMessage('I want to register a complaint')">
-                                        <span class="dc-action-icon">📝</span>
-                                        <span class="dc-action-label">Complaints</span>
-                                    </button>
-                                    <button class="dc-action-btn" onclick="DCPuneWidget.sendMessage('I need help with land records')">
-                                        <span class="dc-action-icon">🏘️</span>
-                                        <span class="dc-action-label">Land Records</span>
-                                    </button>
-                                    <button class="dc-action-btn" onclick="DCPuneWidget.sendMessage('I want to track my application')">
-                                        <span class="dc-action-icon">📍</span>
-                                        <span class="dc-action-label">Track Status</span>
-                                    </button>
+                            <div class="dcw-ai-feature">
+                                <span class="dcw-ai-icon">🌐</span>
+                                <span class="dcw-ai-label">Multi-language</span>
+                            </div>
+                            <div class="dcw-ai-feature">
+                                <span class="dcw-ai-icon">⚡</span>
+                                <span class="dcw-ai-label">Instant Response</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Chat Messages Area -->
+                        <div class="dcw-chat-messages" id="dcwChatMessages">
+                            <div class="dcw-message dcw-message-bot">
+                                <div class="dcw-message-avatar">
+                                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%234F46E5'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E" alt="AI">
                                 </div>
-                            </div>
-                            
-                            <!-- Chat Options -->
-                            <div class="dc-chat-options">
-                                <a href="${whatsappUrl}" target="_blank" class="dc-chat-option dc-mobile-chat">
-                                    <div class="dc-chat-icon">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="${config.primaryColor}">
-                                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.688"/>
-                                        </svg>
+                                <div class="dcw-message-content">
+                                    <div class="dcw-message-bubble">
+                                        <p>Hello! I'm your AI Assistant for Divisional Commissioner Pune. 👋</p>
+                                        <p>I can help you with:</p>
+                                        <ul>
+                                            <li>📜 Certificates and Documents</li>
+                                            <li>📝 Complaint Registration</li>
+                                            <li>🏘️ Land Records</li>
+                                            <li>📍 Application Status Tracking</li>
+                                            <li>ℹ️ Government Schemes Information</li>
+                                        </ul>
+                                        <p>How may I assist you today?</p>
                                     </div>
-                                    <div class="dc-chat-info">
-                                        <div class="dc-chat-title">Chat on Mobile</div>
-                                        <div class="dc-chat-desc">Open WhatsApp on your phone</div>
-                                    </div>
-                                    <div class="dc-chat-arrow">→</div>
-                                </a>
-                                
-                                <a href="https://web.whatsapp.com/send?phone=${config.phoneNumber}&text=${encodeURIComponent(config.message)}" target="_blank" class="dc-chat-option dc-web-chat">
-                                    <div class="dc-chat-icon">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="${config.primaryColor}">
-                                            <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4V8h16v10z"/>
-                                        </svg>
-                                    </div>
-                                    <div class="dc-chat-info">
-                                        <div class="dc-chat-title">WhatsApp Web</div>
-                                        <div class="dc-chat-desc">Continue on computer</div>
-                                    </div>
-                                    <div class="dc-chat-arrow">→</div>
-                                </a>
-                            </div>
-                            
-                            <!-- QR Code Section -->
-                            <div class="dc-qr-section">
-                                <h4 class="dc-section-title">Scan QR Code</h4>
-                                <div class="dc-qr-container">
-                                    <img src="${qrCodeImage}" alt="WhatsApp QR Code" class="dc-qr-image"/>
-                                    <div class="dc-qr-instructions">
-                                        <div class="dc-qr-step">1. Open WhatsApp</div>
-                                        <div class="dc-qr-step">2. Tap Menu or Settings</div>
-                                        <div class="dc-qr-step">3. Select Web/Desktop</div>
-                                        <div class="dc-qr-step">4. Scan this code</div>
-                                    </div>
+                                    <div class="dcw-message-time">Just now</div>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Footer -->
-                        <div class="dc-modal-footer">
-                            <a href="${config.poweredBy.url}" target="_blank" class="dc-powered-by">
-                                ⚡ ${config.poweredBy.text}
-                            </a>
+                        <!-- Quick Actions -->
+                        <div class="dcw-quick-actions">
+                            <div class="dcw-quick-title">Quick Actions:</div>
+                            <div class="dcw-quick-buttons">
+                                <button class="dcw-quick-btn" onclick="DCPuneChatWidget.quickAction('Check Symptoms')">
+                                    <span class="dcw-quick-icon">📋</span>
+                                    <span class="dcw-quick-label">Check Status</span>
+                                </button>
+                                <button class="dcw-quick-btn" onclick="DCPuneChatWidget.quickAction('Find Doctors')">
+                                    <span class="dcw-quick-icon">🏛️</span>
+                                    <span class="dcw-quick-label">Find Services</span>
+                                </button>
+                                <button class="dcw-quick-btn" onclick="DCPuneChatWidget.quickAction('Book Appointment')">
+                                    <span class="dcw-quick-icon">📅</span>
+                                    <span class="dcw-quick-label">Book Appointment</span>
+                                </button>
+                                <button class="dcw-quick-btn" onclick="DCPuneChatWidget.quickAction('Get Help')">
+                                    <span class="dcw-quick-icon">🆘</span>
+                                    <span class="dcw-quick-label">Get Help</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Chat Input -->
+                        <div class="dcw-chat-input">
+                            <div class="dcw-input-wrapper">
+                                <input type="text" id="dcwChatInput" placeholder="Type your message here..." class="dcw-input-field">
+                                <button class="dcw-attach-btn" title="Attach file">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/>
+                                    </svg>
+                                </button>
+                                <button class="dcw-send-btn" onclick="DCPuneChatWidget.sendMessage()">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="dcw-input-footer">
+                                <a href="${config.poweredBy.url}" target="_blank" class="dcw-powered-link">
+                                    ⚡ ${config.poweredBy.text}
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             
             <style>
-                /* Base Styles */
-                .dc-widget * {
+                /* Global Styles */
+                .dcw-container * {
                     margin: 0;
                     padding: 0;
                     box-sizing: border-box;
-                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
                 }
                 
-                .dc-widget {
+                .dcw-container {
                     position: fixed;
                     bottom: 20px;
                     right: 20px;
-                    z-index: 999999;
+                    z-index: 9999;
                 }
                 
-                /* Main Button */
-                .dc-button {
-                    width: 68px;
-                    height: 68px;
+                /* Floating Button */
+                .dcw-floating-btn {
+                    width: 60px;
+                    height: 60px;
                     background: linear-gradient(135deg, ${config.primaryColor}, ${config.secondaryColor});
-                    border-radius: 50%;
+                    border-radius: 30px;
                     cursor: pointer;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.15), 0 8px 25px rgba(37,211,102,0.3);
-                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                    position: relative;
-                    overflow: visible;
-                    animation: dcButtonEntrance 0.6s ease-out;
-                }
-                
-                .dc-button:hover {
-                    transform: scale(1.08);
-                    box-shadow: 0 6px 20px rgba(0,0,0,0.2), 0 12px 35px rgba(37,211,102,0.4);
-                }
-                
-                .dc-button-inner {
-                    width: 100%;
-                    height: 100%;
+                    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3), 0 8px 24px rgba(0, 0, 0, 0.15);
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    flex-direction: column;
+                    position: relative;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    animation: dcwEntrance 0.5s ease-out;
                 }
                 
-                .dc-button-text {
-                    display: none;
+                .dcw-floating-btn:hover {
+                    transform: scale(1.05);
+                    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4), 0 12px 32px rgba(0, 0, 0, 0.2);
                 }
                 
-                .dc-badge-ai {
+                .dcw-floating-btn.hidden {
+                    transform: scale(0);
+                    opacity: 0;
+                }
+                
+                .dcw-btn-badge {
                     position: absolute;
-                    top: -4px;
-                    right: -4px;
-                    background: linear-gradient(135deg, #FF6B6B, #FF3838);
+                    top: -2px;
+                    right: -2px;
+                    background: #EF4444;
                     color: white;
-                    width: 24px;
-                    height: 24px;
+                    width: 20px;
+                    height: 20px;
                     border-radius: 50%;
-                    font-size: 10px;
+                    font-size: 9px;
                     font-weight: bold;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     border: 2px solid white;
-                    animation: dcPulse 2s infinite;
+                    animation: dcwPulse 2s infinite;
                 }
                 
-                .dc-pulse-ring {
+                .dcw-btn-pulse {
                     position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
                     width: 100%;
                     height: 100%;
                     border-radius: 50%;
                     border: 2px solid ${config.primaryColor};
-                    animation: dcRipple 2s infinite;
+                    animation: dcwRipple 2s infinite;
                 }
                 
-                /* Notification Bubble */
-                .dc-notification {
+                /* Chat Bubble */
+                .dcw-chat-bubble {
                     position: absolute;
-                    bottom: 85px;
+                    bottom: 75px;
                     right: 0;
+                    width: 320px;
                     background: white;
-                    border-radius: 12px;
-                    padding: 12px;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-                    width: 280px;
+                    border-radius: 16px;
+                    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
                     display: none;
-                    animation: dcSlideInRight 0.4s ease-out;
+                    animation: dcwSlideUp 0.3s ease-out;
+                    border: 1px solid #E5E7EB;
                 }
                 
-                .dc-notification.show {
-                    display: flex;
-                    gap: 12px;
+                .dcw-chat-bubble.show {
+                    display: block;
                 }
                 
-                .dc-notification-close {
+                .dcw-bubble-close {
                     position: absolute;
-                    top: 8px;
-                    right: 8px;
-                    width: 20px;
-                    height: 20px;
-                    background: #f0f0f0;
+                    top: 12px;
+                    right: 12px;
+                    width: 24px;
+                    height: 24px;
+                    background: #F3F4F6;
                     border-radius: 50%;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     cursor: pointer;
-                    font-size: 14px;
-                    color: #666;
+                    color: #6B7280;
+                    font-size: 16px;
+                    transition: all 0.2s;
                 }
                 
-                .dc-notification-avatar {
-                    flex-shrink: 0;
+                .dcw-bubble-close:hover {
+                    background: #E5E7EB;
+                    color: #374151;
+                }
+                
+                .dcw-bubble-header {
+                    padding: 16px;
+                    display: flex;
+                    gap: 12px;
+                    align-items: center;
+                    border-bottom: 1px solid #F3F4F6;
+                }
+                
+                .dcw-bubble-avatar {
                     width: 40px;
                     height: 40px;
-                    background: linear-gradient(135deg, ${config.governmentColor}, #138808);
                     border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
+                    background: #EEF2FF;
+                    padding: 4px;
                 }
                 
-                .dc-notification-avatar svg {
-                    fill: white;
-                }
-                
-                .dc-notification-content {
-                    flex: 1;
-                    padding-right: 20px;
-                }
-                
-                .dc-notification-title {
+                .dcw-bubble-name {
                     font-size: 14px;
                     font-weight: 600;
-                    color: #333;
-                    margin-bottom: 4px;
+                    color: #111827;
                 }
                 
-                .dc-notification-message {
-                    font-size: 13px;
-                    color: #666;
-                    line-height: 1.4;
-                }
-                
-                /* Modal */
-                .dc-modal {
-                    position: fixed;
-                    inset: 0;
-                    background: rgba(0, 0, 0, 0);
-                    display: none;
-                    align-items: center;
-                    justify-content: center;
-                    z-index: 999998;
-                    padding: 20px;
-                    transition: background 0.3s ease;
-                }
-                
-                .dc-modal.show {
+                .dcw-bubble-status {
+                    font-size: 12px;
+                    color: #6B7280;
                     display: flex;
-                    background: rgba(0, 0, 0, 0.6);
+                    align-items: center;
+                    gap: 4px;
+                    margin-top: 2px;
                 }
                 
-                .dc-modal-inner {
+                .dcw-status-dot {
+                    width: 8px;
+                    height: 8px;
+                    background: ${config.accentColor};
+                    border-radius: 50%;
+                    animation: dcwBlink 2s infinite;
+                }
+                
+                .dcw-bubble-message {
+                    padding: 16px;
+                    font-size: 14px;
+                    line-height: 1.5;
+                    color: #4B5563;
+                }
+                
+                .dcw-bubble-actions {
+                    padding: 16px;
+                    display: flex;
+                    gap: 8px;
+                    border-top: 1px solid #F3F4F6;
+                }
+                
+                .dcw-bubble-btn {
+                    flex: 1;
+                    padding: 10px 16px;
+                    border-radius: 8px;
+                    border: none;
+                    font-size: 14px;
+                    font-weight: 500;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                }
+                
+                .dcw-btn-primary {
+                    background: linear-gradient(135deg, ${config.primaryColor}, ${config.secondaryColor});
+                    color: white;
+                }
+                
+                .dcw-btn-primary:hover {
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+                }
+                
+                .dcw-btn-secondary {
+                    background: #F3F4F6;
+                    color: #6B7280;
+                }
+                
+                .dcw-btn-secondary:hover {
+                    background: #E5E7EB;
+                    color: #4B5563;
+                }
+                
+                /* Chat Window */
+                .dcw-chat-window {
+                    position: absolute;
+                    bottom: 0;
+                    right: 0;
+                    width: 380px;
+                    height: 600px;
                     background: white;
                     border-radius: 16px;
-                    width: 100%;
-                    max-width: 450px;
-                    max-height: 90vh;
+                    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+                    display: none;
+                    flex-direction: column;
                     overflow: hidden;
-                    transform: scale(0.9) translateY(20px);
-                    opacity: 0;
-                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                    animation: dcwSlideUp 0.3s ease-out;
+                    border: 1px solid #E5E7EB;
                 }
                 
-                .dc-modal.show .dc-modal-inner {
-                    transform: scale(1) translateY(0);
-                    opacity: 1;
-                }
-                
-                /* Modal Header */
-                .dc-modal-header {
-                    background: linear-gradient(135deg, ${config.secondaryColor}, ${config.primaryColor});
-                    color: white;
-                    padding: 24px;
-                    position: relative;
-                }
-                
-                .dc-modal-header-content {
+                .dcw-chat-window.show {
                     display: flex;
-                    gap: 16px;
-                    align-items: flex-start;
                 }
                 
-                .dc-modal-logo {
-                    flex-shrink: 0;
-                    width: 50px;
-                    height: 50px;
-                    background: rgba(255,255,255,0.2);
-                    border-radius: 12px;
+                .dcw-chat-container {
+                    display: flex;
+                    flex-direction: column;
+                    height: 100%;
+                }
+                
+                /* Chat Header */
+                .dcw-chat-header {
+                    padding: 16px;
+                    background: linear-gradient(135deg, ${config.primaryColor}, ${config.secondaryColor});
+                    color: white;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+                
+                .dcw-header-left {
+                    display: flex;
+                    gap: 12px;
+                    align-items: center;
+                }
+                
+                .dcw-header-avatar {
+                    width: 40px;
+                    height: 40px;
+                    background: rgba(255, 255, 255, 0.2);
+                    border-radius: 50%;
+                    position: relative;
+                    padding: 4px;
+                }
+                
+                .dcw-avatar-status {
+                    position: absolute;
+                    bottom: 0;
+                    right: 0;
+                    width: 12px;
+                    height: 12px;
+                    background: ${config.accentColor};
+                    border-radius: 50%;
+                    border: 2px solid white;
+                }
+                
+                .dcw-header-title {
+                    font-size: 15px;
+                    font-weight: 600;
+                }
+                
+                .dcw-header-subtitle {
+                    font-size: 12px;
+                    opacity: 0.9;
+                    margin-top: 2px;
+                }
+                
+                .dcw-header-actions {
+                    display: flex;
+                    gap: 8px;
+                }
+                
+                .dcw-header-btn {
+                    width: 32px;
+                    height: 32px;
+                    background: rgba(255, 255, 255, 0.2);
+                    border: none;
+                    border-radius: 50%;
+                    color: white;
+                    cursor: pointer;
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    transition: all 0.2s;
                 }
                 
-                .dc-modal-title-group {
-                    flex: 1;
+                .dcw-header-btn:hover {
+                    background: rgba(255, 255, 255, 0.3);
                 }
                 
-                .dc-modal-title {
-                    font-size: 18px;
-                    font-weight: 600;
-                    margin-bottom: 4px;
+                /* AI Banner */
+                .dcw-ai-banner {
+                    padding: 12px;
+                    background: linear-gradient(to right, #EEF2FF, #DBEAFE);
+                    display: flex;
+                    justify-content: space-around;
+                    border-bottom: 1px solid #E5E7EB;
                 }
                 
-                .dc-modal-subtitle {
-                    font-size: 13px;
-                    opacity: 0.9;
-                    margin-bottom: 8px;
-                }
-                
-                .dc-modal-status {
+                .dcw-ai-feature {
                     display: flex;
                     align-items: center;
                     gap: 6px;
                     font-size: 12px;
-                }
-                
-                .dc-status-indicator {
-                    width: 8px;
-                    height: 8px;
-                    border-radius: 50%;
-                    animation: dcBlink 2s infinite;
-                }
-                
-                .dc-modal-close {
-                    position: absolute;
-                    top: 20px;
-                    right: 20px;
-                    background: rgba(255,255,255,0.2);
-                    border: none;
-                    width: 36px;
-                    height: 36px;
-                    border-radius: 50%;
-                    cursor: pointer;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    transition: all 0.3s ease;
-                }
-                
-                .dc-modal-close:hover {
-                    background: rgba(255,255,255,0.3);
-                    transform: scale(1.1);
-                }
-                
-                /* Modal Body */
-                .dc-modal-body {
-                    padding: 24px;
-                    overflow-y: auto;
-                    max-height: calc(90vh - 200px);
-                }
-                
-                /* AI Features */
-                .dc-ai-features {
-                    display: flex;
-                    gap: 12px;
-                    margin-bottom: 24px;
-                    padding: 16px;
-                    background: linear-gradient(135deg, #f0f9ff, #e6f7ff);
-                    border-radius: 12px;
-                    border: 1px solid #91d5ff;
-                }
-                
-                .dc-ai-feature {
-                    flex: 1;
-                    text-align: center;
-                }
-                
-                .dc-ai-icon {
-                    font-size: 24px;
-                    margin-bottom: 4px;
-                }
-                
-                .dc-ai-text {
-                    font-size: 11px;
-                    color: #1890ff;
-                    font-weight: 600;
-                }
-                
-                /* Section Title */
-                .dc-section-title {
-                    font-size: 14px;
-                    font-weight: 600;
-                    color: #333;
-                    margin-bottom: 12px;
-                }
-                
-                /* Quick Actions */
-                .dc-quick-actions {
-                    margin-bottom: 24px;
-                }
-                
-                .dc-action-grid {
-                    display: grid;
-                    grid-template-columns: repeat(2, 1fr);
-                    gap: 12px;
-                }
-                
-                .dc-action-btn {
-                    background: #f8f9fa;
-                    border: 2px solid #e9ecef;
-                    border-radius: 12px;
-                    padding: 12px;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                }
-                
-                .dc-action-btn:hover {
-                    background: #e9ecef;
-                    border-color: ${config.primaryColor};
-                    transform: translateY(-2px);
-                }
-                
-                .dc-action-icon {
-                    font-size: 20px;
-                }
-                
-                .dc-action-label {
-                    font-size: 13px;
-                    color: #333;
+                    color: #4B5563;
                     font-weight: 500;
                 }
                 
-                /* Chat Options */
-                .dc-chat-options {
+                .dcw-ai-icon {
+                    font-size: 16px;
+                }
+                
+                /* Chat Messages */
+                .dcw-chat-messages {
+                    flex: 1;
+                    overflow-y: auto;
+                    padding: 16px;
+                    background: #FAFAFA;
+                }
+                
+                .dcw-message {
+                    display: flex;
+                    gap: 12px;
+                    margin-bottom: 16px;
+                    animation: dcwFadeIn 0.3s ease-out;
+                }
+                
+                .dcw-message-bot {
+                    flex-direction: row;
+                }
+                
+                .dcw-message-user {
+                    flex-direction: row-reverse;
+                }
+                
+                .dcw-message-avatar {
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    background: #EEF2FF;
+                    flex-shrink: 0;
+                    padding: 4px;
+                }
+                
+                .dcw-message-user .dcw-message-avatar {
+                    background: #F0FDF4;
+                }
+                
+                .dcw-message-content {
+                    max-width: 70%;
+                }
+                
+                .dcw-message-bubble {
+                    background: white;
+                    padding: 12px 16px;
+                    border-radius: 12px;
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    font-size: 14px;
+                    line-height: 1.5;
+                    color: #374151;
+                }
+                
+                .dcw-message-bubble p {
+                    margin-bottom: 8px;
+                }
+                
+                .dcw-message-bubble p:last-child {
+                    margin-bottom: 0;
+                }
+                
+                .dcw-message-bubble ul {
+                    margin: 8px 0;
+                    padding-left: 20px;
+                }
+                
+                .dcw-message-bubble li {
+                    margin: 4px 0;
+                }
+                
+                .dcw-message-user .dcw-message-bubble {
+                    background: linear-gradient(135deg, ${config.primaryColor}, ${config.secondaryColor});
+                    color: white;
+                }
+                
+                .dcw-message-time {
+                    font-size: 11px;
+                    color: #9CA3AF;
+                    margin-top: 4px;
+                }
+                
+                /* Quick Actions */
+                .dcw-quick-actions {
+                    padding: 12px;
+                    background: white;
+                    border-top: 1px solid #E5E7EB;
+                }
+                
+                .dcw-quick-title {
+                    font-size: 12px;
+                    color: #6B7280;
+                    margin-bottom: 8px;
+                    font-weight: 500;
+                }
+                
+                .dcw-quick-buttons {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 8px;
+                }
+                
+                .dcw-quick-btn {
+                    padding: 8px;
+                    background: #F3F4F6;
+                    border: 1px solid #E5E7EB;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    transition: all 0.2s;
                     display: flex;
                     flex-direction: column;
-                    gap: 12px;
-                    margin-bottom: 24px;
-                }
-                
-                .dc-chat-option {
-                    display: flex;
                     align-items: center;
-                    gap: 12px;
-                    padding: 16px;
-                    background: #f8f9fa;
-                    border: 2px solid #e9ecef;
-                    border-radius: 12px;
-                    text-decoration: none;
-                    transition: all 0.3s ease;
+                    gap: 4px;
                 }
                 
-                .dc-chat-option:hover {
-                    background: #e8f5e9;
+                .dcw-quick-btn:hover {
+                    background: #EEF2FF;
                     border-color: ${config.primaryColor};
-                    transform: translateX(4px);
+                    transform: translateY(-1px);
                 }
                 
-                .dc-chat-icon {
-                    width: 40px;
-                    height: 40px;
-                    background: white;
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-                
-                .dc-chat-info {
-                    flex: 1;
-                }
-                
-                .dc-chat-title {
-                    font-size: 14px;
-                    font-weight: 600;
-                    color: #333;
-                    margin-bottom: 2px;
-                }
-                
-                .dc-chat-desc {
-                    font-size: 12px;
-                    color: #666;
-                }
-                
-                .dc-chat-arrow {
-                    color: #999;
+                .dcw-quick-icon {
                     font-size: 20px;
                 }
                 
-                /* QR Section */
-                .dc-qr-section {
-                    background: #f8f9fa;
-                    border-radius: 12px;
-                    padding: 16px;
-                }
-                
-                .dc-qr-container {
-                    display: flex;
-                    gap: 16px;
-                    align-items: center;
-                }
-                
-                .dc-qr-image {
-                    width: 120px;
-                    height: 120px;
-                    border-radius: 8px;
-                    border: 2px solid #e9ecef;
-                }
-                
-                .dc-qr-instructions {
-                    flex: 1;
-                }
-                
-                .dc-qr-step {
-                    font-size: 12px;
-                    color: #666;
-                    padding: 4px 0;
-                }
-                
-                /* Footer */
-                .dc-modal-footer {
-                    padding: 16px;
-                    background: #f8f9fa;
-                    border-top: 1px solid #e9ecef;
+                .dcw-quick-label {
+                    font-size: 10px;
+                    color: #4B5563;
                     text-align: center;
                 }
                 
-                .dc-powered-by {
-                    font-size: 12px;
-                    color: #666;
-                    text-decoration: none;
-                    transition: color 0.3s ease;
+                /* Chat Input */
+                .dcw-chat-input {
+                    padding: 12px;
+                    background: white;
+                    border-top: 1px solid #E5E7EB;
                 }
                 
-                .dc-powered-by:hover {
+                .dcw-input-wrapper {
+                    display: flex;
+                    gap: 8px;
+                    align-items: center;
+                    background: #F3F4F6;
+                    border-radius: 24px;
+                    padding: 4px;
+                }
+                
+                .dcw-input-field {
+                    flex: 1;
+                    background: transparent;
+                    border: none;
+                    outline: none;
+                    padding: 8px 12px;
+                    font-size: 14px;
+                    color: #374151;
+                }
+                
+                .dcw-input-field::placeholder {
+                    color: #9CA3AF;
+                }
+                
+                .dcw-attach-btn,
+                .dcw-send-btn {
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    border: none;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.2s;
+                }
+                
+                .dcw-attach-btn {
+                    background: transparent;
+                    color: #6B7280;
+                }
+                
+                .dcw-attach-btn:hover {
+                    background: #E5E7EB;
+                }
+                
+                .dcw-send-btn {
+                    background: linear-gradient(135deg, ${config.primaryColor}, ${config.secondaryColor});
+                    color: white;
+                }
+                
+                .dcw-send-btn:hover {
+                    transform: scale(1.1);
+                }
+                
+                .dcw-input-footer {
+                    text-align: center;
+                    margin-top: 8px;
+                }
+                
+                .dcw-powered-link {
+                    font-size: 11px;
+                    color: #9CA3AF;
+                    text-decoration: none;
+                    transition: color 0.2s;
+                }
+                
+                .dcw-powered-link:hover {
                     color: ${config.primaryColor};
                 }
                 
                 /* Animations */
-                @keyframes dcButtonEntrance {
-                    0% { transform: scale(0) rotate(180deg); opacity: 0; }
-                    50% { transform: scale(1.2) rotate(360deg); }
-                    100% { transform: scale(1) rotate(360deg); opacity: 1; }
+                @keyframes dcwEntrance {
+                    0% {
+                        transform: scale(0) rotate(180deg);
+                        opacity: 0;
+                    }
+                    100% {
+                        transform: scale(1) rotate(0);
+                        opacity: 1;
+                    }
                 }
                 
-                @keyframes dcPulse {
-                    0%, 100% { transform: scale(1); }
-                    50% { transform: scale(1.1); }
+                @keyframes dcwPulse {
+                    0%, 100% {
+                        transform: scale(1);
+                    }
+                    50% {
+                        transform: scale(1.1);
+                    }
                 }
                 
-                @keyframes dcRipple {
-                    0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-                    100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+                @keyframes dcwRipple {
+                    0% {
+                        transform: scale(1);
+                        opacity: 1;
+                    }
+                    100% {
+                        transform: scale(1.5);
+                        opacity: 0;
+                    }
                 }
                 
-                @keyframes dcSlideInRight {
-                    0% { transform: translateX(100%); opacity: 0; }
-                    100% { transform: translateX(0); opacity: 1; }
+                @keyframes dcwSlideUp {
+                    0% {
+                        transform: translateY(20px);
+                        opacity: 0;
+                    }
+                    100% {
+                        transform: translateY(0);
+                        opacity: 1;
+                    }
                 }
                 
-                @keyframes dcBlink {
-                    0%, 100% { opacity: 1; }
-                    50% { opacity: 0.5; }
+                @keyframes dcwFadeIn {
+                    0% {
+                        opacity: 0;
+                        transform: translateY(10px);
+                    }
+                    100% {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+                
+                @keyframes dcwBlink {
+                    0%, 100% {
+                        opacity: 1;
+                    }
+                    50% {
+                        opacity: 0.5;
+                    }
                 }
                 
                 /* Responsive */
-                @media (max-width: 480px) {
-                    .dc-modal-inner {
-                        max-width: 100%;
-                        max-height: 100vh;
+                @media (max-width: 420px) {
+                    .dcw-chat-bubble {
+                        width: calc(100vw - 40px);
+                        right: -10px;
+                    }
+                    
+                    .dcw-chat-window {
+                        width: 100vw;
+                        height: 100vh;
+                        bottom: 0;
+                        right: 0;
                         border-radius: 0;
                     }
                     
-                    .dc-notification {
-                        width: calc(100vw - 100px);
-                    }
-                    
-                    .dc-action-grid {
-                        grid-template-columns: 1fr;
-                    }
-                    
-                    .dc-qr-container {
-                        flex-direction: column;
-                        text-align: center;
+                    .dcw-quick-buttons {
+                        grid-template-columns: repeat(2, 1fr);
                     }
                 }
                 
-                /* Print styles */
+                /* Scrollbar Styling */
+                .dcw-chat-messages::-webkit-scrollbar {
+                    width: 6px;
+                }
+                
+                .dcw-chat-messages::-webkit-scrollbar-track {
+                    background: #F3F4F6;
+                }
+                
+                .dcw-chat-messages::-webkit-scrollbar-thumb {
+                    background: #D1D5DB;
+                    border-radius: 3px;
+                }
+                
+                .dcw-chat-messages::-webkit-scrollbar-thumb:hover {
+                    background: #9CA3AF;
+                }
+                
+                /* Print */
                 @media print {
-                    .dc-widget {
+                    .dcw-container {
                         display: none !important;
                     }
                 }
@@ -750,10 +830,10 @@
     const initWidget = () => {
         try {
             // Create container
-            let container = document.getElementById('dc-pune-widget');
+            let container = document.getElementById('dc-pune-chat-widget');
             if (!container) {
                 container = document.createElement('div');
-                container.id = 'dc-pune-widget';
+                container.id = 'dc-pune-chat-widget';
                 document.body.appendChild(container);
             }
             
@@ -761,90 +841,137 @@
             container.innerHTML = createWidget();
             
             // Setup event listeners
-            const button = document.getElementById('dcButton');
-            const modal = document.getElementById('dcModal');
-            const notification = document.getElementById('dcNotification');
+            const floatingBtn = document.getElementById('dcwFloatingBtn');
+            const chatBubble = document.getElementById('dcwChatBubble');
+            const chatWindow = document.getElementById('dcwChatWindow');
+            const chatInput = document.getElementById('dcwChatInput');
             
-            // Button click
-            button.addEventListener('click', () => {
-                DCPuneWidget.toggle();
-            });
-            
-            // Click outside to close
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    DCPuneWidget.close();
+            // Floating button click
+            floatingBtn.addEventListener('click', () => {
+                if (chatWindow.classList.contains('show')) {
+                    DCPuneChatWidget.close();
+                } else if (chatBubble.classList.contains('show')) {
+                    chatBubble.classList.remove('show');
+                    DCPuneChatWidget.open();
+                } else {
+                    DCPuneChatWidget.open();
                 }
             });
             
-            // Escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && modal.classList.contains('show')) {
-                    DCPuneWidget.close();
+            // Enter key to send message
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    DCPuneChatWidget.sendMessage();
                 }
             });
             
-            // Auto show notification
+            // Auto show notification bubble
             if (config.autoShow) {
                 setTimeout(() => {
-                    notification.classList.add('show');
-                    
-                    // Auto hide after 10 seconds
-                    setTimeout(() => {
-                        notification.classList.remove('show');
-                    }, 10000);
+                    if (!chatWindow.classList.contains('show')) {
+                        chatBubble.classList.add('show');
+                    }
                 }, config.autoPopupDelay);
             }
             
-            console.log('✅ DC Pune Widget v4.0.0 initialized successfully!');
+            console.log('✅ DC Pune Chat Widget v5.0.0 initialized successfully!');
             console.log('⚡ Powered by WoW-Strategies Private Limited');
             
         } catch (error) {
-            console.error('❌ DC Pune Widget initialization failed:', error);
+            console.error('❌ DC Pune Chat Widget initialization failed:', error);
         }
     };
     
     // Public API
-    window.DCPuneWidget = {
-        version: '4.0.0',
+    window.DCPuneChatWidget = {
+        version: '5.0.0',
         config: config,
         
         open: () => {
-            const modal = document.getElementById('dcModal');
-            if (modal) {
-                modal.classList.add('show');
-                document.getElementById('dcNotification').classList.remove('show');
-            }
+            const chatWindow = document.getElementById('dcwChatWindow');
+            const chatBubble = document.getElementById('dcwChatBubble');
+            const floatingBtn = document.getElementById('dcwFloatingBtn');
+            
+            chatBubble.classList.remove('show');
+            chatWindow.classList.add('show');
+            floatingBtn.classList.add('hidden');
         },
         
         close: () => {
-            const modal = document.getElementById('dcModal');
-            if (modal) {
-                modal.classList.remove('show');
-            }
+            const chatWindow = document.getElementById('dcwChatWindow');
+            const floatingBtn = document.getElementById('dcwFloatingBtn');
+            
+            chatWindow.classList.remove('show');
+            floatingBtn.classList.remove('hidden');
         },
         
-        toggle: () => {
-            const modal = document.getElementById('dcModal');
-            if (modal) {
-                if (modal.classList.contains('show')) {
-                    DCPuneWidget.close();
-                } else {
-                    DCPuneWidget.open();
-                }
-            }
+        minimize: () => {
+            DCPuneChatWidget.close();
         },
         
-        closeNotification: () => {
-            const notification = document.getElementById('dcNotification');
-            if (notification) {
-                notification.classList.remove('show');
-            }
+        closeBubble: () => {
+            const chatBubble = document.getElementById('dcwChatBubble');
+            chatBubble.classList.remove('show');
         },
         
-        sendMessage: (message) => {
-            const url = `https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(message)}`;
-            window.open(url, '_blank');
+        sendMessage: () => {
+            const input = document.getElementById('dcwChatInput');
+            const messagesContainer = document.getElementById('dcwChatMessages');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            const userMessageHTML = `
+                <div class="dcw-message dcw-message-user">
+                    <div class="dcw-message-avatar">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%2310B981'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E" alt="User">
+                    </div>
+                    <div class="dcw-message-content">
+                        <div class="dcw-message-bubble">${message}</div>
+                        <div class="dcw-message-time">Just now</div>
+                    </div>
+                </div>
+            `;
+            
+            messagesContainer.insertAdjacentHTML('beforeend', userMessageHTML);
+            input.value = '';
+            
+            // Scroll to bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // Simulate bot response
+            setTimeout(() => {
+                const botMessageHTML = `
+                    <div class="dcw-message dcw-message-bot">
+                        <div class="dcw-message-avatar">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%234F46E5'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E" alt="AI">
+                        </div>
+                        <div class="dcw-message-content">
+                            <div class="dcw-message-bubble">
+                                Thank you for your message. I'm processing your request and will connect you with the right information shortly. For immediate assistance, you can also reach us on WhatsApp.
+                            </div>
+                            <div class="dcw-message-time">Just now</div>
+                        </div>
+                    </div>
+                `;
+                
+                messagesContainer.insertAdjacentHTML('beforeend', botMessageHTML);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                
+                // Open WhatsApp after delay
+                setTimeout(() => {
+                    const whatsappUrl = `https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(message)}`;
+                    window.open(whatsappUrl, '_blank');
+                }, 1500);
+            }, 1000);
+        },
+        
+        quickAction: (action) => {
+            const input = document.getElementById('dcwChatInput');
+            input.value = action;
+            DCPuneChatWidget.sendMessage();
         }
     };
     

@@ -1,653 +1,539 @@
 /**
- * Divisional Commissioner Pune - AI WhatsApp Integration Widget
- * Version: 1.0.0
+ * Divisional Commissioner, Pune - AI WhatsApp Assistant Widget
+ * File: zpp-whatsapp-widget.js
+ * Version: 1.0.0 (DivComm Edition)
  * Date: 2025-09-27
- * Author: soft00null (refactored for Divisional Commissioner Pune)
- * Base Inspiration: ZPP Widget (earlier version), redesigned for Govt Professional UI
- * 
- * Powered by WoW-Strategies Private Limited
- * https://wow-strategies.com/
+ * Author: soft00null (adapted for Divisional Commissioner, Pune)
+ * Base Inspiration: ZPP Widget v3.5.0
  *
- * Features:
- *  - Glass morph translucent panel with subtle shadows
- *  - Bilingual (Marathi / English) toggle
- *  - Quick action pill buttons (accessible)
- *  - Dynamic + fallback QR code (API based)
- *  - AI emphasis animations & pulsing nudge
- *  - Office hours highlighting (configurable)
- *  - Auto-first-popup + repeat nudge (non-intrusive)
- *  - Public API: DCWidget.show(), hide(), toggle(), refreshQR(), setLanguage(lang)
- *  - No external library dependency
+ * WhatsApp Redirect: https://wa.me/919226556203?text=Hi
+ * Secondary Reference: WoW-Strategies Pvt. Ltd.
+ *
+ * Purpose:
+ *  - Provide a trustworthy, citizen-friendly AI help entry point
+ *  - Offer structured, intent-aligned quick actions
+ *  - Maintain Government credibility (solid colors, accessible, no transparency)
+ *  - Encourage citizens to use WhatsApp for deeper AI-powered assistance
+ *
+ * Accessibility:
+ *  - Keyboard operable (Enter/Space on launcher, Esc to close)
+ *  - ARIA roles & labels
+ *  - Focus trap inside modal
+ *
+ * Public API:
+ *  window.DivCommWidget.show()
+ *  window.DivCommWidget.hide()
+ *  window.DivCommWidget.toggle()
+ *  window.DivCommWidget.refreshQR()
+ *  window.DivCommWidget.setConfig(partialConfigObject)
+ *
+ * NOTE: Replace placeholder logo (config.logoUrl) with an official hosted asset.
  */
-(function() {
+
+(function () {
     'use strict';
 
-    if (window.DCWidget) {
-        console.warn('DC WhatsApp Widget already initialized');
+    if (window.DivCommWidget) {
+        console.warn('[DivCommWidget] Already initialized.');
         return;
     }
 
     const config = {
-        entityName: 'Divisional Commissioner, Pune',
         phoneNumber: '919226556203',
-        defaultMessageMarathi: 'नमस्कार! मला विभागीय आयुक्त कार्यालयाच्या सेवांबद्दल माहिती हवी आहे.',
-        defaultMessageEnglish: 'Hello! I need information about the Divisional Commissioner office services.',
-        whatsappBaseText: 'Hi',
-        position: 'bottom-right',          // bottom-right | bottom-left | top-right | top-left
-        autoShowAfterMs: 4000,             // First automatic popup delay
-        nudgeEveryMs: 35000,               // Nudge pulse interval if not opened yet (0 to disable)
-        maxNudges: 4,
-        showNotificationBadge: true,
-        showOfficeStatus: true,
-        officeHours: {                     // 24h times local to Asia/Kolkata
-            monFri: ['10:00','18:00'],
-            sat: ['10:00','14:00'],
-            sun: null
-        },
-        colors: {
-            primary: '#25D366',            // WhatsApp Green
-            accent: '#3D33A0',             // Deep Indigo accent
-            accentSoft: '#5a4bd3',
-            bubbleBg: 'rgba(255,255,255,0.86)',
-            border: 'rgba(70,60,160,0.25)',
-            shadow: '0 12px 48px -12px rgba(40,45,85,0.25),0 4px 16px -4px rgba(40,45,85,0.15)'
-        },
+        baseMessage: 'Hi',
+        defaultGreeting: '👋 नमस्कार! | Hello!\nमी विभागीय आयुक्त पुणे कार्यालयाचा अधिकृत AI सहाय्यक आहे. कशा प्रकारे मदत करू शकतो? / I am the Official AI Assistant of the Divisional Commissioner, Pune. How may I help you today?',
+        intents: [
+            { id: 'info', label: 'Information', hi: 'माहिती', message: 'Information about divisions / विभागीय माहिती' },
+            { id: 'services', label: 'Services / RTS', hi: 'सेवा / RTS', message: 'List of citizen services / नागरिक सेवा सूची' },
+            { id: 'grievance', label: 'Grievances', hi: 'तक्रारी', message: 'File a grievance / तक्रार नोंद' },
+            { id: 'account', label: 'My Account', hi: 'माझे खाते', message: 'Account status / खाते स्थिती' },
+        ],
+        position: 'bottom-right',
+        autoOpenDelay: 3500,
+        showTooltipDelay: 6000,
+        tooltipText: 'Need help? Ask me on WhatsApp!',
+        primaryColor: '#136F34',         // Deep governance green
+        primaryColorSoft: '#1f8743',
+        accentColor: '#25D366',          // WhatsApp accent
+        surfaceColor: '#FFFFFF',
+        borderColor: '#E2E6EA',
+        bubbleColor: '#F5F7F9',
+        aiBadgeColor: '#D81B60',
+        logoUrl: 'https://example.gov.in/logo.png', // TODO: Replace with official logo
+        qrImageUrl: '', // If empty, uses auto-generated fallback QR
         poweredBy: {
-            text: 'Powered by WoW-Strategies Private Limited',
+            text: 'Powered by AI • WoW-Strategies Pvt. Ltd.',
             url: 'https://wow-strategies.com/'
         },
-        language: 'mr', // 'mr' (Marathi) or 'en'
-        qr: {
-            // If you have a static government-approved QR image, set staticImageUrl.
-            staticImageUrl: '',
-            size: 200,
-            cornerRadius: 20
-        },
-        accessibility: {
-            langMap: { mr: 'mr-IN', en: 'en-IN' }
-        }
+        typingDelay: 1200,
+        localStorageKey: 'divcomm_widget_seen'
     };
 
     const state = {
-        hasOpened: false,
-        nudges: 0,
-        isQRVisible: true,
-        currentLang: config.language
+        isOpen: false,
+        focusableEls: [],
+        lastFocusedBeforeOpen: null,
+        tooltipTimeout: null,
+        autoOpenTimeout: null,
+        typingTimeout: null,
+        hasShownGreeting: false
     };
 
     const utils = {
-        safeLocalSet: (k,v) => {
-            try { localStorage.setItem(k,v); } catch(_) {}
+        encodeWA(msg) {
+            return encodeURIComponent(msg);
         },
-        safeLocalGet: k => {
-            try { return localStorage.getItem(k); } catch(_) { return null; }
+        buildWAUrl(customMessage) {
+            return `https://wa.me/${config.phoneNumber}?text=${utils.encodeWA(customMessage || config.baseMessage)}`;
         },
-        isBackdropSupported: () => CSS && CSS.supports && (CSS.supports('backdrop-filter: blur(10px)') || CSS.supports('-webkit-backdrop-filter: blur(10px)')),
-        nowIST: () => {
-            const now = new Date();
-            try {
-                return new Date(now.toLocaleString('en-US',{ timeZone: 'Asia/Kolkata' }));
-            } catch {
-                return now;
+        createEl(tag, opts = {}) {
+            const el = document.createElement(tag);
+            if (opts.className) el.className = opts.className;
+            if (opts.html) el.innerHTML = opts.html;
+            if (opts.attrs) {
+                Object.entries(opts.attrs).forEach(([k, v]) => el.setAttribute(k, v));
             }
+            if (opts.style) Object.assign(el.style, opts.style);
+            return el;
         },
-        officeStatus: () => {
-            if (!config.showOfficeStatus) return { open: true, label: '' };
-            const d = utils.nowIST();
-            const day = d.getDay(); // 0 Sun
-            const hh = d.getHours().toString().padStart(2,'0');
-            const mm = d.getMinutes().toString().padStart(2,'0');
-            const timeStr = `${hh}:${mm}`;
-            const within = (range) => {
-                if (!range) return false;
-                const [start,end] = range;
-                return timeStr >= start && timeStr <= end;
-            };
-            let open = false;
-            if (day === 0) open = within(config.officeHours.sun);
-            else if (day >=1 && day <=5) open = within(config.officeHours.monFri);
-            else if (day ===6) open = within(config.officeHours.sat);
-            return {
-                open,
-                label: open ? (state.currentLang==='mr' ? 'कार्यरत' : 'Online') : (state.currentLang==='mr' ? 'बंद (कार्यालयीन वेळा)' : 'Offline (Office Hours)')
-            };
-        },
-        langText: {
-            mr: {
-                aiAssistantIntro: "🤖 नमस्कार! मी विभागीय आयुक्त कार्यालयाचा AI सहाय्यक आहे. सेवा, तक्रारी, प्रमाणपत्रे, योजना, दर व संपर्क यांसाठी मी मदत करू शकतो. कृपया एक पर्याय निवडा किंवा WhatsApp वर संदेश पाठवा.",
-                quick: {
-                    grievance: "लोकअर्ज / तक्रार",
-                    schemes: "शासकीय योजना",
-                    certificates: "प्रमाणपत्रे व परवाने",
-                    rti: "माहितीचा अधिकार (RTI)",
-                    contacts: "अधिकाऱ्यांचा संपर्क",
-                    emergency: "आपत्कालीन मदत",
-                    statistics: "जिल्हा आकडेवारी"
-                },
-                showQR: "QR दाखवा",
-                hideQR: "QR लपवा",
-                scanToStart: "प्रारंभ करण्यासाठी स्कॅन करा",
-                openOnPhone: "तुमच्या फोनवर उघडा",
-                langSwitch: "English",
-                mobileChat: "मोबाइल WhatsApp चॅट",
-                webChat: "वेब WhatsApp चॅट",
-                close: "बंद",
-                aiBadge: "AI",
-                govtNotice: "शासन सेवा सहाय्य"
-            },
-            en: {
-                aiAssistantIntro: "🤖 Hello! I am the AI Assistant for the Divisional Commissioner Office, Pune. I can help with services, grievances, certificates, schemes, RTI, contacts & more. Select an option or start WhatsApp chat.",
-                quick: {
-                    grievance: "Public Grievance",
-                    schemes: "Govt Schemes",
-                    certificates: "Certificates & Licenses",
-                    rti: "RTI Information",
-                    contacts: "Officer Contacts",
-                    emergency: "Emergency Help",
-                    statistics: "District Statistics"
-                },
-                showQR: "Show QR",
-                hideQR: "Hide QR",
-                scanToStart: "SCAN TO START",
-                openOnPhone: "Open on your phone",
-                langSwitch: "मराठी",
-                mobileChat: "Mobile WhatsApp Chat",
-                webChat: "Web WhatsApp Chat",
-                close: "Close",
-                aiBadge: "AI",
-                govtNotice: "Government Digital Assistance"
-            }
-        },
-        buildWhatsAppURL: (baseMessage) => {
-            const msg = baseMessage || (state.currentLang==='mr' ? config.defaultMessageMarathi : config.defaultMessageEnglish);
-            return `https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(msg)}`;
-        },
-        actionMessage: (key) => {
-            const base = state.currentLang==='mr' ? config.defaultMessageMarathi : config.defaultMessageEnglish;
-            const map = utils.langText[state.currentLang].quick;
-            const translated = map[key];
-            return `${base}\nTopic: ${translated}`;
-        },
-        createQR: (whatsappUrl) => {
-            // Container
-            const wrap = document.createElement('div');
-            wrap.className = 'dcw-qr-wrapper';
-            wrap.setAttribute('role','group');
-
-            const inner = document.createElement('div');
-            inner.className = 'dcw-qr-inner';
-            inner.style.position = 'relative';
-            inner.style.display = 'flex';
-            inner.style.alignItems = 'center';
-            inner.style.justifyContent = 'center';
-            inner.style.width = inner.style.height = (config.qr.size+40)+'px';
-            inner.style.borderRadius = '24px';
-            inner.style.background = 'rgba(255,255,255,0.92)';
-            inner.style.boxShadow = '0 6px 32px -8px rgba(0,0,0,0.25)';
-            inner.style.border = '1px solid '+config.colors.border;
-            inner.style.padding = '20px';
-            inner.style.backdropFilter = 'blur(10px)';
-            inner.style.webkitBackdropFilter = 'blur(10px)';
-
-            const label = document.createElement('div');
-            label.style.fontSize = '11px';
-            label.style.fontWeight = '600';
-            label.style.letterSpacing = '2px';
-            label.style.textTransform = 'uppercase';
-            label.style.marginBottom = '8px';
-            label.style.textAlign = 'center';
-            label.style.color = config.colors.accent;
-            label.textContent = utils.langText[state.currentLang].scanToStart;
-
-            const img = document.createElement('img');
+        generateFallbackQR(url, size = 160) {
+            // Simple Google Chart fallback
+            const safe = encodeURIComponent(url);
+            const img = new Image();
+            img.src = `https://chart.googleapis.com/chart?cht=qr&chs=${size}x${size}&chl=${safe}&choe=UTF-8`;
             img.alt = 'WhatsApp QR Code';
-            img.width = config.qr.size;
-            img.height = config.qr.size;
+            img.width = size;
+            img.height = size;
             img.style.borderRadius = '12px';
-            img.style.background = '#fff';
-            img.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
-            img.style.objectFit = 'cover';
-            img.style.transition = 'transform .4s ease';
+            img.loading = 'lazy';
+            return img;
+        },
+        createQRContainer() {
+            const container = utils.createEl('div', { className: 'dcw-qr-wrapper' });
+            const label = utils.createEl('div', {
+                className: 'dcw-qr-label',
+                html: 'SCAN TO START<br><span>स्कॅन करा</span>'
+            });
+            const inner = utils.createEl('div', { className: 'dcw-qr-inner' });
 
-            if (config.qr.staticImageUrl) {
-                img.src = config.qr.staticImageUrl;
+            if (config.qrImageUrl) {
+                const img = new Image();
+                img.alt = 'WhatsApp QR Code';
+                img.decoding = 'async';
+                img.src = config.qrImageUrl;
+                img.onload = () => {
+                    inner.innerHTML = '';
+                    img.className = 'dcw-qr-img';
+                    inner.appendChild(img);
+                };
+                img.onerror = () => {
+                    inner.innerHTML = '';
+                    inner.appendChild(utils.generateFallbackQR(utils.buildWAUrl(config.baseMessage)));
+                };
+                inner.innerHTML = '<div class="dcw-qr-loading" aria-hidden="true"></div>';
             } else {
-                img.src = `https://api.qrserver.com/v1/create-qr-code/?size=${config.qr.size}x${config.qr.size}&data=${encodeURIComponent(whatsappUrl)}`;
+                inner.appendChild(utils.generateFallbackQR(utils.buildWAUrl(config.baseMessage)));
             }
 
-            img.onerror = () => {
-                img.replaceWith(utils.buildFallbackQR(whatsappUrl));
-            };
+            container.appendChild(label);
+            container.appendChild(inner);
+            const foot = utils.createEl('div', { className: 'dcw-qr-foot', html: 'Open on your phone' });
+            container.appendChild(foot);
+            return container;
+        },
+        showTypingThenGreeting() {
+            const chat = document.querySelector('.dcw-chat-body');
+            if (!chat || state.hasShownGreeting) return;
 
-            inner.appendChild(img);
+            state.hasShownGreeting = true;
 
-            const phoneNote = document.createElement('div');
-            phoneNote.style.fontSize = '12px';
-            phoneNote.style.color = '#555';
-            phoneNote.style.marginTop = '10px';
-            phoneNote.style.textAlign = 'center';
-            phoneNote.textContent = utils.langText[state.currentLang].openOnPhone;
+            const typing = utils.createEl('div', { className: 'dcw-bubble dcw-typing', html: `
+                <div class="dcw-bubble-inner">
+                    <span class="dcw-ai-emoji">🤖</span>
+                    <span class="dcw-typing-dots" aria-label="AI is typing">
+                        <span></span><span></span><span></span>
+                    </span>
+                </div>
+            `});
 
-            wrap.appendChild(label);
-            wrap.appendChild(inner);
-            wrap.appendChild(phoneNote);
+            chat.appendChild(typing);
+            chat.scrollTop = chat.scrollHeight;
 
-            inner.addEventListener('mouseenter', ()=> {
-                img.style.transform = 'scale(1.04)';
+            state.typingTimeout = setTimeout(() => {
+                typing.remove();
+                const greet = utils.createEl('div', {
+                    className: 'dcw-bubble dcw-bubble-ai',
+                    html: `
+                        <div class="dcw-bubble-inner">
+                            <span class="dcw-ai-emoji">🤖</span>
+                            <div class="dcw-bubble-text">${config.defaultGreeting.replace(/\n/g, '<br>')}</div>
+                        </div>
+                    `
+                });
+                chat.appendChild(greet);
+                chat.scrollTop = chat.scrollHeight;
+            }, config.typingDelay);
+        },
+        buildIntentButtons() {
+            const wrap = utils.createEl('div', { className: 'dcw-intent-wrap', attrs: { role: 'group', 'aria-label': 'Quick actions' } });
+            config.intents.forEach(intent => {
+                const btn = utils.createEl('button', {
+                    className: 'dcw-intent-btn',
+                    html: `<span>${intent.hi} | ${intent.label}</span>`,
+                    attrs: {
+                        type: 'button',
+                        'data-intent': intent.id,
+                        'aria-label': intent.label
+                    }
+                });
+                btn.addEventListener('click', () => {
+                    const url = utils.buildWAUrl(intent.message);
+                    window.open(url, '_blank', 'noopener,noreferrer');
+                });
+                wrap.appendChild(btn);
             });
-            inner.addEventListener('mouseleave', ()=> {
-                img.style.transform = 'scale(1)';
-            });
-
             return wrap;
         },
-        buildFallbackQR: (url) => {
-            const div = document.createElement('div');
-            div.style.width = config.qr.size+'px';
-            div.style.height = config.qr.size+'px';
-            div.style.display='flex';
-            div.style.alignItems='center';
-            div.style.justifyContent='center';
-            div.style.fontSize='12px';
-            div.style.textAlign='center';
-            div.style.color='#6c6c6c';
-            div.style.border='2px dashed '+config.colors.accentSoft;
-            div.style.borderRadius='16px';
-            div.innerHTML = 'QR unavailable<br><a style="color:'+config.colors.accentSoft+';text-decoration:none;font-weight:600" target="_blank" href="'+url+'">Open Chat</a>';
-            return div;
-        },
-        setLanguage: (lang) => {
-            if (!utils.langText[lang]) return;
-            state.currentLang = lang;
-            document.documentElement.setAttribute('lang', config.accessibility.langMap[lang] || 'en-IN');
-            utils.rerenderDynamicTexts();
-            utils.safeLocalSet('dcw_lang', lang);
-        },
-        rerenderDynamicTexts: () => {
-            const t = utils.langText[state.currentLang];
-            const intro = document.querySelector('.dcw-intro-text');
-            if (intro) intro.textContent = t.aiAssistantIntro;
+        maybeShowTooltip() {
+            try {
+                if (localStorage.getItem(config.localStorageKey)) return;
+            } catch (_) { /* ignore */ }
 
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                const parts = key.split('.');
-                let ref = utils.langText[state.currentLang];
-                parts.forEach(p=> { if (ref) ref = ref[p]; });
-                if (typeof ref === 'string') {
-                    el.textContent = ref;
-                }
-            });
+            const launcher = document.getElementById('dcw-launcher');
+            if (!launcher) return;
 
-            // Quick action labels
-            document.querySelectorAll('.dcw-quick-action').forEach(btn => {
-                const act = btn.getAttribute('data-action');
-                btn.textContent = t.quick[act];
+            const tip = utils.createEl('div', {
+                className: 'dcw-tooltip',
+                html: `<span>${config.tooltipText}</span>`
             });
+            launcher.appendChild(tip);
 
-            // Office status
-            const os = utils.officeStatus();
-            const statusEl = document.querySelector('.dcw-office-status');
-            if (statusEl) {
-                statusEl.textContent = os.label;
-                statusEl.classList.toggle('dcw-open', os.open);
-                statusEl.classList.toggle('dcw-closed', !os.open);
-            }
+            setTimeout(() => tip.classList.add('dcw-visible'), 50);
 
-            // QR area rebuild if exists
-            utils.refreshQRIfVisible();
+            setTimeout(() => {
+                tip.classList.remove('dcw-visible');
+                setTimeout(() => tip.remove(), 400);
+            }, 9000);
         },
-        refreshQRIfVisible: () => {
-            const qrArea = document.querySelector('.dcw-qr-area');
-            if (!qrArea) return;
-            const isVisible = state.isQRVisible;
-            qrArea.innerHTML = '';
-            if (isVisible) {
-                const el = utils.createQR(utils.buildWhatsAppURL());
-                qrArea.appendChild(el);
-            }
-            const toggleLink = document.querySelector('.dcw-qr-toggle');
-            if (toggleLink) {
-                toggleLink.textContent = utils.langText[state.currentLang][ isVisible ? 'hideQR' : 'showQR' ];
-            }
-        },
-        smoothShow: (el) => {
-            requestAnimationFrame(()=> {
-                el.style.opacity='1';
-                el.style.transform='translateY(0) scale(1)';
-                el.setAttribute('data-open','true');
-            });
-        },
-        smoothHide: (el) => {
-            el.style.opacity='0';
-            el.style.transform='translateY(14px) scale(.96)';
-            el.setAttribute('data-open','false');
-        },
-        trapFocus: (container) => {
-            const focusable = container.querySelectorAll('button,a,[tabindex]:not([tabindex="-1"])');
-            if (!focusable.length) return;
-            const first = focusable[0];
-            const last = focusable[focusable.length -1];
-            container.addEventListener('keydown', (e) => {
-                if (e.key === 'Tab') {
-                    if (e.shiftKey && document.activeElement === first) {
-                        e.preventDefault(); last.focus();
-                    } else if (!e.shiftKey && document.activeElement === last) {
-                        e.preventDefault(); first.focus();
-                    }
-                }
-            });
-        },
-        openModal: () => {
-            const modal = document.querySelector('.dcw-modal');
-            const btn = document.querySelector('.dcw-launch-btn');
+        trapFocus(e) {
+            if (!state.isOpen) return;
+            if (e.key !== 'Tab') return;
+            const modal = document.getElementById('dcw-modal');
             if (!modal) return;
-            utils.smoothShow(modal);
-            state.hasOpened = true;
-            utils.safeLocalSet('dcw_opened','1');
-            // Remove badge
-            const badge = document.querySelector('.dcw-badge');
-            if (badge) badge.style.display='none';
-            // Focus first element
-            const firstAction = modal.querySelector('.dcw-quick-action');
-            if (firstAction) setTimeout(()=> firstAction.focus(), 300);
-            if (btn) {
-                btn.setAttribute('aria-expanded','true');
+            state.focusableEls = Array.from(modal.querySelectorAll('a[href], button:not([disabled]), [tabindex="0"]'))
+                .filter(el => el.offsetParent !== null);
+
+            if (!state.focusableEls.length) return;
+
+            const first = state.focusableEls[0];
+            const last = state.focusableEls[state.focusableEls.length - 1];
+
+            if (e.shiftKey && document.activeElement === first) {
+                last.focus();
+                e.preventDefault();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                first.focus();
+                e.preventDefault();
             }
         },
-        closeModal: () => {
-            const modal = document.querySelector('.dcw-modal');
-            const btn = document.querySelector('.dcw-launch-btn');
-            if (!modal) return;
-            utils.smoothHide(modal);
-            if (btn) {
-                btn.focus();
-                btn.setAttribute('aria-expanded','false');
-            }
+        markSeen() {
+            try {
+                localStorage.setItem(config.localStorageKey, '1');
+            } catch (_) { /* ignore */ }
         },
-        toggleModal: () => {
-            const modal = document.querySelector('.dcw-modal');
-            if (!modal) return;
-            const open = modal.getAttribute('data-open') === 'true';
-            open ? utils.closeModal() : utils.openModal();
-        },
-        handleQuickAction: (actionKey) => {
-            const url = utils.buildWhatsAppURL(utils.actionMessage(actionKey));
-            window.open(url,'_blank','noopener,noreferrer');
-        },
-        scheduleAutoShow: () => {
-            if (utils.safeLocalGet('dcw_opened')) return;
-            setTimeout(()=> {
-                if (!state.hasOpened) {
-                    utils.openModal();
-                }
-            }, config.autoShowAfterMs);
-        },
-        scheduleNudges: () => {
-            if (!config.nudgeEveryMs) return;
-            const btn = document.querySelector('.dcw-launch-btn');
-            if (!btn) return;
-            const nudge = () => {
-                if (state.hasOpened) return;
-                if (state.nudges >= config.maxNudges) return;
-                btn.classList.add('dcw-nudge');
-                setTimeout(()=> btn.classList.remove('dcw-nudge'), 1800);
-                state.nudges++;
-                setTimeout(nudge, config.nudgeEveryMs);
-            };
-            setTimeout(nudge, config.nudgeEveryMs);
+        setAriaExpanded(val) {
+            const launcher = document.getElementById('dcw-launcher');
+            if (launcher) launcher.setAttribute('aria-expanded', String(val));
         }
     };
 
-    const render = () => {
-        // Container
-        let host = document.getElementById('dc-whatsapp-widget');
-        if (!host) {
-            host = document.createElement('div');
-            host.id = 'dc-whatsapp-widget';
-            document.body.appendChild(host);
-        }
+    function createWidgetHTML() {
+        const waUrl = utils.buildWAUrl(config.baseMessage);
 
-        const posY = config.position.includes('bottom') ? 'bottom:24px;' : 'top:24px;';
-        const posX = config.position.includes('right') ? 'right:24px;' : 'left:24px;';
-
-        host.innerHTML = `
-            <div class="dcw-root" style="position:fixed;${posY}${posX}z-index:999999;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif">
-                <button class="dcw-launch-btn" aria-label="Open WhatsApp AI Assistant" aria-expanded="false" aria-controls="dcwModal"
-                    style="cursor:pointer;width:76px;height:76px;border:none;outline:none;border-radius:50%;background:radial-gradient(circle at 30% 30%, ${config.colors.accentSoft}, ${config.colors.accent});color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 28px -6px rgba(80,60,180,0.45);position:relative;transition:all .45s cubic-bezier(.19,1,.22,1);">
-                    <div class="dcw-icon" style="font-size:34px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.25));">💬</div>
-                    ${config.showNotificationBadge ? `<span class="dcw-badge" aria-hidden="true" style="position:absolute;top:-2px;right:-2px;background:#FF3D4F;color:#fff;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.25);">${utils.langText[state.currentLang].aiBadge}</span>` : ''}
-                    <span class="dcw-launch-halo" aria-hidden="true"></span>
+        return `
+            <div class="dcw-root" aria-live="polite">
+                <button id="dcw-launcher" class="dcw-launcher" aria-haspopup="dialog" aria-expanded="false" aria-controls="dcw-modal" title="Open Divisional Commissioner WhatsApp Assistant">
+                    <span class="dcw-launcher-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.688"/>
+                        </svg>
+                    </span>
+                    <span class="dcw-ai-badge" aria-hidden="true">AI</span>
                 </button>
 
-                <div class="dcw-modal" id="dcwModal" role="dialog" aria-modal="true" aria-label="AI WhatsApp Assistant"
-                    data-open="false"
-                    style="position:absolute;${config.position.includes('bottom')?'bottom:100px;':'top:100px;'}${config.position.includes('right')?'right:0;':'left:0;'}
-                    width:420px;max-width:calc(100vw - 28px);transform:translateY(14px) scale(.96);opacity:0;transition:all .5s cubic-bezier(.19,1,.22,1);
-                    border-radius:32px;overflow:hidden;
-                    background:${config.colors.bubbleBg};
-                    ${utils.isBackdropSupported()? 'backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);':''}
-                    box-shadow:${config.colors.shadow};
-                    border:1px solid ${config.colors.border};">
-
-                    <div class="dcw-inner" style="position:relative;padding:26px;padding-top:28px;">
-                        <button class="dcw-close-btn" type="button" aria-label="${utils.langText[state.currentLang].close}"
-                            style="position:absolute;top:12px;right:12px;width:34px;height:34px;border:none;border-radius:50%;background:rgba(100,90,200,0.12);color:${config.colors.accent};cursor:pointer;font-size:18px;font-weight:500;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
-                            ×
-                        </button>
-
-                        <div class="dcw-header" style="margin-right:42px;">
-                            <div style="font-size:17px;font-weight:700;line-height:1.3;color:#1f2340;display:flex;align-items:center;gap:10px;">
-                                <span style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,${config.colors.primary},${config.colors.accentSoft});color:#fff;font-size:22px;box-shadow:0 4px 12px rgba(0,0,0,0.18);">🤖</span>
-                                <div style="display:flex;flex-direction:column;">
-                                    <span>${config.entityName}</span>
-                                    <small class="dcw-office-status" style="margin-top:2px;font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;"></small>
+                <div id="dcw-modal" class="dcw-modal" role="dialog" aria-modal="true" aria-label="Divisional Commissioner Pune WhatsApp Assistant">
+                    <div class="dcw-modal-inner">
+                        <header class="dcw-header">
+                            <div class="dcw-header-left">
+                                <div class="dcw-logo" aria-hidden="true">
+                                    <img src="${config.logoUrl}" alt="Official Emblem" onerror="this.style.display='none'">
+                                </div>
+                                <div class="dcw-title-group">
+                                    <div class="dcw-title">Official Chatbot</div>
+                                    <div class="dcw-subtitle">Divisional Commissioner, Pune</div>
+                                    <div class="dcw-ai-line">🤖 Powered by AI</div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="dcw-bubble" style="margin-top:22px; position:relative; background:${config.colors.bubbleBg}; border:1px solid ${config.colors.border}; border-radius:26px; padding:20px 22px; line-height:1.5; font-size:14.5px; color:#252a3f; box-shadow:0 12px 32px -10px rgba(50,45,120,0.25);">
-                            <div class="dcw-typing" style="display:flex;gap:6px;margin-bottom:8px;">
-                                <span class="dcw-dot"></span><span class="dcw-dot"></span><span class="dcw-dot"></span>
+                            <div class="dcw-header-actions">
+                                <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="dcw-open-wa" aria-label="Open WhatsApp">
+                                    Open WhatsApp
+                                </a>
+                                <button class="dcw-close-btn" aria-label="Close chat">&times;</button>
                             </div>
-                            <div class="dcw-intro-text" style="display:none;"></div>
+                        </header>
+
+                        <div class="dcw-body">
+                            <div class="dcw-chat-body" tabindex="0" aria-live="polite"></div>
+                            <div class="dcw-intents-region"></div>
+                            <div class="dcw-qr-toggle-area">
+                                <button type="button" class="dcw-qr-toggle" aria-expanded="false" aria-controls="dcw-qr-section">Show QR</button>
+                            </div>
+                            <div id="dcw-qr-section" class="dcw-qr-section" hidden></div>
                         </div>
 
-                        <div class="dcw-actions-wrap" style="margin-top:26px;display:flex;flex-wrap:wrap;gap:14px;">
-                            ${['grievance','schemes','certificates','rti','contacts','emergency','statistics'].map(k=>`
-                                <button type="button" class="dcw-quick-action" data-action="${k}"
-                                    style="flex:1 1 46%;min-width:140px;padding:12px 14px;border:2px solid ${config.colors.accentSoft};
-                                    background:rgba(255,255,255,0.55);color:${config.colors.accent};font-weight:600;font-size:13px;border-radius:40px;
-                                    cursor:pointer;transition:all .35s ease;position:relative;overflow:hidden;">
-                                </button>`).join('')}
-                        </div>
-
-                        <div class="dcw-chat-links" style="margin-top:28px;display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-                            <a class="dcw-chat-link-mobile" data-i18n="mobileChat" target="_blank" rel="noopener noreferrer"
-                               style="text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:600;
-                               padding:14px 12px;border-radius:20px;border:1px solid ${config.colors.accentSoft};color:${config.colors.accent};
-                               background:linear-gradient(145deg,#ffffff,rgba(255,255,255,0.5));box-shadow:0 4px 14px -4px rgba(60,50,140,0.25);
-                               transition:all .4s ease;">📱</a>
-                            <a class="dcw-chat-link-web" data-i18n="webChat" target="_blank" rel="noopener noreferrer"
-                               style="text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:600;
-                               padding:14px 12px;border-radius:20px;border:1px solid ${config.colors.accentSoft};color:${config.colors.accent};
-                               background:linear-gradient(145deg,#ffffff,rgba(255,255,255,0.5));box-shadow:0 4px 14px -4px rgba(60,50,140,0.25);
-                               transition:all .4s ease;">💻</a>
-                        </div>
-
-                        <div class="dcw-qr-toggle" data-i18n="hideQR" role="button" tabindex="0"
-                            style="margin-top:24px;font-size:13px;font-weight:600;color:${config.colors.accent};cursor:pointer;user-select:none;">
-                            ${utils.langText[state.currentLang].hideQR}
-                        </div>
-
-                        <div class="dcw-qr-area" style="margin-top:18px;display:flex;align-items:center;justify-content:center;"></div>
-
-                        <div class="dcw-footer" style="margin-top:26px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
-                            <button class="dcw-lang-switch" type="button" data-i18n="langSwitch"
-                                style="background:rgba(255,255,255,0.55);border:1px solid ${config.colors.accentSoft};color:${config.colors.accent};font-weight:600;
-                                padding:10px 16px;border-radius:30px;font-size:12px;cursor:pointer;transition:all .35s ease;">${utils.langText[state.currentLang].langSwitch}</button>
-                            <a class="dcw-powered" href="${config.poweredBy.url}" target="_blank" rel="noopener noreferrer"
-                                style="flex:1;text-decoration:none;font-size:11.5px;padding:10px 16px;border-radius:30px;background:rgba(255,255,255,.6);
-                                border:1px solid ${config.colors.accentSoft};display:inline-flex;align-items:center;justify-content:center;gap:6px;
-                                color:${config.colors.accent};font-weight:600;letter-spacing:.2px;transition:all .35s;">⚡ ${config.poweredBy.text}</a>
-                        </div>
+                        <footer class="dcw-footer">
+                            <a class="dcw-powered" target="_blank" rel="noopener noreferrer" href="${config.poweredBy.url}">
+                                ${config.poweredBy.text}
+                            </a>
+                        </footer>
                     </div>
                 </div>
             </div>
-
-            <style>
-            .dcw-launch-btn:hover { transform: translateY(-4px) scale(1.05); box-shadow:0 18px 40px -10px rgba(60,50,160,0.55); }
-            .dcw-launch-btn:focus { outline:3px solid ${config.colors.primary}; outline-offset:2px; }
-            .dcw-launch-btn .dcw-launch-halo {
-                position:absolute;inset:-6px;border-radius:inherit;
-                background:radial-gradient(circle at 50% 50%, rgba(120,110,240,0.45), rgba(120,110,240,0) 70%);
-                opacity:.0;animation:dcwHalo 4s ease-in-out infinite;
-                pointer-events:none;
-            }
-            .dcw-nudge { animation: dcwNudgePulse 1.2s ease forwards; }
-            .dcw-quick-action:hover, .dcw-quick-action:focus {
-                background:${config.colors.accent}; color:#fff; box-shadow:0 8px 20px -6px rgba(50,40,140,0.55);
-            }
-            .dcw-quick-action:focus { outline:3px solid ${config.colors.primary}; outline-offset:2px; }
-            .dcw-close-btn:hover { background:rgba(90,75,210,0.25); }
-            .dcw-close-btn:focus { outline:3px solid ${config.colors.primary}; }
-            .dcw-chat-link-mobile:hover, .dcw-chat-link-web:hover,
-            .dcw-chat-link-mobile:focus, .dcw-chat-link-web:focus {
-                background:${config.colors.accent}; color:#fff; transform:translateY(-3px);
-            }
-            .dcw-chat-link-mobile:focus, .dcw-chat-link-web:focus { outline:3px solid ${config.colors.primary}; outline-offset:2px; }
-            .dcw-qr-toggle:hover, .dcw-qr-toggle:focus { text-decoration:underline; }
-            .dcw-qr-toggle:focus { outline:2px dashed ${config.colors.primary}; outline-offset:4px; border-radius:4px; }
-            .dcw-lang-switch:hover, .dcw-lang-switch:focus { background:${config.colors.accent}; color:#fff; }
-            .dcw-powered:hover, .dcw-powered:focus { background:${config.colors.accent}; color:#fff; }
-            .dcw-office-status { color:${config.colors.accent}; }
-            .dcw-office-status.dcw-closed { color:#C25A00; }
-            .dcw-dot {
-                width:8px;height:8px;border-radius:50%;background:${config.colors.accentSoft};animation:dcwTyping 1.2s infinite ease-in-out;
-            }
-            .dcw-dot:nth-child(2){ animation-delay:.2s; }
-            .dcw-dot:nth-child(3){ animation-delay:.4s; }
-            @keyframes dcwTyping {
-                0%,80%,100% { transform:scale(.4); opacity:.5;}
-                40% { transform:scale(1); opacity:1;}
-            }
-            @keyframes dcwHalo {
-                0%,60%,100% { opacity:.0; }
-                10% { opacity:.9; }
-            }
-            @keyframes dcwNudgePulse {
-                0% { transform:scale(1); box-shadow:0 0 0 0 rgba(90,75,210,0.7); }
-                60% { transform:scale(1.08); box-shadow:0 0 0 18px rgba(90,75,210,0); }
-                100% { transform:scale(1); box-shadow:0 0 0 0 rgba(90,75,210,0); }
-            }
-            @media (max-width:580px) {
-                .dcw-modal { width:calc(100vw - 20px) !important; ${config.position.includes('right')?'right:-4px;':'left:-4px;'} }
-                .dcw-launch-btn { width:66px !important; height:66px !important; }
-                .dcw-actions-wrap { gap:10px !important; }
-                .dcw-quick-action { flex:1 1 48%; min-width:46%; }
-            }
-            @media (prefers-reduced-motion: reduce) {
-                * { animation:none !important; transition:none !important; }
-            }
-            </style>
         `;
-    };
+    }
 
-    const attachEvents = () => {
-        const launchBtn = document.querySelector('.dcw-launch-btn');
-        const modal = document.querySelector('.dcw-modal');
-        const closeBtn = document.querySelector('.dcw-close-btn');
-        const langSwitch = document.querySelector('.dcw-lang-switch');
-        const qrToggle = document.querySelector('.dcw-qr-toggle');
-        const quickActions = document.querySelectorAll('.dcw-quick-action');
-        const mobileLink = document.querySelector('.dcw-chat-link-mobile');
-        const webLink = document.querySelector('.dcw-chat-link-web');
+    function injectStyles() {
+        if (document.getElementById('dcw-styles')) return;
+        const css = `
+            .dcw-root{position:fixed;${config.position.includes('bottom') ? 'bottom:20px;' : 'top:20px;'}${config.position.includes('right') ? 'right:20px;' : 'left:20px;'}z-index:999999;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif}
+            .dcw-launcher{position:relative;border:none;cursor:pointer;width:66px;height:66px;border-radius:50%;background:linear-gradient(135deg,${config.primaryColor},${config.primaryColorSoft});color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 28px rgba(0,0,0,.25);transition:transform .25s,box-shadow .25s;outline:none}
+            .dcw-launcher:focus-visible{box-shadow:0 0 0 4px rgba(19,111,52,0.35)}
+            .dcw-launcher:hover{transform:scale(1.07)}
+            .dcw-launcher:active{transform:scale(.95)}
+            .dcw-ai-badge{position:absolute;top:-4px;right:-4px;background:${config.aiBadgeColor};color:#fff;font-weight:600;font-size:11px;border-radius:999px;padding:3px 7px;box-shadow:0 0 0 2px #fff;animation:dcwBadgePulse 2.6s infinite}
+            @keyframes dcwBadgePulse{0%,100%{transform:scale(1)}45%{transform:scale(1.18)}}
 
-        if (launchBtn) launchBtn.addEventListener('click', utils.toggleModal);
-        if (closeBtn) closeBtn.addEventListener('click', utils.closeModal);
-        if (langSwitch) langSwitch.addEventListener('click', () => {
-            const newLang = state.currentLang === 'mr' ? 'en' : 'mr';
-            utils.setLanguage(newLang);
+            .dcw-modal{position:absolute;${config.position.includes('bottom') ? 'bottom:90px;' : 'top:90px;'}${config.position.includes('right') ? 'right:0;' : 'left:0;'}width:420px;max-width:calc(100vw - 30px);background:${config.surfaceColor};border-radius:28px;box-shadow:0 28px 60px -10px rgba(0,0,0,.35),0 6px 18px -6px rgba(0,0,0,.18);transform:translateY(25px) scale(.92);opacity:0;visibility:hidden;transition:all .4s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;border:1px solid ${config.borderColor}}
+            .dcw-modal.dcw-open{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
+            .dcw-modal-inner{display:flex;flex-direction:column;height:100%;max-height:620px}
+
+            .dcw-header{background:#fff;border-bottom:1px solid ${config.borderColor};padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+            .dcw-header-left{display:flex;align-items:center;gap:14px;min-width:0}
+            .dcw-logo{width:54px;height:54px;flex:0 0 54px;border-radius:14px;background:#f2f4f6;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid ${config.borderColor}}
+            .dcw-logo img{width:100%;height:100%;object-fit:contain}
+            .dcw-title-group{display:flex;flex-direction:column;gap:2px}
+            .dcw-title{font-size:14px;font-weight:600;color:#1d2b23;text-transform:uppercase;letter-spacing:.5px}
+            .dcw-subtitle{font-size:13px;font-weight:500;color:#2f3d35}
+            .dcw-ai-line{font-size:11px;color:${config.primaryColor};font-weight:600;letter-spacing:.3px}
+            .dcw-header-actions{display:flex;align-items:center;gap:8px}
+            .dcw-open-wa{font-size:12px;font-weight:600;padding:8px 14px;border-radius:999px;background:${config.primaryColor};color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:background .25s, box-shadow .25s}
+            .dcw-open-wa:hover{background:${config.primaryColorSoft}}
+            .dcw-close-btn{width:36px;height:36px;border:none;background:#f2f4f5;color:#333;font-size:20px;line-height:1;border-radius:50%;cursor:pointer;font-weight:500;display:flex;align-items:center;justify-content:center;transition:background .25s}
+            .dcw-close-btn:hover{background:#e2e6e8}
+            .dcw-close-btn:focus-visible{outline:2px solid ${config.primaryColor};outline-offset:2px}
+
+            .dcw-body{padding:20px 22px 14px;display:flex;flex-direction:column;overflow:hidden}
+            .dcw-chat-body{background:linear-gradient(180deg,#ffffff,#fafbfc);border:1px solid ${config.borderColor};border-radius:22px;padding:18px 18px 20px;min-height:140px;max-height:240px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:${config.primaryColor} #fff;position:relative;box-shadow:inset 0 0 0 1px rgba(0,0,0,.015)}
+            .dcw-chat-body::-webkit-scrollbar{width:8px}
+            .dcw-chat-body::-webkit-scrollbar-track{background:transparent;border-radius:10px}
+            .dcw-chat-body::-webkit-scrollbar-thumb{background:${config.primaryColor};border-radius:10px}
+
+            .dcw-bubble{margin:0 0 14px;display:flex;align-items:flex-start;animation:dcwFadeIn .5s ease}
+            @keyframes dcwFadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+            .dcw-bubble-inner{background:${config.bubbleColor};padding:14px 16px;border-radius:18px 18px 18px 6px;box-shadow:0 4px 14px -6px rgba(0,0,0,.18);font-size:14px;line-height:1.5;color:#1f2c24;display:flex;gap:10px;position:relative}
+            .dcw-bubble-ai .dcw-bubble-inner{background:#eef6f0;border:1px solid #dce7de}
+            .dcw-ai-emoji{flex:0 0 auto;font-size:18px;margin-top:2px}
+            .dcw-bubble-text{white-space:pre-line}
+            .dcw-typing .dcw-bubble-inner{background:#f1f5f2;border:1px solid #d7ded9}
+            .dcw-typing-dots{display:inline-flex;gap:4px}
+            .dcw-typing-dots span{width:6px;height:6px;background:${config.primaryColor};display:block;border-radius:50%;animation:dcwBounce .9s infinite ease-in-out}
+            .dcw-typing-dots span:nth-child(2){animation-delay:.15s}
+            .dcw-typing-dots span:nth-child(3){animation-delay:.3s}
+            @keyframes dcwBounce{0%,80%,100%{transform:scale(.4);opacity:.4}40%{transform:scale(1);opacity:1}}
+
+            .dcw-intent-wrap{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 6px}
+            .dcw-intent-btn{background:#fff;border:1px solid #cfd7d1;border-radius:999px;padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer;line-height:1;color:#1d2b23;box-shadow:0 1px 2px rgba(0,0,0,.07);transition:background .25s,border-color .25s,transform .25s}
+            .dcw-intent-btn:hover{background:#eef6f0;border-color:${config.primaryColor};transform:translateY(-2px)}
+            .dcw-intent-btn:focus-visible{outline:2px solid ${config.primaryColor};outline-offset:2px}
+
+            .dcw-qr-toggle-area{text-align:right;margin:4px 0 8px}
+            .dcw-qr-toggle{background:none;border:none;color:${config.primaryColor};font-size:13px;font-weight:600;cursor:pointer;padding:4px 8px;border-radius:8px;transition:background .25s}
+            .dcw-qr-toggle:hover{background:#edf5ef}
+            .dcw-qr-section{border:1px dashed #ced7d1;border-radius:18px;padding:18px;text-align:center;animation:dcwExpand .4s ease}
+            @keyframes dcwExpand{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+            .dcw-qr-wrapper{display:flex;flex-direction:column;align-items:center;gap:14px}
+            .dcw-qr-label{font-size:12px;font-weight:700;color:#2e3c33;letter-spacing:.8px;text-transform:uppercase}
+            .dcw-qr-label span{display:block;font-weight:500;color:#607066;font-size:11px;margin-top:3px}
+            .dcw-qr-inner{width:170px;height:170px;display:flex;align-items:center;justify-content:center;position:relative;background:#fff;border:1px solid #d9e1db;border-radius:16px}
+            .dcw-qr-img{width:160px;height:160px;display:block}
+            .dcw-qr-loading{width:42px;height:42px;border:4px solid #e3e8e4;border-top:4px solid ${config.primaryColor};border-radius:50%;animation:dcwSpin 1s linear infinite}
+            @keyframes dcwSpin{to{transform:rotate(360deg)}}
+            .dcw-qr-foot{font-size:11px;color:#607066;font-weight:500}
+
+            .dcw-footer{padding:12px 20px 18px;border-top:1px solid ${config.borderColor};background:#fff}
+            .dcw-powered{display:inline-flex;align-items:center;font-size:11px;font-weight:600;color:#5a6961;text-decoration:none;padding:8px 14px;border-radius:999px;background:#f2f5f3;border:1px solid #dce3de;transition:color .25s,border-color .25s,background .25s}
+            .dcw-powered:hover{color:${config.primaryColor};border-color:${config.primaryColor};background:#eef6f0}
+
+            .dcw-tooltip{position:absolute;bottom:80px;${config.position.includes('right') ? 'right:0;' : 'left:0;'}background:#1d3125;color:#fff;padding:10px 14px;font-size:12px;font-weight:500;border-radius:12px;box-shadow:0 10px 24px -6px rgba(0,0,0,.35);opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .35s,transform .35s;max-width:220px;line-height:1.4}
+            .dcw-tooltip:after{content:"";position:absolute;bottom:-6px;${config.position.includes('right') ? 'right:20px;' : 'left:20px;'}width:12px;height:12px;background:#1d3125;transform:rotate(45deg)}
+            .dcw-tooltip.dcw-visible{opacity:1;transform:translateY(0)}
+
+            @media (max-width:520px){
+                .dcw-modal{width:calc(100vw - 16px);${config.position.includes('right') ? 'right:0;' : 'left:0;'}${config.position.includes('bottom') ? 'bottom:84px;' : 'top:84px;'}border-radius:24px}
+                .dcw-header{padding:14px 16px}
+                .dcw-body{padding:16px 16px 10px}
+                .dcw-chat-body{max-height:210px}
+                .dcw-launcher{width:60px;height:60px}
+            }
+
+            @media (prefers-reduced-motion:reduce){
+                .dcw-modal,.dcw-launcher,.dcw-intent-btn,.dcw-tooltip,.dcw-bubble{animation:none!important;transition:none!important}
+            }
+
+            @media print{
+                .dcw-root{display:none!important}
+            }
+        `;
+        const style = document.createElement('style');
+        style.id = 'dcw-styles';
+        style.textContent = css;
+        document.head.appendChild(style);
+    }
+
+    function attachEvents(root) {
+        const launcher = root.querySelector('#dcw-launcher');
+        const modal = root.querySelector('#dcw-modal');
+        const closeBtn = root.querySelector('.dcw-close-btn');
+        const qrToggleBtn = root.querySelector('.dcw-qr-toggle');
+        const qrSection = root.querySelector('#dcw-qr-section');
+        const intentsRegion = root.querySelector('.dcw-intents-region');
+
+        intentsRegion.appendChild(utils.buildIntentButtons());
+
+        qrToggleBtn.addEventListener('click', () => {
+            const expanded = qrToggleBtn.getAttribute('aria-expanded') === 'true';
+            if (expanded) {
+                qrSection.setAttribute('hidden', 'true');
+                qrToggleBtn.textContent = 'Show QR';
+                qrToggleBtn.setAttribute('aria-expanded', 'false');
+                qrSection.innerHTML = '';
+            } else {
+                qrSection.removeAttribute('hidden');
+                qrToggleBtn.textContent = 'Hide QR';
+                qrToggleBtn.setAttribute('aria-expanded', 'true');
+                qrSection.innerHTML = '';
+                qrSection.appendChild(utils.createQRContainer());
+            }
         });
-        if (qrToggle) {
-            const toggle = () => {
-                state.isQRVisible = !state.isQRVisible;
-                utils.refreshQRIfVisible();
-            };
-            qrToggle.addEventListener('click', toggle);
-            qrToggle.addEventListener('keydown', (e)=> {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault(); toggle();
-                }
-            });
-        }
-        quickActions.forEach(btn => {
-            btn.addEventListener('click', () => {
-                utils.handleQuickAction(btn.getAttribute('data-action'));
-            });
+
+        const openModal = () => {
+            if (state.isOpen) return;
+            state.isOpen = true;
+            state.lastFocusedBeforeOpen = document.activeElement;
+            modal.classList.add('dcw-open');
+            utils.setAriaExpanded(true);
+            utils.showTypingThenGreeting();
+            utils.markSeen();
+            setTimeout(() => {
+                const firstBtn = modal.querySelector('.dcw-intent-btn');
+                if (firstBtn) firstBtn.focus();
+            }, 200);
+        };
+
+        const closeModal = () => {
+            if (!state.isOpen) return;
+            state.isOpen = false;
+            modal.classList.remove('dcw-open');
+            utils.setAriaExpanded(false);
+            if (state.typingTimeout) {
+                clearTimeout(state.typingTimeout);
+                state.typingTimeout = null;
+            }
+            if (state.lastFocusedBeforeOpen) state.lastFocusedBeforeOpen.focus({ preventScroll: true });
+        };
+
+        launcher.addEventListener('click', () => {
+            state.isOpen ? closeModal() : openModal();
+        });
+        launcher.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                launcher.click();
+            }
         });
 
-        if (mobileLink) mobileLink.href = utils.buildWhatsAppURL();
-        if (webLink) webLink.href = `https://web.whatsapp.com/send?phone=${config.phoneNumber}&text=${encodeURIComponent(state.currentLang==='mr'?config.defaultMessageMarathi:config.defaultMessageEnglish)}`;
+        closeBtn.addEventListener('click', closeModal);
 
         document.addEventListener('click', (e) => {
-            if (!modal) return;
-            if (modal.getAttribute('data-open')==='true') {
-                if (!modal.contains(e.target) && !launchBtn.contains(e.target)) {
-                    utils.closeModal();
-                }
+            if (!state.isOpen) return;
+            if (!modal.contains(e.target) && !launcher.contains(e.target)) {
+                closeModal();
             }
         });
 
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                if (modal.getAttribute('data-open')==='true') {
-                    utils.closeModal();
-                }
+            if (e.key === 'Escape' && state.isOpen) {
+                closeModal();
             }
+            utils.trapFocus(e);
         });
 
-        utils.trapFocus(modal);
-
-        // Simulate typing introduction
-        setTimeout(()=> {
-            const typing = document.querySelector('.dcw-typing');
-            const intro = document.querySelector('.dcw-intro-text');
-            if (typing && intro) {
-                typing.style.display='flex';
-                setTimeout(()=> {
-                    typing.style.display='none';
-                    intro.style.display='block';
-                }, 1300);
+        // Public API methods
+        window.DivCommWidget = {
+            version: '1.0.0',
+            config,
+            show: openModal,
+            hide: closeModal,
+            toggle: () => state.isOpen ? closeModal() : openModal(),
+            refreshQR: () => {
+                const isVisible = !qrSection.hasAttribute('hidden');
+                if (isVisible) {
+                    qrSection.innerHTML = '';
+                    qrSection.appendChild(utils.createQRContainer());
+                }
+            },
+            setConfig: (partial) => {
+                Object.assign(config, partial || {});
+                console.log('[DivCommWidget] Config updated. Reload page to reflect structural changes if any.');
             }
-        }, 300);
-    };
+        };
+    }
 
-    const init = () => {
-        render();
-        const storedLang = utils.safeLocalGet('dcw_lang');
-        if (storedLang && utils.langText[storedLang]) state.currentLang = storedLang;
-        utils.rerenderDynamicTexts();
-        utils.refreshQRIfVisible();
-        attachEvents();
-        utils.scheduleAutoShow();
-        utils.scheduleNudges();
-        console.log('✅ DC WhatsApp AI Widget initialized (v1.0.0)');
-    };
+    function init() {
+        try {
+            injectStyles();
 
-    // PUBLIC API
-    window.DCWidget = {
-        version: '1.0.0',
-        config,
-        show: () => utils.openModal(),
-        hide: () => utils.closeModal(),
-        toggle: () => utils.toggleModal(),
-        refreshQR: () => utils.refreshQRIfVisible(),
-        setLanguage: (lang) => utils.setLanguage(lang)
-    };
+            let mount = document.getElementById('divcomm-whatsapp-widget');
+            if (!mount) {
+                mount = document.createElement('div');
+                mount.id = 'divcomm-whatsapp-widget';
+                document.body.appendChild(mount);
+            }
+            mount.innerHTML = createWidgetHTML();
+            attachEvents(mount);
+
+            // Auto open prompt (soft attention) without opening full chat
+            state.autoOpenTimeout = setTimeout(() => {
+                const launcher = document.getElementById('dcw-launcher');
+                if (launcher) launcher.classList.add('dcw-attention');
+                setTimeout(() => launcher && launcher.classList.remove('dcw-attention'), 1600);
+            }, config.autoOpenDelay);
+
+            // Tooltip gentle nudge
+            state.tooltipTimeout = setTimeout(() => {
+                utils.maybeShowTooltip();
+            }, config.showTooltipDelay);
+
+            console.log('✅ Divisional Commissioner WhatsApp AI Widget initialized.');
+        } catch (err) {
+            console.error('❌ DivComm Widget failed to initialize:', err);
+        }
+    }
 
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
         init();
     }
+
 })();

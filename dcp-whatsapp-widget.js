@@ -1,12 +1,12 @@
 /**
- * Divisional Commissioner Pune AI Chat Widget
- * File: dc-pune-chat-widget.js
- * Version: 5.0.0 - Professional Healthcare-Style Interface
+ * Divisional Commissioner Pune Healthcare AI WhatsApp Integration Widget
+ * File: dc-pune-healthcare-widget.js
+ * Version: 5.0.0 - Healthcare Professional Edition
  * Date: 2025-09-27
  * Author: soft00null
- * URL: https://wow-strategies.com/dc-pune-chat-widget.js
+ * URL: https://wow-strategies.com/dc-pune-healthcare-widget.js
  * 
- * Healthcare-inspired UI with Docgram-style chat interface
+ * Healthcare-Inspired UI with WhatsApp Integration
  * Powered by WoW-Strategies Private Limited
  */
 
@@ -14,8 +14,8 @@
     'use strict';
     
     // Prevent multiple initializations
-    if (window.DCPuneChatWidget) {
-        console.warn('DC Pune Chat Widget already initialized');
+    if (window.DCHealthWidget) {
+        console.warn('DC Health Widget already initialized');
         return;
     }
     
@@ -26,224 +26,309 @@
         position: 'bottom-right',
         autoShow: true,
         autoPopupDelay: 3000,
-        primaryColor: '#4F46E5', // Professional indigo
-        secondaryColor: '#6366F1',
-        accentColor: '#10B981', // Success green
-        governmentColor: '#FF9933',
+        colors: {
+            whatsappGreen: '#25D366',
+            whatsappDarkGreen: '#075E54',
+            whatsappLight: '#DCF8C6',
+            whatsappTeal: '#34B7F1',
+            primaryBlue: '#4A90E2',
+            successGreen: '#52C41A',
+            warningOrange: '#FA8C16',
+            errorRed: '#F5222D',
+            background: '#F0F2F5',
+            cardBg: '#FFFFFF',
+            textPrimary: '#1C1E21',
+            textSecondary: '#65676B'
+        },
+        menuItems: [
+            {
+                id: 'about',
+                icon: 'ℹ️',
+                title: 'About',
+                description: 'Learn about our services',
+                message: 'I want to know about Divisional Commissioner Pune services'
+            },
+            {
+                id: 'services',
+                icon: '🏛️',
+                title: 'Services',
+                description: 'Government services & certificates',
+                message: 'I need information about government services'
+            },
+            {
+                id: 'schemes',
+                icon: '📋',
+                title: 'Schemes',
+                description: 'Government schemes & benefits',
+                message: 'Tell me about government schemes and benefits'
+            },
+            {
+                id: 'contact',
+                icon: '📞',
+                title: 'Contact',
+                description: 'Get in touch with us',
+                message: 'I need contact information and office details'
+            }
+        ],
         poweredBy: {
             text: 'Powered by WoW-Strategies Private Limited',
             url: 'https://wow-strategies.com/'
         }
     };
     
+    // Utility functions
+    const utils = {
+        getCurrentISTTime: () => {
+            try {
+                const now = new Date();
+                return new Date(now.toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
+            } catch (error) {
+                return new Date();
+            }
+        },
+        
+        isOfficeHours: () => {
+            try {
+                const now = utils.getCurrentISTTime();
+                const day = now.getDay();
+                const hour = now.getHours();
+                const minute = now.getMinutes();
+                const currentTime = hour * 100 + minute;
+                
+                if (day === 0) return false; // Sunday
+                if (day >= 1 && day <= 5) return currentTime >= 1000 && currentTime <= 1730; // Mon-Fri
+                if (day === 6) return currentTime >= 1000 && currentTime <= 1400; // Saturday
+                
+                return false;
+            } catch (error) {
+                return true;
+            }
+        },
+        
+        generateQRCode: (phoneNumber, message) => {
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            return `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(whatsappUrl)}`;
+        }
+    };
+    
     // Create widget HTML
     const createWidget = () => {
+        const isOfficeOpen = utils.isOfficeHours();
+        const statusText = isOfficeOpen ? 'Online' : 'Offline';
+        const statusColor = isOfficeOpen ? config.colors.successGreen : config.colors.warningOrange;
+        const whatsappUrl = `https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(config.message)}`;
+        const qrCodeImage = utils.generateQRCode(config.phoneNumber, config.message);
+        
         const widgetHTML = `
-            <div class="dcw-container" id="dcwContainer">
-                <!-- Main Floating Button -->
-                <div class="dcw-floating-btn" id="dcwFloatingBtn">
-                    <div class="dcw-btn-icon">
+            <div class="dch-widget" id="dchWidget">
+                <!-- Floating Button -->
+                <div class="dch-button" id="dchButton">
+                    <div class="dch-button-icon">
                         <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
-                            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
-                            <circle cx="12" cy="10" r="1"/>
-                            <circle cx="8" cy="10" r="1"/>
-                            <circle cx="16" cy="10" r="1"/>
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.688"/>
                         </svg>
                     </div>
-                    <div class="dcw-btn-badge">AI</div>
-                    <div class="dcw-btn-pulse"></div>
+                    <div class="dch-button-badge">AI</div>
+                    <div class="dch-button-pulse"></div>
                 </div>
                 
-                <!-- Chat Bubble Notification -->
-                <div class="dcw-chat-bubble" id="dcwChatBubble">
-                    <div class="dcw-bubble-close" onclick="DCPuneChatWidget.closeBubble()">×</div>
-                    <div class="dcw-bubble-header">
-                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%234F46E5'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E" alt="AI Assistant" class="dcw-bubble-avatar">
-                        <div class="dcw-bubble-info">
-                            <div class="dcw-bubble-name">DC Pune AI Assistant</div>
-                            <div class="dcw-bubble-status">
-                                <span class="dcw-status-dot"></span>
-                                Online 24/7
-                            </div>
+                <!-- Popup Notification -->
+                <div class="dch-popup" id="dchPopup">
+                    <div class="dch-popup-close" onclick="DCHealthWidget.closePopup()">×</div>
+                    <div class="dch-popup-header">
+                        <div class="dch-popup-avatar">💬</div>
+                        <div class="dch-popup-info">
+                            <div class="dch-popup-title">Divisional Commissioner Pune</div>
+                            <div class="dch-popup-subtitle">AI Care Assistant • 24/7</div>
                         </div>
                     </div>
-                    <div class="dcw-bubble-message">
-                        👋 Hi! I'm your AI Assistant for Divisional Commissioner Pune. I'm here 24/7 to help with government services, certificates, complaints, and more. How can I support you today?
+                    <div class="dch-popup-body">
+                        Hi! I'm your AI Assistant for Saijyot Hospital. I'm here 24/7 to help with symptoms, finding the right doctor, booking appointments or anything you need. How can I support you today?
                     </div>
-                    <div class="dcw-bubble-actions">
-                        <button class="dcw-bubble-btn dcw-btn-primary" onclick="DCPuneChatWidget.open()">
-                            Start Chat
+                    <div class="dch-popup-actions">
+                        <button class="dch-popup-btn-primary" onclick="DCHealthWidget.open()">
+                            Check Symptoms
                         </button>
-                        <button class="dcw-bubble-btn dcw-btn-secondary" onclick="DCPuneChatWidget.closeBubble()">
-                            Later
+                        <button class="dch-popup-btn-secondary" onclick="DCHealthWidget.open()">
+                            Find Doctors
                         </button>
                     </div>
                 </div>
                 
                 <!-- Main Chat Window -->
-                <div class="dcw-chat-window" id="dcwChatWindow">
-                    <div class="dcw-chat-container">
-                        <!-- Chat Header -->
-                        <div class="dcw-chat-header">
-                            <div class="dcw-header-left">
-                                <div class="dcw-header-avatar">
-                                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E" alt="DC Pune">
-                                    <span class="dcw-avatar-status"></span>
-                                </div>
-                                <div class="dcw-header-info">
-                                    <div class="dcw-header-title">Divisional Commissioner Pune</div>
-                                    <div class="dcw-header-subtitle">AI Assistant • Available 24/7</div>
-                                </div>
-                            </div>
-                            <div class="dcw-header-actions">
-                                <button class="dcw-header-btn" onclick="DCPuneChatWidget.minimize()" title="Minimize">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M19 13H5v-2h14v2z"/>
+                <div class="dch-chat" id="dchChat">
+                    <div class="dch-chat-inner">
+                        <!-- Header -->
+                        <div class="dch-chat-header">
+                            <div class="dch-header-left">
+                                <div class="dch-header-avatar">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
                                     </svg>
-                                </button>
-                                <button class="dcw-header-btn" onclick="DCPuneChatWidget.close()" title="Close">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- AI Capabilities Banner -->
-                        <div class="dcw-ai-banner">
-                            <div class="dcw-ai-feature">
-                                <span class="dcw-ai-icon">🤖</span>
-                                <span class="dcw-ai-label">AI Powered</span>
-                            </div>
-                            <div class="dcw-ai-feature">
-                                <span class="dcw-ai-icon">🌐</span>
-                                <span class="dcw-ai-label">Multi-language</span>
-                            </div>
-                            <div class="dcw-ai-feature">
-                                <span class="dcw-ai-icon">⚡</span>
-                                <span class="dcw-ai-label">Instant Response</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Chat Messages Area -->
-                        <div class="dcw-chat-messages" id="dcwChatMessages">
-                            <div class="dcw-message dcw-message-bot">
-                                <div class="dcw-message-avatar">
-                                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%234F46E5'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E" alt="AI">
+                                    <span class="dch-status-dot" style="background: ${statusColor}"></span>
                                 </div>
-                                <div class="dcw-message-content">
-                                    <div class="dcw-message-bubble">
-                                        <p>Hello! I'm your AI Assistant for Divisional Commissioner Pune. 👋</p>
-                                        <p>I can help you with:</p>
-                                        <ul>
-                                            <li>📜 Certificates and Documents</li>
-                                            <li>📝 Complaint Registration</li>
-                                            <li>🏘️ Land Records</li>
-                                            <li>📍 Application Status Tracking</li>
-                                            <li>ℹ️ Government Schemes Information</li>
-                                        </ul>
-                                        <p>How may I assist you today?</p>
+                                <div class="dch-header-info">
+                                    <div class="dch-header-title">DC Pune AI Assistant</div>
+                                    <div class="dch-header-status">
+                                        <span class="dch-status-text">${statusText}</span>
+                                        <span class="dch-status-separator">•</span>
+                                        <span class="dch-status-response">Typically replies instantly</span>
                                     </div>
-                                    <div class="dcw-message-time">Just now</div>
                                 </div>
+                            </div>
+                            <button class="dch-header-close" onclick="DCHealthWidget.close()">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="${config.colors.textSecondary}">
+                                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <!-- AI Banner -->
+                        <div class="dch-ai-banner">
+                            <div class="dch-ai-icon">🤖</div>
+                            <div class="dch-ai-text">
+                                <strong>AI-Powered Assistant</strong>
+                                <div>Get instant help with government services</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Menu Grid -->
+                        <div class="dch-menu-section">
+                            <div class="dch-menu-title">How can I help you today?</div>
+                            <div class="dch-menu-grid">
+                                ${config.menuItems.map(item => `
+                                    <div class="dch-menu-card" onclick="DCHealthWidget.selectMenu('${item.id}', '${item.message}')">
+                                        <div class="dch-menu-icon">${item.icon}</div>
+                                        <div class="dch-menu-content">
+                                            <div class="dch-menu-heading">${item.title}</div>
+                                            <div class="dch-menu-desc">${item.description}</div>
+                                        </div>
+                                        <div class="dch-menu-arrow">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="${config.colors.textSecondary}">
+                                                <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                `).join('')}
                             </div>
                         </div>
                         
                         <!-- Quick Actions -->
-                        <div class="dcw-quick-actions">
-                            <div class="dcw-quick-title">Quick Actions:</div>
-                            <div class="dcw-quick-buttons">
-                                <button class="dcw-quick-btn" onclick="DCPuneChatWidget.quickAction('Check Symptoms')">
-                                    <span class="dcw-quick-icon">📋</span>
-                                    <span class="dcw-quick-label">Check Status</span>
+                        <div class="dch-quick-section">
+                            <div class="dch-quick-title">Quick Actions</div>
+                            <div class="dch-quick-chips">
+                                <button class="dch-chip" onclick="DCHealthWidget.sendMessage('Apply for certificate')">
+                                    📜 Certificates
                                 </button>
-                                <button class="dcw-quick-btn" onclick="DCPuneChatWidget.quickAction('Find Doctors')">
-                                    <span class="dcw-quick-icon">🏛️</span>
-                                    <span class="dcw-quick-label">Find Services</span>
+                                <button class="dch-chip" onclick="DCHealthWidget.sendMessage('Track application status')">
+                                    📍 Track Status
                                 </button>
-                                <button class="dcw-quick-btn" onclick="DCPuneChatWidget.quickAction('Book Appointment')">
-                                    <span class="dcw-quick-icon">📅</span>
-                                    <span class="dcw-quick-label">Book Appointment</span>
+                                <button class="dch-chip" onclick="DCHealthWidget.sendMessage('Register complaint')">
+                                    📝 Complaints
                                 </button>
-                                <button class="dcw-quick-btn" onclick="DCPuneChatWidget.quickAction('Get Help')">
-                                    <span class="dcw-quick-icon">🆘</span>
-                                    <span class="dcw-quick-label">Get Help</span>
+                                <button class="dch-chip" onclick="DCHealthWidget.sendMessage('Emergency services')">
+                                    🚨 Emergency
                                 </button>
                             </div>
                         </div>
                         
-                        <!-- Chat Input -->
-                        <div class="dcw-chat-input">
-                            <div class="dcw-input-wrapper">
-                                <input type="text" id="dcwChatInput" placeholder="Type your message here..." class="dcw-input-field">
-                                <button class="dcw-attach-btn" title="Attach file">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/>
+                        <!-- Chat Options -->
+                        <div class="dch-options-section">
+                            <a href="${whatsappUrl}" target="_blank" class="dch-option-card dch-whatsapp-mobile">
+                                <div class="dch-option-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="${config.colors.whatsappGreen}">
+                                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.688"/>
                                     </svg>
-                                </button>
-                                <button class="dcw-send-btn" onclick="DCPuneChatWidget.sendMessage()">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                                </div>
+                                <div class="dch-option-content">
+                                    <div class="dch-option-title">WhatsApp Mobile</div>
+                                    <div class="dch-option-desc">Continue on your phone</div>
+                                </div>
+                                <div class="dch-option-badge">Recommended</div>
+                            </a>
+                            
+                            <a href="https://web.whatsapp.com/send?phone=${config.phoneNumber}&text=${encodeURIComponent(config.message)}" target="_blank" class="dch-option-card dch-whatsapp-web">
+                                <div class="dch-option-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="${config.colors.whatsappGreen}">
+                                        <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4V8h16v10z"/>
                                     </svg>
+                                </div>
+                                <div class="dch-option-content">
+                                    <div class="dch-option-title">WhatsApp Web</div>
+                                    <div class="dch-option-desc">Chat from your computer</div>
+                                </div>
+                            </a>
+                        </div>
+                        
+                        <!-- QR Code Section -->
+                        <div class="dch-qr-section">
+                            <div class="dch-qr-header">
+                                <span class="dch-qr-title">Scan to Start</span>
+                                <button class="dch-qr-toggle" onclick="DCHealthWidget.toggleQR()">
+                                    Show QR
                                 </button>
                             </div>
-                            <div class="dcw-input-footer">
-                                <a href="${config.poweredBy.url}" target="_blank" class="dcw-powered-link">
-                                    ⚡ ${config.poweredBy.text}
-                                </a>
+                            <div class="dch-qr-content" id="dchQRContent" style="display: none;">
+                                <img src="${qrCodeImage}" alt="WhatsApp QR Code" class="dch-qr-image"/>
+                                <div class="dch-qr-steps">
+                                    <div class="dch-qr-step">1. Open WhatsApp on your phone</div>
+                                    <div class="dch-qr-step">2. Tap Menu or Settings and select Web/Desktop</div>
+                                    <div class="dch-qr-step">3. Point your phone at this screen</div>
+                                </div>
                             </div>
+                        </div>
+                        
+                        <!-- Footer -->
+                        <div class="dch-footer">
+                            <a href="${config.poweredBy.url}" target="_blank" class="dch-powered">
+                                ⚡ ${config.poweredBy.text}
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
             
             <style>
-                /* Global Styles */
-                .dcw-container * {
+                /* Reset and Base */
+                .dch-widget * {
                     margin: 0;
                     padding: 0;
                     box-sizing: border-box;
-                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
                 }
                 
-                .dcw-container {
+                .dch-widget {
                     position: fixed;
                     bottom: 20px;
                     right: 20px;
-                    z-index: 9999;
+                    z-index: 999999;
                 }
                 
                 /* Floating Button */
-                .dcw-floating-btn {
+                .dch-button {
                     width: 60px;
                     height: 60px;
-                    background: linear-gradient(135deg, ${config.primaryColor}, ${config.secondaryColor});
-                    border-radius: 30px;
+                    background: linear-gradient(135deg, ${config.colors.whatsappGreen}, ${config.colors.whatsappDarkGreen});
+                    border-radius: 50%;
                     cursor: pointer;
-                    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3), 0 8px 24px rgba(0, 0, 0, 0.15);
+                    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    position: relative;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    position: relative;
-                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                    animation: dcwEntrance 0.5s ease-out;
                 }
                 
-                .dcw-floating-btn:hover {
-                    transform: scale(1.05);
-                    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4), 0 12px 32px rgba(0, 0, 0, 0.2);
+                .dch-button:hover {
+                    transform: scale(1.08);
+                    box-shadow: 0 4px 20px rgba(37,211,102,0.4);
                 }
                 
-                .dcw-floating-btn.hidden {
-                    transform: scale(0);
-                    opacity: 0;
-                }
-                
-                .dcw-btn-badge {
+                .dch-button-badge {
                     position: absolute;
                     top: -2px;
                     right: -2px;
-                    background: #EF4444;
+                    background: ${config.colors.errorRed};
                     color: white;
                     width: 20px;
                     height: 20px;
@@ -254,569 +339,547 @@
                     align-items: center;
                     justify-content: center;
                     border: 2px solid white;
-                    animation: dcwPulse 2s infinite;
                 }
                 
-                .dcw-btn-pulse {
+                .dch-button-pulse {
                     position: absolute;
                     width: 100%;
                     height: 100%;
                     border-radius: 50%;
-                    border: 2px solid ${config.primaryColor};
-                    animation: dcwRipple 2s infinite;
+                    background: ${config.colors.whatsappGreen};
+                    opacity: 0.6;
+                    animation: dchPulse 2s infinite;
+                    pointer-events: none;
                 }
                 
-                /* Chat Bubble */
-                .dcw-chat-bubble {
+                /* Popup Notification */
+                .dch-popup {
                     position: absolute;
                     bottom: 75px;
                     right: 0;
                     width: 320px;
                     background: white;
                     border-radius: 16px;
-                    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+                    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
                     display: none;
-                    animation: dcwSlideUp 0.3s ease-out;
-                    border: 1px solid #E5E7EB;
+                    animation: dchSlideUp 0.4s ease-out;
+                    border: 1px solid rgba(0,0,0,0.08);
                 }
                 
-                .dcw-chat-bubble.show {
+                .dch-popup.show {
                     display: block;
                 }
                 
-                .dcw-bubble-close {
+                .dch-popup-close {
                     position: absolute;
                     top: 12px;
                     right: 12px;
                     width: 24px;
                     height: 24px;
-                    background: #F3F4F6;
+                    background: ${config.colors.background};
                     border-radius: 50%;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     cursor: pointer;
-                    color: #6B7280;
+                    color: ${config.colors.textSecondary};
                     font-size: 16px;
-                    transition: all 0.2s;
                 }
                 
-                .dcw-bubble-close:hover {
-                    background: #E5E7EB;
-                    color: #374151;
-                }
-                
-                .dcw-bubble-header {
+                .dch-popup-header {
                     padding: 16px;
                     display: flex;
                     gap: 12px;
-                    align-items: center;
-                    border-bottom: 1px solid #F3F4F6;
+                    border-bottom: 1px solid ${config.colors.background};
                 }
                 
-                .dcw-bubble-avatar {
+                .dch-popup-avatar {
                     width: 40px;
                     height: 40px;
+                    background: linear-gradient(135deg, ${config.colors.whatsappGreen}, ${config.colors.whatsappDarkGreen});
                     border-radius: 50%;
-                    background: #EEF2FF;
-                    padding: 4px;
-                }
-                
-                .dcw-bubble-name {
-                    font-size: 14px;
-                    font-weight: 600;
-                    color: #111827;
-                }
-                
-                .dcw-bubble-status {
-                    font-size: 12px;
-                    color: #6B7280;
-                    display: flex;
-                    align-items: center;
-                    gap: 4px;
-                    margin-top: 2px;
-                }
-                
-                .dcw-status-dot {
-                    width: 8px;
-                    height: 8px;
-                    background: ${config.accentColor};
-                    border-radius: 50%;
-                    animation: dcwBlink 2s infinite;
-                }
-                
-                .dcw-bubble-message {
-                    padding: 16px;
-                    font-size: 14px;
-                    line-height: 1.5;
-                    color: #4B5563;
-                }
-                
-                .dcw-bubble-actions {
-                    padding: 16px;
-                    display: flex;
-                    gap: 8px;
-                    border-top: 1px solid #F3F4F6;
-                }
-                
-                .dcw-bubble-btn {
-                    flex: 1;
-                    padding: 10px 16px;
-                    border-radius: 8px;
-                    border: none;
-                    font-size: 14px;
-                    font-weight: 500;
-                    cursor: pointer;
-                    transition: all 0.2s;
-                }
-                
-                .dcw-btn-primary {
-                    background: linear-gradient(135deg, ${config.primaryColor}, ${config.secondaryColor});
-                    color: white;
-                }
-                
-                .dcw-btn-primary:hover {
-                    transform: translateY(-1px);
-                    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
-                }
-                
-                .dcw-btn-secondary {
-                    background: #F3F4F6;
-                    color: #6B7280;
-                }
-                
-                .dcw-btn-secondary:hover {
-                    background: #E5E7EB;
-                    color: #4B5563;
-                }
-                
-                /* Chat Window */
-                .dcw-chat-window {
-                    position: absolute;
-                    bottom: 0;
-                    right: 0;
-                    width: 380px;
-                    height: 600px;
-                    background: white;
-                    border-radius: 16px;
-                    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-                    display: none;
-                    flex-direction: column;
-                    overflow: hidden;
-                    animation: dcwSlideUp 0.3s ease-out;
-                    border: 1px solid #E5E7EB;
-                }
-                
-                .dcw-chat-window.show {
-                    display: flex;
-                }
-                
-                .dcw-chat-container {
-                    display: flex;
-                    flex-direction: column;
-                    height: 100%;
-                }
-                
-                /* Chat Header */
-                .dcw-chat-header {
-                    padding: 16px;
-                    background: linear-gradient(135deg, ${config.primaryColor}, ${config.secondaryColor});
-                    color: white;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                }
-                
-                .dcw-header-left {
-                    display: flex;
-                    gap: 12px;
-                    align-items: center;
-                }
-                
-                .dcw-header-avatar {
-                    width: 40px;
-                    height: 40px;
-                    background: rgba(255, 255, 255, 0.2);
-                    border-radius: 50%;
-                    position: relative;
-                    padding: 4px;
-                }
-                
-                .dcw-avatar-status {
-                    position: absolute;
-                    bottom: 0;
-                    right: 0;
-                    width: 12px;
-                    height: 12px;
-                    background: ${config.accentColor};
-                    border-radius: 50%;
-                    border: 2px solid white;
-                }
-                
-                .dcw-header-title {
-                    font-size: 15px;
-                    font-weight: 600;
-                }
-                
-                .dcw-header-subtitle {
-                    font-size: 12px;
-                    opacity: 0.9;
-                    margin-top: 2px;
-                }
-                
-                .dcw-header-actions {
-                    display: flex;
-                    gap: 8px;
-                }
-                
-                .dcw-header-btn {
-                    width: 32px;
-                    height: 32px;
-                    background: rgba(255, 255, 255, 0.2);
-                    border: none;
-                    border-radius: 50%;
-                    color: white;
-                    cursor: pointer;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    transition: all 0.2s;
-                }
-                
-                .dcw-header-btn:hover {
-                    background: rgba(255, 255, 255, 0.3);
-                }
-                
-                /* AI Banner */
-                .dcw-ai-banner {
-                    padding: 12px;
-                    background: linear-gradient(to right, #EEF2FF, #DBEAFE);
-                    display: flex;
-                    justify-content: space-around;
-                    border-bottom: 1px solid #E5E7EB;
-                }
-                
-                .dcw-ai-feature {
-                    display: flex;
-                    align-items: center;
-                    gap: 6px;
-                    font-size: 12px;
-                    color: #4B5563;
-                    font-weight: 500;
-                }
-                
-                .dcw-ai-icon {
-                    font-size: 16px;
-                }
-                
-                /* Chat Messages */
-                .dcw-chat-messages {
-                    flex: 1;
-                    overflow-y: auto;
-                    padding: 16px;
-                    background: #FAFAFA;
-                }
-                
-                .dcw-message {
-                    display: flex;
-                    gap: 12px;
-                    margin-bottom: 16px;
-                    animation: dcwFadeIn 0.3s ease-out;
-                }
-                
-                .dcw-message-bot {
-                    flex-direction: row;
-                }
-                
-                .dcw-message-user {
-                    flex-direction: row-reverse;
-                }
-                
-                .dcw-message-avatar {
-                    width: 32px;
-                    height: 32px;
-                    border-radius: 50%;
-                    background: #EEF2FF;
-                    flex-shrink: 0;
-                    padding: 4px;
-                }
-                
-                .dcw-message-user .dcw-message-avatar {
-                    background: #F0FDF4;
-                }
-                
-                .dcw-message-content {
-                    max-width: 70%;
-                }
-                
-                .dcw-message-bubble {
-                    background: white;
-                    padding: 12px 16px;
-                    border-radius: 12px;
-                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-                    font-size: 14px;
-                    line-height: 1.5;
-                    color: #374151;
-                }
-                
-                .dcw-message-bubble p {
-                    margin-bottom: 8px;
-                }
-                
-                .dcw-message-bubble p:last-child {
-                    margin-bottom: 0;
-                }
-                
-                .dcw-message-bubble ul {
-                    margin: 8px 0;
-                    padding-left: 20px;
-                }
-                
-                .dcw-message-bubble li {
-                    margin: 4px 0;
-                }
-                
-                .dcw-message-user .dcw-message-bubble {
-                    background: linear-gradient(135deg, ${config.primaryColor}, ${config.secondaryColor});
-                    color: white;
-                }
-                
-                .dcw-message-time {
-                    font-size: 11px;
-                    color: #9CA3AF;
-                    margin-top: 4px;
-                }
-                
-                /* Quick Actions */
-                .dcw-quick-actions {
-                    padding: 12px;
-                    background: white;
-                    border-top: 1px solid #E5E7EB;
-                }
-                
-                .dcw-quick-title {
-                    font-size: 12px;
-                    color: #6B7280;
-                    margin-bottom: 8px;
-                    font-weight: 500;
-                }
-                
-                .dcw-quick-buttons {
-                    display: grid;
-                    grid-template-columns: repeat(4, 1fr);
-                    gap: 8px;
-                }
-                
-                .dcw-quick-btn {
-                    padding: 8px;
-                    background: #F3F4F6;
-                    border: 1px solid #E5E7EB;
-                    border-radius: 8px;
-                    cursor: pointer;
-                    transition: all 0.2s;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    gap: 4px;
-                }
-                
-                .dcw-quick-btn:hover {
-                    background: #EEF2FF;
-                    border-color: ${config.primaryColor};
-                    transform: translateY(-1px);
-                }
-                
-                .dcw-quick-icon {
                     font-size: 20px;
                 }
                 
-                .dcw-quick-label {
-                    font-size: 10px;
-                    color: #4B5563;
-                    text-align: center;
+                .dch-popup-title {
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: ${config.colors.textPrimary};
                 }
                 
-                /* Chat Input */
-                .dcw-chat-input {
-                    padding: 12px;
-                    background: white;
-                    border-top: 1px solid #E5E7EB;
+                .dch-popup-subtitle {
+                    font-size: 12px;
+                    color: ${config.colors.textSecondary};
+                    margin-top: 2px;
                 }
                 
-                .dcw-input-wrapper {
+                .dch-popup-body {
+                    padding: 16px;
+                    font-size: 14px;
+                    line-height: 1.5;
+                    color: ${config.colors.textPrimary};
+                }
+                
+                .dch-popup-actions {
+                    padding: 0 16px 16px;
                     display: flex;
                     gap: 8px;
-                    align-items: center;
-                    background: #F3F4F6;
-                    border-radius: 24px;
-                    padding: 4px;
                 }
                 
-                .dcw-input-field {
+                .dch-popup-btn-primary,
+                .dch-popup-btn-secondary {
                     flex: 1;
-                    background: transparent;
+                    padding: 10px;
+                    border-radius: 20px;
                     border: none;
-                    outline: none;
-                    padding: 8px 12px;
-                    font-size: 14px;
-                    color: #374151;
-                }
-                
-                .dcw-input-field::placeholder {
-                    color: #9CA3AF;
-                }
-                
-                .dcw-attach-btn,
-                .dcw-send-btn {
-                    width: 32px;
-                    height: 32px;
-                    border-radius: 50%;
-                    border: none;
+                    font-size: 13px;
+                    font-weight: 600;
                     cursor: pointer;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    transition: all 0.2s;
+                    transition: all 0.3s ease;
                 }
                 
-                .dcw-attach-btn {
-                    background: transparent;
-                    color: #6B7280;
-                }
-                
-                .dcw-attach-btn:hover {
-                    background: #E5E7EB;
-                }
-                
-                .dcw-send-btn {
-                    background: linear-gradient(135deg, ${config.primaryColor}, ${config.secondaryColor});
+                .dch-popup-btn-primary {
+                    background: ${config.colors.primaryBlue};
                     color: white;
                 }
                 
-                .dcw-send-btn:hover {
-                    transform: scale(1.1);
+                .dch-popup-btn-primary:hover {
+                    background: #3A7BC8;
                 }
                 
-                .dcw-input-footer {
+                .dch-popup-btn-secondary {
+                    background: transparent;
+                    color: ${config.colors.primaryBlue};
+                    border: 1px solid ${config.colors.primaryBlue};
+                }
+                
+                .dch-popup-btn-secondary:hover {
+                    background: ${config.colors.background};
+                }
+                
+                /* Main Chat Window */
+                .dch-chat {
+                    position: fixed;
+                    inset: 0;
+                    background: rgba(0,0,0,0);
+                    display: none;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 999998;
+                    padding: 20px;
+                    transition: background 0.3s ease;
+                }
+                
+                .dch-chat.show {
+                    display: flex;
+                    background: rgba(0,0,0,0.5);
+                }
+                
+                .dch-chat-inner {
+                    background: white;
+                    border-radius: 16px;
+                    width: 100%;
+                    max-width: 440px;
+                    max-height: 90vh;
+                    display: flex;
+                    flex-direction: column;
+                    overflow: hidden;
+                    transform: scale(0.95) translateY(20px);
+                    opacity: 0;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                }
+                
+                .dch-chat.show .dch-chat-inner {
+                    transform: scale(1) translateY(0);
+                    opacity: 1;
+                }
+                
+                /* Chat Header */
+                .dch-chat-header {
+                    background: ${config.colors.whatsappDarkGreen};
+                    color: white;
+                    padding: 16px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                }
+                
+                .dch-header-left {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                }
+                
+                .dch-header-avatar {
+                    width: 40px;
+                    height: 40px;
+                    background: rgba(255,255,255,0.2);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    position: relative;
+                }
+                
+                .dch-status-dot {
+                    position: absolute;
+                    bottom: 2px;
+                    right: 2px;
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    border: 2px solid ${config.colors.whatsappDarkGreen};
+                }
+                
+                .dch-header-title {
+                    font-size: 16px;
+                    font-weight: 600;
+                    margin-bottom: 2px;
+                }
+                
+                .dch-header-status {
+                    font-size: 12px;
+                    opacity: 0.9;
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                }
+                
+                .dch-status-separator {
+                    opacity: 0.5;
+                }
+                
+                .dch-header-close {
+                    background: transparent;
+                    border: none;
+                    cursor: pointer;
+                    padding: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 50%;
+                    transition: background 0.3s ease;
+                }
+                
+                .dch-header-close:hover {
+                    background: rgba(255,255,255,0.1);
+                }
+                
+                .dch-header-close svg {
+                    fill: white;
+                }
+                
+                /* AI Banner */
+                .dch-ai-banner {
+                    background: linear-gradient(135deg, ${config.colors.whatsappLight}, #C8E6C9);
+                    padding: 12px 16px;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    border-bottom: 1px solid rgba(0,0,0,0.08);
+                }
+                
+                .dch-ai-icon {
+                    font-size: 24px;
+                }
+                
+                .dch-ai-text {
+                    font-size: 13px;
+                    color: ${config.colors.textPrimary};
+                    line-height: 1.4;
+                }
+                
+                .dch-ai-text strong {
+                    display: block;
+                    margin-bottom: 2px;
+                }
+                
+                /* Menu Section */
+                .dch-menu-section {
+                    padding: 20px 16px;
+                    overflow-y: auto;
+                    flex: 1;
+                }
+                
+                .dch-menu-title {
+                    font-size: 15px;
+                    font-weight: 600;
+                    color: ${config.colors.textPrimary};
+                    margin-bottom: 16px;
+                }
+                
+                .dch-menu-grid {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                }
+                
+                .dch-menu-card {
+                    background: ${config.colors.background};
+                    border: 1px solid rgba(0,0,0,0.08);
+                    border-radius: 12px;
+                    padding: 14px;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                }
+                
+                .dch-menu-card:hover {
+                    background: white;
+                    border-color: ${config.colors.whatsappGreen};
+                    transform: translateX(4px);
+                    box-shadow: 0 2px 8px rgba(37,211,102,0.15);
+                }
+                
+                .dch-menu-icon {
+                    font-size: 28px;
+                    width: 40px;
                     text-align: center;
-                    margin-top: 8px;
                 }
                 
-                .dcw-powered-link {
-                    font-size: 11px;
-                    color: #9CA3AF;
+                .dch-menu-content {
+                    flex: 1;
+                }
+                
+                .dch-menu-heading {
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: ${config.colors.textPrimary};
+                    margin-bottom: 2px;
+                }
+                
+                .dch-menu-desc {
+                    font-size: 12px;
+                    color: ${config.colors.textSecondary};
+                }
+                
+                .dch-menu-arrow {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                
+                /* Quick Actions */
+                .dch-quick-section {
+                    padding: 0 16px 16px;
+                }
+                
+                .dch-quick-title {
+                    font-size: 13px;
+                    font-weight: 600;
+                    color: ${config.colors.textSecondary};
+                    margin-bottom: 10px;
+                }
+                
+                .dch-quick-chips {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 8px;
+                }
+                
+                .dch-chip {
+                    background: white;
+                    border: 1px solid rgba(0,0,0,0.12);
+                    border-radius: 20px;
+                    padding: 8px 14px;
+                    font-size: 12px;
+                    color: ${config.colors.textPrimary};
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    white-space: nowrap;
+                }
+                
+                .dch-chip:hover {
+                    background: ${config.colors.whatsappLight};
+                    border-color: ${config.colors.whatsappGreen};
+                }
+                
+                /* Chat Options */
+                .dch-options-section {
+                    padding: 0 16px 16px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                }
+                
+                .dch-option-card {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    padding: 12px;
+                    background: white;
+                    border: 2px solid ${config.colors.whatsappGreen};
+                    border-radius: 12px;
                     text-decoration: none;
-                    transition: color 0.2s;
+                    transition: all 0.3s ease;
+                    position: relative;
                 }
                 
-                .dcw-powered-link:hover {
-                    color: ${config.primaryColor};
+                .dch-option-card:hover {
+                    background: ${config.colors.whatsappLight};
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(37,211,102,0.2);
+                }
+                
+                .dch-option-icon {
+                    width: 40px;
+                    height: 40px;
+                    background: white;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                }
+                
+                .dch-option-content {
+                    flex: 1;
+                }
+                
+                .dch-option-title {
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: ${config.colors.textPrimary};
+                    margin-bottom: 2px;
+                }
+                
+                .dch-option-desc {
+                    font-size: 12px;
+                    color: ${config.colors.textSecondary};
+                }
+                
+                .dch-option-badge {
+                    position: absolute;
+                    top: -6px;
+                    right: 12px;
+                    background: ${config.colors.successGreen};
+                    color: white;
+                    padding: 2px 8px;
+                    border-radius: 10px;
+                    font-size: 10px;
+                    font-weight: 600;
+                }
+                
+                /* QR Section */
+                .dch-qr-section {
+                    padding: 0 16px 16px;
+                }
+                
+                .dch-qr-header {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin-bottom: 12px;
+                }
+                
+                .dch-qr-title {
+                    font-size: 13px;
+                    font-weight: 600;
+                    color: ${config.colors.textSecondary};
+                }
+                
+                .dch-qr-toggle {
+                    background: transparent;
+                    border: 1px solid ${config.colors.whatsappGreen};
+                    color: ${config.colors.whatsappGreen};
+                    padding: 4px 12px;
+                    border-radius: 12px;
+                    font-size: 12px;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                }
+                
+                .dch-qr-toggle:hover {
+                    background: ${config.colors.whatsappGreen};
+                    color: white;
+                }
+                
+                .dch-qr-content {
+                    background: ${config.colors.background};
+                    border-radius: 12px;
+                    padding: 16px;
+                    text-align: center;
+                }
+                
+                .dch-qr-image {
+                    width: 150px;
+                    height: 150px;
+                    margin: 0 auto 12px;
+                    border-radius: 8px;
+                }
+                
+                .dch-qr-steps {
+                    font-size: 11px;
+                    color: ${config.colors.textSecondary};
+                    line-height: 1.6;
+                }
+                
+                .dch-qr-step {
+                    margin-bottom: 4px;
+                }
+                
+                /* Footer */
+                .dch-footer {
+                    padding: 12px;
+                    background: ${config.colors.background};
+                    border-top: 1px solid rgba(0,0,0,0.08);
+                    text-align: center;
+                }
+                
+                .dch-powered {
+                    font-size: 11px;
+                    color: ${config.colors.textSecondary};
+                    text-decoration: none;
+                    transition: color 0.3s ease;
+                }
+                
+                .dch-powered:hover {
+                    color: ${config.colors.whatsappGreen};
                 }
                 
                 /* Animations */
-                @keyframes dcwEntrance {
-                    0% {
-                        transform: scale(0) rotate(180deg);
-                        opacity: 0;
-                    }
-                    100% {
-                        transform: scale(1) rotate(0);
-                        opacity: 1;
-                    }
+                @keyframes dchPulse {
+                    0% { transform: scale(1); opacity: 0.6; }
+                    50% { transform: scale(1.3); opacity: 0; }
+                    100% { transform: scale(1.6); opacity: 0; }
                 }
                 
-                @keyframes dcwPulse {
-                    0%, 100% {
-                        transform: scale(1);
-                    }
-                    50% {
-                        transform: scale(1.1);
-                    }
-                }
-                
-                @keyframes dcwRipple {
-                    0% {
-                        transform: scale(1);
-                        opacity: 1;
-                    }
-                    100% {
-                        transform: scale(1.5);
-                        opacity: 0;
-                    }
-                }
-                
-                @keyframes dcwSlideUp {
-                    0% {
-                        transform: translateY(20px);
-                        opacity: 0;
-                    }
-                    100% {
-                        transform: translateY(0);
-                        opacity: 1;
-                    }
-                }
-                
-                @keyframes dcwFadeIn {
-                    0% {
-                        opacity: 0;
-                        transform: translateY(10px);
-                    }
-                    100% {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-                
-                @keyframes dcwBlink {
-                    0%, 100% {
-                        opacity: 1;
-                    }
-                    50% {
-                        opacity: 0.5;
-                    }
+                @keyframes dchSlideUp {
+                    from { transform: translateY(20px); opacity: 0; }
+                    to { transform: translateY(0); opacity: 1; }
                 }
                 
                 /* Responsive */
-                @media (max-width: 420px) {
-                    .dcw-chat-bubble {
+                @media (max-width: 480px) {
+                    .dch-popup {
                         width: calc(100vw - 40px);
                         right: -10px;
                     }
                     
-                    .dcw-chat-window {
-                        width: 100vw;
-                        height: 100vh;
-                        bottom: 0;
-                        right: 0;
+                    .dch-chat-inner {
+                        max-width: 100%;
+                        max-height: 100vh;
                         border-radius: 0;
                     }
                     
-                    .dcw-quick-buttons {
-                        grid-template-columns: repeat(2, 1fr);
+                    .dch-quick-chips {
+                        gap: 6px;
+                    }
+                    
+                    .dch-chip {
+                        padding: 6px 10px;
+                        font-size: 11px;
                     }
                 }
                 
-                /* Scrollbar Styling */
-                .dcw-chat-messages::-webkit-scrollbar {
-                    width: 6px;
-                }
-                
-                .dcw-chat-messages::-webkit-scrollbar-track {
-                    background: #F3F4F6;
-                }
-                
-                .dcw-chat-messages::-webkit-scrollbar-thumb {
-                    background: #D1D5DB;
-                    border-radius: 3px;
-                }
-                
-                .dcw-chat-messages::-webkit-scrollbar-thumb:hover {
-                    background: #9CA3AF;
-                }
-                
-                /* Print */
                 @media print {
-                    .dcw-container {
+                    .dch-widget {
                         display: none !important;
                     }
                 }
@@ -830,10 +893,10 @@
     const initWidget = () => {
         try {
             // Create container
-            let container = document.getElementById('dc-pune-chat-widget');
+            let container = document.getElementById('dc-health-widget');
             if (!container) {
                 container = document.createElement('div');
-                container.id = 'dc-pune-chat-widget';
+                container.id = 'dc-health-widget';
                 document.body.appendChild(container);
             }
             
@@ -841,137 +904,110 @@
             container.innerHTML = createWidget();
             
             // Setup event listeners
-            const floatingBtn = document.getElementById('dcwFloatingBtn');
-            const chatBubble = document.getElementById('dcwChatBubble');
-            const chatWindow = document.getElementById('dcwChatWindow');
-            const chatInput = document.getElementById('dcwChatInput');
+            const button = document.getElementById('dchButton');
+            const chat = document.getElementById('dchChat');
+            const popup = document.getElementById('dchPopup');
             
-            // Floating button click
-            floatingBtn.addEventListener('click', () => {
-                if (chatWindow.classList.contains('show')) {
-                    DCPuneChatWidget.close();
-                } else if (chatBubble.classList.contains('show')) {
-                    chatBubble.classList.remove('show');
-                    DCPuneChatWidget.open();
-                } else {
-                    DCPuneChatWidget.open();
+            // Button click
+            button.addEventListener('click', () => {
+                DCHealthWidget.toggle();
+            });
+            
+            // Click outside to close
+            chat.addEventListener('click', (e) => {
+                if (e.target === chat) {
+                    DCHealthWidget.close();
                 }
             });
             
-            // Enter key to send message
-            chatInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    DCPuneChatWidget.sendMessage();
+            // Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && chat.classList.contains('show')) {
+                    DCHealthWidget.close();
                 }
             });
             
-            // Auto show notification bubble
+            // Show popup notification after delay
             if (config.autoShow) {
                 setTimeout(() => {
-                    if (!chatWindow.classList.contains('show')) {
-                        chatBubble.classList.add('show');
-                    }
+                    popup.classList.add('show');
+                    
+                    // Auto hide after 12 seconds
+                    setTimeout(() => {
+                        popup.classList.remove('show');
+                    }, 12000);
                 }, config.autoPopupDelay);
             }
             
-            console.log('✅ DC Pune Chat Widget v5.0.0 initialized successfully!');
+            console.log('✅ DC Health Widget v5.0.0 initialized!');
+            console.log('🏥 Healthcare-inspired UI loaded');
             console.log('⚡ Powered by WoW-Strategies Private Limited');
             
         } catch (error) {
-            console.error('❌ DC Pune Chat Widget initialization failed:', error);
+            console.error('❌ Widget initialization failed:', error);
         }
     };
     
     // Public API
-    window.DCPuneChatWidget = {
+    window.DCHealthWidget = {
         version: '5.0.0',
         config: config,
         
         open: () => {
-            const chatWindow = document.getElementById('dcwChatWindow');
-            const chatBubble = document.getElementById('dcwChatBubble');
-            const floatingBtn = document.getElementById('dcwFloatingBtn');
-            
-            chatBubble.classList.remove('show');
-            chatWindow.classList.add('show');
-            floatingBtn.classList.add('hidden');
+            const chat = document.getElementById('dchChat');
+            if (chat) {
+                chat.classList.add('show');
+                document.getElementById('dchPopup').classList.remove('show');
+            }
         },
         
         close: () => {
-            const chatWindow = document.getElementById('dcwChatWindow');
-            const floatingBtn = document.getElementById('dcwFloatingBtn');
-            
-            chatWindow.classList.remove('show');
-            floatingBtn.classList.remove('hidden');
+            const chat = document.getElementById('dchChat');
+            if (chat) {
+                chat.classList.remove('show');
+            }
         },
         
-        minimize: () => {
-            DCPuneChatWidget.close();
+        toggle: () => {
+            const chat = document.getElementById('dchChat');
+            if (chat) {
+                if (chat.classList.contains('show')) {
+                    DCHealthWidget.close();
+                } else {
+                    DCHealthWidget.open();
+                }
+            }
         },
         
-        closeBubble: () => {
-            const chatBubble = document.getElementById('dcwChatBubble');
-            chatBubble.classList.remove('show');
+        closePopup: () => {
+            const popup = document.getElementById('dchPopup');
+            if (popup) {
+                popup.classList.remove('show');
+            }
         },
         
-        sendMessage: () => {
-            const input = document.getElementById('dcwChatInput');
-            const messagesContainer = document.getElementById('dcwChatMessages');
-            const message = input.value.trim();
-            
-            if (!message) return;
-            
-            // Add user message
-            const userMessageHTML = `
-                <div class="dcw-message dcw-message-user">
-                    <div class="dcw-message-avatar">
-                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%2310B981'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E" alt="User">
-                    </div>
-                    <div class="dcw-message-content">
-                        <div class="dcw-message-bubble">${message}</div>
-                        <div class="dcw-message-time">Just now</div>
-                    </div>
-                </div>
-            `;
-            
-            messagesContainer.insertAdjacentHTML('beforeend', userMessageHTML);
-            input.value = '';
-            
-            // Scroll to bottom
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            
-            // Simulate bot response
-            setTimeout(() => {
-                const botMessageHTML = `
-                    <div class="dcw-message dcw-message-bot">
-                        <div class="dcw-message-avatar">
-                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%234F46E5'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E" alt="AI">
-                        </div>
-                        <div class="dcw-message-content">
-                            <div class="dcw-message-bubble">
-                                Thank you for your message. I'm processing your request and will connect you with the right information shortly. For immediate assistance, you can also reach us on WhatsApp.
-                            </div>
-                            <div class="dcw-message-time">Just now</div>
-                        </div>
-                    </div>
-                `;
-                
-                messagesContainer.insertAdjacentHTML('beforeend', botMessageHTML);
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                
-                // Open WhatsApp after delay
-                setTimeout(() => {
-                    const whatsappUrl = `https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(message)}`;
-                    window.open(whatsappUrl, '_blank');
-                }, 1500);
-            }, 1000);
+        selectMenu: (menuId, message) => {
+            const url = `https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
         },
         
-        quickAction: (action) => {
-            const input = document.getElementById('dcwChatInput');
-            input.value = action;
-            DCPuneChatWidget.sendMessage();
+        sendMessage: (message) => {
+            const url = `https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        },
+        
+        toggleQR: () => {
+            const qrContent = document.getElementById('dchQRContent');
+            const toggle = document.querySelector('.dch-qr-toggle');
+            if (qrContent) {
+                if (qrContent.style.display === 'none') {
+                    qrContent.style.display = 'block';
+                    toggle.textContent = 'Hide QR';
+                } else {
+                    qrContent.style.display = 'none';
+                    toggle.textContent = 'Show QR';
+                }
+            }
         }
     };
     

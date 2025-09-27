@@ -1,12 +1,12 @@
 /**
  * Divisional Commissioner Pune AI WhatsApp Integration Widget
- * File: dcp-whatsapp-widget-v5.js
- * Version: 5.0.0 - Professional Government AI Assistant
+ * File: dcp-whatsapp-widget-final.js
+ * Version: 6.0.0 - WhatsApp-Style Government AI Assistant
  * Date: 2025-09-27
  * Author: WoW-Strategies Private Limited
  * URL: https://wow-strategies.com/dcp-widget.js
  * 
- * Professional Government AI Chatbot with Transparent UI
+ * Professional Government AI Chatbot with WhatsApp UI
  */
 
 (function() {
@@ -25,23 +25,24 @@
         organization: {
             name: 'Divisional Commissioner Pune',
             nameMarathi: 'विभागीय आयुक्त पुणे',
-            tagline: 'AI-Powered Government Assistant',
-            taglineMarathi: 'AI-संचालित शासकीय सहाय्यक'
+            greeting: "Hi! I'm your AI Assistant for Divisional Commissioner Pune. I'm here 24/7 to help with government services. How can I support you today?"
         },
         position: 'bottom-right',
         autoShow: true,
-        showDelay: 2000,
+        showDelay: 1500,
         colors: {
-            primary: '#5E5CE6',      // Professional purple (like reference)
-            secondary: '#7C7CFF',    // Lighter purple
-            success: '#34C759',      // WhatsApp green
+            whatsappGreen: '#25D366',
+            whatsappDarkGreen: '#075E54',
+            whatsappLight: '#DCF8C6',
+            buttonBorder: '#8B5CF6',
+            buttonText: '#6366F1',
             white: '#FFFFFF',
-            text: '#1C1C1E',
-            lightText: '#8E8E93',
-            border: '#E5E5EA',
-            transparentBg: 'rgba(255, 255, 255, 0.95)',
-            glassBg: 'rgba(255, 255, 255, 0.85)',
-            shadowColor: 'rgba(0, 0, 0, 0.1)'
+            text: '#303030',
+            lightGray: '#F0F0F0',
+            gray: '#8E8E93',
+            transparentWhite: 'rgba(255, 255, 255, 0.92)',
+            transparentOverlay: 'rgba(242, 242, 247, 0.85)',
+            shadow: 'rgba(0, 0, 0, 0.12)'
         },
         poweredBy: {
             text: 'WoW-Strategies Private Limited',
@@ -51,294 +52,221 @@
     
     // Utility functions
     const utils = {
-        getCurrentISTTime: () => {
-            try {
-                const now = new Date();
-                return new Date(now.toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
-            } catch (error) {
-                return new Date();
-            }
-        },
-        
-        isOfficeHours: () => {
-            try {
-                const now = utils.getCurrentISTTime();
-                const day = now.getDay();
-                const hour = now.getHours();
-                const minute = now.getMinutes();
-                const currentTime = hour * 100 + minute;
-                
-                // Government office hours: Mon-Fri 10:00-17:30, Sat 10:00-14:00
-                if (day === 0) return false; // Sunday closed
-                if (day >= 1 && day <= 5) return currentTime >= 1000 && currentTime <= 1730; // Mon-Fri
-                if (day === 6) return currentTime >= 1000 && currentTime <= 1400; // Saturday
-                
-                return false;
-            } catch (error) {
-                return true;
-            }
-        },
-        
         generateQRCode: (text) => {
-            const qrSize = 200;
-            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${qrSize}x${qrSize}&data=${encodeURIComponent(text)}&bgcolor=FFFFFF&color=5E5CE6&margin=1`;
+            const qrSize = 180;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${qrSize}x${qrSize}&data=${encodeURIComponent(text)}&bgcolor=FFFFFF&color=6366F1&margin=0`;
             return qrUrl;
+        },
+        
+        isMobile: () => {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         }
     };
     
     // Create widget HTML
     const createWidget = () => {
-        const isOfficeOpen = utils.isOfficeHours();
         const whatsappUrl = `https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(config.defaultMessage)}`;
         
         const widgetHTML = `
-            <!-- Main Container -->
-            <div class="dcp-widget" style="position:fixed;bottom:24px;right:24px;z-index:2147483647;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif">
+            <!-- Main Widget Container -->
+            <div class="dcp-widget-container" style="position:fixed;bottom:20px;right:20px;z-index:2147483647;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
                 
-                <!-- Floating Action Button -->
-                <button class="dcp-fab" id="dcpFab" onclick="toggleDCPChat()" style="width:65px;height:65px;background:${config.colors.primary};border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 12px ${config.colors.shadowColor}, 0 8px 24px rgba(94, 92, 230, 0.25);transition:all 0.3s cubic-bezier(0.4,0,0.2,1);position:relative;border:none;outline:none;overflow:visible">
-                    <div class="dcp-fab-icon" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative">
-                        <svg width="30" height="30" viewBox="0 0 24 24" fill="white" style="transition:transform 0.3s ease">
-                            <path d="M12 2C6.48 2 2 6.48 2 12c0 1.54.36 3 .97 4.29L1 23l6.71-1.97C9 21.64 10.46 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.61 13.61c-.24.67-.94 1.24-1.54 1.4-.39.1-1 .19-2.91-.62-2.43-.99-3.98-3.46-4.1-3.62-.12-.15-1-1.33-1-2.54 0-1.21.63-1.8.85-2.05.23-.24.49-.3.65-.3h.47c.15 0 .36-.06.56.43.24.54.76 1.86.83 2 .07.13.12.3.02.48-.1.19-.15.3-.3.47-.15.16-.31.35-.44.47-.14.13-.29.27-.12.53.17.25.74 1.22 1.58 1.97 1.09.97 2 1.27 2.28 1.41.28.14.45.12.61-.07.17-.2.7-.82.89-1.1.19-.28.38-.23.63-.14.26.1 1.62.77 1.9.91.28.14.47.21.54.33.07.12.07.69-.17 1.36z"/>
-                        </svg>
-                    </div>
-                    <div class="dcp-ai-badge" style="position:absolute;top:-2px;right:-2px;background:#FF3B30;color:white;border-radius:10px;padding:2px 6px;font-size:9px;font-weight:700;display:flex;align-items:center;gap:2px;animation:aiPulse 2s infinite;box-shadow:0 2px 6px rgba(255,59,48,0.4);border:1.5px solid white;text-transform:uppercase;letter-spacing:0.5px">
+                <!-- WhatsApp Floating Button -->
+                <button class="dcp-whatsapp-btn" id="dcpWhatsappBtn" onclick="toggleDCPWidget()" style="width:60px;height:60px;background:${config.colors.whatsappGreen};border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.15);transition:all 0.3s ease;position:relative;border:none;outline:none">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                    <!-- AI Badge -->
+                    <div class="dcp-ai-indicator" style="position:absolute;top:-3px;right:-3px;background:#FF3B30;color:white;border-radius:50%;width:20px;height:20px;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid white;animation:aiBadgePulse 2s infinite">
                         AI
                     </div>
-                    <div class="dcp-ripple" style="position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);width:65px;height:65px;border-radius:50%;background:${config.colors.primary};opacity:0.3;animation:rippleEffect 3s infinite"></div>
                 </button>
                 
-                <!-- Chat Window with Transparent Background -->
-                <div class="dcp-chat" id="dcpChat" style="position:absolute;bottom:85px;right:0;width:380px;max-width:calc(100vw - 48px);background:${config.colors.transparentBg};backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:24px;box-shadow:0 10px 40px ${config.colors.shadowColor}, 0 0 0 1px rgba(0,0,0,0.05);transform:translateY(20px) scale(0.95);opacity:0;visibility:hidden;pointer-events:none;transition:all 0.4s cubic-bezier(0.4,0,0.2,1);overflow:hidden;display:flex;flex-direction:column">
+                <!-- Chat Popup Window -->
+                <div class="dcp-chat-popup" id="dcpChatPopup" style="position:absolute;bottom:80px;right:0;width:360px;background:${config.colors.transparentWhite};backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:16px;box-shadow:0 8px 32px ${config.colors.shadow};opacity:0;visibility:hidden;transform:scale(0.9) translateY(20px);transition:all 0.3s cubic-bezier(0.4,0,0.2,1);pointer-events:none;overflow:hidden">
                     
-                    <!-- Header with Glass Effect -->
-                    <div class="dcp-header" style="background:linear-gradient(135deg, ${config.colors.primary} 0%, ${config.colors.secondary} 100%);padding:20px;position:relative;color:white;border-radius:24px 24px 0 0">
-                        <!-- Close Button -->
-                        <button onclick="toggleDCPChat()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);color:white;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px;font-weight:300;transition:all 0.3s ease;display:flex;align-items:center;justify-content:center;outline:none" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">×</button>
+                    <!-- Chat Header -->
+                    <div style="background:linear-gradient(135deg, ${config.colors.whatsappGreen} 0%, ${config.colors.whatsappDarkGreen} 100%);padding:16px;position:relative">
+                        <button onclick="toggleDCPWidget()" style="position:absolute;top:12px;right:12px;width:24px;height:24px;background:transparent;border:none;color:white;font-size:20px;cursor:pointer;opacity:0.8;transition:opacity 0.2s" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">×</button>
                         
-                        <!-- Header Content -->
                         <div style="display:flex;align-items:center;gap:12px">
-                            <div style="width:44px;height:44px;background:rgba(255,255,255,0.2);backdrop-filter:blur(10px);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid rgba(255,255,255,0.25)">
-                                🏛️
+                            <div style="width:40px;height:40px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center">
+                                <span style="font-size:20px">🏛️</span>
                             </div>
                             <div style="flex:1">
-                                <div style="font-size:16px;font-weight:600;margin-bottom:2px;display:flex;align-items:center;gap:6px">
+                                <div style="color:white;font-weight:600;font-size:14px">
                                     ${config.organization.nameMarathi}
-                                    <span style="width:8px;height:8px;background:#34C759;border-radius:50%;display:inline-block;animation:pulse 2s infinite"></span>
                                 </div>
-                                <div style="font-size:12px;opacity:0.9">
-                                    AI Assistant • Always Active
+                                <div style="color:rgba(255,255,255,0.9);font-size:12px;display:flex;align-items:center;gap:4px">
+                                    <span style="width:6px;height:6px;background:#4FCE5D;border-radius:50%;display:inline-block"></span>
+                                    AI Assistant Active
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Welcome Message with Semi-Transparent Background -->
-                    <div class="dcp-welcome" style="padding:16px;background:${config.colors.glassBg};backdrop-filter:blur(10px);border-bottom:1px solid ${config.colors.border}">
-                        <div style="background:white;border-radius:16px 16px 4px 16px;padding:14px;position:relative;box-shadow:0 2px 8px ${config.colors.shadowColor}">
-                            <div style="display:flex;gap:8px;margin-bottom:8px">
-                                <span style="font-size:18px">👋</span>
-                                <span style="font-size:18px">💜</span>
-                            </div>
-                            <div style="font-size:14px;color:${config.colors.text};line-height:1.6;font-weight:500">
-                                Hi! I'm your AI Assistant for Divisional Commissioner Pune. I'm here 24/7 to help with government services and information. How can I support you today?
+                    <!-- Welcome Message -->
+                    <div style="padding:12px;background:${config.colors.transparentOverlay};backdrop-filter:blur(8px)">
+                        <div style="background:white;border-radius:12px 12px 4px 12px;padding:12px;box-shadow:0 1px 2px rgba(0,0,0,0.08);position:relative">
+                            <div style="display:flex;gap:6px;align-items:flex-start">
+                                <span style="font-size:16px">🏛️💜</span>
+                                <div style="flex:1;font-size:13px;color:${config.colors.text};line-height:1.5">
+                                    ${config.organization.greeting}
+                                </div>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Government Service Menu Options -->
-                    <div class="dcp-menu" style="padding:16px;display:flex;flex-direction:column;gap:8px;max-height:300px;overflow-y:auto;background:${config.colors.glassBg};backdrop-filter:blur(10px)">
+                    <!-- Menu Buttons Container -->
+                    <div style="padding:12px;background:${config.colors.transparentOverlay};backdrop-filter:blur(8px);display:flex;flex-direction:column;gap:8px">
                         
-                        <!-- Administrative Services -->
-                        <button onclick="sendQuickMessage('I need help with Administrative services')" class="dcp-menu-btn" style="width:100%;padding:14px 16px;background:white;border:2px solid ${config.colors.border};border-radius:24px;cursor:pointer;transition:all 0.3s ease;text-align:center;font-size:15px;font-weight:500;color:${config.colors.primary};outline:none;display:block;box-shadow:0 1px 3px ${config.colors.shadowColor}" onmouseover="this.style.borderColor='${config.colors.primary}';this.style.background='#F7F7FF';this.style.transform='translateY(-1px)';this.style.boxShadow='0 3px 8px rgba(94,92,230,0.2)'" onmouseout="this.style.borderColor='${config.colors.border}';this.style.background='white';this.style.transform='translateY(0)';this.style.boxShadow='0 1px 3px ${config.colors.shadowColor}'">
-                            Administrative Services
+                        <!-- Administrative Button -->
+                        <button onclick="sendDCPMessage('I need help with Administrative services')" style="width:100%;padding:12px 16px;background:white;border:1.5px solid ${config.colors.buttonBorder};border-radius:24px;color:${config.colors.buttonText};font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s ease;outline:none;text-align:center" onmouseover="this.style.background='#F5F3FF';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='white';this.style.transform='translateY(0)'">
+                            Administrative
                         </button>
                         
-                        <!-- Departments -->
-                        <button onclick="sendQuickMessage('Show me all government departments')" class="dcp-menu-btn" style="width:100%;padding:14px 16px;background:white;border:2px solid ${config.colors.border};border-radius:24px;cursor:pointer;transition:all 0.3s ease;text-align:center;font-size:15px;font-weight:500;color:${config.colors.primary};outline:none;display:block;box-shadow:0 1px 3px ${config.colors.shadowColor}" onmouseover="this.style.borderColor='${config.colors.primary}';this.style.background='#F7F7FF';this.style.transform='translateY(-1px)';this.style.boxShadow='0 3px 8px rgba(94,92,230,0.2)'" onmouseout="this.style.borderColor='${config.colors.border}';this.style.background='white';this.style.transform='translateY(0)';this.style.boxShadow='0 1px 3px ${config.colors.shadowColor}'">
+                        <!-- Departments Button -->
+                        <button onclick="sendDCPMessage('Show me all government departments')" style="width:100%;padding:12px 16px;background:white;border:1.5px solid ${config.colors.buttonBorder};border-radius:24px;color:${config.colors.buttonText};font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s ease;outline:none;text-align:center" onmouseover="this.style.background='#F5F3FF';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='white';this.style.transform='translateY(0)'">
                             Departments
                         </button>
                         
-                        <!-- Government Schemes -->
-                        <button onclick="sendQuickMessage('Tell me about government schemes')" class="dcp-menu-btn" style="width:100%;padding:14px 16px;background:white;border:2px solid ${config.colors.border};border-radius:24px;cursor:pointer;transition:all 0.3s ease;text-align:center;font-size:15px;font-weight:500;color:${config.colors.primary};outline:none;display:block;box-shadow:0 1px 3px ${config.colors.shadowColor}" onmouseover="this.style.borderColor='${config.colors.primary}';this.style.background='#F7F7FF';this.style.transform='translateY(-1px)';this.style.boxShadow='0 3px 8px rgba(94,92,230,0.2)'" onmouseout="this.style.borderColor='${config.colors.border}';this.style.background='white';this.style.transform='translateY(0)';this.style.boxShadow='0 1px 3px ${config.colors.shadowColor}'">
-                            Government Schemes
+                        <!-- Schemes Button -->
+                        <button onclick="sendDCPMessage('Tell me about government schemes')" style="width:100%;padding:12px 16px;background:white;border:1.5px solid ${config.colors.buttonBorder};border-radius:24px;color:${config.colors.buttonText};font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s ease;outline:none;text-align:center" onmouseover="this.style.background='#F5F3FF';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='white';this.style.transform='translateY(0)'">
+                            Schemes
                         </button>
                         
-                        <!-- Contact Information -->
-                        <button onclick="sendQuickMessage('I need contact information')" class="dcp-menu-btn" style="width:100%;padding:14px 16px;background:white;border:2px solid ${config.colors.border};border-radius:24px;cursor:pointer;transition:all 0.3s ease;text-align:center;font-size:15px;font-weight:500;color:${config.colors.primary};outline:none;display:block;box-shadow:0 1px 3px ${config.colors.shadowColor}" onmouseover="this.style.borderColor='${config.colors.primary}';this.style.background='#F7F7FF';this.style.transform='translateY(-1px)';this.style.boxShadow='0 3px 8px rgba(94,92,230,0.2)'" onmouseout="this.style.borderColor='${config.colors.border}';this.style.background='white';this.style.transform='translateY(0)';this.style.boxShadow='0 1px 3px ${config.colors.shadowColor}'">
-                            Contact Us
+                        <!-- Contact Button -->
+                        <button onclick="sendDCPMessage('I need contact information')" style="width:100%;padding:12px 16px;background:white;border:1.5px solid ${config.colors.buttonBorder};border-radius:24px;color:${config.colors.buttonText};font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s ease;outline:none;text-align:center" onmouseover="this.style.background='#F5F3FF';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='white';this.style.transform='translateY(0)'">
+                            Contact
                         </button>
                         
-                        <!-- Document Status -->
-                        <button onclick="sendQuickMessage('Check my document or application status')" class="dcp-menu-btn" style="width:100%;padding:14px 16px;background:white;border:2px solid ${config.colors.border};border-radius:24px;cursor:pointer;transition:all 0.3s ease;text-align:center;font-size:15px;font-weight:500;color:${config.colors.primary};outline:none;display:block;box-shadow:0 1px 3px ${config.colors.shadowColor}" onmouseover="this.style.borderColor='${config.colors.primary}';this.style.background='#F7F7FF';this.style.transform='translateY(-1px)';this.style.boxShadow='0 3px 8px rgba(94,92,230,0.2)'" onmouseout="this.style.borderColor='${config.colors.border}';this.style.background='white';this.style.transform='translateY(0)';this.style.boxShadow='0 1px 3px ${config.colors.shadowColor}'">
-                            Document Status
-                        </button>
-                        
-                        <!-- Other Query -->
-                        <button onclick="sendQuickMessage('I have a different question')" class="dcp-menu-btn" style="width:100%;padding:14px 16px;background:white;border:2px solid ${config.colors.border};border-radius:24px;cursor:pointer;transition:all 0.3s ease;text-align:center;font-size:15px;font-weight:500;color:${config.colors.primary};outline:none;display:block;box-shadow:0 1px 3px ${config.colors.shadowColor}" onmouseover="this.style.borderColor='${config.colors.primary}';this.style.background='#F7F7FF';this.style.transform='translateY(-1px)';this.style.boxShadow='0 3px 8px rgba(94,92,230,0.2)'" onmouseout="this.style.borderColor='${config.colors.border}';this.style.background='white';this.style.transform='translateY(0)';this.style.boxShadow='0 1px 3px ${config.colors.shadowColor}'">
-                            Other Queries
+                        <!-- Get Help Button -->
+                        <button onclick="sendDCPMessage('I have a general query')" style="width:100%;padding:12px 16px;background:white;border:1.5px solid ${config.colors.buttonBorder};border-radius:24px;color:${config.colors.buttonText};font-size:14px;font-weight:500;cursor:pointer;transition:all 0.2s ease;outline:none;text-align:center" onmouseover="this.style.background='#F5F3FF';this.style.transform='translateY(-1px)'" onmouseout="this.style.background='white';this.style.transform='translateY(0)'">
+                            Get Help
                         </button>
                     </div>
                     
-                    <!-- QR Code Section Toggle -->
-                    <div style="padding:0 16px 16px;background:${config.colors.glassBg};backdrop-filter:blur(10px);text-align:center">
-                        <button onclick="toggleQRCode()" style="color:${config.colors.primary};background:none;border:none;font-size:13px;font-weight:500;cursor:pointer;padding:8px;transition:all 0.3s ease;outline:none" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
-                            Show QR Code
+                    <!-- Show/Hide QR Toggle -->
+                    <div style="padding:8px 12px;background:${config.colors.transparentOverlay};backdrop-filter:blur(8px);text-align:center;border-bottom:1px solid rgba(0,0,0,0.06)">
+                        <button onclick="toggleDCPQR()" id="qrToggleBtn" style="color:${config.colors.buttonText};background:none;border:none;font-size:12px;font-weight:500;cursor:pointer;padding:4px 8px;transition:all 0.2s ease;outline:none" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
+                            Show QR
                         </button>
                     </div>
                     
-                    <!-- QR Code Section (Initially Hidden) -->
-                    <div class="dcp-qr-section" id="dcpQRSection" style="padding:16px;background:white;border-top:1px solid ${config.colors.border};display:none">
-                        <div style="text-align:center">
-                            <div style="font-size:13px;font-weight:600;color:${config.colors.primary};margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px">
-                                Scan to Start
-                            </div>
-                            <div style="display:inline-block;padding:12px;background:white;border:2px solid ${config.colors.border};border-radius:16px">
-                                <img src="${utils.generateQRCode(whatsappUrl)}" alt="QR Code" style="width:160px;height:160px;display:block">
-                            </div>
-                            <div style="font-size:11px;color:${config.colors.lightText};margin-top:8px">
-                                Open WhatsApp on your phone
-                            </div>
+                    <!-- QR Code Section -->
+                    <div id="dcpQRSection" style="display:none;padding:16px;background:white;text-align:center;border-top:1px solid rgba(0,0,0,0.06)">
+                        <div style="font-size:12px;font-weight:600;color:${config.colors.buttonText};margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px">
+                            SCAN TO START
+                        </div>
+                        <div style="display:inline-block;padding:8px;border:1px solid ${config.colors.lightGray};border-radius:12px;background:white">
+                            <img src="${utils.generateQRCode(whatsappUrl)}" alt="WhatsApp QR" style="width:150px;height:150px;display:block">
+                        </div>
+                        <div style="font-size:11px;color:${config.colors.gray};margin-top:8px">
+                            Open on your phone
                         </div>
                     </div>
                     
-                    <!-- Footer with Powered By -->
-                    <div style="padding:12px 16px;background:rgba(248,248,248,0.8);backdrop-filter:blur(10px);border-top:1px solid ${config.colors.border};text-align:center;border-radius:0 0 24px 24px">
-                        <a href="${config.poweredBy.url}" target="_blank" rel="noopener noreferrer" style="color:${config.colors.lightText};text-decoration:none;font-size:11px;transition:color 0.3s ease;display:inline-flex;align-items:center;gap:4px;font-weight:500" onmouseover="this.style.color='${config.colors.primary}'" onmouseout="this.style.color='${config.colors.lightText}'">
+                    <!-- Footer -->
+                    <div style="padding:10px;background:rgba(250,250,250,0.9);text-align:center;border-radius:0 0 16px 16px">
+                        <a href="${config.poweredBy.url}" target="_blank" rel="noopener noreferrer" style="color:${config.colors.gray};text-decoration:none;font-size:11px;display:inline-flex;align-items:center;gap:4px;transition:color 0.2s" onmouseover="this.style.color='${config.colors.buttonText}'" onmouseout="this.style.color='${config.colors.gray}'">
                             Powered by ${config.poweredBy.text} ↗
                         </a>
                     </div>
                 </div>
                 
-                <!-- Notification Popup (Shows after delay) -->
-                <div class="dcp-notification" id="dcpNotification" style="position:absolute;bottom:85px;right:0;background:white;padding:14px 16px;border-radius:16px;font-size:14px;font-weight:500;color:${config.colors.text};opacity:0;visibility:hidden;transform:translateY(10px);transition:all 0.4s ease;white-space:nowrap;box-shadow:0 4px 12px ${config.colors.shadowColor}, 0 0 0 1px rgba(0,0,0,0.05);max-width:280px;pointer-events:none">
-                    <div style="position:absolute;bottom:-5px;right:28px;width:10px;height:10px;background:white;transform:rotate(45deg);box-shadow:2px 2px 4px rgba(0,0,0,0.05)"></div>
+                <!-- Notification Bubble -->
+                <div class="dcp-notification-bubble" id="dcpNotificationBubble" style="position:absolute;bottom:80px;right:0;background:white;padding:12px 16px;border-radius:12px;font-size:13px;color:${config.colors.text};box-shadow:0 4px 12px ${config.colors.shadow};opacity:0;visibility:hidden;transform:translateY(10px) scale(0.9);transition:all 0.3s ease;max-width:250px;pointer-events:none">
+                    <div style="position:absolute;bottom:-4px;right:24px;width:8px;height:8px;background:white;transform:rotate(45deg)"></div>
                     <div style="display:flex;align-items:center;gap:8px">
-                        <span style="font-size:16px;animation:wave 1s ease-in-out infinite">👋</span>
-                        <span>AI Assistant is ready to help!</span>
+                        <span style="animation:handWave 1s ease-in-out 2">👋</span>
+                        <span>Need help? Chat with AI Assistant!</span>
                     </div>
                 </div>
             </div>
             
+            <!-- Styles -->
             <style>
-                @keyframes aiPulse {
+                @keyframes aiBadgePulse {
                     0%, 100% { transform: scale(1); }
                     50% { transform: scale(1.1); }
                 }
                 
-                @keyframes rippleEffect {
-                    0% {
-                        transform: translate(-50%, -50%) scale(1);
-                        opacity: 0.3;
-                    }
-                    100% {
-                        transform: translate(-50%, -50%) scale(2.5);
-                        opacity: 0;
-                    }
-                }
-                
-                @keyframes pulse {
-                    0%, 100% { opacity: 1; }
-                    50% { opacity: 0.5; }
-                }
-                
-                @keyframes wave {
+                @keyframes handWave {
                     0%, 100% { transform: rotate(0deg); }
                     25% { transform: rotate(20deg); }
                     75% { transform: rotate(-20deg); }
                 }
                 
-                @keyframes slideInUp {
+                @keyframes fadeInUp {
                     from {
-                        transform: translateY(100%);
                         opacity: 0;
+                        transform: translateY(20px);
                     }
                     to {
-                        transform: translateY(0);
                         opacity: 1;
+                        transform: translateY(0);
                     }
                 }
                 
-                @keyframes fadeIn {
-                    from { opacity: 0; }
-                    to { opacity: 1; }
+                .dcp-whatsapp-btn {
+                    animation: fadeInUp 0.5s ease;
                 }
                 
-                .dcp-fab {
-                    animation: fadeIn 0.6s ease;
+                .dcp-whatsapp-btn:hover {
+                    transform: scale(1.1);
+                    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3);
                 }
                 
-                .dcp-fab:hover {
-                    transform: scale(1.1) !important;
-                    box-shadow: 0 6px 20px rgba(94, 92, 230, 0.35), 0 12px 32px rgba(94, 92, 230, 0.25) !important;
+                .dcp-whatsapp-btn:active {
+                    transform: scale(0.95);
                 }
                 
-                .dcp-fab:active {
-                    transform: scale(0.95) !important;
-                }
-                
-                .dcp-chat.active {
+                .dcp-chat-popup.active {
                     opacity: 1 !important;
                     visibility: visible !important;
-                    transform: translateY(0) scale(1) !important;
+                    transform: scale(1) translateY(0) !important;
                     pointer-events: auto !important;
                 }
                 
-                .dcp-notification.active {
+                .dcp-notification-bubble.active {
                     opacity: 1 !important;
                     visibility: visible !important;
-                    transform: translateY(0) !important;
+                    transform: translateY(0) scale(1) !important;
                 }
                 
-                /* Custom Scrollbar */
-                .dcp-menu::-webkit-scrollbar {
-                    width: 4px;
+                /* Smooth animations */
+                .dcp-chat-popup * {
+                    transition: all 0.2s ease;
                 }
                 
-                .dcp-menu::-webkit-scrollbar-track {
-                    background: transparent;
-                }
-                
-                .dcp-menu::-webkit-scrollbar-thumb {
-                    background: ${config.colors.border};
-                    border-radius: 2px;
-                }
-                
-                .dcp-menu::-webkit-scrollbar-thumb:hover {
-                    background: ${config.colors.lightText};
-                }
-                
+                /* Mobile responsive */
                 @media (max-width: 480px) {
-                    .dcp-chat {
-                        width: calc(100vw - 24px) !important;
-                        right: -12px !important;
-                        bottom: 75px !important;
+                    .dcp-chat-popup {
+                        width: calc(100vw - 32px) !important;
+                        right: -6px !important;
+                        bottom: 70px !important;
                     }
                     
-                    .dcp-fab {
-                        width: 56px !important;
-                        height: 56px !important;
+                    .dcp-whatsapp-btn {
+                        width: 54px !important;
+                        height: 54px !important;
                     }
                     
-                    .dcp-fab svg {
-                        width: 26px !important;
-                        height: 26px !important;
-                    }
-                    
-                    .dcp-ripple {
-                        width: 56px !important;
-                        height: 56px !important;
+                    .dcp-whatsapp-btn svg {
+                        width: 24px !important;
+                        height: 24px !important;
                     }
                 }
                 
                 @media print {
-                    .dcp-widget {
+                    .dcp-widget-container {
                         display: none !important;
                     }
                 }
                 
+                /* Accessibility */
                 @media (prefers-reduced-motion: reduce) {
-                    * {
+                    .dcp-widget-container * {
                         animation: none !important;
                         transition: none !important;
                     }
@@ -363,151 +291,127 @@
             // Insert widget HTML
             container.innerHTML = createWidget();
             
-            // Auto-show notification after delay
+            // Auto-show features
             if (config.autoShow) {
+                // Show notification bubble
                 setTimeout(() => {
-                    showNotification();
+                    const bubble = document.getElementById('dcpNotificationBubble');
+                    if (bubble) {
+                        bubble.classList.add('active');
+                        
+                        // Hide after 5 seconds
+                        setTimeout(() => {
+                            bubble.classList.remove('active');
+                        }, 5000);
+                    }
                 }, config.showDelay);
                 
-                // Auto-open chat on first visit
+                // Auto-open popup for first-time visitors
                 setTimeout(() => {
-                    const hasVisited = localStorage.getItem('dcp_visited');
+                    const hasVisited = sessionStorage.getItem('dcp_widget_shown');
                     if (!hasVisited) {
-                        toggleDCPChat();
-                        localStorage.setItem('dcp_visited', 'true');
+                        toggleDCPWidget();
+                        sessionStorage.setItem('dcp_widget_shown', 'true');
                     }
-                }, config.showDelay + 3000);
+                }, config.showDelay + 2000);
             }
             
-            // Add entrance animation
-            setTimeout(() => {
-                const fab = document.querySelector('.dcp-fab');
-                if (fab) {
-                    fab.style.animation = 'aiPulse 2s ease-in-out 3';
-                }
-            }, 500);
-            
-            console.log('🚀 DCP WhatsApp Widget v5.0.0 initialized');
-            console.log('🤖 AI-Powered Government Assistant Ready');
+            console.log('✅ DCP WhatsApp Widget v6.0.0 initialized');
+            console.log('🤖 AI-Powered Government Assistant Active');
             console.log('⚡ Powered by WoW-Strategies Private Limited');
             
         } catch (error) {
-            console.error('❌ DCP Widget initialization failed:', error);
+            console.error('❌ Widget initialization failed:', error);
         }
     };
     
-    // Toggle chat window
-    window.toggleDCPChat = function() {
-        try {
-            const chat = document.getElementById('dcpChat');
-            const notification = document.getElementById('dcpNotification');
-            if (!chat) return;
-            
-            const isActive = chat.classList.contains('active');
+    // Toggle chat popup
+    window.toggleDCPWidget = function() {
+        const popup = document.getElementById('dcpChatPopup');
+        const bubble = document.getElementById('dcpNotificationBubble');
+        
+        if (popup) {
+            const isActive = popup.classList.contains('active');
             
             if (isActive) {
-                chat.classList.remove('active');
+                popup.classList.remove('active');
             } else {
-                chat.classList.add('active');
-                // Hide notification when chat opens
-                if (notification) {
-                    notification.classList.remove('active');
-                }
-                // Hide AI badge
-                const badge = document.querySelector('.dcp-ai-badge');
-                if (badge) {
-                    setTimeout(() => {
-                        badge.style.display = 'none';
-                    }, 300);
+                popup.classList.add('active');
+                // Hide notification when opening
+                if (bubble) {
+                    bubble.classList.remove('active');
                 }
             }
-        } catch (error) {
-            console.error('Toggle chat failed:', error);
         }
     };
     
-    // Show notification
-    function showNotification() {
-        const notification = document.getElementById('dcpNotification');
-        if (notification) {
-            notification.classList.add('active');
-            
-            // Auto-hide after 5 seconds
-            setTimeout(() => {
-                notification.classList.remove('active');
-            }, 5000);
-        }
-    }
-    
-    // Toggle QR code visibility
-    window.toggleQRCode = function() {
+    // Toggle QR code
+    window.toggleDCPQR = function() {
         const qrSection = document.getElementById('dcpQRSection');
-        const button = event.target;
-        if (qrSection) {
+        const toggleBtn = document.getElementById('qrToggleBtn');
+        
+        if (qrSection && toggleBtn) {
             if (qrSection.style.display === 'none') {
                 qrSection.style.display = 'block';
-                button.textContent = 'Hide QR Code';
+                toggleBtn.textContent = 'Hide QR';
             } else {
                 qrSection.style.display = 'none';
-                button.textContent = 'Show QR Code';
+                toggleBtn.textContent = 'Show QR';
             }
         }
     };
     
-    // Send quick message
-    window.sendQuickMessage = function(message) {
+    // Send message to WhatsApp
+    window.sendDCPMessage = function(message) {
         const whatsappUrl = `https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, '_blank');
+        if (utils.isMobile()) {
+            window.location.href = whatsappUrl;
+        } else {
+            window.open(whatsappUrl, '_blank');
+        }
     };
     
-    // Click outside to close
+    // Close on outside click
     document.addEventListener('click', function(e) {
-        try {
-            const chat = document.getElementById('dcpChat');
-            const fab = document.getElementById('dcpFab');
-            
-            if (chat && fab && 
-                !chat.contains(e.target) && 
-                !fab.contains(e.target) && 
-                chat.classList.contains('active')) {
-                toggleDCPChat();
+        const popup = document.getElementById('dcpChatPopup');
+        const btn = document.getElementById('dcpWhatsappBtn');
+        
+        if (popup && btn && !popup.contains(e.target) && !btn.contains(e.target)) {
+            if (popup.classList.contains('active')) {
+                popup.classList.remove('active');
             }
-        } catch (error) {
-            // Silent fail
         }
     });
     
-    // Escape key to close
+    // Close on ESC key
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
-            const chat = document.getElementById('dcpChat');
-            if (chat && chat.classList.contains('active')) {
-                toggleDCPChat();
+            const popup = document.getElementById('dcpChatPopup');
+            if (popup && popup.classList.contains('active')) {
+                popup.classList.remove('active');
             }
         }
     });
     
     // Public API
     window.DCPWidget = {
-        version: '5.0.0',
-        config: config,
+        version: '6.0.0',
         open: () => {
-            const chat = document.getElementById('dcpChat');
-            if (chat && !chat.classList.contains('active')) {
-                toggleDCPChat();
+            const popup = document.getElementById('dcpChatPopup');
+            if (popup && !popup.classList.contains('active')) {
+                popup.classList.add('active');
             }
         },
         close: () => {
-            const chat = document.getElementById('dcpChat');
-            if (chat && chat.classList.contains('active')) {
-                toggleDCPChat();
+            const popup = document.getElementById('dcpChatPopup');
+            if (popup && popup.classList.contains('active')) {
+                popup.classList.remove('active');
             }
         },
-        toggle: () => toggleDCPChat(),
-        showNotification: () => showNotification()
+        toggle: () => toggleDCPWidget()
     };
     
-    // Initialize when DOM is ready
+    // Initialize on DOM ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initWidget);
     } else {

@@ -1,30 +1,8 @@
 /* 
- PCMC Municipal Corporation – Minimalistic Government AI WhatsApp Widget
+ PCMC Municipal Corporation –  Government AI WhatsApp Widget
  Version: 1.0.0
  Author: WoW-Strategies Private Limited
- Description:
-   Ultra–light, modern, glass / transparent floating AI helper with quick service buttons:
-   Information, My Properties, Grievance, Schemes, CFC, Help.
-   - Minimal footprint (< ~15KB unminified)
-   - Accessible (ARIA / keyboard)
-   - LocalStorage hint logic
-   - Configurable through global init or <script data-* attributes>
-   - Optional QR code show/hide (persisting preference)
-   - Auto-injects styles (no global CSS pollution; namespaced)
-   - Graceful WhatsApp fallback (new tab)
-   - Emphasis on AI helper context (government digital governance)
-   - Mobile responsive & reduced motion aware
- HOW TO USE:
-   <script src="https://wow-strategies.com/pcmc-whatsup.js"
-           data-phone="918888006666"
-           data-title="PCMC AI Assistant"
-           data-theme="#1e3a8a"
-           data-position="right"
-           data-lang="en"
-           data-hint="true"
-           defer></script>
-   OR programmatic:
-     window.PCMCChatbot.init({ phone: '918888006666', ... })
+
 */
 
 (function() {

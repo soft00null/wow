@@ -1,7 +1,7 @@
 /**
  * PCMC Municipal Corporation AI Assistant Widget
- * Professional Government Chatbot for Citizen Services
- * (c) 2025 Powered by WoW-Strategies Private Limited
+ * Professional Government Chatbot for Citizen services
+ * Powered by WoW-Strategies Private Limited
  */
 
 (function(window, document) {
@@ -58,6 +58,7 @@
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 position: relative;
                 overflow: hidden;
+                border: none;
             }
 
             .pcmc-float-btn::before {
@@ -87,6 +88,7 @@
                 height: 32px;
                 fill: white;
                 transition: transform 0.3s ease;
+                pointer-events: none;
             }
 
             .pcmc-float-btn.active svg {
@@ -110,6 +112,7 @@
                 font-weight: 600;
                 animation: pulse 2s infinite;
                 border: 2px solid white;
+                pointer-events: none;
             }
 
             @keyframes pulse {
@@ -141,6 +144,7 @@
                 transition: all 0.3s ease;
                 backdrop-filter: blur(10px);
                 box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+                pointer-events: none;
             }
 
             .pcmc-hint.show {
@@ -546,6 +550,7 @@
                 width: 32px;
                 height: 32px;
                 background: #f1f5f9;
+                border: none;
                 border-radius: 10px;
                 display: flex;
                 align-items: center;
@@ -611,6 +616,8 @@
                 font-weight: 500;
                 cursor: pointer;
                 transition: all 0.2s ease;
+                text-decoration: none;
+                display: inline-block;
             }
 
             .pcmc-qr-button:hover {
@@ -650,7 +657,7 @@
     // SVG Icons
     const icons = {
         ai: '<svg viewBox="0 0 24 24"><path d="M21 11V9h-2V7a2 2 0 0 0-2-2h-2V3h-2v2h-2V3H9v2H7a2 2 0 0 0-2 2v2H3v2h2v2H3v2h2v2a2 2 0 0 0 2 2h2v2h2v-2h2v2h2v-2h2a2 2 0 0 0 2-2v-2h2v-2h-2v-2h2zm-4 6H7V7h10v10z"/><circle cx="12" cy="12" r="1.5"/></svg>',
-        chat: '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>',
+        chat: '<svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>',
         close: '<svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
         qr: '<svg viewBox="0 0 24 24"><path d="M3 11h8V3H3v8zm2-6h4v4H5V5zM3 21h8v-8H3v8zm2-6h4v4H5v-4zM13 3v8h8V3h-8zm6 6h-4V5h4v4zM19 19h2v2h-2zM13 13h2v2h-2zM15 15h2v2h-2zM13 17h2v2h-2zM15 19h2v2h-2zM17 17h2v2h-2zM17 13h2v2h-2zM19 15h2v2h-2z"/></svg>',
         send: '<svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>',
@@ -741,9 +748,9 @@
                         </div>
                         <h3 class="pcmc-qr-title">Scan to Connect on WhatsApp</h3>
                         <p class="pcmc-qr-desc">Scan this QR code with your phone to continue the conversation on WhatsApp</p>
-                        <button class="pcmc-qr-button" onclick="window.open('https://wa.me/${PCMC_CONFIG.whatsappNumber}', '_blank')">
+                        <a class="pcmc-qr-button" href="https://wa.me/${PCMC_CONFIG.whatsappNumber}" target="_blank">
                             Open WhatsApp
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -758,12 +765,16 @@
 
     // Initialize widget
     const init = () => {
+        console.log('PCMC Widget: Starting initialization...');
+        
         // Inject styles
         injectStyles();
+        console.log('PCMC Widget: Styles injected');
         
         // Create and append widget
         const widget = createWidget();
         document.body.appendChild(widget);
+        console.log('PCMC Widget: Widget added to DOM');
         
         // Get elements
         const floatBtn = document.getElementById('pcmcFloatBtn');
@@ -820,8 +831,10 @@
             const btn = e.target.closest('.pcmc-service-btn');
             if (btn) {
                 const service = btn.dataset.service;
-                const serviceName = services.find(s => s.id === service)?.name;
-                handleServiceClick(serviceName);
+                const serviceObj = services.find(s => s.id === service);
+                if (serviceObj) {
+                    handleServiceClick(serviceObj.name);
+                }
             }
         });
         
@@ -916,6 +929,8 @@
                 }
             }, 5000);
         }
+        
+        console.log('PCMC Widget: Initialization complete!');
     };
     
     // Initialize when DOM is ready

@@ -1,12 +1,11 @@
 /**
- * Divisional Commissioner Pune Minimalist Chat Widget
+ * Divisional Commissioner Pune  Chat Widget
  * File: dc-pune-chat-widget.js
- * Version: 5.0.0 - Elegant Minimalist Edition
+ * Version: 5.0.0 
  * Date: 2025-09-28
- * Author: soft00null
+ * Author: Team WoW
  * URL: https://wow-strategies.com/dc-pune-chat-widget.js
  * 
- * Minimalist WhatsApp-inspired design
  * Powered by WoW-Strategies Private Limited
  */
 
@@ -35,7 +34,7 @@
             bubblePurple: '#7C66DC'
         },
         poweredBy: {
-            text: 'Powered by WoW-Strategies',
+            text: 'Powered by WoW-Strategies Private Limited',
             url: 'https://wow-strategies.com/'
         }
     };
@@ -91,7 +90,7 @@
                         <div class="dcpc-message dcpc-message-received">
                             <div class="dcpc-message-bubble">
                                 <div class="dcpc-message-text">
-                                    👋 नमस्कार! Welcome to Divisional Commissioner Pune
+                                    👋 Hello! Welcome to Divisional Commissioner Pune
                                 </div>
                                 <div class="dcpc-message-time">Just now</div>
                             </div>

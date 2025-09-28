@@ -1,24 +1,19 @@
 (function() {
     'use strict';
     
-    // Configuration for PCMC Municipal Corporation
+    // PCMC Municipal Corporation Configuration
     const config = {
-        phoneNumber: '918888006666',
-        corporationName: 'Pimpri Chinchwad Municipal Corporation',
-        shortName: 'PCMC',
-        tagline: 'Digital Governance at Your Service',
+        corporationName: 'PCMC',
+        fullName: 'Pimpri Chinchwad Municipal Corporation',
+        tagline: 'Digital Governance • Citizen First',
+        supportNumber: '918888006666',
         poweredBy: 'WoW-Strategies Private Limited',
-        poweredByUrl: 'https://wow-strategies.com/',
-        workingHours: {
-            start: 9,
-            end: 18,
-            days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-        }
+        poweredByUrl: 'https://wow-strategies.com/'
     };
 
-    // Comprehensive styles for government theme
+    // Minimalistic Modern Styles
     const styles = `
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         
         * {
             margin: 0;
@@ -26,297 +21,212 @@
             box-sizing: border-box;
         }
 
-        .pcmc-ai-widget {
+        .pcmc-widget {
             position: fixed;
             bottom: 24px;
             right: 24px;
             z-index: 999999;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        .pcmc-ai-launcher {
-            position: relative;
-            width: 72px;
-            height: 72px;
-            background: linear-gradient(145deg, #1e3a8a 0%, #3b82f6 100%);
-            border-radius: 50%;
+        /* Floating Action Button */
+        .pcmc-fab {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #0EA5E9 0%, #2563EB 100%);
+            border-radius: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 8px 32px rgba(30, 58, 138, 0.3);
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            animation: float 3s ease-in-out infinite;
-            overflow: hidden;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .pcmc-ai-launcher:hover {
-            transform: scale(1.1);
-            box-shadow: 0 12px 48px rgba(30, 58, 138, 0.4);
-        }
-
-        .pcmc-ai-launcher::before {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            background: linear-gradient(45deg, #60a5fa, #3b82f6, #1e3a8a);
-            border-radius: 50%;
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.3s;
-            animation: rotate 3s linear infinite;
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .pcmc-ai-launcher:hover::before {
-            opacity: 1;
-        }
-
-        .pcmc-ai-launcher-icon {
-            width: 36px;
-            height: 36px;
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            z-index: 2;
         }
 
-        .pcmc-ai-launcher-icon svg {
+        .pcmc-fab:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 32px rgba(37, 99, 235, 0.4);
+        }
+
+        .pcmc-fab-icon {
+            width: 32px;
+            height: 32px;
+            transition: transform 0.3s ease;
+        }
+
+        .pcmc-fab.active .pcmc-fab-icon {
+            transform: rotate(90deg);
+        }
+
+        .pcmc-fab-icon svg {
             width: 100%;
             height: 100%;
             fill: white;
         }
 
-        .pcmc-status-dot {
+        .pcmc-pulse {
             position: absolute;
             top: 4px;
             right: 4px;
-            width: 16px;
-            height: 16px;
-            background: #10b981;
-            border: 3px solid white;
+            width: 12px;
+            height: 12px;
+            background: #10B981;
             border-radius: 50%;
-            animation: pulse-dot 2s infinite;
-        }
-
-        @keyframes pulse-dot {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.2);
-                opacity: 0.8;
-            }
-        }
-
-        .pcmc-notification-badge {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            background: #ef4444;
-            color: white;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 2px 6px;
-            border-radius: 12px;
             border: 2px solid white;
-            animation: shake 2s infinite;
+            animation: pulse 2s infinite;
         }
 
-        @keyframes shake {
-            0%, 90%, 100% { transform: rotate(0deg); }
-            92% { transform: rotate(-5deg); }
-            94%, 96%, 98% { transform: rotate(5deg); }
-            95%, 97%, 99% { transform: rotate(-5deg); }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+            70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
 
-        .pcmc-ai-chatbox {
+        /* Chat Window - Minimal Design */
+        .pcmc-chat {
             position: absolute;
-            bottom: 96px;
+            bottom: 80px;
             right: 0;
-            width: 420px;
-            height: 600px;
+            width: 380px;
             background: white;
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
             opacity: 0;
             visibility: hidden;
-            transform: scale(0.8) translateY(20px);
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transform: translateY(16px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            max-height: 600px;
         }
 
-        .pcmc-ai-chatbox.active {
+        .pcmc-chat.active {
             opacity: 1;
             visibility: visible;
-            transform: scale(1) translateY(0);
+            transform: translateY(0) scale(1);
         }
 
+        /* Chat Header - Clean & Minimal */
         .pcmc-chat-header {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-            padding: 24px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .pcmc-chat-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="white" opacity="0.1"/><circle cx="80" cy="80" r="2" fill="white" opacity="0.1"/><circle cx="50" cy="50" r="2" fill="white" opacity="0.1"/><circle cx="80" cy="20" r="2" fill="white" opacity="0.1"/><circle cx="20" cy="80" r="2" fill="white" opacity="0.1"/></svg>') repeat;
-            opacity: 0.3;
-        }
-
-        .pcmc-header-content {
-            position: relative;
-            z-index: 1;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            padding: 20px;
+            border-bottom: 1px solid #f1f5f9;
         }
 
         .pcmc-header-top {
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: start;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
-        .pcmc-header-info {
-            flex: 1;
+        .pcmc-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .pcmc-header-logo {
-            width: 48px;
-            height: 48px;
-            background: white;
+        .pcmc-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #0EA5E9 0%, #2563EB 100%);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .pcmc-header-logo svg {
-            width: 28px;
-            height: 28px;
-            fill: #1e3a8a;
-        }
-
-        .pcmc-header-title {
-            color: white;
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 4px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .pcmc-header-subtitle {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 13px;
-            margin-bottom: 8px;
-        }
-
-        .pcmc-header-status {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: rgba(255, 255, 255, 0.95);
-            font-size: 12px;
-        }
-
-        .pcmc-status-indicator {
-            width: 8px;
-            height: 8px;
-            background: #10b981;
-            border-radius: 50%;
-            animation: blink 2s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        .pcmc-header-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .pcmc-header-btn {
-            width: 32px;
-            height: 32px;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            backdrop-filter: blur(10px);
-        }
-
-        .pcmc-header-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.1);
-        }
-
-        .pcmc-header-btn svg {
-            width: 18px;
-            height: 18px;
+        .pcmc-avatar svg {
+            width: 24px;
+            height: 24px;
             fill: white;
         }
 
-        .pcmc-language-selector {
+        .pcmc-header-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0F172A;
+            margin-bottom: 2px;
+        }
+
+        .pcmc-header-info p {
+            font-size: 12px;
+            color: #64748B;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .pcmc-status {
+            width: 6px;
+            height: 6px;
+            background: #10B981;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .pcmc-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .pcmc-close:hover {
+            background: #f1f5f9;
+        }
+
+        .pcmc-close svg {
+            width: 20px;
+            height: 20px;
+            fill: #64748B;
+        }
+
+        /* Language Bar - Subtle */
+        .pcmc-lang-bar {
             display: flex;
             gap: 8px;
-            padding: 8px 12px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
+            padding: 0 2px;
         }
 
-        .pcmc-lang-btn {
-            padding: 4px 8px;
+        .pcmc-lang {
+            flex: 1;
+            padding: 6px;
             background: transparent;
-            color: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 6px;
+            border: none;
             font-size: 11px;
+            color: #94A3B8;
             cursor: pointer;
-            transition: all 0.3s;
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-weight: 500;
         }
 
-        .pcmc-lang-btn.active,
-        .pcmc-lang-btn:hover {
-            background: white;
-            color: #1e3a8a;
-            border-color: white;
+        .pcmc-lang.active {
+            background: #2563EB;
+            color: white;
         }
 
+        /* Chat Body */
         .pcmc-chat-body {
             flex: 1;
-            background: linear-gradient(to bottom, #f8fafc 0%, #f1f5f9 100%);
+            padding: 24px 20px;
             overflow-y: auto;
-            padding: 20px;
-            scroll-behavior: smooth;
+            background: #FAFBFC;
         }
 
         .pcmc-chat-body::-webkit-scrollbar {
-            width: 6px;
+            width: 4px;
         }
 
         .pcmc-chat-body::-webkit-scrollbar-track {
@@ -324,181 +234,145 @@
         }
 
         .pcmc-chat-body::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 3px;
+            background: #E2E8F0;
+            border-radius: 4px;
         }
 
-        .pcmc-welcome-section {
+        /* Welcome Message */
+        .pcmc-welcome {
             text-align: center;
-            padding: 24px;
-            animation: slideUp 0.5s ease-out;
+            padding: 20px 0;
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .pcmc-bot-avatar {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);
-            border-radius: 50%;
-            margin: 0 auto 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
-        }
-
-        .pcmc-bot-avatar svg {
-            width: 36px;
-            height: 36px;
-            fill: white;
-        }
-
-        .pcmc-welcome-title {
-            font-size: 20px;
+        .pcmc-welcome h4 {
+            font-size: 18px;
             font-weight: 600;
-            color: #1e293b;
+            color: #0F172A;
             margin-bottom: 8px;
         }
 
-        .pcmc-welcome-subtitle {
-            font-size: 14px;
-            color: #64748b;
-            margin-bottom: 24px;
+        .pcmc-welcome p {
+            font-size: 13px;
+            color: #64748B;
             line-height: 1.5;
         }
 
-        .pcmc-services-grid {
+        /* Service Cards - Clean Grid */
+        .pcmc-services {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
-            margin-bottom: 20px;
+            margin-top: 24px;
         }
 
-        .pcmc-service-card {
+        .pcmc-service {
             background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
             padding: 16px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
             position: relative;
             overflow: hidden;
         }
 
-        .pcmc-service-card::before {
+        .pcmc-service::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #3b82f6, #1e3a8a);
+            height: 2px;
+            background: linear-gradient(90deg, #0EA5E9, #2563EB);
             transform: scaleX(0);
             transition: transform 0.3s;
         }
 
-        .pcmc-service-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-            border-color: #3b82f6;
+        .pcmc-service:hover {
+            border-color: #CBD5E1;
+            background: #F8FAFC;
+            transform: translateY(-2px);
         }
 
-        .pcmc-service-card:hover::before {
+        .pcmc-service:hover::before {
             transform: scaleX(1);
         }
 
         .pcmc-service-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 12px;
-            font-size: 20px;
+            font-size: 24px;
+            margin-bottom: 8px;
         }
 
         .pcmc-service-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
-            color: #1e293b;
+            color: #1E293B;
             margin-bottom: 4px;
         }
 
         .pcmc-service-desc {
             font-size: 11px;
-            color: #64748b;
-            line-height: 1.4;
+            color: #64748B;
+            line-height: 1.3;
         }
 
+        /* Quick Actions - Pills */
         .pcmc-quick-actions {
-            background: white;
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 20px;
-            border: 1px solid #e2e8f0;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #F1F5F9;
         }
 
-        .pcmc-quick-actions-title {
-            font-size: 12px;
+        .pcmc-actions-title {
+            font-size: 11px;
             font-weight: 600;
-            color: #64748b;
+            color: #94A3B8;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 12px;
         }
 
-        .pcmc-action-chips {
+        .pcmc-action-pills {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
         }
 
-        .pcmc-action-chip {
-            padding: 8px 16px;
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            border: 1px solid #e2e8f0;
+        .pcmc-pill {
+            padding: 8px 14px;
+            background: white;
+            border: 1px solid #E2E8F0;
             border-radius: 20px;
-            font-size: 13px;
+            font-size: 12px;
             color: #475569;
             cursor: pointer;
-            transition: all 0.3s;
-            white-space: nowrap;
+            transition: all 0.2s;
+            font-weight: 500;
         }
 
-        .pcmc-action-chip:hover {
-            background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);
+        .pcmc-pill:hover {
+            background: #2563EB;
             color: white;
-            border-color: transparent;
-            transform: scale(1.05);
+            border-color: #2563EB;
+            transform: translateY(-1px);
         }
 
+        /* Message Styles */
         .pcmc-message {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             margin-bottom: 16px;
-            animation: messageSlide 0.3s ease-out;
+            animation: fadeInUp 0.3s ease;
         }
 
-        @keyframes messageSlide {
+        @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateX(-20px);
+                transform: translateY(8px);
             }
             to {
                 opacity: 1;
-                transform: translateX(0);
+                transform: translateY(0);
             }
         }
 
@@ -506,341 +380,220 @@
             flex-direction: row-reverse;
         }
 
-        .pcmc-message.user .pcmc-message-content {
-            background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);
-            color: white;
-        }
-
-        .pcmc-message-avatar {
-            width: 32px;
-            height: 32px;
-            background: #e2e8f0;
-            border-radius: 50%;
+        .pcmc-msg-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: #F1F5F9;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
         }
 
-        .pcmc-message.bot .pcmc-message-avatar {
-            background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);
+        .pcmc-message.user .pcmc-msg-avatar {
+            background: #E0E7FF;
         }
 
-        .pcmc-message-avatar svg {
+        .pcmc-msg-avatar svg {
+            width: 16px;
+            height: 16px;
+            fill: #64748B;
+        }
+
+        .pcmc-msg-content {
+            max-width: 70%;
+            background: white;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #334155;
+            border: 1px solid #F1F5F9;
+        }
+
+        .pcmc-message.user .pcmc-msg-content {
+            background: #2563EB;
+            color: white;
+            border: none;
+        }
+
+        /* Chat Input - Clean Design */
+        .pcmc-chat-footer {
+            padding: 16px;
+            background: white;
+            border-top: 1px solid #F1F5F9;
+        }
+
+        .pcmc-input-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .pcmc-input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid #E2E8F0;
+            border-radius: 10px;
+            font-size: 13px;
+            outline: none;
+            transition: all 0.2s;
+            background: #F8FAFC;
+        }
+
+        .pcmc-input:focus {
+            background: white;
+            border-color: #2563EB;
+        }
+
+        .pcmc-input::placeholder {
+            color: #94A3B8;
+        }
+
+        .pcmc-send {
+            width: 36px;
+            height: 36px;
+            background: #2563EB;
+            border: none;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pcmc-send:hover {
+            background: #1D4ED8;
+            transform: scale(1.05);
+        }
+
+        .pcmc-send svg {
             width: 18px;
             height: 18px;
-            fill: #64748b;
-        }
-
-        .pcmc-message.bot .pcmc-message-avatar svg {
             fill: white;
         }
 
-        .pcmc-message-content {
-            max-width: 70%;
-            background: white;
-            padding: 12px 16px;
-            border-radius: 16px;
-            font-size: 14px;
-            line-height: 1.5;
-            color: #1e293b;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .pcmc-typing-indicator {
+        /* Footer Info */
+        .pcmc-footer-info {
             display: flex;
-            gap: 4px;
-            padding: 12px 16px;
-            background: white;
-            border-radius: 16px;
-            width: fit-content;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10px;
+            color: #94A3B8;
         }
 
-        .pcmc-typing-dot {
-            width: 8px;
-            height: 8px;
-            background: #64748b;
+        .pcmc-secure {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .pcmc-secure svg {
+            width: 12px;
+            height: 12px;
+            fill: #10B981;
+        }
+
+        .pcmc-powered a {
+            color: #2563EB;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Typing Indicator */
+        .pcmc-typing {
+            display: flex;
+            gap: 3px;
+            padding: 10px 14px;
+            background: white;
+            border-radius: 12px;
+            width: fit-content;
+            border: 1px solid #F1F5F9;
+        }
+
+        .pcmc-typing span {
+            width: 6px;
+            height: 6px;
+            background: #94A3B8;
             border-radius: 50%;
             animation: typing 1.4s infinite;
         }
 
-        .pcmc-typing-dot:nth-child(2) {
+        .pcmc-typing span:nth-child(2) {
             animation-delay: 0.2s;
         }
 
-        .pcmc-typing-dot:nth-child(3) {
+        .pcmc-typing span:nth-child(3) {
             animation-delay: 0.4s;
         }
 
         @keyframes typing {
             0%, 60%, 100% {
                 transform: translateY(0);
-                opacity: 0.5;
             }
             30% {
-                transform: translateY(-10px);
-                opacity: 1;
+                transform: translateY(-8px);
             }
         }
 
-        .pcmc-chat-footer {
-            padding: 16px;
-            background: white;
-            border-top: 1px solid #e2e8f0;
-        }
-
-        .pcmc-input-wrapper {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .pcmc-chat-input {
-            flex: 1;
-            padding: 12px 16px;
-            background: #f8fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 14px;
-            outline: none;
-            transition: all 0.3s;
-        }
-
-        .pcmc-chat-input:focus {
-            background: white;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .pcmc-input-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .pcmc-input-btn {
-            width: 40px;
-            height: 40px;
-            background: #f8fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .pcmc-input-btn:hover {
-            background: #3b82f6;
-            border-color: #3b82f6;
-        }
-
-        .pcmc-input-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: #64748b;
-        }
-
-        .pcmc-input-btn:hover svg {
-            fill: white;
-        }
-
-        .pcmc-send-btn {
-            background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);
-            border-color: transparent;
-        }
-
-        .pcmc-send-btn svg {
-            fill: white;
-        }
-
-        .pcmc-footer-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 12px;
-            border-top: 1px solid #f1f5f9;
-        }
-
-        .pcmc-security-info {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11px;
-            color: #94a3b8;
-        }
-
-        .pcmc-security-info svg {
-            width: 14px;
-            height: 14px;
-            fill: #10b981;
-        }
-
-        .pcmc-powered-by {
-            font-size: 10px;
-            color: #94a3b8;
-        }
-
-        .pcmc-powered-by a {
-            color: #3b82f6;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .pcmc-powered-by a:hover {
-            text-decoration: underline;
-        }
-
-        .pcmc-tooltip {
-            position: absolute;
-            bottom: 96px;
-            right: 88px;
-            background: #1e293b;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .pcmc-tooltip.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .pcmc-tooltip::after {
-            content: '';
-            position: absolute;
-            bottom: -6px;
-            right: 24px;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 6px 6px 0 6px;
-            border-color: #1e293b transparent transparent transparent;
-        }
-
-        @media (max-width: 480px) {
-            .pcmc-ai-widget {
+        /* Responsive Design */
+        @media (max-width: 420px) {
+            .pcmc-widget {
                 bottom: 16px;
                 right: 16px;
             }
 
-            .pcmc-ai-chatbox {
+            .pcmc-chat {
                 width: calc(100vw - 32px);
-                height: calc(100vh - 120px);
-                bottom: 88px;
-                right: -16px;
+                max-height: calc(100vh - 120px);
             }
 
-            .pcmc-services-grid {
+            .pcmc-services {
                 grid-template-columns: 1fr;
             }
 
-            .pcmc-ai-launcher {
-                width: 60px;
-                height: 60px;
-            }
-
-            .pcmc-ai-launcher-icon {
-                width: 32px;
-                height: 32px;
+            .pcmc-fab {
+                width: 56px;
+                height: 56px;
             }
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation: none !important;
-                transition: none !important;
-            }
+        /* Smooth Scrollbar */
+        .pcmc-chat-body {
+            scrollbar-width: thin;
+            scrollbar-color: #E2E8F0 transparent;
         }
     `;
 
-    // Icons
+    // SVG Icons
     const icons = {
-        bot: `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>`,
+        chat: `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.54.36 3 .97 4.29L1 23l6.71-1.97C9 21.64 10.46 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.41 0-2.73-.36-3.88-.98l-.28-.14-2.92.77.79-2.89-.18-.29C4.36 14.73 4 13.41 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8z"/></svg>`,
         close: `<svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>`,
-        minimize: `<svg viewBox="0 0 24 24"><path d="M19 13H5v-2h14v2z"/></svg>`,
         send: `<svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>`,
-        attach: `<svg viewBox="0 0 24 24"><path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/></svg>`,
-        mic: `<svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>`,
+        bot: `<svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 010 2h-1v1a3 3 0 01-3 3h-1v1a2 2 0 01-2 2h-6a2 2 0 01-2-2v-1H6a3 3 0 01-3-3v-1H2a1 1 0 110-2h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2M7.5 13A1.5 1.5 0 006 14.5 1.5 1.5 0 007.5 16 1.5 1.5 0 009 14.5 1.5 1.5 0 007.5 13m9 0a1.5 1.5 0 00-1.5 1.5 1.5 1.5 0 001.5 1.5 1.5 1.5 0 001.5-1.5 1.5 1.5 0 00-1.5-1.5z"/></svg>`,
         user: `<svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`,
-        shield: `<svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>`,
-        government: `<svg viewBox="0 0 24 24"><path d="M12 2L2 7v2h20V7L12 2zM4 10v9h3v-5h2v5h2v-5h2v5h2v-5h2v5h3v-9H4zM22 20v2H2v-2h20z"/></svg>`
+        lock: `<svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>`,
+        gov: `<svg viewBox="0 0 24 24"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm6 9.09c0 4-2.55 7.7-6 8.83-3.45-1.13-6-4.82-6-8.83V6.31l6-2.25 6 2.25v4.78z"/></svg>`
     };
 
-    // Service categories
+    // Service definitions
     const services = [
-        {
-            id: 'information',
-            icon: '📋',
-            title: 'Information',
-            description: 'City info & guidelines',
-            queries: ['City Information', 'Contact Details', 'Office Timings', 'Department Info']
-        },
-        {
-            id: 'properties',
-            icon: '🏠',
-            title: 'My Properties',
-            description: 'Property tax & records',
-            queries: ['Property Tax', 'Property Details', 'Tax Payment', 'Property Transfer']
-        },
-        {
-            id: 'grievance',
-            icon: '📝',
-            title: 'Grievance',
-            description: 'Register complaints',
-            queries: ['Register Complaint', 'Track Complaint', 'Complaint Status', 'Emergency Services']
-        },
-        {
-            id: 'schemes',
-            icon: '🎯',
-            title: 'Schemes',
-            description: 'Government schemes',
-            queries: ['Housing Schemes', 'Welfare Programs', 'Subsidies', 'Benefits']
-        },
-        {
-            id: 'cfc',
-            icon: '🏛️',
-            title: 'CFC Services',
-            description: 'Citizen facilitation',
-            queries: ['Birth Certificate', 'Death Certificate', 'Marriage Registration', 'Documents']
-        },
-        {
-            id: 'water',
-            icon: '💧',
-            title: 'Water & Sewage',
-            description: 'Water connection & bills',
-            queries: ['Water Connection', 'Bill Payment', 'New Connection', 'Complaints']
-        },
-        {
-            id: 'building',
-            icon: '🏗️',
-            title: 'Building Plan',
-            description: 'Construction permits',
-            queries: ['Building Permission', 'Plan Approval', 'Completion Certificate', 'NOC']
-        },
-        {
-            id: 'health',
-            icon: '🏥',
-            title: 'Health Services',
-            description: 'Medical & health',
-            queries: ['Hospitals', 'Vaccination', 'Health Camps', 'Emergency']
-        }
+        { id: 'info', icon: '📋', title: 'Information', desc: 'City services & info' },
+        { id: 'property', icon: '🏠', title: 'My Properties', desc: 'Tax & registration' },
+        { id: 'grievance', icon: '📝', title: 'Grievance', desc: 'Lodge complaints' },
+        { id: 'schemes', icon: '🎯', title: 'Schemes', desc: 'Govt. benefits' },
+        { id: 'cfc', icon: '🏛️', title: 'CFC Services', desc: 'Certificates & docs' },
+        { id: 'health', icon: '🏥', title: 'Health', desc: 'Medical services' }
     ];
 
-    // Quick actions
     const quickActions = [
-        'Pay Property Tax',
+        'Property Tax',
+        'Birth Certificate', 
+        'Water Bill',
         'Track Application',
-        'Download Forms',
-        'Book Appointment',
-        'Emergency Helpline'
+        'Emergency'
     ];
 
     // Create and inject styles
@@ -851,108 +604,78 @@
     // Create widget HTML
     function createWidget() {
         const widget = document.createElement('div');
-        widget.className = 'pcmc-ai-widget';
+        widget.className = 'pcmc-widget';
         widget.innerHTML = `
-            <div class="pcmc-tooltip">👋 Need help? Click to chat!</div>
-            
-            <div class="pcmc-ai-chatbox">
+            <!-- Chat Window -->
+            <div class="pcmc-chat">
+                <!-- Header -->
                 <div class="pcmc-chat-header">
-                    <div class="pcmc-header-content">
-                        <div class="pcmc-header-top">
+                    <div class="pcmc-header-top">
+                        <div class="pcmc-header-left">
+                            <div class="pcmc-avatar">${icons.gov}</div>
                             <div class="pcmc-header-info">
-                                <div class="pcmc-header-logo">
-                                    ${icons.government}
-                                </div>
-                                <div class="pcmc-header-title">${config.shortName} AI Assistant</div>
-                                <div class="pcmc-header-subtitle">${config.tagline}</div>
-                                <div class="pcmc-header-status">
-                                    <span class="pcmc-status-indicator"></span>
-                                    <span>Online - Instant Response</span>
-                                </div>
-                            </div>
-                            <div class="pcmc-header-actions">
-                                <button class="pcmc-header-btn pcmc-minimize-btn">
-                                    ${icons.minimize}
-                                </button>
-                                <button class="pcmc-header-btn pcmc-close-btn">
-                                    ${icons.close}
-                                </button>
+                                <h3>PCMC Assistant</h3>
+                                <p><span class="pcmc-status"></span> Online</p>
                             </div>
                         </div>
-                        <div class="pcmc-language-selector">
-                            <button class="pcmc-lang-btn active" data-lang="en">English</button>
-                            <button class="pcmc-lang-btn" data-lang="hi">हिंदी</button>
-                            <button class="pcmc-lang-btn" data-lang="mr">मराठी</button>
-                        </div>
+                        <button class="pcmc-close">${icons.close}</button>
+                    </div>
+                    <div class="pcmc-lang-bar">
+                        <button class="pcmc-lang active" data-lang="en">English</button>
+                        <button class="pcmc-lang" data-lang="hi">हिंदी</button>
+                        <button class="pcmc-lang" data-lang="mr">मराठी</button>
                     </div>
                 </div>
-                
+
+                <!-- Body -->
                 <div class="pcmc-chat-body">
-                    <div class="pcmc-welcome-section">
-                        <div class="pcmc-bot-avatar">
-                            ${icons.government}
-                        </div>
-                        <div class="pcmc-welcome-title">Welcome to PCMC Digital Services</div>
-                        <div class="pcmc-welcome-subtitle">
-                            I'm your AI assistant for all municipal services. Select a service below or type your query.
-                        </div>
-                        
-                        <div class="pcmc-services-grid">
-                            ${services.map(service => `
-                                <div class="pcmc-service-card" data-service="${service.id}">
-                                    <div class="pcmc-service-icon">${service.icon}</div>
-                                    <div class="pcmc-service-title">${service.title}</div>
-                                    <div class="pcmc-service-desc">${service.description}</div>
-                                </div>
+                    <div class="pcmc-welcome">
+                        <h4>Welcome to PCMC Services</h4>
+                        <p>How can I assist you today? Select a service below or type your query.</p>
+                    </div>
+
+                    <div class="pcmc-services">
+                        ${services.map(s => `
+                            <div class="pcmc-service" data-service="${s.id}">
+                                <div class="pcmc-service-icon">${s.icon}</div>
+                                <div class="pcmc-service-title">${s.title}</div>
+                                <div class="pcmc-service-desc">${s.desc}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="pcmc-quick-actions">
+                        <div class="pcmc-actions-title">Quick Actions</div>
+                        <div class="pcmc-action-pills">
+                            ${quickActions.map(action => `
+                                <button class="pcmc-pill" data-action="${action}">${action}</button>
                             `).join('')}
                         </div>
-                        
-                        <div class="pcmc-quick-actions">
-                            <div class="pcmc-quick-actions-title">Quick Actions</div>
-                            <div class="pcmc-action-chips">
-                                ${quickActions.map(action => `
-                                    <button class="pcmc-action-chip" data-action="${action}">
-                                        ${action}
-                                    </button>
-                                `).join('')}
-                            </div>
-                        </div>
                     </div>
                 </div>
-                
+
+                <!-- Footer -->
                 <div class="pcmc-chat-footer">
-                    <div class="pcmc-input-wrapper">
-                        <input type="text" class="pcmc-chat-input" placeholder="Type your message or query...">
-                        <div class="pcmc-input-actions">
-                            <button class="pcmc-input-btn pcmc-attach-btn">
-                                ${icons.attach}
-                            </button>
-                            <button class="pcmc-input-btn pcmc-mic-btn">
-                                ${icons.mic}
-                            </button>
-                            <button class="pcmc-input-btn pcmc-send-btn">
-                                ${icons.send}
-                            </button>
-                        </div>
+                    <div class="pcmc-input-group">
+                        <input type="text" class="pcmc-input" placeholder="Type your message...">
+                        <button class="pcmc-send">${icons.send}</button>
                     </div>
                     <div class="pcmc-footer-info">
-                        <div class="pcmc-security-info">
-                            ${icons.shield}
-                            <span>Secure & Encrypted</span>
+                        <div class="pcmc-secure">
+                            ${icons.lock}
+                            <span>Secure</span>
                         </div>
-                        <div class="pcmc-powered-by">
+                        <div class="pcmc-powered">
                             Powered by <a href="${config.poweredByUrl}" target="_blank">${config.poweredBy}</a>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <div class="pcmc-ai-launcher">
-                <div class="pcmc-ai-launcher-icon">
-                    ${icons.government}
-                </div>
-                <span class="pcmc-status-dot"></span>
-                <span class="pcmc-notification-badge">1</span>
+
+            <!-- Floating Action Button -->
+            <div class="pcmc-fab">
+                <div class="pcmc-fab-icon">${icons.chat}</div>
+                <span class="pcmc-pulse"></span>
             </div>
         `;
         return widget;
@@ -960,71 +683,76 @@
 
     // Message handling
     function addMessage(content, isUser = false) {
-        const chatBody = document.querySelector('.pcmc-chat-body');
-        const welcomeSection = chatBody.querySelector('.pcmc-welcome-section');
+        const body = document.querySelector('.pcmc-chat-body');
+        const welcome = body.querySelector('.pcmc-welcome');
+        const servicesGrid = body.querySelector('.pcmc-services');
+        const quickActions = body.querySelector('.pcmc-quick-actions');
         
-        if (welcomeSection) {
-            welcomeSection.style.display = 'none';
+        // Hide welcome content after first message
+        if (welcome) {
+            welcome.style.display = 'none';
+            servicesGrid.style.display = 'none';
+            quickActions.style.display = 'none';
         }
 
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `pcmc-message ${isUser ? 'user' : 'bot'}`;
-        messageDiv.innerHTML = `
-            <div class="pcmc-message-avatar">
-                ${isUser ? icons.user : icons.government}
-            </div>
-            <div class="pcmc-message-content">${content}</div>
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `pcmc-message ${isUser ? 'user' : ''}`;
+        msgDiv.innerHTML = `
+            <div class="pcmc-msg-avatar">${isUser ? icons.user : icons.bot}</div>
+            <div class="pcmc-msg-content">${content}</div>
         `;
         
-        chatBody.appendChild(messageDiv);
-        chatBody.scrollTop = chatBody.scrollHeight;
+        body.appendChild(msgDiv);
+        body.scrollTop = body.scrollHeight;
     }
 
     // Show typing indicator
     function showTyping() {
-        const chatBody = document.querySelector('.pcmc-chat-body');
+        const body = document.querySelector('.pcmc-chat-body');
         const typingDiv = document.createElement('div');
-        typingDiv.className = 'pcmc-message bot';
+        typingDiv.className = 'pcmc-message';
         typingDiv.innerHTML = `
-            <div class="pcmc-message-avatar">${icons.government}</div>
-            <div class="pcmc-typing-indicator">
-                <span class="pcmc-typing-dot"></span>
-                <span class="pcmc-typing-dot"></span>
-                <span class="pcmc-typing-dot"></span>
+            <div class="pcmc-msg-avatar">${icons.bot}</div>
+            <div class="pcmc-typing">
+                <span></span><span></span><span></span>
             </div>
         `;
-        chatBody.appendChild(typingDiv);
-        chatBody.scrollTop = chatBody.scrollHeight;
-        
+        body.appendChild(typingDiv);
+        body.scrollTop = body.scrollHeight;
         return typingDiv;
     }
 
     // Handle service selection
-    function handleServiceSelection(serviceId) {
+    function handleService(serviceId) {
         const service = services.find(s => s.id === serviceId);
         if (service) {
-            addMessage(`I want to know about ${service.title}`, true);
+            addMessage(`Tell me about ${service.title}`, true);
             
             const typing = showTyping();
             setTimeout(() => {
                 typing.remove();
-                addMessage(`I can help you with ${service.title}. Here are some common queries:`);
                 
-                setTimeout(() => {
-                    const queryOptions = service.queries.map(q => `• ${q}`).join('<br>');
-                    addMessage(`${queryOptions}<br><br>Please select an option or type your specific query.`);
-                }, 500);
+                const responses = {
+                    'info': 'PCMC provides various citizen services including water supply, property tax, building permissions, and more. What specific information do you need?',
+                    'property': 'You can pay property tax, view property details, and manage property transfers online. Would you like to check your property tax status?',
+                    'grievance': 'You can register complaints for water supply, roads, streetlights, garbage collection, etc. What issue would you like to report?',
+                    'schemes': 'Various government schemes are available for housing, education, and welfare. Which category interests you?',
+                    'cfc': 'Citizen Facilitation Center offers birth/death certificates, domicile certificates, and other documents. Which certificate do you need?',
+                    'health': 'PCMC operates multiple hospitals and health centers. Do you need information about hospitals, vaccinations, or health camps?'
+                };
+                
+                addMessage(responses[serviceId] || 'How can I help you with this service?');
             }, 1500);
         }
     }
 
-    // Send message to WhatsApp
-    function sendToWhatsApp(message) {
-        const whatsappUrl = `https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, '_blank');
+    // WhatsApp redirect
+    function redirectToWhatsApp(message) {
+        const url = `https://wa.me/${config.supportNumber}?text=${encodeURIComponent(message)}`;
+        window.open(url, '_blank');
     }
 
-    // Initialize widget
+    // Initialize
     function init() {
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', init);
@@ -1035,77 +763,55 @@
         document.body.appendChild(widget);
 
         // Elements
-        const launcher = widget.querySelector('.pcmc-ai-launcher');
-        const chatbox = widget.querySelector('.pcmc-ai-chatbox');
-        const closeBtn = widget.querySelector('.pcmc-close-btn');
-        const minimizeBtn = widget.querySelector('.pcmc-minimize-btn');
-        const tooltip = widget.querySelector('.pcmc-tooltip');
-        const input = widget.querySelector('.pcmc-chat-input');
-        const sendBtn = widget.querySelector('.pcmc-send-btn');
-        const serviceCards = widget.querySelectorAll('.pcmc-service-card');
-        const actionChips = widget.querySelectorAll('.pcmc-action-chip');
-        const langBtns = widget.querySelectorAll('.pcmc-lang-btn');
-        const notificationBadge = widget.querySelector('.pcmc-notification-badge');
+        const fab = widget.querySelector('.pcmc-fab');
+        const chat = widget.querySelector('.pcmc-chat');
+        const closeBtn = widget.querySelector('.pcmc-close');
+        const input = widget.querySelector('.pcmc-input');
+        const sendBtn = widget.querySelector('.pcmc-send');
+        const serviceCards = widget.querySelectorAll('.pcmc-service');
+        const pills = widget.querySelectorAll('.pcmc-pill');
+        const langBtns = widget.querySelectorAll('.pcmc-lang');
 
         let isOpen = false;
 
-        // Toggle chatbox
-        launcher.addEventListener('click', () => {
+        // Toggle chat
+        fab.addEventListener('click', () => {
             isOpen = !isOpen;
-            if (isOpen) {
-                chatbox.classList.add('active');
-                tooltip.classList.remove('show');
-                notificationBadge.style.display = 'none';
-                input.focus();
-                
-                // Analytics
-                if (typeof gtag !== 'undefined') {
-                    gtag('event', 'chatbot_open', {
-                        'event_category': 'engagement',
-                        'event_label': 'PCMC AI Assistant'
-                    });
-                }
-            } else {
-                chatbox.classList.remove('active');
-            }
+            chat.classList.toggle('active');
+            fab.classList.toggle('active');
+            if (isOpen) input.focus();
         });
 
-        // Close button
+        // Close chat
         closeBtn.addEventListener('click', () => {
-            chatbox.classList.remove('active');
+            chat.classList.remove('active');
+            fab.classList.remove('active');
             isOpen = false;
         });
 
-        // Minimize button
-        minimizeBtn.addEventListener('click', () => {
-            chatbox.classList.remove('active');
-            isOpen = false;
-        });
-
-        // Service card clicks
+        // Service cards
         serviceCards.forEach(card => {
             card.addEventListener('click', () => {
-                const serviceId = card.dataset.service;
-                handleServiceSelection(serviceId);
+                handleService(card.dataset.service);
             });
         });
 
-        // Quick action chips
-        actionChips.forEach(chip => {
-            chip.addEventListener('click', () => {
-                const action = chip.dataset.action;
+        // Quick action pills
+        pills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                const action = pill.dataset.action;
                 addMessage(action, true);
                 
                 const typing = showTyping();
                 setTimeout(() => {
                     typing.remove();
                     
-                    if (action === 'Emergency Helpline') {
-                        addMessage('🚨 Emergency Services:<br><br>📞 Police: 100<br>🚒 Fire: 101<br>🚑 Ambulance: 108<br>📱 PCMC Helpline: 1800-XXX-XXXX');
+                    if (action === 'Emergency') {
+                        addMessage('Emergency Contacts:<br>🚓 Police: 100<br>🚒 Fire: 101<br>🚑 Ambulance: 108');
                     } else {
-                        addMessage(`I'll help you with "${action}". This service will redirect you to our WhatsApp support for personalized assistance.`);
+                        addMessage(`I'll help you with "${action}". Connecting you to our WhatsApp support...`);
                         setTimeout(() => {
-                            sendToWhatsApp(`Hi, I need help with: ${action}`);
+                            redirectToWhatsApp(`Hi, I need help with: ${action}`);
                         }, 2000);
                     }
                 }, 1500);
@@ -1117,10 +823,6 @@
             btn.addEventListener('click', () => {
                 langBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                const lang = btn.dataset.lang;
-                
-                // Handle language change
-                console.log(`Language changed to: ${lang}`);
             });
         });
 
@@ -1134,9 +836,9 @@
                 const typing = showTyping();
                 setTimeout(() => {
                     typing.remove();
-                    addMessage('Thank you for your query. For detailed assistance, I\'m connecting you to our WhatsApp support team.');
+                    addMessage('Thank you for your query. For detailed assistance, connecting you to WhatsApp support...');
                     setTimeout(() => {
-                        sendToWhatsApp(message);
+                        redirectToWhatsApp(message);
                     }, 2000);
                 }, 1500);
             }
@@ -1144,42 +846,22 @@
 
         sendBtn.addEventListener('click', handleSend);
         input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                handleSend();
-            }
+            if (e.key === 'Enter') handleSend();
         });
 
-        // Show tooltip
-        setTimeout(() => {
-            if (!isOpen) {
-                tooltip.classList.add('show');
-                setTimeout(() => {
-                    tooltip.classList.remove('show');
-                }, 5000);
-            }
-        }, 3000);
-
-        // First time visitor
-        if (!localStorage.getItem('pcmc_ai_visited')) {
+        // Auto-show for first-time visitors
+        if (!sessionStorage.getItem('pcmc_chat_shown')) {
             setTimeout(() => {
                 if (!isOpen) {
-                    launcher.click();
-                    localStorage.setItem('pcmc_ai_visited', 'true');
+                    fab.click();
+                    sessionStorage.setItem('pcmc_chat_shown', 'true');
                 }
-            }, 5000);
+            }, 3000);
         }
 
-        // Escape key to close
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && isOpen) {
-                chatbox.classList.remove('active');
-                isOpen = false;
-            }
-        });
-
-        console.log('✅ PCMC AI Assistant initialized successfully!');
+        console.log('✅ PCMC Chat Widget initialized');
     }
 
-    // Start initialization
+    // Start
     init();
 })();

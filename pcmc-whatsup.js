@@ -12,7 +12,7 @@
     name: 'PCMC',
     fullName: 'Pimpri-Chinchwad Municipal Corporation',
     phone: '918888006666',
-    welcome: '👋 Welcome to PCMC Digital Assistant! How may I assist you today? Our AI-powered service is available 24/7 to help with all municipal services and queries.',
+    welcome: '👋 Welcome to PCMC Digital Assistant! I\'m your AI-powered helper available 24/7 for all municipal services. How may I assist you today?',
     poweredBy: 'WoW-Strategies Private Limited',
     poweredByUrl: 'https://wow-strategies.com/',
     autoOpen: true,
@@ -25,11 +25,11 @@
   // Updated suggestions with PCMC services
   const suggestions = [
     '📋 Service Information',
-    '🏠 Property Tax Payment',
+    '🏠 Property Tax Portal',
     '📝 Lodge Complaint',
-    '📞 Department Contacts',
-    '💧 Water & Sewerage',
-    '📄 Download Certificates'
+    '📞 Department Contact',
+    '💧 Water & Sanitation',
+    '📄 Download Certificate'
   ];
 
   // Helper functions
@@ -46,7 +46,7 @@
   // Build and inject widget
   async function initWidget() {
     const waBase = `https://wa.me/${PCMC_CONFIG.phone}`;
-    const defaultMsg = 'Hello PCMC, I need assistance';
+    const defaultMsg = 'Hi, I need assistance from PCMC';
     const qrImageUrl = generateQRUrl(PCMC_CONFIG.phone, defaultMsg);
 
     // Create host element
@@ -58,44 +58,41 @@
     // Inject styles with professional color scheme
     const style = document.createElement('style');
     style.textContent = `
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-      
       :host {
         all: initial;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         --wa-green: #128C7E;
         --wa-green-dark: #075E54;
-        --wa-teal: #0A5C50;
-        --wa-teal-dark: #054640;
+        --wa-teal: #00897B;
+        --wa-teal-dark: #00695C;
         --wa-light-green: #E8F5E9;
-        --wa-accent: #00BFA5;
-        --wa-blue: #4A90E2;
+        --wa-accent: #00ACC1;
         --wa-bg-chat: #F5F7FA;
         --wa-bg-light: #FFFFFF;
-        --wa-bg-panel: #FAFBFC;
+        --wa-bg-panel: #F8F9FA;
         --wa-text-primary: #1A1A1A;
-        --wa-text-secondary: #6B7280;
-        --wa-border: #E5E7EB;
-        --wa-shadow: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06);
-        --wa-shadow-strong: 0 20px 25px -5px rgba(0,0,0,.1), 0 10px 10px -5px rgba(0,0,0,.04);
-        --wa-shadow-xl: 0 25px 50px -12px rgba(0,0,0,.25);
+        --wa-text-secondary: #5F6368;
+        --wa-border: #E0E0E0;
+        --wa-shadow: 0 4px 6px rgba(0,0,0,.07), 0 1px 3px rgba(0,0,0,.06);
+        --wa-shadow-strong: 0 10px 40px rgba(0,0,0,.15);
+        --wa-shadow-hover: 0 20px 50px rgba(0,0,0,.2);
         --wa-radius: 12px;
-        --wa-launcher-size: 68px;
+        --wa-launcher-size: 60px;
         --wa-offset: max(20px, env(safe-area-inset-bottom, 20px));
         color: var(--wa-text-primary);
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
       }
       
       @media (prefers-color-scheme: dark) {
         :host:not(.force-light) {
-          --wa-bg-chat: #1F2937;
-          --wa-bg-light: #111827;
-          --wa-bg-panel: #374151;
-          --wa-text-primary: #F9FAFB;
-          --wa-text-secondary: #9CA3AF;
-          --wa-border: #4B5563;
-          --wa-light-green: #064E3B;
+          --wa-green: #00BFA5;
+          --wa-green-dark: #00897B;
+          --wa-bg-chat: #121212;
+          --wa-bg-light: #1E1E1E;
+          --wa-bg-panel: #2C2C2C;
+          --wa-text-primary: #FFFFFF;
+          --wa-text-secondary: #B0B0B0;
+          --wa-border: #424242;
+          --wa-light-green: #004D40;
         }
       }
 
@@ -112,66 +109,48 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: var(--wa-shadow-xl);
+        box-shadow: var(--wa-shadow-strong);
         transition: all .3s cubic-bezier(.4,0,.2,1);
         z-index: 2147483646;
         outline: none;
-        animation: wa-entrance .6s cubic-bezier(.68,-.55,.265,1.55);
-        overflow: hidden;
+        animation: wa-pulse 3s infinite;
       }
       
-      @keyframes wa-entrance {
-        0% { transform: scale(0) rotate(-180deg); opacity: 0; }
-        100% { transform: scale(1) rotate(0); opacity: 1; }
-      }
-      
-      .wa-launcher::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
-        opacity: 0;
-        transition: opacity .3s;
-      }
-      
-      .wa-launcher:hover::before {
-        opacity: 1;
+      @keyframes wa-pulse {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(18, 140, 126, 0.4), var(--wa-shadow-strong); }
+        50% { box-shadow: 0 0 0 20px rgba(18, 140, 126, 0), var(--wa-shadow-strong); }
       }
       
       .wa-launcher:hover {
-        transform: scale(1.1) translateY(-2px);
-        box-shadow: 0 30px 60px -15px rgba(0,0,0,.3);
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: var(--wa-shadow-hover);
       }
       
       .wa-launcher:active {
-        transform: scale(0.95);
+        transform: translateY(-1px) scale(0.98);
       }
       
       .wa-launcher svg {
         width: 55%;
         height: 55%;
         fill: white;
-        z-index: 1;
       }
       
       .wa-badge-ai {
         position: absolute;
-        top: -3px;
-        right: -3px;
+        top: -4px;
+        right: -4px;
         background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
         color: white;
-        font-size: 10px;
+        font-size: 9px;
         line-height: 1;
         padding: 5px 7px;
         border-radius: 12px;
-        font-weight: 700;
-        box-shadow: 0 4px 6px rgba(0,0,0,.2);
+        font-weight: 800;
+        box-shadow: 0 2px 8px rgba(102, 126, 234, .4);
         letter-spacing: 0.5px;
-        animation: wa-badge-pop .5s cubic-bezier(.68,-.55,.265,1.55);
-        border: 2px solid white;
+        animation: wa-badge-pop .6s cubic-bezier(.68,-.55,.265,1.55);
+        border: 2px solid var(--wa-bg-light);
       }
       
       @keyframes wa-badge-pop {
@@ -187,14 +166,14 @@
         display: flex;
         flex-direction: column;
         align-items: flex-end;
-        gap: 14px;
+        gap: 12px;
         max-width: min(400px, calc(100vw - 40px));
         z-index: 2147483646;
-        animation: wa-slide-up .5s cubic-bezier(.34,1.56,.64,1);
+        animation: wa-slide-up .5s cubic-bezier(.4,0,.2,1);
       }
       
       @keyframes wa-slide-up {
-        0% { opacity: 0; transform: translateY(30px) scale(.9); }
+        0% { opacity: 0; transform: translateY(30px) scale(.92); }
         100% { opacity: 1; transform: translateY(0) scale(1); }
       }
 
@@ -206,7 +185,6 @@
         color: var(--wa-text-primary);
         line-height: 1.6;
         font-size: 14px;
-        font-weight: 500;
         animation: wa-bubble-in .5s cubic-bezier(.68,-.55,.265,1.55);
         max-width: 100%;
         position: relative;
@@ -215,7 +193,7 @@
       }
       
       @keyframes wa-bubble-in {
-        0% { transform: translateY(10px) scale(.9); opacity: 0; }
+        0% { transform: translateY(15px) scale(.85); opacity: 0; }
         100% { transform: translateY(0) scale(1); opacity: 1; }
       }
       
@@ -236,34 +214,32 @@
         position: absolute;
         top: 10px;
         right: 10px;
-        width: 26px;
-        height: 26px;
+        width: 22px;
+        height: 22px;
         border: none;
         cursor: pointer;
-        background: var(--wa-bg-panel);
+        background: transparent;
         color: var(--wa-text-secondary);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         transition: all .2s;
-        font-size: 18px;
+        font-size: 16px;
         line-height: 1;
-        font-weight: 300;
       }
       
       .wa-bubble button.wa-dismiss:hover {
-        background: var(--wa-green);
-        color: white;
+        background: rgba(0,0,0,.08);
         transform: rotate(90deg);
       }
 
       .wa-pill {
         background: var(--wa-bg-light);
         color: var(--wa-text-primary);
-        border: 1.5px solid var(--wa-border);
+        border: 1px solid var(--wa-border);
         border-radius: 30px;
-        padding: 12px 18px;
+        padding: 12px 20px;
         font-size: 14px;
         font-weight: 600;
         cursor: pointer;
@@ -274,65 +250,65 @@
         gap: 10px;
         box-shadow: var(--wa-shadow);
         transition: all .3s cubic-bezier(.4,0,.2,1);
-        animation: wa-pill-in .5s cubic-bezier(.68,-.55,.265,1.55) backwards;
+        animation: wa-pill-in .6s cubic-bezier(.68,-.55,.265,1.55) backwards;
         max-width: 100%;
         width: fit-content;
         white-space: nowrap;
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(5px);
       }
       
       .wa-pill:hover {
         background: linear-gradient(135deg, var(--wa-green) 0%, var(--wa-green-dark) 100%);
         color: white;
-        border-color: var(--wa-green-dark);
-        transform: translateX(-5px) scale(1.03);
-        box-shadow: 0 10px 25px rgba(18,140,126,.3);
+        border-color: transparent;
+        transform: translateY(-3px) translateX(-5px) scale(1.02);
+        box-shadow: 0 8px 20px rgba(18, 140, 126, .35);
       }
       
       .wa-pill:active {
-        transform: translateX(-2px) scale(.98);
+        transform: translateY(-1px) scale(.98);
       }
       
       @keyframes wa-pill-in {
-        0% { opacity: 0; transform: translateX(30px) scale(.8); }
+        0% { opacity: 0; transform: translateX(30px) scale(.85); }
         100% { opacity: 1; transform: translateX(0) scale(1); }
       }
       
       .wa-pill[data-recent="1"] {
-        background: linear-gradient(135deg, var(--wa-light-green) 0%, #E8F5E9 100%);
+        background: linear-gradient(135deg, var(--wa-light-green) 0%, rgba(18, 140, 126, 0.08) 100%);
         border-color: var(--wa-green);
-        border-width: 2px;
-        font-weight: 700;
       }
 
       .wa-qr-toggle {
         margin-top: 6px;
         background: transparent;
-        border: none;
+        border: 2px solid var(--wa-green);
         color: var(--wa-green);
         font-size: 13px;
         cursor: pointer;
-        padding: 10px 14px;
+        padding: 10px 18px;
         border-radius: 25px;
         font-weight: 700;
-        transition: all .2s;
+        transition: all .3s;
         align-self: flex-end;
         letter-spacing: 0.3px;
       }
       
       .wa-qr-toggle:hover {
-        background: var(--wa-light-green);
-        transform: translateY(-1px);
+        background: var(--wa-green);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(18, 140, 126, .3);
       }
 
       .wa-qr-panel {
         display: none;
-        background: linear-gradient(135deg, var(--wa-bg-light) 0%, var(--wa-bg-panel) 100%);
+        background: var(--wa-bg-light);
         padding: 24px;
         border-radius: 20px;
-        border: 1.5px solid var(--wa-border);
+        border: 1px solid var(--wa-border);
         box-shadow: var(--wa-shadow-strong);
-        animation: wa-bubble-in .4s cubic-bezier(.68,-.55,.265,1.55);
+        animation: wa-bubble-in .5s cubic-bezier(.68,-.55,.265,1.55);
         align-self: flex-end;
         text-align: center;
         backdrop-filter: blur(10px);
@@ -346,7 +322,7 @@
         border-radius: 12px;
         background: white;
         padding: 10px;
-        box-shadow: 0 4px 15px rgba(0,0,0,.1);
+        box-shadow: 0 4px 15px rgba(0,0,0,.08);
         border: 1px solid var(--wa-border);
       }
       
@@ -364,27 +340,23 @@
         gap: 8px;
       }
       
-      .wa-qr-panel .wa-label::before,
-      .wa-qr-panel .wa-label::after {
-        content: '';
+      .wa-qr-panel .wa-label:before,
+      .wa-qr-panel .wa-label:after {
+        content: "";
+        flex: 1;
         height: 1px;
-        width: 30px;
-        background: linear-gradient(90deg, transparent, var(--wa-green));
-      }
-      
-      .wa-qr-panel .wa-label::before {
-        background: linear-gradient(90deg, var(--wa-green), transparent);
+        background: linear-gradient(90deg, transparent, var(--wa-border), transparent);
       }
       
       .wa-qr-panel .wa-scan-text {
-        font-size: 14px;
+        font-size: 13px;
         color: var(--wa-text-secondary);
         line-height: 1.6;
         font-weight: 500;
       }
       
       .wa-qr-panel .wa-scan-text strong {
-        color: var(--wa-green-dark);
+        color: var(--wa-green);
         font-weight: 700;
       }
 
@@ -393,14 +365,14 @@
         color: var(--wa-text-secondary);
         text-align: center;
         background: linear-gradient(135deg, var(--wa-bg-light) 0%, var(--wa-bg-panel) 100%);
-        padding: 10px 14px;
+        padding: 10px 16px;
         border-radius: 15px;
         border: 1px solid var(--wa-border);
         line-height: 1.5;
         align-self: flex-end;
-        animation: wa-pill-in .5s cubic-bezier(.68,-.55,.265,1.55) backwards;
-        animation-delay: 0.4s;
-        backdrop-filter: blur(10px);
+        animation: wa-pill-in .6s cubic-bezier(.68,-.55,.265,1.55) backwards;
+        animation-delay: 0.5s;
+        backdrop-filter: blur(5px);
       }
       
       .wa-powered-link {
@@ -410,17 +382,12 @@
         text-decoration: none;
         color: var(--wa-text-secondary);
         font-weight: 600;
-        transition: color .2s;
-        letter-spacing: 0.2px;
+        transition: all .3s;
       }
       
       .wa-powered-link:hover {
         color: var(--wa-green);
-      }
-      
-      .wa-powered-link strong {
-        font-weight: 700;
-        color: var(--wa-green-dark);
+        transform: translateX(2px);
       }
       
       .wa-powered-link svg {
@@ -429,26 +396,26 @@
         stroke: currentColor;
         stroke-width: 2.5;
         fill: none;
-        transition: transform .2s;
+        transition: transform .3s;
       }
       
       .wa-powered-link:hover svg {
-        transform: translate(1px, -1px);
+        transform: translate(2px, -2px);
       }
 
       .wa-tooltip {
         position: fixed;
-        bottom: calc(var(--wa-offset) + var(--wa-launcher-size) + 10px);
+        bottom: calc(var(--wa-offset) + var(--wa-launcher-size) + 12px);
         right: 20px;
         background: linear-gradient(135deg, var(--wa-teal) 0%, var(--wa-teal-dark) 100%);
         color: white;
-        padding: 10px 14px;
+        padding: 10px 16px;
         font-size: 12px;
         font-weight: 600;
         border-radius: 8px;
-        box-shadow: var(--wa-shadow-strong);
+        box-shadow: 0 4px 12px rgba(0,0,0,.15);
         opacity: 0;
-        transform: translateY(5px) scale(.95);
+        transform: translateY(8px) scale(.9);
         pointer-events: none;
         transition: all .3s;
         white-space: nowrap;
@@ -464,32 +431,21 @@
       .wa-tooltip:after {
         content: "";
         position: absolute;
-        bottom: -4px;
-        right: 34px;
-        width: 8px;
-        height: 8px;
+        bottom: -5px;
+        right: 30px;
+        width: 10px;
+        height: 10px;
         background: var(--wa-teal-dark);
         transform: rotate(45deg);
       }
 
       @media (max-width: 640px) {
-        :host { 
-          --wa-launcher-size: 60px;
-        }
-        .wa-shelf { 
-          right: 15px; 
-          bottom: calc(var(--wa-offset) + var(--wa-launcher-size) + 10px);
-          max-width: calc(100vw - 30px);
-        }
+        :host { --wa-launcher-size: 54px; }
+        .wa-shelf { right: 15px; bottom: calc(var(--wa-offset) + var(--wa-launcher-size) + 12px); }
         .wa-launcher { right: 15px; }
-        .wa-tooltip { right: 15px; }
-        .wa-pill { 
-          font-size: 13px; 
-          padding: 10px 16px;
-        }
-        .wa-bubble {
-          font-size: 13px;
-        }
+        .wa-tooltip { right: 15px; font-size: 11px; }
+        .wa-pill { font-size: 13px; padding: 10px 16px; }
+        .wa-qr-panel { padding: 20px; }
       }
     `;
     shadow.appendChild(style);
@@ -504,7 +460,7 @@
     const launcher = document.createElement('button');
     launcher.type = 'button';
     launcher.className = 'wa-launcher';
-    launcher.setAttribute('aria-label', 'Open PCMC WhatsApp Assistant');
+    launcher.setAttribute('aria-label', 'Open PCMC Digital Assistant');
     launcher.innerHTML = `
       <span class="wa-badge-ai">AI</span>
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -528,7 +484,7 @@
       shelf = document.createElement('div');
       shelf.className = 'wa-shelf';
       shelf.setAttribute('role', 'dialog');
-      shelf.setAttribute('aria-label', 'PCMC WhatsApp Assistant');
+      shelf.setAttribute('aria-label', 'PCMC Digital Assistant');
 
       const greetKey = '__pcmc_greeting_dismiss_' + PCMC_CONFIG.orgId;
       const showGreeting = !PCMC_CONFIG.suppressGreet && (PCMC_CONFIG.forceGreet || !localStorage.getItem(greetKey));
@@ -561,10 +517,10 @@
       const qrToggle = document.createElement('button');
       qrToggle.type = 'button';
       qrToggle.className = 'wa-qr-toggle';
-      qrToggle.textContent = '📱 Show QR Code';
+      qrToggle.textContent = '📱 Scan QR Code';
       qrToggle.addEventListener('click', () => {
         qrPanelVisible = !qrPanelVisible;
-        qrToggle.textContent = qrPanelVisible ? '✕ Hide QR Code' : '📱 Show QR Code';
+        qrToggle.textContent = qrPanelVisible ? '✕ Close QR' : '📱 Scan QR Code';
         qrPanel.style.display = qrPanelVisible ? 'block' : 'none';
       });
 
@@ -575,8 +531,8 @@
         <img alt="WhatsApp QR Code" src="${qrImageUrl}" />
         <div class="wa-scan-text">
           <strong>Scan to start chatting instantly!</strong><br>
-          Point your phone's camera at this QR code<br>
-          to connect with PCMC's AI Assistant
+          Point your phone camera at this QR code<br>
+          to connect with PCMC AI Assistant
         </div>
       `;
 
@@ -605,7 +561,7 @@
     function handleSuggestion(text, recentKey, pill) {
       // Remove emoji for message text
       const cleanText = text.replace(/^[^\w\s]+\s/, '');
-      const message = `Hello PCMC, I need assistance with: ${cleanText}`;
+      const message = `Hi, I need help with: ${cleanText}`;
       const waLink = `${waBase}?text=${encodeURIComponent(message)}`;
       
       window.open(waLink, '_blank', 'noopener');

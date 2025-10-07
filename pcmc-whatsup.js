@@ -12,8 +12,7 @@
     name: 'PCMC',
     fullName: 'Pimpri-Chinchwad Municipal Corporation',
     phone: '918888006666',
-    logo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdOYW1lPSIwIDAgNjQgNjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzAiIGZpbGw9InVybCgjZ3JhZCkiLz4KICA8cGF0aCBkPSJNMTggMjRoMjh2NGgtMjh6TTIwIDM0aDI0djRoLTI0ek0yMiA0NGgyMHY0aC0yMHoiIGZpbGw9IndoaXRlIiBvcGFjaXR5PSIwLjkiLz4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ3JhZCIgeDE9IjAiIHkxPSIwIiB4Mj0iNjQiIHkyPSI2NCI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxZTQwYWYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjM2I4MmY2Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KPC9zdmc+',
-    welcome: '🤖💜 Hi! I\'m your PCMC AI Care Assistant. I\'m here 24/7 to help with municipal services, property tax, water connection, complaints, certificates or anything you need. How can I support you today?',
+    welcome: '👋 Welcome to PCMC Digital Assistant!\n\nI\'m here to help you 24/7 with all municipal services. How can I assist you today?',
     poweredBy: 'WoW-Strategies Private Limited',
     poweredByUrl: 'https://wow-strategies.com/',
     autoOpen: true,
@@ -23,43 +22,32 @@
     forceDark: false
   };
 
+  // Updated suggestions with PCMC services
   const suggestions = [
-    'Property Tax Payment',
-    'Water Connection',
-    'Register Complaint',
-    'Birth/Death Certificate'
+    { icon: '📋', text: 'Service Information', desc: 'Get details about PCMC services' },
+    { icon: '🏠', text: 'Property Tax', desc: 'Pay or check property tax status' },
+    { icon: '📝', text: 'Register Grievance', desc: 'Report issues or complaints' },
+    { icon: '💧', text: 'Water Services', desc: 'Water connection & billing' },
+    { icon: '📄', text: 'Certificates', desc: 'Apply for municipal certificates' },
+    { icon: '📞', text: 'Contact Department', desc: 'Connect with specific departments' }
   ];
 
   // Helper functions
-  function esc(str) {
-    return (str || '')
-      .replace(/\\/g,'\\\\')
-      .replace(/`/g,'\\`')
-      .replace(/\$/g,'\\$')
-      .replace(/\r?\n/g,'\\n');
-  }
-
   function escapeHtml(str) {
     return str.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   }
 
-  function truncate(str, len) {
-    return str.length > len ? str.slice(0, len - 1) + '…' : str;
-  }
-
-  // Generate QR Code (simplified version)
-  async function generateQRDataUrl(text) {
-    // For production, use actual QR library
-    const qrPlaceholder = `data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgZmlsbD0iI2Y5ZmFmYiIvPgogIDx0ZXh0IHg9IjkwIiB5PSI5MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZiNzI4MCIgZm9udC1zaXplPSIxNCIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSI+UVIgQ29kZTwvdGV4dD4KPC9zdmc+`;
-    return qrPlaceholder;
+  // Generate proper QR Code URL
+  function generateQRUrl(phoneNumber, message = 'Hi') {
+    const waLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    return `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(waLink)}&bgcolor=FFFFFF&color=075E54&margin=2`;
   }
 
   // Build and inject widget
   async function initWidget() {
     const waBase = `https://wa.me/${PCMC_CONFIG.phone}`;
-    const defaultMsg = encodeURIComponent(`Hi, I need assistance from ${PCMC_CONFIG.name}`);
-    const waDefaultLink = `${waBase}?text=${defaultMsg}`;
-    const qrDataUrl = await generateQRDataUrl(waDefaultLink);
+    const defaultMsg = 'Hi, I need assistance from PCMC';
+    const qrImageUrl = generateQRUrl(PCMC_CONFIG.phone, defaultMsg);
 
     // Create host element
     const host = document.createElement('div');
@@ -67,414 +55,714 @@
     const shadow = host.attachShadow({ mode: 'open' });
     if (PCMC_CONFIG.forceDark) host.classList.add('force-dark');
 
-    // Inject styles
+    // Inject enhanced styles
     const style = document.createElement('style');
     style.textContent = `
       :host {
         all: initial;
-        font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        --pcmc-primary: #1e40af;
-        --pcmc-primary-rgb: 30,64,175;
-        --pcmc-accent: #3b82f6;
-        --pcmc-accent-rgb: 59,130,246;
-        --pcmc-bg: #ffffff;
-        --pcmc-bg-alt: #f0f9ff;
-        --pcmc-text: #1e293b;
-        --pcmc-text-soft: #64748b;
-        --pcmc-border: #e0f2fe;
-        --pcmc-radius-pill: 1000px;
-        --pcmc-shadow-elev: 0 18px 48px -15px rgba(30,64,175,.35), 0 6px 18px -6px rgba(30,64,175,.22);
-        --pcmc-shadow-soft: 0 4px 16px -6px rgba(30,64,175,.22);
-        --pcmc-glass: rgba(255,255,255,0.72);
-        --pcmc-focus: 0 0 0 3px rgba(var(--pcmc-accent-rgb),0.35);
-        --pcmc-launcher-size: 68px;
-        --pcmc-offset: max(24px, env(safe-area-inset-bottom, 24px));
-        color: var(--pcmc-text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        --wa-green: #25D366;
+        --wa-green-dark: #128C7E;
+        --wa-teal: #075E54;
+        --wa-teal-dark: #054640;
+        --wa-light-green: #DCF8C6;
+        --wa-blue: #34B7F1;
+        --wa-bg-chat: #ECE5DD;
+        --wa-bg-light: #FFFFFF;
+        --wa-bg-panel: #F0F2F5;
+        --wa-text-primary: #1C1E21;
+        --wa-text-secondary: #667781;
+        --wa-text-tertiary: #8696A0;
+        --wa-border: #E4E6EB;
+        --wa-border-light: #F0F2F5;
+        --wa-shadow-sm: 0 1px 2px rgba(0,0,0,0.1);
+        --wa-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        --wa-shadow-lg: 0 12px 28px rgba(0,0,0,0.15);
+        --wa-shadow-xl: 0 20px 60px rgba(0,0,0,0.3);
+        --wa-radius: 12px;
+        --wa-launcher-size: 68px;
+        --wa-offset: max(24px, env(safe-area-inset-bottom, 24px));
+        --wa-transition: cubic-bezier(0.4, 0, 0.2, 1);
+        color: var(--wa-text-primary);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
       
       @media (prefers-color-scheme: dark) {
         :host:not(.force-light) {
-          --pcmc-bg: #0f172a;
-          --pcmc-bg-alt: #1e293b;
-          --pcmc-text: #f1f5f9;
-          --pcmc-text-soft: #94a3b8;
-          --pcmc-border: #334155;
-          --pcmc-glass: rgba(15,23,42,0.72);
-          --pcmc-shadow-elev: 0 18px 52px -15px rgba(0,0,0,.65), 0 6px 18px -6px rgba(0,0,0,.5);
-          --pcmc-shadow-soft: 0 4px 16px -6px rgba(0,0,0,.5);
+          --wa-bg-chat: #0B141A;
+          --wa-bg-light: #111B21;
+          --wa-bg-panel: #202C33;
+          --wa-text-primary: #E9EDEF;
+          --wa-text-secondary: #8696A0;
+          --wa-text-tertiary: #667781;
+          --wa-border: #3B4A54;
+          --wa-border-light: #2A3942;
+          --wa-light-green: #005C4B;
         }
       }
-      
-      :host(.force-dark) {
-        --pcmc-bg: #0f172a;
-        --pcmc-bg-alt: #1e293b;
-        --pcmc-text: #f1f5f9;
-        --pcmc-text-soft: #94a3b8;
-        --pcmc-border: #334155;
-        --pcmc-glass: rgba(15,23,42,0.72);
-        --pcmc-shadow-elev: 0 18px 52px -15px rgba(0,0,0,.65), 0 6px 18px -6px rgba(0,0,0,.5);
-        --pcmc-shadow-soft: 0 4px 16px -6px rgba(0,0,0,.5);
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
       }
 
-      .pcmc-launcher {
+      .wa-launcher {
         position: fixed;
-        bottom: var(--pcmc-offset);
+        bottom: var(--wa-offset);
         right: 24px;
-        width: var(--pcmc-launcher-size);
-        height: var(--pcmc-launcher-size);
+        width: var(--wa-launcher-size);
+        height: var(--wa-launcher-size);
         border-radius: 50%;
         cursor: pointer;
         border: none;
-        background: linear-gradient(135deg, var(--pcmc-primary), var(--pcmc-accent));
-        display:flex; align-items:center; justify-content:center;
-        box-shadow: 0 10px 30px -10px rgba(var(--pcmc-primary-rgb),0.65), 0 0 0 0 rgba(var(--pcmc-accent-rgb),0.45);
-        animation: pcmc-halo 6s linear infinite;
-        transition: transform .55s cubic-bezier(.34,1.56,.64,1), box-shadow .5s;
-        z-index:2147483646;
-        outline:none;
+        background: linear-gradient(135deg, var(--wa-green) 0%, var(--wa-green-dark) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--wa-shadow-lg);
+        transition: all .3s var(--wa-transition);
+        z-index: 2147483646;
+        outline: none;
+        overflow: hidden;
+        position: relative;
       }
       
-      @keyframes pcmc-halo {
-        0% { box-shadow:0 10px 30px -10px rgba(var(--pcmc-primary-rgb),0.65), 0 0 0 0 rgba(var(--pcmc-accent-rgb),0.0);}
-        40% { box-shadow:0 10px 30px -10px rgba(var(--pcmc-primary-rgb),0.65), 0 0 0 16px rgba(var(--pcmc-accent-rgb),0);}
-        100% { box-shadow:0 10px 30px -10px rgba(var(--pcmc-primary-rgb),0.65), 0 0 0 0 rgba(var(--pcmc-accent-rgb),0);}
+      .wa-launcher:before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at center, transparent 30%, rgba(255,255,255,0.1) 100%);
+        opacity: 0;
+        transition: opacity .3s;
       }
       
-      .pcmc-launcher:hover,
-      .pcmc-launcher:focus-visible {
-        transform: scale(1.08) rotate(6deg);
+      .wa-launcher:hover:before {
+        opacity: 1;
       }
       
-      .pcmc-launcher:focus-visible {
-        box-shadow: 0 0 0 4px rgba(var(--pcmc-accent-rgb),0.4), 0 10px 30px -10px rgba(var(--pcmc-primary-rgb),0.65);
+      .wa-launcher-pulse {
+        position: absolute;
+        inset: -20px;
+        border: 3px solid var(--wa-green);
+        border-radius: 50%;
+        animation: wa-pulse 2s infinite;
       }
       
-      .pcmc-launcher svg {
-        width:58%; height:58%;
+      @keyframes wa-pulse {
+        0% { transform: scale(0.8); opacity: 1; }
+        50% { transform: scale(1.2); opacity: 0; }
+        100% { transform: scale(1.2); opacity: 0; }
+      }
+      
+      .wa-launcher:hover {
+        transform: scale(1.1) translateY(-2px);
+        box-shadow: var(--wa-shadow-xl);
+      }
+      
+      .wa-launcher:active {
+        transform: scale(0.95);
+      }
+      
+      .wa-launcher svg {
+        width: 32px;
+        height: 32px;
         fill: white;
-        filter: drop-shadow(0 4px 9px rgba(0,0,0,.35));
+        z-index: 1;
       }
       
-      .pcmc-badge-ai {
-        position:absolute;
-        top:-4px; right:-4px;
-        background:#ff2f6d;
-        color:#fff;
-        font-size:11px;
-        line-height:1;
-        padding:5px 7px 6px;
-        border-radius:14px;
-        font-weight:600;
-        box-shadow:0 4px 10px -3px rgba(0,0,0,.45);
-        letter-spacing:.5px;
-        animation: pcmc-badge-pop .6s cubic-bezier(.34,1.56,.64,1);
+      .wa-badge-ai {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: linear-gradient(135deg, #FF6B6B 0%, #FF5252 100%);
+        color: white;
+        font-size: 11px;
+        line-height: 1;
+        padding: 5px 7px;
+        border-radius: 12px;
+        font-weight: 700;
+        box-shadow: 0 2px 8px rgba(255,107,107,.4);
+        letter-spacing: 0.5px;
+        animation: wa-badge-pop .6s var(--wa-transition);
       }
       
-      @keyframes pcmc-badge-pop {
-        0% { transform: scale(.4) rotate(-10deg); opacity:0; }
-        60% { transform: scale(1.12) rotate(4deg); opacity:1; }
+      @keyframes wa-badge-pop {
+        0% { transform: scale(0) rotate(-180deg); }
+        50% { transform: scale(1.2) rotate(10deg); }
         100% { transform: scale(1) rotate(0); }
       }
 
-      .pcmc-shelf {
+      .wa-shelf {
         position: fixed;
         right: 24px;
-        bottom: calc(var(--pcmc-offset) + var(--pcmc-launcher-size) + 12px);
-        display:flex;
-        flex-direction:column;
-        align-items:flex-end;
-        gap:10px;
-        max-width: min(360px, calc(100vw - 28px));
-        z-index:2147483646;
-        animation: pcmc-shelf-in .45s cubic-bezier(.4,.0,.2,1);
+        bottom: calc(var(--wa-offset) + var(--wa-launcher-size) + 16px);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        max-width: min(420px, calc(100vw - 48px));
+        z-index: 2147483646;
+        animation: wa-shelf-enter .4s var(--wa-transition);
       }
       
-      @keyframes pcmc-shelf-in {
-        0% { opacity:0; transform: translateY(14px) scale(.97); }
-        100% { opacity:1; transform: translateY(0) scale(1); }
+      @keyframes wa-shelf-enter {
+        0% { 
+          opacity: 0; 
+          transform: translateY(20px) scale(.95);
+        }
+        100% { 
+          opacity: 1; 
+          transform: translateY(0) scale(1);
+        }
       }
 
-      .pcmc-bubble {
-        background: var(--pcmc-glass);
-        backdrop-filter: blur(14px) saturate(1.35);
-        -webkit-backdrop-filter: blur(14px) saturate(1.35);
-        padding:14px 18px 12px;
-        border-radius: 20px;
-        border:1px solid rgba(var(--pcmc-accent-rgb),0.25);
-        box-shadow: var(--pcmc-shadow-elev);
-        color: var(--pcmc-text);
-        line-height:1.5;
-        font-size:14px;
-        animation: pcmc-bubble-in .50s cubic-bezier(.34,1.35,.64,1);
-        max-width:100%;
-        position:relative;
-      }
-      
-      @keyframes pcmc-bubble-in {
-        0% { transform: translateY(10px) scale(.95); opacity:0; }
-        60% { transform: translateY(-2px) scale(1.02); opacity:1; }
-        100% { transform: translateY(0) scale(1); }
-      }
-      
-      .pcmc-bubble:after {
-        content:"";
-        position:absolute;
-        bottom:-6px; right:24px;
-        width:12px; height:12px;
-        background: var(--pcmc-glass);
-        border:1px solid rgba(var(--pcmc-accent-rgb),0.25);
-        border-left:none; border-top:none;
-        transform: rotate(45deg);
-        filter: blur(.2px);
-      }
-      
-      .pcmc-bubble button.pcmc-dismiss {
-        position:absolute;
-        top:4px; right:6px;
-        width:24px; height:24px;
-        border:none; cursor:pointer;
-        background: rgba(var(--pcmc-accent-rgb),0.18);
-        color: var(--pcmc-text);
-        backdrop-filter: blur(4px);
-        border-radius:50%;
-        font-size:14px;
-        display:flex; align-items:center; justify-content:center;
-        transition: background .25s;
-      }
-      
-      .pcmc-bubble button.pcmc-dismiss:hover { 
-        background: rgba(var(--pcmc-accent-rgb),0.32); 
-      }
-
-      .pcmc-pill {
-        background: transparent;
-        color: var(--pcmc-primary);
-        border: 2px solid var(--pcmc-primary);
-        border-radius: var(--pcmc-radius-pill);
-        padding: 12px 18px;
-        font-size:14px;
-        font-weight:500;
-        cursor:pointer;
-        text-align:left;
-        position:relative;
-        overflow:hidden;
-        display:inline-flex;
-        align-items:center;
-        gap:10px;
-        box-shadow: var(--pcmc-shadow-soft);
+      .wa-bubble {
+        background: var(--wa-bg-light);
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: var(--wa-shadow-lg);
+        color: var(--wa-text-primary);
+        line-height: 1.6;
+        font-size: 15px;
+        animation: wa-bubble-in .5s var(--wa-transition);
+        position: relative;
+        border: 1px solid var(--wa-border-light);
         backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        transition: background .4s, color .4s, transform .5s cubic-bezier(.34,1.56,.64,1), border-color .4s, box-shadow .4s;
-        animation: pcmc-pill-in .55s cubic-bezier(.34,1.5,.64,1) backwards;
-        max-width:100%;
-        width: fit-content;
       }
       
-      .pcmc-pill:focus-visible {
-        outline:none;
-        box-shadow: var(--pcmc-shadow-soft), var(--pcmc-focus);
+      .wa-bubble-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
       }
       
-      @keyframes pcmc-pill-in {
-        0% { opacity:0; transform: translateY(14px) scale(.95); }
-        70% { opacity:1; transform: translateY(-3px) scale(1.02); }
-        100% { transform: translateY(0) scale(1); }
+      .wa-bubble-avatar {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, var(--wa-green) 0%, var(--wa-green-dark) 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
       }
       
-      .pcmc-pill:before {
-        content:"";
-        position:absolute;
-        inset:0;
-        background: linear-gradient(120deg, var(--pcmc-primary), var(--pcmc-accent));
-        opacity:0;
-        transition: opacity .45s;
-        z-index:0;
+      .wa-bubble-avatar svg {
+        width: 24px;
+        height: 24px;
+        fill: white;
       }
       
-      .pcmc-pill span { position:relative; z-index:1; }
-      
-      .pcmc-pill:hover,
-      .pcmc-pill:focus-visible {
-        color:#fff;
-        border-color: transparent;
-        transform: translateY(-4px) scale(1.03);
-        box-shadow: 0 14px 32px -12px rgba(var(--pcmc-primary-rgb),0.6), 0 6px 18px -6px rgba(var(--pcmc-accent-rgb),0.55);
+      .wa-bubble-info {
+        flex: 1;
       }
       
-      .pcmc-pill:hover:before,
-      .pcmc-pill:focus-visible:before { opacity:1; }
-      
-      .pcmc-pill[data-recent="1"] {
-        border-color: var(--pcmc-accent);
-        color: var(--pcmc-accent);
+      .wa-bubble-name {
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--wa-text-primary);
       }
       
-      .pcmc-pill[data-recent="1"]:hover,
-      .pcmc-pill[data-recent="1"]:focus-visible { color:#fff; }
-
-      .pcmc-qr-toggle {
-        margin-top:2px;
-        background: none;
-        border:none;
-        color: var(--pcmc-accent);
-        font-size:12.5px;
-        cursor:pointer;
-        padding: 6px 10px;
-        border-radius: 10px;
-        font-weight:500;
-        transition: background .25s;
-        align-self:flex-end;
+      .wa-bubble-status {
+        font-size: 12px;
+        color: var(--wa-green);
+        display: flex;
+        align-items: center;
+        gap: 4px;
       }
       
-      .pcmc-qr-toggle:hover,
-      .pcmc-qr-toggle:focus-visible {
-        background: rgba(var(--pcmc-accent-rgb),0.12);
-        outline:none;
-      }
-
-      .pcmc-qr-panel {
-        display:none;
-        background: var(--pcmc-glass);
-        backdrop-filter: blur(14px) saturate(1.3);
-        -webkit-backdrop-filter: blur(14px) saturate(1.3);
-        padding:16px 18px 12px;
-        border-radius: 18px;
-        border:1px solid rgba(var(--pcmc-accent-rgb),0.28);
-        box-shadow: var(--pcmc-shadow-elev);
-        animation: pcmc-bubble-in .55s cubic-bezier(.34,1.4,.64,1);
-        align-self:flex-end;
+      .wa-status-dot {
+        width: 6px;
+        height: 6px;
+        background: var(--wa-green);
+        border-radius: 50%;
+        animation: wa-blink 1.5s infinite;
       }
       
-      .pcmc-qr-panel img {
-        width:140px; height:140px;
-        display:block;
-        margin:0 auto 6px;
+      @keyframes wa-blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
       }
       
-      .pcmc-qr-panel .pcmc-label {
-        font-size:10.5px;
-        letter-spacing:1px;
-        font-weight:600;
-        text-transform:uppercase;
-        text-align:center;
-        color: var(--pcmc-accent);
-        margin-bottom:6px;
-      }
-
-      .pcmc-footer {
-        font-size:10.5px;
-        color: var(--pcmc-text-soft);
-        text-align:center;
-        background: var(--pcmc-glass);
-        padding:6px 10px 6px;
-        border-radius:14px;
-        border:1px solid rgba(var(--pcmc-accent-rgb),0.22);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        line-height:1.25;
-        align-self:flex-end;
-        animation: pcmc-pill-in .55s cubic-bezier(.34,1.5,.64,1) backwards;
+      .wa-bubble-message {
+        white-space: pre-line;
+        color: var(--wa-text-primary);
       }
       
-      .pcmc-powered-link {
-        display:inline-flex;
-        align-items:center;
-        gap:6px;
-        text-decoration:none;
-        color: var(--pcmc-text-soft);
-        font-weight:500;
-        position:relative;
-        padding:4px 10px;
-        border-radius:12px;
-        background: rgba(var(--pcmc-accent-rgb),0.08);
-        transition: background .35s, color .35s;
-      }
-      
-      .pcmc-powered-link:before {
-        content:"";
-        position:absolute;
-        inset:0;
-        border-radius:inherit;
-        background:linear-gradient(120deg,var(--pcmc-primary),var(--pcmc-accent));
-        opacity:0;
-        transition:opacity .45s;
-        z-index:0;
-      }
-      
-      .pcmc-powered-link span,
-      .pcmc-powered-link svg { position:relative; z-index:1; }
-      
-      .pcmc-powered-link:hover,
-      .pcmc-powered-link:focus-visible {
-        color:#fff;
-        outline:none;
-      }
-      
-      .pcmc-powered-link:hover:before,
-      .pcmc-powered-link:focus-visible:before { opacity:1; }
-      
-      .pcmc-powered-link svg {
-        width:12px;
-        height:12px;
-        stroke: currentColor;
-        stroke-width:2;
-        fill:none;
-      }
-
-      .pcmc-tooltip {
-        position:fixed;
-        bottom: calc(var(--pcmc-offset) + var(--pcmc-launcher-size) + 12px);
-        right: 24px;
-        background: var(--pcmc-glass);
-        border:1px solid rgba(var(--pcmc-accent-rgb),0.3);
-        padding:6px 10px;
-        font-size:12px;
-        color: var(--pcmc-text);
-        border-radius: 11px;
-        backdrop-filter: blur(10px);
-        box-shadow: var(--pcmc-shadow-soft);
-        opacity:0;
-        transform: translateY(6px) scale(.96);
-        pointer-events:none;
-        transition: opacity .4s, transform .4s;
-        white-space:nowrap;
-        z-index:2147483646;
-      }
-      
-      .pcmc-tooltip.show {
-        opacity:1;
-        transform: translateY(0) scale(1);
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        .pcmc-launcher, .pcmc-pill, .pcmc-bubble, .pcmc-tooltip, .pcmc-shelf, .pcmc-qr-panel { 
-          animation:none !important; 
-          transition:none !important; 
+      @keyframes wa-bubble-in {
+        0% { 
+          transform: translateY(10px) translateX(10px) scale(.9); 
+          opacity: 0;
+        }
+        100% { 
+          transform: translateY(0) translateX(0) scale(1); 
+          opacity: 1;
         }
       }
       
-      @media (max-width:640px) {
-        :host { --pcmc-launcher-size:60px; }
-        .pcmc-shelf { right: 14px; bottom: calc(var(--pcmc-offset) + var(--pcmc-launcher-size) + 10px); }
-        .pcmc-launcher { right:14px; }
-        .pcmc-tooltip { right:14px; }
+      .wa-bubble:after {
+        content: "";
+        position: absolute;
+        bottom: -8px;
+        right: 30px;
+        width: 16px;
+        height: 16px;
+        background: var(--wa-bg-light);
+        border-right: 1px solid var(--wa-border-light);
+        border-bottom: 1px solid var(--wa-border-light);
+        transform: rotate(45deg);
+      }
+      
+      .wa-bubble button.wa-dismiss {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 28px;
+        height: 28px;
+        border: none;
+        cursor: pointer;
+        background: var(--wa-bg-panel);
+        color: var(--wa-text-secondary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all .2s;
+        font-size: 18px;
+      }
+      
+      .wa-bubble button.wa-dismiss:hover {
+        background: var(--wa-text-secondary);
+        color: white;
+        transform: rotate(90deg);
+      }
+
+      .wa-suggestions-container {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .wa-pill {
+        background: var(--wa-bg-light);
+        color: var(--wa-text-primary);
+        border: 1px solid var(--wa-border);
+        border-radius: 16px;
+        padding: 14px 18px;
+        cursor: pointer;
+        text-align: left;
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        box-shadow: var(--wa-shadow-sm);
+        transition: all .3s var(--wa-transition);
+        animation: wa-pill-in .5s var(--wa-transition) backwards;
+        overflow: hidden;
+      }
+      
+      .wa-pill:before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, var(--wa-green) 0%, var(--wa-green-dark) 100%);
+        opacity: 0;
+        transition: opacity .3s;
+      }
+      
+      .wa-pill:hover {
+        transform: translateX(8px) scale(1.02);
+        box-shadow: var(--wa-shadow);
+        border-color: var(--wa-green);
+      }
+      
+      .wa-pill:hover:before {
+        opacity: 0.05;
+      }
+      
+      .wa-pill:active {
+        transform: translateX(4px) scale(.98);
+      }
+      
+      .wa-pill-icon {
+        font-size: 24px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--wa-bg-panel);
+        border-radius: 12px;
+        flex-shrink: 0;
+      }
+      
+      .wa-pill:hover .wa-pill-icon {
+        background: linear-gradient(135deg, var(--wa-green) 0%, var(--wa-green-dark) 100%);
+        transform: rotate(-5deg);
+      }
+      
+      .wa-pill:hover .wa-pill-icon {
+        filter: grayscale(0%) brightness(1.2);
+      }
+      
+      .wa-pill-content {
+        flex: 1;
+        min-width: 0;
+      }
+      
+      .wa-pill-text {
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--wa-text-primary);
+        margin-bottom: 2px;
+      }
+      
+      .wa-pill-desc {
+        font-size: 12px;
+        color: var(--wa-text-secondary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      
+      .wa-pill-arrow {
+        width: 20px;
+        height: 20px;
+        color: var(--wa-text-tertiary);
+        transition: all .3s;
+        flex-shrink: 0;
+      }
+      
+      .wa-pill:hover .wa-pill-arrow {
+        color: var(--wa-green);
+        transform: translateX(4px);
+      }
+      
+      @keyframes wa-pill-in {
+        0% { 
+          opacity: 0; 
+          transform: translateX(20px) scale(.9);
+        }
+        100% { 
+          opacity: 1; 
+          transform: translateX(0) scale(1);
+        }
+      }
+      
+      .wa-pill[data-recent="1"] .wa-pill-icon {
+        background: linear-gradient(135deg, var(--wa-green) 0%, var(--wa-green-dark) 100%);
+      }
+      
+      .wa-pill[data-recent="1"] .wa-pill-icon {
+        filter: grayscale(0%);
+      }
+
+      .wa-qr-toggle {
+        margin-top: 8px;
+        background: linear-gradient(135deg, var(--wa-green) 0%, var(--wa-green-dark) 100%);
+        border: none;
+        color: white;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        padding: 12px 20px;
+        border-radius: 24px;
+        transition: all .3s var(--wa-transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        box-shadow: var(--wa-shadow);
+        animation: wa-pill-in .5s var(--wa-transition) backwards;
+        animation-delay: 0.4s;
+      }
+      
+      .wa-qr-toggle:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--wa-shadow-lg);
+      }
+      
+      .wa-qr-toggle:active {
+        transform: translateY(0);
+      }
+      
+      .wa-qr-toggle svg {
+        width: 18px;
+        height: 18px;
+        fill: currentColor;
+      }
+
+      .wa-qr-panel {
+        display: none;
+        background: var(--wa-bg-light);
+        padding: 24px;
+        border-radius: 16px;
+        border: 1px solid var(--wa-border);
+        box-shadow: var(--wa-shadow-lg);
+        animation: wa-bubble-in .4s var(--wa-transition);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .wa-qr-panel:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--wa-green) 0%, var(--wa-green-dark) 100%);
+      }
+      
+      .wa-qr-header {
+        margin-bottom: 20px;
+      }
+      
+      .wa-qr-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--wa-text-primary);
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      
+      .wa-qr-subtitle {
+        font-size: 13px;
+        color: var(--wa-text-secondary);
+        line-height: 1.5;
+      }
+      
+      .wa-qr-wrapper {
+        position: relative;
+        display: inline-block;
+        padding: 16px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+      }
+      
+      .wa-qr-wrapper:before {
+        content: '';
+        position: absolute;
+        inset: -2px;
+        background: linear-gradient(135deg, var(--wa-green) 0%, var(--wa-green-dark) 100%);
+        border-radius: 18px;
+        z-index: -1;
+        opacity: 0.5;
+      }
+      
+      .wa-qr-panel img {
+        width: 200px;
+        height: 200px;
+        display: block;
+        border-radius: 8px;
+      }
+      
+      .wa-qr-steps {
+        background: var(--wa-bg-panel);
+        border-radius: 12px;
+        padding: 16px;
+        text-align: left;
+      }
+      
+      .wa-qr-step {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 12px;
+        font-size: 13px;
+        color: var(--wa-text-primary);
+        line-height: 1.5;
+      }
+      
+      .wa-qr-step:last-child {
+        margin-bottom: 0;
+      }
+      
+      .wa-qr-step-number {
+        width: 24px;
+        height: 24px;
+        background: var(--wa-green);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 12px;
+        flex-shrink: 0;
+      }
+      
+      .wa-qr-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: var(--wa-bg-panel);
+        color: var(--wa-text-secondary);
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all .2s;
+        font-size: 20px;
+      }
+      
+      .wa-qr-close:hover {
+        background: var(--wa-text-secondary);
+        color: white;
+        transform: rotate(90deg);
+      }
+
+      .wa-footer {
+        font-size: 12px;
+        color: var(--wa-text-tertiary);
+        text-align: center;
+        background: var(--wa-bg-light);
+        padding: 12px 16px;
+        border-radius: 12px;
+        border: 1px solid var(--wa-border-light);
+        line-height: 1.5;
+        animation: wa-pill-in .5s var(--wa-transition) backwards;
+        animation-delay: 0.5s;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      
+      .wa-footer-left {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      
+      .wa-secure-badge {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        color: var(--wa-green);
+        font-weight: 600;
+      }
+      
+      .wa-secure-badge svg {
+        width: 14px;
+        height: 14px;
+        fill: currentColor;
+      }
+      
+      .wa-powered-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        text-decoration: none;
+        color: var(--wa-text-tertiary);
+        transition: color .2s;
+      }
+      
+      .wa-powered-link:hover {
+        color: var(--wa-green-dark);
+      }
+      
+      .wa-powered-link svg {
+        width: 14px;
+        height: 14px;
+        stroke: currentColor;
+        stroke-width: 2;
+        fill: none;
+      }
+
+      .wa-tooltip {
+        position: fixed;
+        bottom: calc(var(--wa-offset) + var(--wa-launcher-size) + 12px);
+        right: 24px;
+        background: var(--wa-teal);
+        color: white;
+        padding: 10px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        border-radius: 8px;
+        box-shadow: var(--wa-shadow);
+        opacity: 0;
+        transform: translateY(5px) scale(.95);
+        pointer-events: none;
+        transition: all .3s var(--wa-transition);
+        white-space: nowrap;
+        z-index: 2147483646;
+      }
+      
+      .wa-tooltip.show {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      
+      .wa-tooltip:after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        right: 34px;
+        width: 10px;
+        height: 10px;
+        background: var(--wa-teal);
+        transform: rotate(45deg);
+      }
+
+      @media (max-width: 640px) {
+        :host { 
+          --wa-launcher-size: 60px;
+          --wa-offset: 16px;
+        }
+        .wa-shelf { 
+          right: 16px; 
+          left: 16px;
+          max-width: none;
+          bottom: calc(var(--wa-offset) + var(--wa-launcher-size) + 12px);
+        }
+        .wa-launcher { right: 16px; }
+        .wa-tooltip { right: 16px; }
+        .wa-pill { padding: 12px 16px; }
+        .wa-pill-desc { display: none; }
+        .wa-footer {
+          flex-direction: column;
+          gap: 8px;
+        }
+      }
+      
+      @media (hover: none) {
+        .wa-launcher:hover {
+          transform: none;
+        }
+        .wa-pill:hover {
+          transform: none;
+        }
       }
     `;
     shadow.appendChild(style);
 
     // Create tooltip
     const tooltip = document.createElement('div');
-    tooltip.className='pcmc-tooltip';
-    tooltip.textContent='PCMC AI WhatsApp Assistant';
+    tooltip.className = 'wa-tooltip';
+    tooltip.textContent = '💬 Chat with PCMC Assistant';
     shadow.appendChild(tooltip);
 
-    // Create launcher button
+    // Create launcher button with pulse effect
     const launcher = document.createElement('button');
-    launcher.type='button';
-    launcher.className='pcmc-launcher';
-    launcher.setAttribute('aria-label','Open PCMC AI WhatsApp Assistant');
+    launcher.type = 'button';
+    launcher.className = 'wa-launcher';
+    launcher.setAttribute('aria-label', 'Open PCMC WhatsApp Assistant');
     launcher.innerHTML = `
-      <span class="pcmc-badge-ai">AI</span>
+      <span class="wa-launcher-pulse"></span>
+      <span class="wa-badge-ai">AI</span>
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
       </svg>
@@ -485,104 +773,213 @@
     let qrPanelVisible = false;
 
     // Tooltip events
-    launcher.addEventListener('mouseenter',()=> tooltip.classList.add('show'));
-    launcher.addEventListener('mouseleave',()=> tooltip.classList.remove('show'));
-    launcher.addEventListener('focus',()=> tooltip.classList.add('show'));
-    launcher.addEventListener('blur',()=> tooltip.classList.remove('show'));
+    launcher.addEventListener('mouseenter', () => tooltip.classList.add('show'));
+    launcher.addEventListener('mouseleave', () => tooltip.classList.remove('show'));
+    launcher.addEventListener('focus', () => tooltip.classList.add('show'));
+    launcher.addEventListener('blur', () => tooltip.classList.remove('show'));
     launcher.addEventListener('click', () => { shelf ? closeShelf() : openShelf(); });
 
     function openShelf() {
       if (shelf) return;
       shelf = document.createElement('div');
-      shelf.className='pcmc-shelf';
-      shelf.setAttribute('role','dialog');
-      shelf.setAttribute('aria-label','PCMC AI WhatsApp Assistant');
+      shelf.className = 'wa-shelf';
+      shelf.setAttribute('role', 'dialog');
+      shelf.setAttribute('aria-label', 'PCMC WhatsApp Assistant');
 
-      const greetKey = '__pcmc_greeting_dismiss_'+PCMC_CONFIG.orgId;
+      const greetKey = '__pcmc_greeting_dismiss_' + PCMC_CONFIG.orgId;
       const showGreeting = !PCMC_CONFIG.suppressGreet && (PCMC_CONFIG.forceGreet || !localStorage.getItem(greetKey));
 
       if (showGreeting) {
         const bubble = document.createElement('div');
-        bubble.className='pcmc-bubble';
-        bubble.innerHTML = '<button class="pcmc-dismiss" aria-label="Dismiss greeting">&times;</button>' + escapeHtml(PCMC_CONFIG.welcome);
-        bubble.querySelector('.pcmc-dismiss').addEventListener('click', () => {
+        bubble.className = 'wa-bubble';
+        bubble.innerHTML = `
+          <button class="wa-dismiss" aria-label="Dismiss greeting">×</button>
+          <div class="wa-bubble-header">
+            <div class="wa-bubble-avatar">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+              </svg>
+            </div>
+            <div class="wa-bubble-info">
+              <div class="wa-bubble-name">PCMC Assistant</div>
+              <div class="wa-bubble-status">
+                <span class="wa-status-dot"></span>
+                Available 24/7
+              </div>
+            </div>
+          </div>
+          <div class="wa-bubble-message">${escapeHtml(PCMC_CONFIG.welcome)}</div>
+        `;
+        bubble.querySelector('.wa-dismiss').addEventListener('click', () => {
           bubble.remove();
-          localStorage.setItem(greetKey,'1');
+          localStorage.setItem(greetKey, '1');
         });
         shelf.appendChild(bubble);
       }
 
-      const recentKey = '__pcmc_recent_fixed4_'+PCMC_CONFIG.orgId;
+      const suggestionsContainer = document.createElement('div');
+      suggestionsContainer.className = 'wa-suggestions-container';
+      
+      const recentKey = '__pcmc_recent_' + PCMC_CONFIG.orgId;
       const recent = JSON.parse(localStorage.getItem(recentKey) || '[]');
 
-      suggestions.forEach((text, idx) => {
+      suggestions.forEach((item, idx) => {
         const pill = document.createElement('button');
-        pill.type='button';
-        pill.className='pcmc-pill';
-        pill.style.animationDelay = (0.04 + idx*0.06)+'s';
-        pill.innerHTML = '<span>'+escapeHtml(text)+'</span>';
-        if (recent.includes(text)) pill.dataset.recent='1';
-        pill.addEventListener('click', () => handleSuggestion(text, recentKey, pill));
-        pill.addEventListener('keydown', e => {
-          if (e.key==='Enter' || e.key===' ') { 
-            e.preventDefault(); 
-            handleSuggestion(text, recentKey, pill); 
-          }
-        });
-        shelf.appendChild(pill);
+        pill.type = 'button';
+        pill.className = 'wa-pill';
+        pill.style.animationDelay = (idx * 0.08) + 's';
+        pill.innerHTML = `
+          <span class="wa-pill-icon">${item.icon}</span>
+          <div class="wa-pill-content">
+            <div class="wa-pill-text">${escapeHtml(item.text)}</div>
+            <div class="wa-pill-desc">${escapeHtml(item.desc)}</div>
+          </div>
+          <svg class="wa-pill-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
+        `;
+        if (recent.includes(item.text)) pill.dataset.recent = '1';
+        pill.addEventListener('click', () => handleSuggestion(item, recentKey, pill));
+        suggestionsContainer.appendChild(pill);
       });
+      
+      shelf.appendChild(suggestionsContainer);
 
       const qrToggle = document.createElement('button');
-      qrToggle.type='button';
-      qrToggle.className='pcmc-qr-toggle';
-      qrToggle.textContent='Show QR';
+      qrToggle.type = 'button';
+      qrToggle.className = 'wa-qr-toggle';
+      qrToggle.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3 11h8V3H3v8zm2-6h4v4H5V5zm8-2v8h8V3h-8zm6 6h-4V5h4v4zM3 21h8v-8H3v8zm2-6h4v4H5v-4zm13 6h3v-3h-3v3zm-3 0h2v-2h-1v-1h-1v3zm-2-3h1v1h1v-2h-2v1zm4-1v1h1v1h1v-1h1v-1h-3zm3-1h1v-1h-1v1zm-7 2h1v-1h-1v1zm3-2v1h1v-1h-1zm-1 0h-1v1h1v-1zm6 2h1v-1h-1v1zm0 3h1v-2h-1v2z"/>
+        </svg>
+        <span>Scan QR Code</span>
+      `;
       qrToggle.addEventListener('click', () => {
         qrPanelVisible = !qrPanelVisible;
-        qrToggle.textContent = qrPanelVisible ? 'Hide QR' : 'Show QR';
+        qrToggle.innerHTML = qrPanelVisible ? `
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+          </svg>
+          <span>Close QR Code</span>
+        ` : `
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3 11h8V3H3v8zm2-6h4v4H5V5zm8-2v8h8V3h-8zm6 6h-4V5h4v4zM3 21h8v-8H3v8zm2-6h4v4H5v-4zm13 6h3v-3h-3v3zm-3 0h2v-2h-1v-1h-1v3zm-2-3h1v1h1v-2h-2v1zm4-1v1h1v1h1v-1h1v-1h-3zm3-1h1v-1h-1v1zm-7 2h1v-1h-1v1zm3-2v1h1v-1h-1zm-1 0h-1v1h1v-1zm6 2h1v-1h-1v1zm0 3h1v-2h-1v2z"/>
+          </svg>
+          <span>Scan QR Code</span>
+        `;
         qrPanel.style.display = qrPanelVisible ? 'block' : 'none';
       });
 
       const qrPanel = document.createElement('div');
-      qrPanel.className='pcmc-qr-panel';
-      qrPanel.innerHTML = '<div class="pcmc-label">SCAN TO START</div><img alt="WhatsApp QR" src="'+qrDataUrl+'"/>' +
-        '<div style="text-align:center;font-size:12px;color:var(--pcmc-text-soft);">Open on your phone</div>';
+      qrPanel.className = 'wa-qr-panel';
+      qrPanel.innerHTML = `
+        <button class="wa-qr-close" aria-label="Close QR panel">×</button>
+        <div class="wa-qr-header">
+          <div class="wa-qr-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--wa-green)">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+            Quick Connect
+          </div>
+          <div class="wa-qr-subtitle">Scan the QR code below to instantly start chatting with our AI-powered assistant</div>
+        </div>
+        <div class="wa-qr-wrapper">
+          <img alt="WhatsApp QR Code" src="${qrImageUrl}" />
+        </div>
+        <div class="wa-qr-steps">
+          <div class="wa-qr-step">
+            <span class="wa-qr-step-number">1</span>
+            <span>Open WhatsApp on your mobile device</span>
+          </div>
+          <div class="wa-qr-step">
+            <span class="wa-qr-step-number">2</span>
+            <span>Tap the camera icon in the search bar</span>
+          </div>
+          <div class="wa-qr-step">
+            <span class="wa-qr-step-number">3</span>
+            <span>Point your camera at this QR code to scan</span>
+          </div>
+          <div class="wa-qr-step">
+            <span class="wa-qr-step-number">4</span>
+            <span>Start chatting with PCMC Assistant instantly!</span>
+          </div>
+        </div>
+      `;
+      
+      qrPanel.querySelector('.wa-qr-close').addEventListener('click', () => {
+        qrPanelVisible = false;
+        qrToggle.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3 11h8V3H3v8zm2-6h4v4H5V5zm8-2v8h8V3h-8zm6 6h-4V5h4v4zM3 21h8v-8H3v8zm2-6h4v4H5v-4zm13 6h3v-3h-3v3zm-3 0h2v-2h-1v-1h-1v3zm-2-3h1v1h1v-2h-2v1zm4-1v1h1v1h1v-1h1v-1h-3zm3-1h1v-1h-1v1zm-7 2h1v-1h-1v1zm3-2v1h1v-1h-1zm-1 0h-1v1h1v-1zm6 2h1v-1h-1v1zm0 3h1v-2h-1v2z"/>
+          </svg>
+          <span>Scan QR Code</span>
+        `;
+        qrPanel.style.display = 'none';
+      });
 
       shelf.appendChild(qrToggle);
       shelf.appendChild(qrPanel);
 
       const footer = document.createElement('div');
-      footer.className='pcmc-footer';
-      footer.innerHTML =
-        '<a class="pcmc-powered-link" href="'+PCMC_CONFIG.poweredByUrl+'" target="_blank" rel="noopener" aria-label="Visit WoW-Strategies website">' +
-        '<span>Powered by <strong>'+PCMC_CONFIG.poweredBy+'</strong></span>' +
-        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>' +
-        '</a>';
+      footer.className = 'wa-footer';
+      footer.innerHTML = `
+        <div class="wa-footer-left">
+          <span class="wa-secure-badge">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+            </svg>
+            Secure Chat
+          </span>
+        </div>
+        <a class="wa-powered-link" href="${PCMC_CONFIG.poweredByUrl}" target="_blank" rel="noopener" aria-label="Visit WoW-Strategies website">
+          <span>Powered by <strong>${PCMC_CONFIG.poweredBy}</strong></span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M17 7h-10M17 7v10"/></svg>
+        </a>
+      `;
       shelf.appendChild(footer);
 
       shadow.appendChild(shelf);
+      tooltip.classList.remove('show');
     }
 
     function closeShelf() {
       if (!shelf) return;
-      shelf.remove();
-      shelf = null;
+      shelf.style.animation = 'wa-shelf-exit .3s var(--wa-transition)';
+      setTimeout(() => {
+        shelf.remove();
+        shelf = null;
+      }, 300);
     }
 
-    function handleSuggestion(text, recentKey, pill) {
-      const pre = encodeURIComponent(text + ' - ');
-      window.open(waBase + '?text=' + pre, '_blank', 'noopener');
+    function handleSuggestion(item, recentKey, pill) {
+      const message = `Hi, I need help with: ${item.text}`;
+      const waLink = `${waBase}?text=${encodeURIComponent(message)}`;
+      
+      window.open(waLink, '_blank', 'noopener');
+      
+      // Update recent selections
       let r = JSON.parse(localStorage.getItem(recentKey) || '[]');
-      r = [text, ...r.filter(x=>x!==text)].slice(0,4);
+      r = [item.text, ...r.filter(x => x !== item.text)].slice(0, 4);
       localStorage.setItem(recentKey, JSON.stringify(r));
-      pill.dataset.recent='1';
+      pill.dataset.recent = '1';
     }
+
+    // Add exit animation
+    const exitStyle = document.createElement('style');
+    exitStyle.textContent = `
+      @keyframes wa-shelf-exit {
+        0% { opacity: 1; transform: translateY(0) scale(1); }
+        100% { opacity: 0; transform: translateY(20px) scale(.95); }
+      }
+    `;
+    shadow.appendChild(exitStyle);
 
     if (PCMC_CONFIG.autoOpen) {
-      const key = '__pcmc_auto_aligned_'+PCMC_CONFIG.orgId;
+      const key = '__pcmc_auto_opened_' + PCMC_CONFIG.orgId;
       if (!sessionStorage.getItem(key)) {
-        setTimeout(()=> {
+        setTimeout(() => {
           openShelf();
-          sessionStorage.setItem(key,'1');
+          sessionStorage.setItem(key, '1');
         }, PCMC_CONFIG.openDelay);
       }
     }

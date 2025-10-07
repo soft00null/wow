@@ -12,7 +12,7 @@
     name: 'PCMC',
     fullName: 'Pimpri-Chinchwad Municipal Corporation',
     phone: '918888006666',
-    welcome: '🤖💬 Welcome to PCMC WhatsApp Assistant! I\'m here 24/7 to help with municipal services. Select an option below or type your query.',
+    welcome: '👋 Welcome to PCMC Digital Assistant! I\'m your AI-powered helper available 24/7 for all municipal services. How may I assist you today?',
     poweredBy: 'WoW-Strategies Private Limited',
     poweredByUrl: 'https://wow-strategies.com/',
     autoOpen: true,
@@ -24,12 +24,12 @@
 
   // Updated suggestions with PCMC services
   const suggestions = [
-    '📋 Get Information',
-    '🏠 Property Tax',
-    '📝 Register Grievance',
-    '📞 Contact Department',
-    '💧 Water Services',
-    '📄 Certificates'
+    '📋 Service Information',
+    '🏠 Property Tax Portal',
+    '📝 Lodge Complaint',
+    '📞 Department Contact',
+    '💧 Water & Sanitation',
+    '📄 Download Certificate'
   ];
 
   // Helper functions
@@ -40,7 +40,7 @@
   // Generate proper QR Code URL
   function generateQRUrl(phoneNumber, message = 'Hi') {
     const waLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    return `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(waLink)}&bgcolor=FFFFFF&color=25D366&margin=1`;
+    return `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(waLink)}&bgcolor=FFFFFF&color=128C7E&margin=1`;
   }
 
   // Build and inject widget
@@ -55,41 +55,44 @@
     const shadow = host.attachShadow({ mode: 'open' });
     if (PCMC_CONFIG.forceDark) host.classList.add('force-dark');
 
-    // Inject styles with WhatsApp color scheme
+    // Inject styles with professional color scheme
     const style = document.createElement('style');
     style.textContent = `
       :host {
         all: initial;
-        font-family: "Segoe UI", "Helvetica Neue", Helvetica, "Lucida Grande", Arial, Ubuntu, Cantarell, "Fira Sans", sans-serif;
-        --wa-green: #25D366;
-        --wa-green-dark: #128C7E;
-        --wa-teal: #075E54;
-        --wa-teal-dark: #054640;
-        --wa-light-green: #DCF8C6;
-        --wa-blue: #34B7F1;
-        --wa-bg-chat: #ECE5DD;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        --wa-green: #128C7E;
+        --wa-green-dark: #075E54;
+        --wa-teal: #00897B;
+        --wa-teal-dark: #00695C;
+        --wa-light-green: #E8F5E9;
+        --wa-accent: #00ACC1;
+        --wa-bg-chat: #F5F7FA;
         --wa-bg-light: #FFFFFF;
-        --wa-bg-panel: #EDEDED;
-        --wa-text-primary: #303030;
-        --wa-text-secondary: #667781;
-        --wa-border: #D1D7DB;
-        --wa-shadow: 0 2px 5px 0 rgba(11,20,26,.26), 0 2px 10px 0 rgba(11,20,26,.16);
-        --wa-shadow-strong: 0 10px 30px rgba(11,20,26,.19), 0 2px 10px rgba(11,20,26,.12);
-        --wa-radius: 8px;
-        --wa-launcher-size: 65px;
+        --wa-bg-panel: #F8F9FA;
+        --wa-text-primary: #1A1A1A;
+        --wa-text-secondary: #5F6368;
+        --wa-border: #E0E0E0;
+        --wa-shadow: 0 4px 6px rgba(0,0,0,.07), 0 1px 3px rgba(0,0,0,.06);
+        --wa-shadow-strong: 0 10px 40px rgba(0,0,0,.15);
+        --wa-shadow-hover: 0 20px 50px rgba(0,0,0,.2);
+        --wa-radius: 12px;
+        --wa-launcher-size: 60px;
         --wa-offset: max(20px, env(safe-area-inset-bottom, 20px));
         color: var(--wa-text-primary);
       }
       
       @media (prefers-color-scheme: dark) {
         :host:not(.force-light) {
-          --wa-bg-chat: #0B141A;
-          --wa-bg-light: #111B21;
-          --wa-bg-panel: #202C33;
-          --wa-text-primary: #E9EDEF;
-          --wa-text-secondary: #8696A0;
-          --wa-border: #3B4A54;
-          --wa-light-green: #005C4B;
+          --wa-green: #00BFA5;
+          --wa-green-dark: #00897B;
+          --wa-bg-chat: #121212;
+          --wa-bg-light: #1E1E1E;
+          --wa-bg-panel: #2C2C2C;
+          --wa-text-primary: #FFFFFF;
+          --wa-text-secondary: #B0B0B0;
+          --wa-border: #424242;
+          --wa-light-green: #004D40;
         }
       }
 
@@ -102,52 +105,52 @@
         border-radius: 50%;
         cursor: pointer;
         border: none;
-        background: var(--wa-green);
+        background: linear-gradient(135deg, var(--wa-green) 0%, var(--wa-green-dark) 100%);
         display: flex;
         align-items: center;
         justify-content: center;
         box-shadow: var(--wa-shadow-strong);
-        transition: transform .3s cubic-bezier(.4,0,.2,1), box-shadow .3s;
+        transition: all .3s cubic-bezier(.4,0,.2,1);
         z-index: 2147483646;
         outline: none;
-        animation: wa-pulse 2s infinite;
+        animation: wa-pulse 3s infinite;
       }
       
       @keyframes wa-pulse {
-        0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5), var(--wa-shadow-strong); }
-        70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0), var(--wa-shadow-strong); }
-        100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0), var(--wa-shadow-strong); }
+        0%, 100% { box-shadow: 0 0 0 0 rgba(18, 140, 126, 0.4), var(--wa-shadow-strong); }
+        50% { box-shadow: 0 0 0 20px rgba(18, 140, 126, 0), var(--wa-shadow-strong); }
       }
       
       .wa-launcher:hover {
-        transform: scale(1.08);
-        box-shadow: 0 15px 35px rgba(11,20,26,.25);
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: var(--wa-shadow-hover);
       }
       
       .wa-launcher:active {
-        transform: scale(0.95);
+        transform: translateY(-1px) scale(0.98);
       }
       
       .wa-launcher svg {
-        width: 60%;
-        height: 60%;
+        width: 55%;
+        height: 55%;
         fill: white;
       }
       
       .wa-badge-ai {
         position: absolute;
-        top: -2px;
-        right: -2px;
-        background: #FF6B6B;
+        top: -4px;
+        right: -4px;
+        background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
         color: white;
-        font-size: 10px;
+        font-size: 9px;
         line-height: 1;
-        padding: 4px 6px;
-        border-radius: 10px;
-        font-weight: 700;
-        box-shadow: 0 2px 5px rgba(0,0,0,.3);
+        padding: 5px 7px;
+        border-radius: 12px;
+        font-weight: 800;
+        box-shadow: 0 2px 8px rgba(102, 126, 234, .4);
         letter-spacing: 0.5px;
-        animation: wa-badge-pop .5s cubic-bezier(.68,-.55,.265,1.55);
+        animation: wa-badge-pop .6s cubic-bezier(.68,-.55,.265,1.55);
+        border: 2px solid var(--wa-bg-light);
       }
       
       @keyframes wa-badge-pop {
@@ -164,55 +167,55 @@
         flex-direction: column;
         align-items: flex-end;
         gap: 12px;
-        max-width: min(380px, calc(100vw - 40px));
+        max-width: min(400px, calc(100vw - 40px));
         z-index: 2147483646;
-        animation: wa-slide-up .4s cubic-bezier(.4,0,.2,1);
+        animation: wa-slide-up .5s cubic-bezier(.4,0,.2,1);
       }
       
       @keyframes wa-slide-up {
-        0% { opacity: 0; transform: translateY(20px) scale(.95); }
+        0% { opacity: 0; transform: translateY(30px) scale(.92); }
         100% { opacity: 1; transform: translateY(0) scale(1); }
       }
 
       .wa-bubble {
         background: var(--wa-bg-light);
-        padding: 16px 18px 14px;
-        border-radius: 18px;
-        box-shadow: var(--wa-shadow);
+        padding: 18px 20px 16px;
+        border-radius: 20px;
+        box-shadow: var(--wa-shadow-strong);
         color: var(--wa-text-primary);
-        line-height: 1.5;
+        line-height: 1.6;
         font-size: 14px;
-        animation: wa-bubble-in .4s cubic-bezier(.68,-.55,.265,1.55);
+        animation: wa-bubble-in .5s cubic-bezier(.68,-.55,.265,1.55);
         max-width: 100%;
         position: relative;
         border: 1px solid var(--wa-border);
+        backdrop-filter: blur(10px);
       }
       
       @keyframes wa-bubble-in {
-        0% { transform: translateY(10px) scale(.9); opacity: 0; }
+        0% { transform: translateY(15px) scale(.85); opacity: 0; }
         100% { transform: translateY(0) scale(1); opacity: 1; }
       }
       
       .wa-bubble:after {
         content: "";
         position: absolute;
-        bottom: -8px;
-        right: 25px;
-        width: 15px;
-        height: 15px;
+        bottom: -7px;
+        right: 28px;
+        width: 14px;
+        height: 14px;
         background: var(--wa-bg-light);
         border-right: 1px solid var(--wa-border);
         border-bottom: 1px solid var(--wa-border);
         transform: rotate(45deg);
-        box-shadow: 2px 2px 2px rgba(0,0,0,.06);
       }
       
       .wa-bubble button.wa-dismiss {
         position: absolute;
-        top: 8px;
-        right: 8px;
-        width: 24px;
-        height: 24px;
+        top: 10px;
+        right: 10px;
+        width: 22px;
+        height: 22px;
         border: none;
         cursor: pointer;
         background: transparent;
@@ -221,128 +224,155 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: background .2s;
-        font-size: 18px;
+        transition: all .2s;
+        font-size: 16px;
         line-height: 1;
       }
       
       .wa-bubble button.wa-dismiss:hover {
-        background: rgba(0,0,0,.05);
+        background: rgba(0,0,0,.08);
+        transform: rotate(90deg);
       }
 
       .wa-pill {
         background: var(--wa-bg-light);
         color: var(--wa-text-primary);
         border: 1px solid var(--wa-border);
-        border-radius: 25px;
-        padding: 10px 16px;
+        border-radius: 30px;
+        padding: 12px 20px;
         font-size: 14px;
-        font-weight: 500;
+        font-weight: 600;
         cursor: pointer;
         text-align: left;
         position: relative;
         display: inline-flex;
         align-items: center;
-        gap: 8px;
+        gap: 10px;
         box-shadow: var(--wa-shadow);
         transition: all .3s cubic-bezier(.4,0,.2,1);
-        animation: wa-pill-in .5s cubic-bezier(.68,-.55,.265,1.55) backwards;
+        animation: wa-pill-in .6s cubic-bezier(.68,-.55,.265,1.55) backwards;
         max-width: 100%;
         width: fit-content;
         white-space: nowrap;
+        backdrop-filter: blur(5px);
       }
       
       .wa-pill:hover {
-        background: var(--wa-green);
+        background: linear-gradient(135deg, var(--wa-green) 0%, var(--wa-green-dark) 100%);
         color: white;
-        border-color: var(--wa-green);
-        transform: translateY(-2px) scale(1.02);
-        box-shadow: 0 5px 15px rgba(37,211,102,.3);
+        border-color: transparent;
+        transform: translateY(-3px) translateX(-5px) scale(1.02);
+        box-shadow: 0 8px 20px rgba(18, 140, 126, .35);
       }
       
       .wa-pill:active {
-        transform: translateY(0) scale(.98);
+        transform: translateY(-1px) scale(.98);
       }
       
       @keyframes wa-pill-in {
-        0% { opacity: 0; transform: translateX(20px) scale(.9); }
+        0% { opacity: 0; transform: translateX(30px) scale(.85); }
         100% { opacity: 1; transform: translateX(0) scale(1); }
       }
       
       .wa-pill[data-recent="1"] {
-        background: var(--wa-light-green);
+        background: linear-gradient(135deg, var(--wa-light-green) 0%, rgba(18, 140, 126, 0.08) 100%);
         border-color: var(--wa-green);
       }
 
       .wa-qr-toggle {
-        margin-top: 4px;
+        margin-top: 6px;
         background: transparent;
-        border: none;
-        color: var(--wa-green-dark);
+        border: 2px solid var(--wa-green);
+        color: var(--wa-green);
         font-size: 13px;
         cursor: pointer;
-        padding: 8px 12px;
-        border-radius: 20px;
-        font-weight: 600;
-        transition: background .2s;
+        padding: 10px 18px;
+        border-radius: 25px;
+        font-weight: 700;
+        transition: all .3s;
         align-self: flex-end;
+        letter-spacing: 0.3px;
       }
       
       .wa-qr-toggle:hover {
-        background: rgba(37,211,102,.1);
+        background: var(--wa-green);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(18, 140, 126, .3);
       }
 
       .wa-qr-panel {
         display: none;
         background: var(--wa-bg-light);
-        padding: 20px;
-        border-radius: 16px;
+        padding: 24px;
+        border-radius: 20px;
         border: 1px solid var(--wa-border);
-        box-shadow: var(--wa-shadow);
-        animation: wa-bubble-in .4s cubic-bezier(.68,-.55,.265,1.55);
+        box-shadow: var(--wa-shadow-strong);
+        animation: wa-bubble-in .5s cubic-bezier(.68,-.55,.265,1.55);
         align-self: flex-end;
         text-align: center;
+        backdrop-filter: blur(10px);
       }
       
       .wa-qr-panel img {
         width: 180px;
         height: 180px;
         display: block;
-        margin: 0 auto 12px;
-        border-radius: 8px;
+        margin: 0 auto 16px;
+        border-radius: 12px;
         background: white;
-        padding: 8px;
-        box-shadow: 0 2px 10px rgba(0,0,0,.1);
+        padding: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,.08);
+        border: 1px solid var(--wa-border);
       }
       
       .wa-qr-panel .wa-label {
-        font-size: 11px;
-        letter-spacing: 0.8px;
-        font-weight: 600;
+        font-size: 12px;
+        letter-spacing: 1px;
+        font-weight: 700;
         text-transform: uppercase;
         text-align: center;
-        color: var(--wa-green-dark);
-        margin-bottom: 12px;
+        color: var(--wa-green);
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      
+      .wa-qr-panel .wa-label:before,
+      .wa-qr-panel .wa-label:after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--wa-border), transparent);
       }
       
       .wa-qr-panel .wa-scan-text {
         font-size: 13px;
         color: var(--wa-text-secondary);
-        line-height: 1.4;
+        line-height: 1.6;
+        font-weight: 500;
+      }
+      
+      .wa-qr-panel .wa-scan-text strong {
+        color: var(--wa-green);
+        font-weight: 700;
       }
 
       .wa-footer {
         font-size: 11px;
         color: var(--wa-text-secondary);
         text-align: center;
-        background: var(--wa-bg-light);
-        padding: 8px 12px;
-        border-radius: 12px;
+        background: linear-gradient(135deg, var(--wa-bg-light) 0%, var(--wa-bg-panel) 100%);
+        padding: 10px 16px;
+        border-radius: 15px;
         border: 1px solid var(--wa-border);
-        line-height: 1.4;
+        line-height: 1.5;
         align-self: flex-end;
-        animation: wa-pill-in .5s cubic-bezier(.68,-.55,.265,1.55) backwards;
-        animation-delay: 0.4s;
+        animation: wa-pill-in .6s cubic-bezier(.68,-.55,.265,1.55) backwards;
+        animation-delay: 0.5s;
+        backdrop-filter: blur(5px);
       }
       
       .wa-powered-link {
@@ -352,37 +382,45 @@
         text-decoration: none;
         color: var(--wa-text-secondary);
         font-weight: 600;
-        transition: color .2s;
+        transition: all .3s;
       }
       
       .wa-powered-link:hover {
-        color: var(--wa-green-dark);
+        color: var(--wa-green);
+        transform: translateX(2px);
       }
       
       .wa-powered-link svg {
         width: 12px;
         height: 12px;
         stroke: currentColor;
-        stroke-width: 2;
+        stroke-width: 2.5;
         fill: none;
+        transition: transform .3s;
+      }
+      
+      .wa-powered-link:hover svg {
+        transform: translate(2px, -2px);
       }
 
       .wa-tooltip {
         position: fixed;
-        bottom: calc(var(--wa-offset) + var(--wa-launcher-size) + 10px);
+        bottom: calc(var(--wa-offset) + var(--wa-launcher-size) + 12px);
         right: 20px;
-        background: var(--wa-teal);
+        background: linear-gradient(135deg, var(--wa-teal) 0%, var(--wa-teal-dark) 100%);
         color: white;
-        padding: 8px 12px;
+        padding: 10px 16px;
         font-size: 12px;
-        border-radius: 6px;
-        box-shadow: var(--wa-shadow);
+        font-weight: 600;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,.15);
         opacity: 0;
-        transform: translateY(5px) scale(.95);
+        transform: translateY(8px) scale(.9);
         pointer-events: none;
         transition: all .3s;
         white-space: nowrap;
         z-index: 2147483646;
+        letter-spacing: 0.3px;
       }
       
       .wa-tooltip.show {
@@ -393,20 +431,21 @@
       .wa-tooltip:after {
         content: "";
         position: absolute;
-        bottom: -4px;
-        right: 32px;
-        width: 8px;
-        height: 8px;
-        background: var(--wa-teal);
+        bottom: -5px;
+        right: 30px;
+        width: 10px;
+        height: 10px;
+        background: var(--wa-teal-dark);
         transform: rotate(45deg);
       }
 
       @media (max-width: 640px) {
-        :host { --wa-launcher-size: 56px; }
-        .wa-shelf { right: 15px; bottom: calc(var(--wa-offset) + var(--wa-launcher-size) + 10px); }
+        :host { --wa-launcher-size: 54px; }
+        .wa-shelf { right: 15px; bottom: calc(var(--wa-offset) + var(--wa-launcher-size) + 12px); }
         .wa-launcher { right: 15px; }
-        .wa-tooltip { right: 15px; }
-        .wa-pill { font-size: 13px; padding: 9px 14px; }
+        .wa-tooltip { right: 15px; font-size: 11px; }
+        .wa-pill { font-size: 13px; padding: 10px 16px; }
+        .wa-qr-panel { padding: 20px; }
       }
     `;
     shadow.appendChild(style);
@@ -414,14 +453,14 @@
     // Create tooltip
     const tooltip = document.createElement('div');
     tooltip.className = 'wa-tooltip';
-    tooltip.textContent = 'PCMC WhatsApp Assistant';
+    tooltip.textContent = 'PCMC Digital Assistant';
     shadow.appendChild(tooltip);
 
     // Create launcher button
     const launcher = document.createElement('button');
     launcher.type = 'button';
     launcher.className = 'wa-launcher';
-    launcher.setAttribute('aria-label', 'Open PCMC WhatsApp Assistant');
+    launcher.setAttribute('aria-label', 'Open PCMC Digital Assistant');
     launcher.innerHTML = `
       <span class="wa-badge-ai">AI</span>
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -445,7 +484,7 @@
       shelf = document.createElement('div');
       shelf.className = 'wa-shelf';
       shelf.setAttribute('role', 'dialog');
-      shelf.setAttribute('aria-label', 'PCMC WhatsApp Assistant');
+      shelf.setAttribute('aria-label', 'PCMC Digital Assistant');
 
       const greetKey = '__pcmc_greeting_dismiss_' + PCMC_CONFIG.orgId;
       const showGreeting = !PCMC_CONFIG.suppressGreet && (PCMC_CONFIG.forceGreet || !localStorage.getItem(greetKey));
@@ -478,22 +517,22 @@
       const qrToggle = document.createElement('button');
       qrToggle.type = 'button';
       qrToggle.className = 'wa-qr-toggle';
-      qrToggle.textContent = '📱 Show QR Code';
+      qrToggle.textContent = '📱 Scan QR Code';
       qrToggle.addEventListener('click', () => {
         qrPanelVisible = !qrPanelVisible;
-        qrToggle.textContent = qrPanelVisible ? '✕ Hide QR Code' : '📱 Show QR Code';
+        qrToggle.textContent = qrPanelVisible ? '✕ Close QR' : '📱 Scan QR Code';
         qrPanel.style.display = qrPanelVisible ? 'block' : 'none';
       });
 
       const qrPanel = document.createElement('div');
       qrPanel.className = 'wa-qr-panel';
       qrPanel.innerHTML = `
-        <div class="wa-label">Scan with WhatsApp</div>
+        <div class="wa-label">Quick Connect</div>
         <img alt="WhatsApp QR Code" src="${qrImageUrl}" />
         <div class="wa-scan-text">
-          Open WhatsApp on your phone<br>
-          Tap Menu or Settings and select<br>
-          <strong>Linked Devices</strong> → <strong>Link a Device</strong>
+          <strong>Scan to start chatting instantly!</strong><br>
+          Point your phone camera at this QR code<br>
+          to connect with PCMC AI Assistant
         </div>
       `;
 

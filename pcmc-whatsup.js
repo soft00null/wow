@@ -22,14 +22,15 @@
     forceDark: false
   };
 
-  // Updated suggestions with PCMC services
+  // Updated suggestions with specific PCMC services
   const suggestions = [
-    '📋 Service Information',
-    '🏠 Property Tax Portal',
-    '📝 Lodge Complaint',
-    '📞 Department Contact',
-    '💧 Water & Sanitation',
-    '📄 Download Certificate'
+    '📋 Get Information',
+    '🏠 My Properties',
+    '📝 Register Grievance',
+    '💳 Property Tax Payment',
+    '📄 No Dues Certificate',
+    '🔍 Track Grievance Status',
+    '📞 Contact Details'
   ];
 
   // Helper functions
@@ -166,8 +167,8 @@
         display: flex;
         flex-direction: column;
         align-items: flex-end;
-        gap: 12px;
-        max-width: min(400px, calc(100vw - 40px));
+        gap: 10px;
+        max-width: min(420px, calc(100vw - 40px));
         z-index: 2147483646;
         animation: wa-slide-up .5s cubic-bezier(.4,0,.2,1);
       }
@@ -371,7 +372,7 @@
         line-height: 1.5;
         align-self: flex-end;
         animation: wa-pill-in .6s cubic-bezier(.68,-.55,.265,1.55) backwards;
-        animation-delay: 0.5s;
+        animation-delay: 0.6s;
         backdrop-filter: blur(5px);
       }
       
@@ -441,7 +442,7 @@
 
       @media (max-width: 640px) {
         :host { --wa-launcher-size: 54px; }
-        .wa-shelf { right: 15px; bottom: calc(var(--wa-offset) + var(--wa-launcher-size) + 12px); }
+        .wa-shelf { right: 15px; bottom: calc(var(--wa-offset) + var(--wa-launcher-size) + 12px); gap: 8px; }
         .wa-launcher { right: 15px; }
         .wa-tooltip { right: 15px; font-size: 11px; }
         .wa-pill { font-size: 13px; padding: 10px 16px; }

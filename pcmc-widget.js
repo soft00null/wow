@@ -28,7 +28,7 @@
     '🏠 My Properties',
     '💧 My Water Connection',
     '💳 Property Tax Payment',
-    '💧 Water Tax Payment',
+    '💳 Water Tax Payment',
     '❓ I Need Help'
   ];
 

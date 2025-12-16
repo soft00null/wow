@@ -26,11 +26,10 @@
   const suggestions = [
     '📋 Get Information',
     '🏠 My Properties',
-    '📝 Register Grievance',
+    '💧 My Water Connection',
     '💳 Property Tax Payment',
-    '📄 No Dues Certificate',
-    '🔍 Track Grievance Status',
-    '📞 Contact Details'
+    '💧 Water Tax Payment',
+    '❓ I Need Help'
   ];
 
   // Helper functions

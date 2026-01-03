@@ -1,7 +1,7 @@
 /**
- * Thane Municipal Corporation (TMC) 311 Chat Widget
- * File: tmc-311-chat-widget.js
- * Version: 2.0.0
+ * Thane Municipal Corporation (TMC) 311 Grievance Widget
+ * File: tmc-311-modern-widget.js
+ * Version: 3.0.0 (Modern UI)
  * Date: 2026-01-03
  * Brand: WhatsUp.city
  * 
@@ -19,111 +19,101 @@
     const config = {
         phoneNumber: '15558830019',
         defaultMessage: 'Hi',
-        // Official Logo URL
         logoUrl: 'https://wow-strategies.com/tmc.png',
-        // QR Code URL
-        qrCodeUrl: 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://wa.me/15558830019?text=Hi',
+        qrCodeUrl: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=10&data=https://wa.me/15558830019?text=Hi',
         colors: {
-            primary: '#075E54',        // WhatsApp Teal Dark
-            secondary: '#128C7E',      // WhatsApp Teal
-            accent: '#25D366',         // WhatsApp Bright Green
-            background: '#E5DDD5',     // WhatsApp Chat Bg
-            headerText: '#FFFFFF',
-            text: '#111b21',
-            white: '#FFFFFF',
-            gray: '#8696A0',
-            lightGray: '#F0F2F5',
-            tmcBlue: '#0056b3'
+            primary: '#128C7E',      // WhatsApp Teal
+            dark: '#075E54',         // Darker Teal
+            accent: '#25D366',       // Bright Green
+            bg: '#F0F2F5',           // Light Gray BG
+            surface: '#FFFFFF',
+            text: '#111B21',
+            subtext: '#54656F',
+            danger: '#EA4335',       // For high priority/potholes
+            warning: '#FBBC04',      // For garbage
+            info: '#4285F4'          // For others
         },
         poweredBy: {
-            text: 'Powered by WhatsUp.city',
-            url: 'https://whatsup.city/'
+            text: 'Powered by WoW-Strategies Private Limited',
+            url: 'https://wow-strategies.com/'
         }
     };
     
+    // Pure 311 Grievance Menu (No Payments/Water)
     const menuOptions = [
-        { id: 'pothole', label: 'Report Pothole', icon: '🕳️', message: 'I want to report a pothole' },
-        { id: 'garbage', label: 'Garbage Issue', icon: '🗑️', message: 'I want to report uncollected garbage' },
-        { id: 'water', label: 'Water Supply', icon: '💧', message: 'Issue with water supply' },
-        { id: 'tax', label: 'Pay Tax', icon: '💸', message: 'I want to pay property tax' },
-        { id: 'cert', label: 'Birth/Death Cert', icon: '📜', message: 'I need a certificate' },
-        { id: 'lang', label: 'Change Language', icon: '🗣️', message: 'Change Language' }
+        { id: 'pothole', label: 'Report Pothole', icon: '🚧', color: '#FFF5F5', border: '#FEB2B2', message: 'I want to report a pothole' },
+        { id: 'garbage', label: 'Garbage Dump', icon: '🗑️', color: '#F0FFF4', border: '#9AE6B4', message: 'I want to report uncollected garbage' },
+        { id: 'lights', label: 'Street Lights', icon: '💡', color: '#FFFFF0', border: '#FBD38D', message: 'Street light is not working' },
+        { id: 'drainage', label: 'Drainage/Sewage', icon: '🚿', color: '#EBF8FF', border: '#90CDF4', message: 'Report drainage overflow' },
+        { id: 'parking', label: 'Illegal Parking', icon: '🚫', color: '#FFF5F7', border: '#FFBBF8', message: 'Report illegal parking' },
+        { id: 'debris', label: 'Construction Debris', icon: '🏗️', color: '#F7FAFC', border: '#CBD5E0', message: 'Report construction debris' }
     ];
     
     const createWidget = () => {
         return `
             <div class="tmc-widget" id="tmcWidget">
-                <!-- Floating Action Button -->
-                <button class="tmc-fab" id="tmcFab" aria-label="Open TMC 311 Chat">
-                    <div class="tmc-fab-icon">
-                        <!-- WhatsApp Icon -->
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
-                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.688"/>
-                        </svg>
+                <!-- Modern FAB with notification dot -->
+                <button class="tmc-fab" id="tmcFab" aria-label="Open 311 Support">
+                    <div class="tmc-fab-content">
+                        <img src="${config.logoUrl}" alt="TMC" class="tmc-fab-logo">
+                        <div class="tmc-fab-badge">311</div>
                     </div>
-                    <div class="tmc-fab-badge">311</div>
                 </button>
                 
-                <!-- Chat Interface -->
+                <!-- Main Widget Container -->
                 <div class="tmc-chat" id="tmcChat">
-                    <!-- Header -->
+                    <!-- Hero Header -->
                     <div class="tmc-header">
-                        <div class="tmc-header-avatar">
-                            <div class="tmc-avatar-circle">
-                                <img src="${config.logoUrl}" alt="TMC Logo" class="tmc-avatar-img">
-                            </div>
-                            <div class="tmc-status-dot"></div>
+                        <div class="tmc-header-top">
+                            <span class="tmc-live-badge">● Live Agent AI</span>
+                            <button class="tmc-close" aria-label="Close">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            </button>
                         </div>
-                        <div class="tmc-header-info">
-                            <div class="tmc-header-title">Thane Municipal Corporation</div>
-                            <div class="tmc-header-subtitle">Official AI Assistant</div>
+                        <div class="tmc-brand-area">
+                            <h1 class="tmc-title">Thane Municipal Corporation</h1>
+                            <p class="tmc-subtitle">Citizen Grievance Redressal</p>
                         </div>
-                        <button class="tmc-close" aria-label="Close chat">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                            </svg>
-                        </button>
                     </div>
                     
-                    <!-- Content Area -->
-                    <div class="tmc-content">
-                        <!-- QR Code Section -->
-                        <div class="tmc-qr-section">
-                            <div class="tmc-qr-container">
-                                <img src="${config.qrCodeUrl}" alt="Scan to Chat on WhatsApp" class="tmc-qr-image">
-                                <div class="tmc-scan-hint">Scan with camera</div>
-                            </div>
-                            <p class="tmc-qr-text">Connect with TMC 311 on WhatsApp</p>
-                        </div>
-
-                        <!-- Chat Bubbles -->
-                        <div class="tmc-messages">
-                            <div class="tmc-message-bubble">
-                                <div class="tmc-message-text">
-                                    🙏 <strong>Namaskar!</strong> Welcome to TMC 311.<br><br>
-                                    I am your multilingual AI assistant. You can speak to me in <strong>22 Indian languages</strong>.
+                    <div class="tmc-scroll-area">
+                        <!-- Stunning QR Card -->
+                        <div class="tmc-qr-card">
+                            <div class="tmc-qr-glass">
+                                <div class="tmc-qr-header">
+                                    <span>Scan to Chat</span>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="${config.colors.accent}"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.688"/></svg>
+                                </div>
+                                <div class="tmc-qr-body">
+                                    <img src="${config.qrCodeUrl}" alt="QR Code" class="tmc-qr-code">
+                                </div>
+                                <div class="tmc-qr-footer">
+                                    <span class="tmc-qr-tag">Multilingual Support (22 Languages)</span>
                                 </div>
                             </div>
-                            
-                            <!-- Menu Grid -->
-                            <div class="tmc-menu-grid">
-                                ${menuOptions.map(option => `
-                                    <button class="tmc-menu-item" data-message="${option.message}">
-                                        <div class="tmc-menu-icon-wrap">${option.icon}</div>
-                                        <span class="tmc-menu-label">${option.label}</span>
-                                    </button>
-                                `).join('')}
-                            </div>
+                        </div>
+
+                        <!-- Welcome Text -->
+                        <div class="tmc-welcome">
+                            <p>👋 <strong>Namaskar!</strong> Report civic issues instantly by clicking below or scanning the QR.</p>
+                        </div>
+
+                        <!-- 311 Grid -->
+                        <div class="tmc-grid">
+                            ${menuOptions.map(opt => `
+                                <button class="tmc-grid-item" data-message="${opt.message}" style="--item-bg:${opt.color}; --item-border:${opt.border}">
+                                    <span class="tmc-grid-icon">${opt.icon}</span>
+                                    <span class="tmc-grid-label">${opt.label}</span>
+                                </button>
+                            `).join('')}
                         </div>
                     </div>
-                    
+
                     <!-- Footer -->
                     <div class="tmc-footer">
-                        <button class="tmc-action-btn" onclick="window.open('https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(config.defaultMessage)}', '_blank')">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.688"/>
-                            </svg>
-                            <span>Start Chat on WhatsApp</span>
+                        <button class="tmc-cta" onclick="window.open('https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(config.defaultMessage)}', '_blank')">
+                            Open WhatsApp
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                         </button>
                         <div class="tmc-powered">
                             <a href="${config.poweredBy.url}" target="_blank" rel="noopener">
@@ -132,168 +122,161 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Notification Popup -->
-                <div class="tmc-notification" id="tmcNotification">
-                    <button class="tmc-notification-close" aria-label="Close notification">×</button>
-                    <div class="tmc-notification-content">
-                        <div class="tmc-notification-icon">
-                            <img src="${config.logoUrl}" alt="TMC" style="width:100%; height:100%; border-radius:50%; object-fit:contain;">
-                        </div>
-                        <div class="tmc-notification-text">
-                            <strong>TMC 311</strong><br>
-                            How can we help you today?
-                        </div>
-                    </div>
+
+                <!-- Notification Pill -->
+                <div class="tmc-notify" id="tmcNotify">
+                    <div class="tmc-notify-dot"></div>
+                    <span>Report a pothole in 30 seconds!</span>
+                    <button class="tmc-notify-close">×</button>
                 </div>
             </div>
-            
+
             <style>
-                /* Reset & Base */
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
                 .tmc-widget * {
+                    box-sizing: border-box;
+                    font-family: 'Inter', system-ui, -apple-system, sans-serif;
                     margin: 0;
                     padding: 0;
-                    box-sizing: border-box;
-                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
                 }
-                
+
                 .tmc-widget {
                     position: fixed;
                     bottom: 24px;
                     right: 24px;
-                    z-index: 999999;
+                    z-index: 100000;
+                    isolation: isolate;
                 }
-                
-                /* Floating Action Button (FAB) */
+
+                /* --- FAB Design --- */
                 .tmc-fab {
-                    width: 60px;
-                    height: 60px;
-                    background: linear-gradient(135deg, ${config.colors.accent} 0%, ${config.colors.secondary} 100%);
+                    width: 64px;
+                    height: 64px;
+                    border-radius: 24px;
+                    background: ${config.colors.surface};
                     border: none;
-                    border-radius: 50%;
+                    box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.04);
                     cursor: pointer;
-                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+                    position: relative;
+                    padding: 0;
+                    overflow: visible;
+                }
+
+                .tmc-fab:hover {
+                    transform: scale(1.05) translateY(-2px);
+                    box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+                }
+
+                .tmc-fab-content {
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 24px;
+                    overflow: hidden;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    position: relative;
-                    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+                    background: white;
                 }
-                
-                .tmc-fab:hover {
-                    transform: scale(1.08);
-                    box-shadow: 0 8px 24px rgba(37, 211, 102, 0.4);
-                }
-                
-                /* Pulse Animation */
-                .tmc-fab::after {
-                    content: '';
-                    position: absolute;
-                    width: 100%;
-                    height: 100%;
-                    border-radius: 50%;
-                    border: 2px solid ${config.colors.accent};
-                    opacity: 0;
-                    animation: tmcPulse 2s infinite;
-                }
-                
-                @keyframes tmcPulse {
-                    0% { transform: scale(1); opacity: 0.6; }
-                    100% { transform: scale(1.5); opacity: 0; }
+
+                .tmc-fab-logo {
+                    width: 48px;
+                    height: 48px;
+                    object-fit: contain;
                 }
 
                 .tmc-fab-badge {
                     position: absolute;
-                    top: -2px;
-                    right: -2px;
-                    background: #FF3B30;
+                    top: -6px;
+                    right: -6px;
+                    background: ${config.colors.danger};
                     color: white;
-                    font-size: 10px;
-                    font-weight: 700;
+                    font-size: 11px;
+                    font-weight: 800;
                     padding: 4px 8px;
-                    border-radius: 12px;
+                    border-radius: 10px;
                     border: 2px solid white;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-                    z-index: 2;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
                 }
-                
-                /* Chat Window */
+
+                /* --- Chat Window --- */
                 .tmc-chat {
                     position: absolute;
                     bottom: 80px;
                     right: 0;
-                    width: 380px;
-                    max-height: 720px;
-                    height: auto;
-                    background: ${config.colors.white};
+                    width: 360px;
+                    max-height: 85vh;
+                    background: ${config.colors.bg};
                     border-radius: 24px;
-                    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0,0,0,0.02);
+                    box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05);
                     display: flex;
                     flex-direction: column;
                     overflow: hidden;
                     opacity: 0;
-                    visibility: hidden;
-                    transform: translateY(20px) scale(0.96);
+                    transform: translateY(20px) scale(0.95);
                     transform-origin: bottom right;
-                    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-                }
-                
-                .tmc-chat.show {
-                    opacity: 1;
-                    visibility: visible;
-                    transform: translateY(0) scale(1);
-                }
-                
-                /* Header */
-                .tmc-header {
-                    background: linear-gradient(135deg, ${config.colors.primary} 0%, ${config.colors.secondary} 100%);
-                    padding: 18px 20px;
-                    display: flex;
-                    align-items: center;
-                    gap: 12px;
-                    color: white;
-                }
-                
-                .tmc-avatar-circle {
-                    width: 44px;
-                    height: 44px;
-                    background: white;
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border: 2px solid rgba(255,255,255,0.2);
-                    overflow: hidden;
-                    padding: 2px;
+                    visibility: hidden;
+                    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
                 }
 
-                .tmc-avatar-img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: contain;
+                .tmc-chat.active {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                    visibility: visible;
+                }
+
+                /* --- Header --- */
+                .tmc-header {
+                    background: linear-gradient(135deg, ${config.colors.primary}, ${config.colors.dark});
+                    padding: 24px;
+                    color: white;
+                    position: relative;
+                    overflow: hidden;
+                }
+
+                .tmc-header::after {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: radial-gradient(circle at top right, rgba(255,255,255,0.15), transparent 70%);
+                    pointer-events: none;
+                }
+
+                .tmc-header-top {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 16px;
+                }
+
+                .tmc-live-badge {
+                    font-size: 11px;
+                    background: rgba(255,255,255,0.2);
+                    backdrop-filter: blur(4px);
+                    padding: 4px 10px;
+                    border-radius: 20px;
+                    font-weight: 600;
+                    color: #fff;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                }
+
+                .tmc-live-badge::before {
+                    content: '';
+                    width: 6px;
+                    height: 6px;
+                    background: #4ADE80;
                     border-radius: 50%;
+                    box-shadow: 0 0 8px #4ADE80;
                 }
-                
-                .tmc-header-info {
-                    flex: 1;
-                }
-                
-                .tmc-header-title {
-                    font-size: 16px;
-                    font-weight: 700;
-                    letter-spacing: -0.01em;
-                    line-height: 1.2;
-                }
-                
-                .tmc-header-subtitle {
-                    font-size: 13px;
-                    opacity: 0.9;
-                    margin-top: 2px;
-                    font-weight: 400;
-                }
-                
+
                 .tmc-close {
-                    background: rgba(255,255,255,0.1);
+                    background: rgba(255,255,255,0.15);
                     border: none;
                     width: 32px;
                     height: 32px;
@@ -303,364 +286,307 @@
                     align-items: center;
                     justify-content: center;
                     transition: background 0.2s;
+                    z-index: 2;
                 }
-                
+
                 .tmc-close:hover {
-                    background: rgba(255,255,255,0.2);
+                    background: rgba(255,255,255,0.3);
                 }
-                
-                /* Content Area */
-                .tmc-content {
+
+                .tmc-title {
+                    font-size: 18px;
+                    font-weight: 700;
+                    margin-bottom: 4px;
+                    letter-spacing: -0.02em;
+                }
+
+                .tmc-subtitle {
+                    font-size: 13px;
+                    opacity: 0.9;
+                }
+
+                /* --- Scroll Content --- */
+                .tmc-scroll-area {
                     flex: 1;
                     overflow-y: auto;
-                    background-color: ${config.colors.background};
-                    /* Standard WhatsApp doodle pattern opacity lowered */
-                    background-image: url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png");
-                    background-size: 400px;
-                    background-blend-mode: overlay;
-                    padding: 0;
-                    display: flex;
-                    flex-direction: column;
-                }
-                
-                /* QR Section */
-                .tmc-qr-section {
-                    background: ${config.colors.white};
-                    padding: 24px;
-                    text-align: center;
-                    border-bottom: 1px solid rgba(0,0,0,0.06);
-                }
-                
-                .tmc-qr-container {
-                    width: 160px;
-                    height: 160px;
-                    margin: 0 auto 12px;
-                    background: white;
-                    padding: 8px;
-                    border: 1px solid #eaeaea;
-                    border-radius: 12px;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-                    position: relative;
-                }
-                
-                .tmc-qr-image {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: contain;
-                    border-radius: 4px;
+                    padding: 0 20px 20px;
                 }
 
-                .tmc-scan-hint {
-                    position: absolute;
-                    bottom: -10px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    background: ${config.colors.text};
-                    color: white;
-                    font-size: 10px;
-                    padding: 4px 8px;
-                    border-radius: 10px;
-                    white-space: nowrap;
+                /* --- Stunning QR Card --- */
+                .tmc-qr-card {
+                    margin-top: -30px;
+                    position: relative;
+                    z-index: 10;
+                    padding: 0 10px;
+                }
+
+                .tmc-qr-glass {
+                    background: rgba(255, 255, 255, 0.9);
+                    backdrop-filter: blur(12px);
+                    border: 1px solid rgba(255,255,255,0.8);
+                    border-radius: 20px;
+                    padding: 16px;
+                    box-shadow: 0 12px 24px -8px rgba(0,0,0,0.1);
+                    text-align: center;
+                }
+
+                .tmc-qr-header {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 8px;
+                    font-size: 13px;
+                    font-weight: 600;
+                    color: ${config.colors.subtext};
+                    margin-bottom: 12px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+
+                .tmc-qr-body {
+                    background: white;
+                    padding: 12px;
+                    border-radius: 12px;
+                    border: 1px solid #eee;
+                    display: inline-block;
+                    margin-bottom: 12px;
+                }
+
+                .tmc-qr-code {
+                    width: 140px;
+                    height: 140px;
+                    display: block;
+                }
+
+                .tmc-qr-tag {
+                    font-size: 11px;
+                    background: ${config.colors.bg};
+                    color: ${config.colors.text};
+                    padding: 6px 12px;
+                    border-radius: 12px;
                     font-weight: 600;
                 }
-                
-                .tmc-qr-text {
-                    font-size: 13px;
-                    color: ${config.colors.gray};
-                    font-weight: 500;
-                }
 
-                /* Messages */
-                .tmc-messages {
-                    padding: 20px;
-                }
-                
-                .tmc-message-bubble {
-                    background: ${config.colors.white};
-                    padding: 14px 18px;
-                    border-radius: 0 16px 16px 16px;
-                    box-shadow: 0 1px 1px rgba(0,0,0,0.08);
-                    margin-bottom: 24px;
-                    max-width: 90%;
-                    align-self: flex-start;
-                    position: relative;
-                    animation: slideIn 0.3s ease-out;
-                }
-                
-                @keyframes slideIn {
-                    from { opacity: 0; transform: translateY(10px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-                
-                .tmc-message-bubble::before {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: -8px;
-                    width: 0;
-                    height: 0;
-                    border: 8px solid transparent;
-                    border-top-color: ${config.colors.white};
-                    border-right-color: ${config.colors.white};
-                }
-                
-                .tmc-message-text {
+                /* --- Welcome --- */
+                .tmc-welcome {
+                    margin: 20px 0;
+                    text-align: center;
                     font-size: 14px;
+                    color: ${config.colors.subtext};
                     line-height: 1.5;
-                    color: ${config.colors.text};
                 }
 
-                /* Menu Grid */
-                .tmc-menu-grid {
+                /* --- Grid --- */
+                .tmc-grid {
                     display: grid;
                     grid-template-columns: 1fr 1fr;
                     gap: 12px;
                 }
-                
-                .tmc-menu-item {
-                    background: rgba(255, 255, 255, 0.95);
-                    border: 1px solid rgba(255, 255, 255, 1);
-                    padding: 16px 12px;
+
+                .tmc-grid-item {
+                    background: var(--item-bg);
+                    border: 1px solid var(--item-border);
                     border-radius: 16px;
+                    padding: 16px;
                     cursor: pointer;
-                    text-align: center;
+                    text-align: left;
                     transition: all 0.2s;
                     display: flex;
                     flex-direction: column;
-                    align-items: center;
                     gap: 8px;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-                    backdrop-filter: blur(5px);
                 }
-                
-                .tmc-menu-item:hover {
-                    background: #fff;
-                    transform: translateY(-3px);
-                    box-shadow: 0 8px 16px rgba(0,0,0,0.06);
+
+                .tmc-grid-item:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                    filter: brightness(0.98);
                 }
-                
-                .tmc-menu-icon-wrap {
+
+                .tmc-grid-icon {
                     font-size: 24px;
-                    margin-bottom: 4px;
-                    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
                 }
-                
-                .tmc-menu-label {
-                    font-size: 12px;
+
+                .tmc-grid-label {
+                    font-size: 13px;
                     font-weight: 600;
                     color: ${config.colors.text};
-                    letter-spacing: -0.01em;
+                    line-height: 1.3;
                 }
-                
-                /* Footer */
+
+                /* --- Footer --- */
                 .tmc-footer {
+                    background: white;
                     padding: 16px 20px 20px;
-                    background: ${config.colors.white};
-                    border-top: 1px solid rgba(0,0,0,0.06);
+                    border-top: 1px solid rgba(0,0,0,0.05);
                 }
-                
-                .tmc-action-btn {
+
+                .tmc-cta {
                     width: 100%;
-                    padding: 14px;
+                    background: ${config.colors.text};
+                    color: white;
                     border: none;
-                    border-radius: 28px;
+                    padding: 14px;
+                    border-radius: 14px;
                     font-size: 15px;
                     font-weight: 600;
                     cursor: pointer;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    gap: 10px;
-                    transition: all 0.2s;
-                    background: ${config.colors.accent};
-                    color: white;
-                    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
+                    gap: 8px;
+                    transition: transform 0.1s;
                 }
-                
-                .tmc-action-btn:hover {
-                    background: ${config.colors.secondary};
-                    transform: translateY(-1px);
-                    box-shadow: 0 6px 16px rgba(37, 211, 102, 0.35);
+
+                .tmc-cta:active {
+                    transform: scale(0.98);
                 }
-                
+
                 .tmc-powered {
-                    text-align: center;
                     margin-top: 12px;
-                    font-size: 11px;
+                    text-align: center;
+                    font-size: 10px;
+                    color: #999;
                 }
-                
+
                 .tmc-powered a {
-                    color: ${config.colors.gray};
+                    color: inherit;
                     text-decoration: none;
                     font-weight: 500;
-                    opacity: 0.8;
-                    transition: opacity 0.2s;
                 }
-                
+
                 .tmc-powered a:hover {
-                    opacity: 1;
-                    color: ${config.colors.primary};
+                    text-decoration: underline;
                 }
-                
-                /* Notification */
-                .tmc-notification {
+
+                /* --- Notification --- */
+                .tmc-notify {
                     position: absolute;
-                    bottom: 80px;
-                    right: 0;
-                    background: ${config.colors.white};
-                    border-radius: 16px;
-                    padding: 16px;
-                    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-                    width: 280px;
+                    bottom: 24px;
+                    right: 80px;
+                    background: white;
+                    padding: 12px 16px;
+                    border-radius: 12px;
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    white-space: nowrap;
+                    font-size: 13px;
+                    font-weight: 500;
+                    color: ${config.colors.text};
                     opacity: 0;
+                    transform: translateX(10px);
                     visibility: hidden;
-                    transform: translateX(20px);
-                    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                    transition: all 0.4s ease;
                 }
-                
-                .tmc-notification.show {
+
+                .tmc-notify.show {
                     opacity: 1;
-                    visibility: visible;
                     transform: translateX(0);
+                    visibility: visible;
                 }
-                
-                .tmc-notification-close {
-                    position: absolute;
-                    top: 8px;
-                    right: 8px;
+
+                .tmc-notify-dot {
+                    width: 8px;
+                    height: 8px;
+                    background: ${config.colors.danger};
+                    border-radius: 50%;
+                    animation: pulseDot 1.5s infinite;
+                }
+
+                .tmc-notify-close {
                     background: none;
                     border: none;
-                    font-size: 16px;
-                    color: ${config.colors.gray};
+                    color: #999;
                     cursor: pointer;
-                    width: 20px;
-                    height: 20px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
+                    font-size: 16px;
+                    padding-left: 8px;
                 }
-                
-                .tmc-notification-content {
-                    display: flex;
-                    align-items: center;
-                    gap: 14px;
+
+                @keyframes pulseDot {
+                    0% { box-shadow: 0 0 0 0 rgba(234, 67, 53, 0.4); }
+                    70% { box-shadow: 0 0 0 6px rgba(234, 67, 53, 0); }
+                    100% { box-shadow: 0 0 0 0 rgba(234, 67, 53, 0); }
                 }
-                
-                .tmc-notification-icon {
-                    width: 48px;
-                    height: 48px;
-                    flex-shrink: 0;
-                    border-radius: 50%;
-                    padding: 2px;
-                    border: 1px solid ${config.colors.lightGray};
-                }
-                
-                .tmc-notification-text {
-                    font-size: 13px;
-                    line-height: 1.4;
-                    color: ${config.colors.text};
-                }
-                
-                /* Mobile Responsive */
+
+                /* Mobile Override */
                 @media (max-width: 480px) {
-                    .tmc-widget {
-                        bottom: 16px;
-                        right: 16px;
-                    }
-                    
                     .tmc-chat {
                         width: calc(100vw - 32px);
-                        height: calc(100vh - 100px);
-                        bottom: 84px;
-                        right: 0;
+                        right: 16px;
+                        bottom: 96px;
+                    }
+                    .tmc-notify {
+                        display: none;
                     }
                 }
                 
-                @media print {
-                    .tmc-widget { display: none !important; }
-                }
+                @media print { .tmc-widget { display: none; } }
             </style>
         `;
     };
     
     const initWidget = () => {
         try {
-            // Create container
-            let container = document.getElementById('tmc-chat-widget-container');
+            let container = document.getElementById('tmc-widget-container');
             if (!container) {
                 container = document.createElement('div');
-                container.id = 'tmc-chat-widget-container';
+                container.id = 'tmc-widget-container';
                 document.body.appendChild(container);
             }
-            
             container.innerHTML = createWidget();
             
-            // Get elements
+            // Logic
             const fab = document.getElementById('tmcFab');
             const chat = document.getElementById('tmcChat');
-            const closeBtn = chat.querySelector('.tmc-close');
-            const notification = document.getElementById('tmcNotification');
-            const notificationClose = notification.querySelector('.tmc-notification-close');
-            const menuItems = document.querySelectorAll('.tmc-menu-item');
+            const close = document.querySelector('.tmc-close');
+            const notify = document.getElementById('tmcNotify');
+            const notifyClose = document.querySelector('.tmc-notify-close');
+            const gridItems = document.querySelectorAll('.tmc-grid-item');
             
-            // Toggle Chat
-            const toggleChat = () => {
-                const isOpen = chat.classList.contains('show');
-                if (isOpen) {
-                    chat.classList.remove('show');
+            const toggle = () => {
+                const isActive = chat.classList.contains('active');
+                if (isActive) {
+                    chat.classList.remove('active');
                 } else {
-                    chat.classList.add('show');
-                    notification.classList.remove('show');
+                    chat.classList.add('active');
+                    notify.classList.remove('show');
                 }
             };
-
-            fab.addEventListener('click', toggleChat);
-            closeBtn.addEventListener('click', () => chat.classList.remove('show'));
             
-            // Notification Logic
-            notificationClose.addEventListener('click', () => {
-                notification.classList.remove('show');
+            fab.addEventListener('click', toggle);
+            close.addEventListener('click', () => chat.classList.remove('active'));
+            
+            // Auto-notify after 3s
+            setTimeout(() => {
+                if(!chat.classList.contains('active')) notify.classList.add('show');
+            }, 3000);
+            
+            notifyClose.addEventListener('click', (e) => {
+                e.stopPropagation();
+                notify.classList.remove('show');
             });
             
-            // Show notification automatically after 5 seconds if chat not opened
-            setTimeout(() => {
-                if (!chat.classList.contains('show')) {
-                    notification.classList.add('show');
-                    setTimeout(() => notification.classList.remove('show'), 10000); // Hide after 10s
-                }
-            }, 5000);
-            
-            // Menu Item Click Logic
-            menuItems.forEach(item => {
+            gridItems.forEach(item => {
                 item.addEventListener('click', function() {
-                    const message = this.getAttribute('data-message');
-                    const url = `https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(message)}`;
-                    window.open(url, '_blank');
+                    const msg = this.getAttribute('data-message');
+                    window.open(`https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(msg)}`, '_blank');
                 });
             });
             
-            // Click outside to close
+            // Close on click outside
             document.addEventListener('click', (e) => {
-                if (!container.contains(e.target) && chat.classList.contains('show')) {
-                    chat.classList.remove('show');
+                if (!container.contains(e.target) && chat.classList.contains('active')) {
+                    chat.classList.remove('active');
                 }
             });
-            
-            console.log('✅ TMC 311 Widget initialized');
-            
-        } catch (error) {
-            console.error('❌ Widget init failed:', error);
+
+            console.log('✅ TMC 311 Modern Widget Loaded');
+        } catch (e) {
+            console.error('Widget Error:', e);
         }
     };
     
-    // Public API
-    window.TMC311Widget = {
-        open: () => document.getElementById('tmcChat')?.classList.add('show'),
-        close: () => document.getElementById('tmcChat')?.classList.remove('show'),
-        toggle: () => document.getElementById('tmcFab')?.click()
-    };
-    
-    // Initialize
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initWidget);
     } else {

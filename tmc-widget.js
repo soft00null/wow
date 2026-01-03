@@ -1,7 +1,7 @@
 /**
- * Thane Municipal Corporation (TMC) 311 Premium Widget
- * File: tmc-311-premium-widget.js
- * Version: 4.0.0 (Ultra Modern)
+ * Thane 311 AI Widget
+ * File: tmc-311-ai-widget.js
+ * Version: 5.0.0 (Mobile Optimized & AI Focus)
  * Date: 2026-01-03
  * Brand: WhatsUp.city
  * 
@@ -11,8 +11,8 @@
 (function() {
     'use strict';
     
-    if (window.TMC311Widget) {
-        console.warn('TMC 311 Widget already initialized');
+    if (window.Thane311Widget) {
+        console.warn('Thane 311 Widget already initialized');
         return;
     }
     
@@ -20,15 +20,14 @@
         phoneNumber: '15558830019',
         defaultMessage: 'Hi',
         logoUrl: 'https://wow-strategies.com/tmc.png',
-        // High-res QR with specific margin for better scanning
         qrCodeUrl: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://wa.me/15558830019?text=Hi&margin=10&bgcolor=ffffff',
         colors: {
-            brand: '#10b981',         // Modern Emerald
-            brandDark: '#047857',     
-            brandLight: '#d1fae5',
-            darkText: '#111827',
-            lightText: '#6b7280',
-            bgBlur: 'rgba(255, 255, 255, 0.92)'
+            primary: '#10b981',        // Emerald Green
+            primaryDark: '#059669',
+            accent: '#3b82f6',         // AI Blue Accent
+            textDark: '#111827',
+            textLight: '#6b7280',
+            surface: 'rgba(255, 255, 255, 0.95)'
         },
         poweredBy: {
             text: 'Powered by WoW-Strategies Private Limited',
@@ -47,71 +46,71 @@
     
     const createWidget = () => {
         return `
-            <div class="tmc-widget-root" id="tmcWidget">
+            <div class="t311-root" id="t311Widget">
                 <!-- Pulse Effect Ring -->
-                <div class="tmc-fab-pulse"></div>
+                <div class="t311-fab-pulse"></div>
                 
                 <!-- Main FAB -->
-                <button class="tmc-fab" id="tmcFab" aria-label="Open 311 Support">
-                    <div class="tmc-fab-icon">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+                <button class="t311-fab" id="t311Fab" aria-label="Open Thane 311">
+                    <div class="t311-fab-content">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
                             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.688"/>
                         </svg>
                     </div>
-                    <span class="tmc-fab-tooltip">311 Support</span>
                 </button>
                 
                 <!-- Main Card -->
-                <div class="tmc-card" id="tmcCard">
+                <div class="t311-card" id="t311Card">
                     <!-- Header -->
-                    <div class="tmc-card-header">
-                        <div class="tmc-brand-row">
-                            <img src="${config.logoUrl}" alt="TMC Logo" class="tmc-logo">
-                            <div class="tmc-brand-text">
-                                <h1 class="tmc-title">Thane Municipal Corp</h1>
-                                <span class="tmc-badge">Official 311 Service</span>
+                    <div class="t311-header">
+                        <div class="t311-brand">
+                            <img src="${config.logoUrl}" alt="TMC Logo" class="t311-logo">
+                            <div class="t311-titles">
+                                <h1 class="t311-h1">Thane 311</h1>
+                                <div class="t311-ai-badge">
+                                    <span class="t311-sparkle">✨</span> AI Powered
+                                </div>
                             </div>
                         </div>
-                        <button class="tmc-close-btn" aria-label="Close">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        <button class="t311-close" aria-label="Close">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                         </button>
                     </div>
 
-                    <!-- Scrollable Content -->
-                    <div class="tmc-card-body">
-                        <!-- QR Hero Section -->
-                        <div class="tmc-qr-wrapper">
-                            <div class="tmc-qr-glass">
-                                <div class="tmc-qr-corners"></div>
-                                <img src="${config.qrCodeUrl}" alt="WhatsApp QR" class="tmc-qr-img">
-                                <div class="tmc-scan-line"></div>
+                    <!-- Body -->
+                    <div class="t311-body">
+                        <!-- QR Hero -->
+                        <div class="t311-qr-section">
+                            <div class="t311-qr-card">
+                                <img src="${config.qrCodeUrl}" alt="Scan QR" class="t311-qr-img">
+                                <div class="t311-scan-laser"></div>
                             </div>
-                            <p class="tmc-qr-instruction">Scan to chat instantly on WhatsApp</p>
+                            <p class="t311-qr-text">Scan to report issues instantly</p>
                         </div>
 
                         <!-- Divider -->
-                        <div class="tmc-divider">
-                            <span>or select a service below</span>
+                        <div class="t311-divider">
+                            <span>Quick Services</span>
                         </div>
 
-                        <!-- Service Grid -->
-                        <div class="tmc-grid">
+                        <!-- Grid -->
+                        <div class="t311-grid">
                             ${menuOptions.map(opt => `
-                                <button class="tmc-service-card" data-msg="${opt.message}">
-                                    <div class="tmc-service-icon">${opt.icon}</div>
-                                    <span class="tmc-service-label">${opt.label}</span>
-                                    <div class="tmc-arrow">→</div>
+                                <button class="t311-option" data-msg="${opt.message}">
+                                    <div class="t311-icon">${opt.icon}</div>
+                                    <span class="t311-label">${opt.label}</span>
                                 </button>
                             `).join('')}
                         </div>
                     </div>
 
                     <!-- Footer -->
-                    <div class="tmc-footer">
-                        <button class="tmc-whatsapp-full" onclick="window.open('https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(config.defaultMessage)}', '_blank')">
-                            Start New Conversation
+                    <div class="t311-footer">
+                        <button class="t311-btn-primary" onclick="window.open('https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(config.defaultMessage)}', '_blank')">
+                            Chat on WhatsApp
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                         </button>
-                        <div class="tmc-attribution">
+                        <div class="t311-copyright">
                             <a href="${config.poweredBy.url}" target="_blank" rel="noopener">
                                 ${config.poweredBy.text}
                             </a>
@@ -121,404 +120,357 @@
             </div>
 
             <style>
-                @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-                .tmc-widget-root {
-                    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+                .t311-root {
+                    font-family: 'Inter', -apple-system, sans-serif;
                     position: fixed;
                     bottom: 24px;
                     right: 24px;
                     z-index: 2147483647;
-                    --tmc-primary: #10b981;
-                    --tmc-primary-dark: #059669;
-                    --tmc-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-                    --tmc-shadow-glow: 0 0 15px rgba(16, 185, 129, 0.5);
+                    --t311-primary: ${config.colors.primary};
+                    --t311-accent: ${config.colors.accent};
+                    --t311-bg: ${config.colors.surface};
+                    --t311-text: ${config.colors.textDark};
                 }
 
-                /* --- FAB & Animations --- */
-                .tmc-fab {
-                    width: 64px;
-                    height: 64px;
+                /* FAB Animation */
+                .t311-fab {
+                    width: 60px;
+                    height: 60px;
                     border-radius: 50%;
-                    background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+                    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
                     border: none;
                     cursor: pointer;
-                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+                    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+                    position: relative;
+                    z-index: 10;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    position: relative;
-                    z-index: 2;
-                    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                    transition: transform 0.3s ease;
                 }
 
-                .tmc-fab:hover {
-                    transform: scale(1.1);
-                    box-shadow: var(--tmc-shadow-glow);
+                .t311-fab:hover {
+                    transform: scale(1.05);
                 }
 
-                .tmc-fab-pulse {
+                .t311-fab-pulse {
                     position: absolute;
                     bottom: 0;
                     right: 0;
-                    width: 64px;
-                    height: 64px;
+                    width: 60px;
+                    height: 60px;
                     border-radius: 50%;
-                    background: var(--tmc-primary);
-                    opacity: 0.5;
+                    background: var(--t311-primary);
+                    opacity: 0.4;
                     z-index: 1;
-                    animation: tmc-pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+                    animation: pulse-ring 2s infinite;
                 }
 
-                @keyframes tmc-pulse-ring {
-                    0% { transform: scale(1); opacity: 0.5; }
-                    100% { transform: scale(2); opacity: 0; }
+                @keyframes pulse-ring {
+                    0% { transform: scale(1); opacity: 0.4; }
+                    100% { transform: scale(1.8); opacity: 0; }
                 }
 
-                .tmc-fab-tooltip {
+                /* Main Card */
+                .t311-card {
                     position: absolute;
-                    right: 76px;
-                    background: #1f2937;
-                    color: white;
-                    padding: 6px 12px;
-                    border-radius: 8px;
-                    font-size: 13px;
-                    font-weight: 600;
-                    opacity: 0;
-                    transform: translateX(10px);
-                    transition: all 0.2s;
-                    pointer-events: none;
-                    white-space: nowrap;
-                }
-
-                .tmc-fab:hover .tmc-fab-tooltip {
-                    opacity: 1;
-                    transform: translateX(0);
-                }
-
-                /* --- Main Card Container --- */
-                .tmc-card {
-                    position: absolute;
-                    bottom: 80px;
+                    bottom: 76px;
                     right: 0;
-                    width: 380px;
-                    background: rgba(255, 255, 255, 0.95);
-                    backdrop-filter: blur(16px);
-                    -webkit-backdrop-filter: blur(16px);
-                    border-radius: 24px;
-                    box-shadow: var(--tmc-shadow-lg);
-                    border: 1px solid rgba(255, 255, 255, 0.5);
-                    overflow: hidden;
+                    width: 360px;
+                    background: var(--t311-bg);
+                    backdrop-filter: blur(20px);
+                    -webkit-backdrop-filter: blur(20px);
+                    border-radius: 20px;
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.4);
                     opacity: 0;
                     visibility: hidden;
                     transform: translateY(20px) scale(0.95);
                     transform-origin: bottom right;
                     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                    overflow: hidden;
                     display: flex;
                     flex-direction: column;
                 }
 
-                .tmc-card.tmc-show {
+                .t311-card.is-open {
                     opacity: 1;
                     visibility: visible;
                     transform: translateY(0) scale(1);
                 }
 
-                /* --- Header --- */
-                .tmc-card-header {
-                    padding: 20px;
+                /* Header */
+                .t311-header {
+                    padding: 16px 20px;
                     display: flex;
-                    align-items: center;
                     justify-content: space-between;
-                    background: linear-gradient(to bottom, #ffffff, rgba(255,255,255,0));
+                    align-items: center;
+                    border-bottom: 1px solid rgba(0,0,0,0.05);
+                    background: rgba(255,255,255,0.8);
                 }
 
-                .tmc-brand-row {
+                .t311-brand {
                     display: flex;
                     align-items: center;
                     gap: 12px;
                 }
 
-                .tmc-logo {
-                    width: 44px;
-                    height: 44px;
+                .t311-logo {
+                    width: 40px;
+                    height: 40px;
                     object-fit: contain;
-                    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
                 }
 
-                .tmc-brand-text {
+                .t311-titles {
                     display: flex;
                     flex-direction: column;
                 }
 
-                .tmc-title {
+                .t311-h1 {
                     margin: 0;
                     font-size: 16px;
                     font-weight: 700;
-                    color: #111827;
-                    letter-spacing: -0.02em;
+                    color: var(--t311-text);
+                    letter-spacing: -0.01em;
                 }
 
-                .tmc-badge {
+                .t311-ai-badge {
                     font-size: 11px;
-                    color: var(--tmc-primary);
-                    background: #ecfdf5;
-                    padding: 2px 6px;
-                    border-radius: 4px;
+                    color: var(--t311-accent);
+                    background: #eff6ff;
+                    padding: 2px 8px;
+                    border-radius: 12px;
                     width: fit-content;
                     font-weight: 600;
                     margin-top: 2px;
-                }
-
-                .tmc-close-btn {
-                    background: #f3f4f6;
-                    border: none;
-                    width: 32px;
-                    height: 32px;
-                    border-radius: 50%;
                     display: flex;
                     align-items: center;
-                    justify-content: center;
+                    gap: 4px;
+                    border: 1px solid #dbeafe;
+                }
+
+                .t311-sparkle {
+                    font-size: 10px;
+                    animation: sparkle 1.5s infinite alternate;
+                }
+
+                @keyframes sparkle {
+                    0% { opacity: 0.6; transform: scale(0.9); }
+                    100% { opacity: 1; transform: scale(1.1); }
+                }
+
+                .t311-close {
+                    background: transparent;
+                    border: none;
                     cursor: pointer;
-                    color: #6b7280;
+                    color: #9ca3af;
+                    padding: 4px;
+                    border-radius: 50%;
                     transition: all 0.2s;
+                    display: flex;
                 }
 
-                .tmc-close-btn:hover {
-                    background: #e5e7eb;
-                    color: #111827;
-                    transform: rotate(90deg);
+                .t311-close:hover {
+                    background: #f3f4f6;
+                    color: #374151;
                 }
 
-                /* --- Body Content --- */
-                .tmc-card-body {
-                    padding: 0 20px;
+                /* Body */
+                .t311-body {
+                    padding: 20px 20px 10px;
                     overflow-y: auto;
                     max-height: 60vh;
                 }
 
-                /* --- QR Section --- */
-                .tmc-qr-wrapper {
+                /* QR Section */
+                .t311-qr-section {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    margin-bottom: 24px;
-                    position: relative;
+                    margin-bottom: 20px;
                 }
 
-                .tmc-qr-glass {
+                .t311-qr-card {
+                    padding: 10px;
                     background: white;
-                    padding: 12px;
-                    border-radius: 20px;
-                    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.15);
+                    border-radius: 16px;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
                     position: relative;
-                    overflow: hidden;
                     border: 1px solid #f3f4f6;
                 }
 
-                .tmc-qr-img {
-                    width: 160px;
-                    height: 160px;
-                    border-radius: 12px;
+                .t311-qr-img {
+                    width: 140px;
+                    height: 140px;
+                    border-radius: 8px;
                     display: block;
                 }
 
-                .tmc-qr-corners {
-                    position: absolute;
-                    inset: 8px;
-                    border: 2px solid transparent;
-                    border-radius: 16px;
-                    background: 
-                        linear-gradient(to right, var(--tmc-primary) 4px, transparent 4px) 0 0,
-                        linear-gradient(to bottom, var(--tmc-primary) 4px, transparent 4px) 0 0,
-                        linear-gradient(to left, var(--tmc-primary) 4px, transparent 4px) 100% 0,
-                        linear-gradient(to bottom, var(--tmc-primary) 4px, transparent 4px) 100% 0,
-                        linear-gradient(to right, var(--tmc-primary) 4px, transparent 4px) 0 100%,
-                        linear-gradient(to top, var(--tmc-primary) 4px, transparent 4px) 0 100%,
-                        linear-gradient(to left, var(--tmc-primary) 4px, transparent 4px) 100% 100%,
-                        linear-gradient(to top, var(--tmc-primary) 4px, transparent 4px) 100% 100%;
-                    background-repeat: no-repeat;
-                    background-size: 20px 20px;
-                    pointer-events: none;
-                }
-
-                .tmc-scan-line {
+                .t311-scan-laser {
                     position: absolute;
                     width: 100%;
                     height: 2px;
-                    background: var(--tmc-primary);
-                    box-shadow: 0 0 10px var(--tmc-primary);
-                    top: 0;
+                    background: var(--t311-primary);
+                    box-shadow: 0 0 8px var(--t311-primary);
+                    top: 10px;
                     left: 0;
-                    animation: tmc-scan 2.5s ease-in-out infinite;
+                    animation: scan 2s linear infinite;
+                    opacity: 0.8;
                 }
 
-                @keyframes tmc-scan {
-                    0% { top: 10%; opacity: 0; }
+                @keyframes scan {
+                    0% { top: 10px; opacity: 0; }
                     10% { opacity: 1; }
                     90% { opacity: 1; }
-                    100% { top: 90%; opacity: 0; }
+                    100% { top: 150px; opacity: 0; }
                 }
 
-                .tmc-qr-instruction {
+                .t311-qr-text {
                     margin-top: 12px;
-                    font-size: 13px;
-                    font-weight: 500;
+                    font-size: 12px;
                     color: #6b7280;
-                    background: #f9fafb;
-                    padding: 6px 12px;
-                    border-radius: 20px;
+                    font-weight: 500;
                 }
 
-                /* --- Divider --- */
-                .tmc-divider {
+                /* Divider */
+                .t311-divider {
                     display: flex;
                     align-items: center;
-                    text-align: center;
-                    color: #9ca3af;
+                    margin: 10px 0 16px;
                     font-size: 11px;
                     font-weight: 600;
+                    color: #9ca3af;
                     text-transform: uppercase;
                     letter-spacing: 0.05em;
-                    margin: 16px 0;
                 }
 
-                .tmc-divider::before, .tmc-divider::after {
+                .t311-divider::before, .t311-divider::after {
                     content: '';
                     flex: 1;
-                    border-bottom: 1px solid #e5e7eb;
+                    height: 1px;
+                    background: #e5e7eb;
                 }
 
-                .tmc-divider span {
+                .t311-divider span {
                     padding: 0 10px;
                 }
 
-                /* --- Grid Services --- */
-                .tmc-grid {
+                /* Grid */
+                .t311-grid {
                     display: grid;
                     grid-template-columns: 1fr 1fr;
-                    gap: 12px;
-                    padding-bottom: 20px;
+                    gap: 10px;
                 }
 
-                .tmc-service-card {
+                .t311-option {
                     background: white;
                     border: 1px solid #f3f4f6;
-                    border-radius: 16px;
-                    padding: 16px 12px;
-                    cursor: pointer;
+                    border-radius: 12px;
+                    padding: 12px;
                     text-align: left;
+                    cursor: pointer;
                     transition: all 0.2s;
-                    position: relative;
                     display: flex;
-                    flex-direction: column;
-                    gap: 8px;
-                    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+                    align-items: center;
+                    gap: 10px;
                 }
 
-                .tmc-service-card:hover {
-                    border-color: var(--tmc-primary);
-                    background: #f0fdf4;
-                    transform: translateY(-2px);
-                    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+                .t311-option:hover {
+                    border-color: var(--t311-primary);
+                    background: #ecfdf5;
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.04);
                 }
 
-                .tmc-service-icon {
-                    font-size: 20px;
-                    width: 36px;
-                    height: 36px;
+                .t311-icon {
+                    font-size: 18px;
+                    width: 32px;
+                    height: 32px;
                     background: #f9fafb;
-                    border-radius: 10px;
+                    border-radius: 8px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    transition: background 0.2s;
                 }
 
-                .tmc-service-card:hover .tmc-service-icon {
-                    background: white;
-                }
-
-                .tmc-service-label {
-                    font-size: 13px;
+                .t311-label {
+                    font-size: 12px;
                     font-weight: 600;
-                    color: #374151;
-                    line-height: 1.2;
+                    color: var(--t311-text);
+                    line-height: 1.3;
                 }
 
-                .tmc-arrow {
-                    position: absolute;
-                    top: 16px;
-                    right: 12px;
-                    font-size: 14px;
-                    color: var(--tmc-primary);
-                    opacity: 0;
-                    transform: translateX(-5px);
-                    transition: all 0.2s;
-                }
-
-                .tmc-service-card:hover .tmc-arrow {
-                    opacity: 1;
-                    transform: translateX(0);
-                }
-
-                /* --- Footer --- */
-                .tmc-footer {
-                    padding: 20px;
+                /* Footer */
+                .t311-footer {
+                    padding: 16px 20px 20px;
                     background: #f9fafb;
                     border-top: 1px solid #f3f4f6;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 12px;
                 }
 
-                .tmc-whatsapp-full {
+                .t311-btn-primary {
                     width: 100%;
-                    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                    background: var(--t311-primary);
                     color: white;
                     border: none;
-                    padding: 14px;
-                    border-radius: 14px;
+                    padding: 12px;
+                    border-radius: 12px;
                     font-size: 14px;
                     font-weight: 600;
                     cursor: pointer;
-                    transition: all 0.2s;
-                    box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     gap: 8px;
+                    transition: opacity 0.2s;
+                    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
                 }
 
-                .tmc-whatsapp-full:hover {
+                .t311-btn-primary:hover {
                     opacity: 0.95;
-                    transform: translateY(-1px);
-                    box-shadow: 0 6px 8px -1px rgba(16, 185, 129, 0.3);
                 }
 
-                .tmc-attribution {
+                .t311-copyright {
                     text-align: center;
-                    font-size: 11px;
+                    margin-top: 12px;
+                    font-size: 10px;
                 }
 
-                .tmc-attribution a {
+                .t311-copyright a {
                     color: #9ca3af;
                     text-decoration: none;
                     font-weight: 500;
-                    transition: color 0.2s;
                 }
 
-                .tmc-attribution a:hover {
-                    color: var(--tmc-primary);
+                .t311-copyright a:hover {
+                    color: var(--t311-primary);
                 }
 
-                /* --- Mobile Responsiveness --- */
+                /* Mobile Optimization */
                 @media (max-width: 480px) {
-                    .tmc-widget-root { bottom: 16px; right: 16px; }
-                    .tmc-card { 
-                        width: calc(100vw - 32px); 
-                        bottom: 90px;
-                        right: 0; 
+                    .t311-root {
+                        bottom: 16px;
+                        right: 16px;
+                    }
+                    
+                    .t311-card {
+                        width: calc(100vw - 32px);
+                        bottom: 80px;
+                        right: 0;
+                        max-height: calc(100vh - 120px);
+                    }
+
+                    .t311-body {
+                        padding: 16px;
+                    }
+
+                    .t311-grid {
+                        grid-template-columns: 1fr; /* Stack on very small screens */
+                    }
+                    
+                    /* iPhone Notch Safety */
+                    .t311-card {
+                        padding-bottom: env(safe-area-inset-bottom);
                     }
                 }
             </style>
@@ -526,56 +478,40 @@
     };
     
     const initWidget = () => {
-        // Only init if not present
-        if(document.getElementById('tmc-widget-root')) return;
+        if(document.getElementById('t311Widget')) return;
 
-        let container = document.createElement('div');
-        container.id = 'tmc-widget-root';
+        const container = document.createElement('div');
         document.body.appendChild(container);
         container.innerHTML = createWidget();
         
-        // Element References
-        const fab = document.getElementById('tmcFab');
-        const card = document.getElementById('tmcCard');
-        const closeBtn = card.querySelector('.tmc-close-btn');
-        const serviceCards = document.querySelectorAll('.tmc-service-card');
-        const pulse = document.querySelector('.tmc-fab-pulse');
+        const fab = document.getElementById('t311Fab');
+        const card = document.getElementById('t311Card');
+        const close = card.querySelector('.t311-close');
+        const options = document.querySelectorAll('.t311-option');
         
-        // Logic
-        const toggleWidget = () => {
-            const isVisible = card.classList.contains('tmc-show');
-            if (isVisible) {
-                card.classList.remove('tmc-show');
-                pulse.style.display = 'block';
-            } else {
-                card.classList.add('tmc-show');
-                pulse.style.display = 'none';
-            }
-        };
-
-        fab.addEventListener('click', toggleWidget);
-        closeBtn.addEventListener('click', toggleWidget);
+        const toggle = () => card.classList.toggle('is-open');
         
-        // Service Selection
-        serviceCards.forEach(card => {
-            card.addEventListener('click', function() {
-                const message = this.getAttribute('data-msg');
-                const url = `https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(message)}`;
-                window.open(url, '_blank');
+        fab.addEventListener('click', toggle);
+        close.addEventListener('click', () => card.classList.remove('is-open'));
+        
+        options.forEach(opt => {
+            opt.addEventListener('click', function() {
+                const msg = this.getAttribute('data-msg');
+                window.open(`https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(msg)}`, '_blank');
             });
         });
-        
-        // Click Outside to Close
+
+        // Close when clicking outside
         document.addEventListener('click', (e) => {
-            if (!container.contains(e.target) && card.classList.contains('tmc-show')) {
-                toggleWidget();
+            const root = document.getElementById('t311Widget');
+            if (root && !root.contains(e.target) && card.classList.contains('is-open')) {
+                card.classList.remove('is-open');
             }
         });
 
-        console.log('✅ TMC 311 Premium Widget Initialized');
+        console.log('✅ Thane 311 Widget Loaded');
     };
     
-    // Auto-load
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initWidget);
     } else {

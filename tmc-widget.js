@@ -4,784 +4,541 @@
  * Version: 3.0.0
  * Date: 2026-01-03
  * Brand: WhatsUp.city
- *
+ * 
  * Powered by WoW-Strategies Private Limited
  */
 
-(function () {
-  "use strict";
-
-  if (window.TMC311Widget) {
-    console.warn("TMC 311 Widget already initialized");
-    return;
-  }
-
-  const config = {
-    phoneNumber: "15558830019",
-    defaultMessage: "Hi",
-    logoUrl: "https://wow-strategies.com/tmc.png",
-
-    // WhatsApp link (single source of truth)
-    get waLink() {
-      return `https://wa.me/${this.phoneNumber}?text=${encodeURIComponent(this.defaultMessage)}`;
-    },
-
-    // QR (stunning card + glow around the image; the image itself is generated)
-    // Note: using a hosted QR generator for convenience
-    get qrCodeUrl() {
-      return `https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=${encodeURIComponent(this.waLink)}&margin=12`;
-    },
-
-    poweredBy: {
-      text: "Powered by WoW-Strategies Private Limited",
-      url: "https://wow-strategies.com/",
-    },
-
-    colors: {
-      // Modern civic + WhatsApp aligned palette
-      brand1: "#00C853", // green
-      brand2: "#00BFA5", // teal
-      ink: "#0B1B14",
-      sub: "#4B5B54",
-      paper: "#FFFFFF",
-      soft: "#F4F7F6",
-      line: "rgba(15, 23, 42, 0.08)",
-      glow: "rgba(0, 200, 83, 0.30)",
-      danger: "#FF3B30",
-    },
-  };
-
-  // ✅ Only 311-style municipal grievances (no payments, no water/property tax)
-  // Focused, universal categories commonly found in urban grievance systems.
-  const menuOptions = [
-    {
-      id: "roads",
-      label: "Roads & Potholes",
-      icon: "🕳️",
-      message:
-        "I want to report a road issue (pothole/damaged road). Please guide me to submit location and photos.",
-    },
-    {
-      id: "garbage",
-      label: "Garbage & Waste",
-      icon: "🗑️",
-      message:
-        "I want to report garbage not collected / overflowing bin. Please record my complaint with location and photo.",
-    },
-    {
-      id: "streetlight",
-      label: "Streetlights",
-      icon: "💡",
-      message:
-        "I want to report a streetlight issue (not working/flickering). Please take location details.",
-    },
-    {
-      id: "drainage",
-      label: "Drainage / Sewer",
-      icon: "🕳️",
-      message:
-        "I want to report drainage/sewer issue (overflow/blockage). Please guide me to share location and photo/video.",
-    },
-    {
-      id: "encroachment",
-      label: "Encroachment",
-      icon: "🚧",
-      message:
-        "I want to report an encroachment / illegal obstruction. Please record complaint with location and photo.",
-    },
-    {
-      id: "stray",
-      label: "Stray Animals",
-      icon: "🐕",
-      message:
-        "I want to report an issue related to stray animals. Please guide me to share location and details.",
-    },
-    {
-      id: "tree",
-      label: "Tree / Branch Hazard",
-      icon: "🌳",
-      message:
-        "I want to report a fallen tree / dangerous branch. Please take my location and photo.",
-    },
-    {
-      id: "other",
-      label: "Other Civic Issue",
-      icon: "📝",
-      message:
-        "I want to report another civic issue. Please ask details and take my location.",
-    },
-  ];
-
-  const createWidget = () => {
-    return `
-      <div class="tmc311-widget" id="tmc311Widget" role="region" aria-label="TMC 311 WhatsApp Chat Widget">
-        <!-- Floating Action Button -->
-        <button class="tmc311-fab" id="tmc311Fab" aria-label="Open TMC 311 WhatsApp widget">
-          <span class="tmc311-fab-ring" aria-hidden="true"></span>
-          <span class="tmc311-fab-inner" aria-hidden="true">
-            <!-- WhatsApp Icon -->
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path fill="white" d="M12.04 0C5.42 0 .07 5.35.07 11.97c0 2.12.56 4.2 1.63 6.03L0 24l6.14-1.62a11.94 11.94 0 0 0 5.9 1.5h.01c6.62 0 11.97-5.35 11.97-11.97C24 5.35 18.66 0 12.04 0Zm0 21.87h-.01a9.98 9.98 0 0 1-5.08-1.39l-.36-.21-3.64.96.97-3.55-.23-.36a9.94 9.94 0 0 1-1.53-5.34C2.16 6.44 6.52 2.09 12.04 2.09c2.67 0 5.18 1.04 7.06 2.92a9.93 9.93 0 0 1 2.91 7.06c0 5.52-4.35 9.8-9.97 9.8Zm5.79-7.31c-.32-.16-1.88-.93-2.17-1.03-.29-.11-.51-.16-.72.16-.21.32-.83 1.03-1.02 1.24-.19.21-.38.24-.7.08-.32-.16-1.34-.49-2.56-1.57-.95-.83-1.58-1.85-1.77-2.17-.19-.32-.02-.49.14-.65.14-.14.32-.38.48-.57.16-.19.21-.32.32-.54.11-.21.05-.4-.03-.56-.08-.16-.72-1.74-.99-2.38-.26-.63-.53-.54-.72-.55h-.61c-.21 0-.56.08-.85.4-.29.32-1.12 1.1-1.12 2.67s1.15 3.07 1.31 3.28c.16.21 2.26 3.45 5.48 4.84.77.33 1.36.52 1.83.67.77.25 1.47.22 2.02.13.62-.09 1.9-.78 2.17-1.52.27-.75.27-1.39.19-1.52-.08-.13-.29-.21-.61-.37Z"/>
-            </svg>
-          </span>
-          <span class="tmc311-fab-badge" aria-hidden="true">311</span>
-        </button>
-
-        <!-- Panel -->
-        <section class="tmc311-panel" id="tmc311Panel" aria-hidden="true">
-          <header class="tmc311-header">
-            <div class="tmc311-brand">
-              <div class="tmc311-logo">
-                <img src="${config.logoUrl}" alt="TMC Logo" />
-              </div>
-              <div class="tmc311-title">
-                <div class="tmc311-title-top">Thane Municipal Corporation</div>
-                <div class="tmc311-title-sub">311 Grievance Assistant • WhatsApp</div>
-              </div>
+(function() {
+    'use strict';
+    
+    if (window.TMC311Widget) {
+        console.warn('TMC 311 Widget already initialized');
+        return;
+    }
+    
+    const config = {
+        phoneNumber: '15558830019',
+        defaultMessage: 'Hi',
+        logoUrl: 'https://wow-strategies.com/tmc.png',
+        qrData: 'https://wa.me/15558830019?text=Hi',
+        colors: {
+            primary: '#0B5D52',
+            secondary: '#0D9F6E',
+            accent: '#1BD741',
+            background: '#0F1115',
+            card: 'rgba(255,255,255,0.06)',
+            glass: 'rgba(255,255,255,0.16)',
+            text: '#E9ECEF',
+            subtext: '#A9B3BD',
+            border: 'rgba(255,255,255,0.08)',
+            white: '#FFFFFF',
+            shadow: '0 20px 80px rgba(0,0,0,0.45)'
+        },
+        poweredBy: {
+            text: 'Powered by WoW-Strategies Private Limited',
+            url: 'https://wow-strategies.com/'
+        }
+    };
+    
+    // Core 311 civic grievance actions (urban municipal)
+    const menuOptions = [
+        { id: 'pothole', label: 'Report Pothole', icon: '🕳️', message: 'I want to report a pothole on the road' },
+        { id: 'garbage', label: 'Garbage / Cleanliness', icon: '🧹', message: 'Please address garbage / cleanliness issue' },
+        { id: 'streetlight', label: 'Streetlight Out', icon: '💡', message: 'A streetlight is not working' },
+        { id: 'drainage', label: 'Drainage / Waterlogging', icon: '🌧️', message: 'Drainage or waterlogging issue' },
+        { id: 'tree', label: 'Tree Fall / Pruning', icon: '🌳', message: 'Tree fall or pruning request' },
+        { id: 'noise', label: 'Noise / Nuisance', icon: '🔊', message: 'Report noise or public nuisance' }
+    ];
+    
+    const createQrMarkup = (data) => {
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=320x320&margin=10&color=0D9F6E&bgcolor=0F1115&data=${encodeURIComponent(data)}`;
+        return `
+            <div class="tmc-qr-frame">
+                <div class="tmc-qr-glow"></div>
+                <img src="${qrUrl}" alt="Scan to chat on WhatsApp" class="tmc-qr-image">
+                <div class="tmc-qr-badge">Scan to chat</div>
             </div>
-
-            <button class="tmc311-close" id="tmc311Close" aria-label="Close widget">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M18 6L6 18M6 6l12 12" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
-              </svg>
-            </button>
-          </header>
-
-          <div class="tmc311-body">
-            <!-- Stunning QR Card -->
-            <div class="tmc311-qrCard" role="group" aria-label="Scan QR to open WhatsApp chat">
-              <div class="tmc311-qrGlow" aria-hidden="true"></div>
-
-              <div class="tmc311-qrTop">
-                <div class="tmc311-qrTitle">Scan & Chat on WhatsApp</div>
-                <div class="tmc311-qrHint">Fastest way to lodge a 311 complaint (photo, voice, location)</div>
-              </div>
-
-              <a class="tmc311-qrLink" href="${config.waLink}" target="_blank" rel="noopener" aria-label="Open WhatsApp chat in a new tab">
-                <div class="tmc311-qrFrame">
-                  <img class="tmc311-qrImg" src="${config.qrCodeUrl}" alt="WhatsApp QR Code for TMC 311" loading="lazy" />
-                  <div class="tmc311-qrOverlay" aria-hidden="true">
-                    <div class="tmc311-qrDot"></div>
-                    <div class="tmc311-qrDot"></div>
-                    <div class="tmc311-qrDot"></div>
-                  </div>
-                </div>
-              </a>
-
-              <div class="tmc311-qrActions">
-                <button class="tmc311-btn tmc311-btnPrimary" id="tmc311StartBtn" type="button">
-                  Start on WhatsApp
-                </button>
-                <button class="tmc311-btn tmc311-btnGhost" id="tmc311CopyBtn" type="button" aria-label="Copy WhatsApp chat link">
-                  Copy Link
-                </button>
-              </div>
-
-              <div class="tmc311-qrFooter">
-                Tip: Share a photo/video + location for quickest resolution.
-              </div>
-            </div>
-
-            <!-- Services -->
-            <div class="tmc311-services">
-              <div class="tmc311-servicesHead">
-                <div class="tmc311-servicesTitle">311 Services</div>
-                <div class="tmc311-servicesSub">Choose a category to open WhatsApp with the right prompt</div>
-              </div>
-
-              <div class="tmc311-grid">
-                ${menuOptions
-                  .map(
-                    (o) => `
-                    <button class="tmc311-tile" data-message="${o.message}" type="button" aria-label="${o.label}">
-                      <div class="tmc311-tileIcon">${o.icon}</div>
-                      <div class="tmc311-tileText">
-                        <div class="tmc311-tileLabel">${o.label}</div>
-                        <div class="tmc311-tileMeta">Tap to report</div>
-                      </div>
-                      <div class="tmc311-tileArrow" aria-hidden="true">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                          <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        `;
+    };
+    
+    const createWidget = () => {
+        return `
+            <div class="tmc-widget" id="tmcWidget">
+                <!-- FAB -->
+                <button class="tmc-fab" id="tmcFab" aria-label="Open TMC 311 Chat">
+                    <div class="tmc-fab-ring"></div>
+                    <div class="tmc-fab-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="white">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.688"/>
                         </svg>
-                      </div>
-                    </button>
-                  `
-                  )
-                  .join("")}
-              </div>
-
-              <div class="tmc311-note">
-                <strong>What to send:</strong> location (GPS / landmark), photo/video, and a short description.
-              </div>
+                    </div>
+                    <div class="tmc-fab-badge">311</div>
+                </button>
+                
+                <!-- Chat -->
+                <div class="tmc-chat" id="tmcChat">
+                    <!-- Header -->
+                    <div class="tmc-header">
+                        <div class="tmc-header-left">
+                            <div class="tmc-avatar">
+                                <img src="${config.logoUrl}" alt="TMC Logo">
+                            </div>
+                            <div class="tmc-headings">
+                                <div class="tmc-title">Thane Municipal Corporation</div>
+                                <div class="tmc-subtitle">Official 311 AI Assistant</div>
+                            </div>
+                        </div>
+                        <button class="tmc-close" aria-label="Close chat">
+                            <span>×</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Body -->
+                    <div class="tmc-body">
+                        <div class="tmc-qr-section">
+                            ${createQrMarkup(config.qrData)}
+                            <div class="tmc-qr-copy">Point your camera to start a WhatsApp chat</div>
+                            <div class="tmc-qr-chip">Works in 22 Indian languages · Text · Voice · Images · Location</div>
+                        </div>
+                        
+                        <div class="tmc-chat-preview">
+                            <div class="tmc-bubble">
+                                <div class="tmc-bubble-text">
+                                    🙏 Namaskar! I’m your TMC 311 assistant.<br>
+                                    Tell me the issue, send a voice note, or attach a photo. I’ll route it to the right ward officer.
+                                </div>
+                                <div class="tmc-bubble-meta">AI · Online now</div>
+                            </div>
+                        </div>
+                        
+                        <div class="tmc-grid">
+                            ${menuOptions.map(option => `
+                                <button class="tmc-card" data-message="${option.message}">
+                                    <div class="tmc-card-icon">${option.icon}</div>
+                                    <div class="tmc-card-label">${option.label}</div>
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <!-- Footer -->
+                    <div class="tmc-footer">
+                        <button class="tmc-action" onclick="window.open('https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(config.defaultMessage)}', '_blank')">
+                            <span>Continue on WhatsApp</span>
+                        </button>
+                        <div class="tmc-powered">
+                            <a href="${config.poweredBy.url}" target="_blank" rel="noopener">
+                                ${config.poweredBy.text}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Notification -->
+                <div class="tmc-toast" id="tmcToast">
+                    <div class="tmc-toast-left">
+                        <div class="tmc-toast-avatar">
+                            <img src="${config.logoUrl}" alt="TMC">
+                        </div>
+                        <div>
+                            <div class="tmc-toast-title">TMC 311</div>
+                            <div class="tmc-toast-sub">Report civic issues in your language</div>
+                        </div>
+                    </div>
+                    <button class="tmc-toast-close" aria-label="Close">×</button>
+                </div>
             </div>
-          </div>
-
-          <footer class="tmc311-footer">
-            <a class="tmc311-powered" href="${config.poweredBy.url}" target="_blank" rel="noopener">
-              ${config.poweredBy.text}
-            </a>
-          </footer>
-        </section>
-
-        <!-- Nudge -->
-        <aside class="tmc311-nudge" id="tmc311Nudge" aria-hidden="true">
-          <button class="tmc311-nudgeClose" id="tmc311NudgeClose" aria-label="Close notification">×</button>
-          <div class="tmc311-nudgeRow">
-            <div class="tmc311-nudgeAvatar">
-              <img src="${config.logoUrl}" alt="TMC" />
-            </div>
-            <div class="tmc311-nudgeText">
-              <div class="tmc311-nudgeTitle">TMC 311 on WhatsApp</div>
-              <div class="tmc311-nudgeSub">Report potholes, garbage, lights & more — in seconds.</div>
-            </div>
-          </div>
-        </aside>
-      </div>
-
-      <style>
-        .tmc311-widget, .tmc311-widget * { box-sizing: border-box; }
-        .tmc311-widget {
-          position: fixed;
-          right: 22px;
-          bottom: 22px;
-          z-index: 999999;
-          font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-          color: ${config.colors.ink};
+            
+            <style>
+                .tmc-widget * { box-sizing: border-box; }
+                .tmc-widget {
+                    position: fixed;
+                    bottom: 24px;
+                    right: 24px;
+                    z-index: 999999;
+                    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+                    color: ${config.colors.text};
+                }
+                
+                /* FAB */
+                .tmc-fab {
+                    width: 64px;
+                    height: 64px;
+                    border-radius: 18px;
+                    border: 1px solid ${config.colors.border};
+                    background: linear-gradient(145deg, ${config.colors.primary}, ${config.colors.secondary});
+                    color: #fff;
+                    cursor: pointer;
+                    display: grid;
+                    place-items: center;
+                    position: relative;
+                    overflow: hidden;
+                    box-shadow: ${config.colors.shadow};
+                    transition: transform 0.2s ease, box-shadow 0.2s ease;
+                }
+                .tmc-fab:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 30px 80px rgba(0,0,0,0.35); }
+                .tmc-fab-ring {
+                    position: absolute;
+                    inset: -12px;
+                    border-radius: 24px;
+                    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.22), transparent 45%),
+                                radial-gradient(circle at 70% 70%, rgba(0,0,0,0.2), transparent 50%);
+                    filter: blur(6px);
+                    opacity: 0.9;
+                    animation: ring 6s linear infinite;
+                }
+                @keyframes ring { to { transform: rotate(360deg); } }
+                .tmc-fab-icon { position: relative; z-index: 2; }
+                .tmc-fab-badge {
+                    position: absolute;
+                    bottom: -4px;
+                    right: 8px;
+                    padding: 4px 8px;
+                    background: rgba(0,0,0,0.65);
+                    color: #fff;
+                    border-radius: 10px;
+                    font-size: 11px;
+                    font-weight: 700;
+                    letter-spacing: 0.3px;
+                    border: 1px solid rgba(255,255,255,0.2);
+                }
+                
+                /* Chat container */
+                .tmc-chat {
+                    position: absolute;
+                    bottom: 78px;
+                    right: 0;
+                    width: 400px;
+                    max-height: 760px;
+                    background: ${config.colors.background};
+                    border: 1px solid ${config.colors.border};
+                    border-radius: 22px;
+                    box-shadow: ${config.colors.shadow};
+                    overflow: hidden;
+                    display: flex;
+                    flex-direction: column;
+                    opacity: 0;
+                    visibility: hidden;
+                    transform: translateY(16px) scale(0.97);
+                    transition: all 0.25s ease;
+                }
+                .tmc-chat.show { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+                
+                /* Header */
+                .tmc-header {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 16px 18px;
+                    background: linear-gradient(120deg, rgba(11,93,82,0.9), rgba(13,159,110,0.9));
+                    border-bottom: 1px solid ${config.colors.border};
+                    backdrop-filter: blur(8px);
+                }
+                .tmc-header-left { display: flex; align-items: center; gap: 12px; }
+                .tmc-avatar {
+                    width: 46px; height: 46px;
+                    border-radius: 14px;
+                    background: rgba(255,255,255,0.1);
+                    border: 1px solid rgba(255,255,255,0.25);
+                    overflow: hidden;
+                    display: grid; place-items: center;
+                }
+                .tmc-avatar img { width: 100%; height: 100%; object-fit: contain; background: #fff; }
+                .tmc-headings { color: #fff; }
+                .tmc-title { font-weight: 700; font-size: 15px; letter-spacing: -0.01em; }
+                .tmc-subtitle { font-size: 12px; opacity: 0.9; }
+                .tmc-close {
+                    background: rgba(255,255,255,0.12);
+                    border: 1px solid rgba(255,255,255,0.25);
+                    color: #fff;
+                    width: 32px; height: 32px;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    font-size: 18px;
+                    display: grid; place-items: center;
+                    transition: background 0.2s ease;
+                }
+                .tmc-close:hover { background: rgba(255,255,255,0.2); }
+                
+                /* Body */
+                .tmc-body {
+                    flex: 1;
+                    overflow-y: auto;
+                    padding: 16px 16px 6px;
+                    background: radial-gradient(circle at 20% 20%, rgba(27,215,65,0.08), transparent 28%),
+                                radial-gradient(circle at 80% 10%, rgba(255,255,255,0.04), transparent 30%),
+                                ${config.colors.background};
+                }
+                
+                /* QR section */
+                .tmc-qr-section {
+                    background: ${config.colors.card};
+                    border: 1px solid ${config.colors.border};
+                    border-radius: 18px;
+                    padding: 18px;
+                    margin-bottom: 14px;
+                    position: relative;
+                    overflow: hidden;
+                }
+                .tmc-qr-section::after {
+                    content:'';
+                    position:absolute;
+                    inset:0;
+                    background: linear-gradient(135deg, rgba(27,215,65,0.10), rgba(13,159,110,0.08), rgba(255,255,255,0.02));
+                    pointer-events:none;
+                }
+                .tmc-qr-frame {
+                    position: relative;
+                    width: 220px;
+                    margin: 0 auto;
+                    padding: 12px;
+                    border-radius: 18px;
+                    background: linear-gradient(160deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+                    border: 1px solid ${config.colors.border};
+                    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+                }
+                .tmc-qr-glow {
+                    position: absolute;
+                    inset: 10px;
+                    background: radial-gradient(circle, rgba(27,215,65,0.14), transparent 55%);
+                    filter: blur(12px);
+                }
+                .tmc-qr-image {
+                    width: 100%;
+                    border-radius: 12px;
+                    position: relative;
+                    z-index: 1;
+                }
+                .tmc-qr-badge {
+                    position: absolute;
+                    bottom: -12px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    padding: 6px 14px;
+                    background: #0D9F6E;
+                    color: #fff;
+                    border-radius: 12px;
+                    font-size: 12px;
+                    font-weight: 700;
+                    letter-spacing: 0.2px;
+                    box-shadow: 0 12px 30px rgba(13,159,110,0.4);
+                    z-index: 2;
+                }
+                .tmc-qr-copy {
+                    text-align: center;
+                    margin-top: 24px;
+                    font-size: 13px;
+                    color: ${config.colors.subtext};
+                }
+                .tmc-qr-chip {
+                    margin-top: 8px;
+                    text-align: center;
+                    font-size: 12px;
+                    color: ${config.colors.text};
+                    background: ${config.colors.glass};
+                    border: 1px solid ${config.colors.border};
+                    display: inline-block;
+                    padding: 8px 10px;
+                    border-radius: 12px;
+                    backdrop-filter: blur(10px);
+                }
+                
+                /* Preview bubble */
+                .tmc-chat-preview { margin: 16px 0 12px; }
+                .tmc-bubble {
+                    background: ${config.colors.card};
+                    border: 1px solid ${config.colors.border};
+                    border-radius: 18px;
+                    padding: 14px 16px;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+                }
+                .tmc-bubble-text { font-size: 14px; line-height: 1.55; }
+                .tmc-bubble-meta { margin-top: 8px; font-size: 12px; color: ${config.colors.subtext}; }
+                
+                /* Grid */
+                .tmc-grid {
+                    display: grid;
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                    gap: 12px;
+                    padding-bottom: 12px;
+                }
+                .tmc-card {
+                    background: ${config.colors.card};
+                    border: 1px solid ${config.colors.border};
+                    border-radius: 16px;
+                    padding: 14px 12px;
+                    color: ${config.colors.text};
+                    text-align: center;
+                    cursor: pointer;
+                    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.16);
+                    display: grid;
+                    gap: 8px;
+                    justify-items: center;
+                }
+                .tmc-card:hover {
+                    transform: translateY(-2px);
+                    border-color: rgba(27,215,65,0.6);
+                    box-shadow: 0 16px 40px rgba(0,0,0,0.28);
+                    background: rgba(255,255,255,0.08);
+                }
+                .tmc-card-icon { font-size: 22px; }
+                .tmc-card-label { font-size: 13px; font-weight: 700; letter-spacing: -0.01em; }
+                
+                /* Footer */
+                .tmc-footer {
+                    padding: 14px 16px 16px;
+                    border-top: 1px solid ${config.colors.border};
+                    background: rgba(0,0,0,0.35);
+                    backdrop-filter: blur(12px);
+                }
+                .tmc-action {
+                    width: 100%;
+                    padding: 14px;
+                    border: none;
+                    border-radius: 14px;
+                    background: linear-gradient(135deg, ${config.colors.secondary}, ${config.colors.accent});
+                    color: #fff;
+                    font-weight: 700;
+                    letter-spacing: 0.1px;
+                    cursor: pointer;
+                    box-shadow: 0 12px 30px rgba(27,215,65,0.35);
+                    transition: transform 0.16s ease, box-shadow 0.16s ease;
+                }
+                .tmc-action:hover { transform: translateY(-1px); box-shadow: 0 16px 40px rgba(27,215,65,0.45); }
+                .tmc-powered {
+                    margin-top: 10px;
+                    text-align: center;
+                    font-size: 11px;
+                    color: ${config.colors.subtext};
+                }
+                .tmc-powered a { color: ${config.colors.subtext}; text-decoration: none; }
+                .tmc-powered a:hover { color: #fff; }
+                
+                /* Toast */
+                .tmc-toast {
+                    position: absolute;
+                    bottom: 86px;
+                    right: 0;
+                    background: ${config.colors.background};
+                    border: 1px solid ${config.colors.border};
+                    border-radius: 16px;
+                    padding: 12px;
+                    box-shadow: ${config.colors.shadow};
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    opacity: 0;
+                    visibility: hidden;
+                    transform: translateX(16px);
+                    transition: all 0.25s ease;
+                    width: 300px;
+                }
+                .tmc-toast.show { opacity: 1; visibility: visible; transform: translateX(0); }
+                .tmc-toast-left { display: flex; align-items: center; gap: 10px; }
+                .tmc-toast-avatar { width: 38px; height: 38px; border-radius: 10px; overflow: hidden; background: #fff; display: grid; place-items: center; }
+                .tmc-toast-avatar img { width: 100%; height: 100%; object-fit: contain; }
+                .tmc-toast-title { font-size: 13px; font-weight: 700; }
+                .tmc-toast-sub { font-size: 11px; color: ${config.colors.subtext}; }
+                .tmc-toast-close {
+                    margin-left: auto;
+                    background: transparent;
+                    border: none;
+                    color: ${config.colors.subtext};
+                    font-size: 16px;
+                    cursor: pointer;
+                }
+                
+                /* Scrollbar */
+                .tmc-body::-webkit-scrollbar { width: 8px; }
+                .tmc-body::-webkit-scrollbar-thumb { background: ${config.colors.glass}; border-radius: 10px; }
+                
+                /* Mobile */
+                @media (max-width: 480px) {
+                    .tmc-widget { bottom: 16px; right: 16px; }
+                    .tmc-chat { width: calc(100vw - 28px); max-height: calc(100vh - 120px); }
+                }
+                
+                @media print {
+                    .tmc-widget { display: none !important; }
+                }
+            </style>
+        `;
+    };
+    
+    const initWidget = () => {
+        try {
+            let container = document.getElementById('tmc-chat-widget-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'tmc-chat-widget-container';
+                document.body.appendChild(container);
+            }
+            container.innerHTML = createWidget();
+            
+            const fab = document.getElementById('tmcFab');
+            const chat = document.getElementById('tmcChat');
+            const closeBtn = chat.querySelector('.tmc-close');
+            const toast = document.getElementById('tmcToast');
+            const toastClose = toast.querySelector('.tmc-toast-close');
+            const cards = chat.querySelectorAll('.tmc-card');
+            
+            const toggleChat = () => {
+                const open = chat.classList.contains('show');
+                chat.classList.toggle('show', !open);
+                if (!open) toast.classList.remove('show');
+            };
+            
+            fab.addEventListener('click', toggleChat);
+            closeBtn.addEventListener('click', () => chat.classList.remove('show'));
+            toastClose.addEventListener('click', () => toast.classList.remove('show'));
+            
+            // Auto toast
+            setTimeout(() => {
+                if (!chat.classList.contains('show')) {
+                    toast.classList.add('show');
+                    setTimeout(() => toast.classList.remove('show'), 9000);
+                }
+            }, 4500);
+            
+            // Card clicks
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const message = this.getAttribute('data-message');
+                    const url = `https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(message)}`;
+                    window.open(url, '_blank');
+                });
+            });
+            
+            // Click outside to close
+            document.addEventListener('click', (e) => {
+                const widget = document.getElementById('tmcWidget');
+                if (widget && !widget.contains(e.target) && chat.classList.contains('show')) {
+                    chat.classList.remove('show');
+                }
+            });
+            
+            // Escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && chat.classList.contains('show')) chat.classList.remove('show');
+            });
+            
+            console.log('✅ TMC 311 Widget initialized');
+        } catch (err) {
+            console.error('❌ Widget init failed:', err);
         }
-
-        /* FAB */
-        .tmc311-fab {
-          width: 62px;
-          height: 62px;
-          border: 0;
-          border-radius: 999px;
-          cursor: pointer;
-          position: relative;
-          background: transparent;
-          padding: 0;
-          outline: none;
-        }
-        .tmc311-fab-ring {
-          position: absolute;
-          inset: 0;
-          border-radius: 999px;
-          background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.35), rgba(255,255,255,0)) ,
-                      linear-gradient(135deg, ${config.colors.brand1}, ${config.colors.brand2});
-          box-shadow: 0 18px 45px rgba(2, 132, 93, 0.28);
-          transform: translateZ(0);
-        }
-        .tmc311-fab-inner {
-          position: absolute;
-          inset: 2px;
-          border-radius: 999px;
-          background: rgba(0,0,0,0.10);
-          display: grid;
-          place-items: center;
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16);
-          transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .tmc311-fab:hover .tmc311-fab-inner { transform: scale(1.03); }
-
-        .tmc311-fab-badge {
-          position: absolute;
-          top: -3px;
-          right: -3px;
-          background: ${config.colors.danger};
-          color: white;
-          font-weight: 800;
-          font-size: 10px;
-          padding: 5px 8px;
-          border-radius: 999px;
-          border: 2px solid white;
-          box-shadow: 0 10px 25px rgba(0,0,0,0.18);
-        }
-
-        /* Panel */
-        .tmc311-panel {
-          position: absolute;
-          right: 0;
-          bottom: 78px;
-          width: 392px;
-          max-width: calc(100vw - 32px);
-          border-radius: 22px;
-          overflow: hidden;
-          background: ${config.colors.paper};
-          box-shadow: 0 30px 80px rgba(2, 6, 23, 0.22);
-          border: 1px solid ${config.colors.line};
-          opacity: 0;
-          visibility: hidden;
-          transform: translateY(14px) scale(0.98);
-          transform-origin: bottom right;
-          transition: all 220ms cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .tmc311-panel.show {
-          opacity: 1;
-          visibility: visible;
-          transform: translateY(0) scale(1);
-        }
-
-        /* Header */
-        .tmc311-header {
-          padding: 16px 16px;
-          color: white;
-          background:
-            radial-gradient(1200px 400px at 20% 0%, rgba(255,255,255,0.20), rgba(255,255,255,0)) ,
-            linear-gradient(135deg, ${config.colors.brand1}, ${config.colors.brand2});
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 12px;
-        }
-        .tmc311-brand {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          min-width: 0;
-        }
-        .tmc311-logo {
-          width: 44px;
-          height: 44px;
-          border-radius: 14px;
-          background: rgba(255,255,255,0.94);
-          display: grid;
-          place-items: center;
-          padding: 6px;
-          box-shadow: 0 10px 22px rgba(0,0,0,0.12);
-          flex: 0 0 auto;
-        }
-        .tmc311-logo img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-        }
-        .tmc311-title { min-width: 0; }
-        .tmc311-title-top {
-          font-size: 14px;
-          font-weight: 800;
-          letter-spacing: -0.01em;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-        .tmc311-title-sub {
-          font-size: 12px;
-          opacity: 0.92;
-          margin-top: 2px;
-        }
-
-        .tmc311-close {
-          width: 36px;
-          height: 36px;
-          border-radius: 12px;
-          border: 1px solid rgba(255,255,255,0.22);
-          background: rgba(255,255,255,0.12);
-          cursor: pointer;
-          display: grid;
-          place-items: center;
-          transition: transform 160ms ease, background 160ms ease;
-        }
-        .tmc311-close:hover { transform: scale(1.05); background: rgba(255,255,255,0.18); }
-
-        /* Body */
-        .tmc311-body {
-          padding: 14px;
-          background:
-            radial-gradient(800px 300px at 15% 0%, rgba(0, 200, 83, 0.12), rgba(255,255,255,0)),
-            linear-gradient(180deg, ${config.colors.soft}, ${config.colors.paper});
-        }
-
-        /* QR Card */
-        .tmc311-qrCard {
-          position: relative;
-          border-radius: 20px;
-          background: rgba(255,255,255,0.78);
-          border: 1px solid rgba(255,255,255,0.55);
-          box-shadow: 0 18px 50px rgba(2, 6, 23, 0.10);
-          overflow: hidden;
-          padding: 16px;
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-        }
-        .tmc311-qrGlow {
-          position: absolute;
-          inset: -80px;
-          background: radial-gradient(circle at 30% 30%, ${config.colors.glow}, rgba(0,0,0,0));
-          filter: blur(12px);
-          pointer-events: none;
-        }
-        .tmc311-qrTop { position: relative; }
-        .tmc311-qrTitle {
-          font-size: 14px;
-          font-weight: 900;
-          letter-spacing: -0.01em;
-        }
-        .tmc311-qrHint {
-          margin-top: 4px;
-          font-size: 12px;
-          color: ${config.colors.sub};
-          line-height: 1.35;
-        }
-
-        .tmc311-qrLink { display: block; text-decoration: none; margin-top: 14px; position: relative; }
-        .tmc311-qrFrame {
-          position: relative;
-          border-radius: 18px;
-          padding: 14px;
-          background:
-            radial-gradient(1000px 250px at 15% 0%, rgba(255,255,255,0.75), rgba(255,255,255,0.40)),
-            linear-gradient(135deg, rgba(0, 200, 83, 0.14), rgba(0, 191, 165, 0.10));
-          border: 1px solid rgba(15, 23, 42, 0.08);
-          box-shadow:
-            0 20px 55px rgba(0,0,0,0.10),
-            inset 0 0 0 1px rgba(255,255,255,0.5);
-          display: grid;
-          place-items: center;
-        }
-        .tmc311-qrImg {
-          width: 220px;
-          height: 220px;
-          max-width: 100%;
-          border-radius: 12px;
-          background: white;
-          padding: 10px;
-          box-shadow: 0 12px 30px rgba(2, 6, 23, 0.12);
-        }
-        .tmc311-qrOverlay {
-          position: absolute;
-          top: 14px;
-          right: 14px;
-          display: flex;
-          gap: 6px;
-          opacity: 0.55;
-        }
-        .tmc311-qrDot {
-          width: 8px;
-          height: 8px;
-          border-radius: 99px;
-          background: rgba(11, 27, 20, 0.55);
-        }
-
-        .tmc311-qrActions {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 10px;
-          margin-top: 14px;
-          position: relative;
-        }
-
-        .tmc311-btn {
-          border: 0;
-          border-radius: 14px;
-          padding: 12px 12px;
-          font-weight: 800;
-          font-size: 13px;
-          cursor: pointer;
-          transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
-        }
-        .tmc311-btn:active { transform: translateY(1px); }
-
-        .tmc311-btnPrimary {
-          color: white;
-          background: linear-gradient(135deg, ${config.colors.brand1}, ${config.colors.brand2});
-          box-shadow: 0 14px 35px rgba(0, 200, 83, 0.22);
-        }
-        .tmc311-btnPrimary:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 18px 45px rgba(0, 200, 83, 0.28);
-        }
-        .tmc311-btnGhost {
-          background: rgba(255,255,255,0.9);
-          border: 1px solid rgba(15, 23, 42, 0.10);
-          color: ${config.colors.ink};
-        }
-        .tmc311-btnGhost:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 12px 28px rgba(2, 6, 23, 0.08);
-        }
-
-        .tmc311-qrFooter {
-          margin-top: 10px;
-          font-size: 11px;
-          color: ${config.colors.sub};
-        }
-
-        /* Services */
-        .tmc311-services { margin-top: 14px; }
-        .tmc311-servicesHead {
-          padding: 10px 4px 10px 4px;
-          display: flex;
-          align-items: baseline;
-          justify-content: space-between;
-          gap: 10px;
-        }
-        .tmc311-servicesTitle { font-size: 13px; font-weight: 900; }
-        .tmc311-servicesSub { font-size: 11px; color: ${config.colors.sub}; text-align: right; }
-
-        .tmc311-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 10px;
-        }
-
-        .tmc311-tile {
-          border: 1px solid rgba(15, 23, 42, 0.10);
-          background: rgba(255,255,255,0.85);
-          border-radius: 18px;
-          padding: 12px;
-          display: grid;
-          grid-template-columns: auto 1fr auto;
-          gap: 10px;
-          align-items: center;
-          cursor: pointer;
-          text-align: left;
-          transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
-          box-shadow: 0 10px 24px rgba(2, 6, 23, 0.06);
-        }
-        .tmc311-tile:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 16px 38px rgba(2, 6, 23, 0.10);
-          background: rgba(255,255,255,0.95);
-        }
-        .tmc311-tileIcon {
-          width: 40px;
-          height: 40px;
-          border-radius: 14px;
-          background: linear-gradient(135deg, rgba(0, 200, 83, 0.16), rgba(0, 191, 165, 0.12));
-          display: grid;
-          place-items: center;
-          font-size: 18px;
-        }
-        .tmc311-tileLabel { font-size: 12px; font-weight: 900; letter-spacing: -0.01em; }
-        .tmc311-tileMeta { font-size: 11px; color: ${config.colors.sub}; margin-top: 2px; }
-        .tmc311-tileArrow { color: rgba(11, 27, 20, 0.60); }
-
-        .tmc311-note {
-          margin-top: 10px;
-          font-size: 11px;
-          color: ${config.colors.sub};
-          padding: 10px 12px;
-          border-radius: 14px;
-          border: 1px dashed rgba(15, 23, 42, 0.12);
-          background: rgba(255,255,255,0.7);
-        }
-
-        /* Footer */
-        .tmc311-footer {
-          padding: 12px 14px 14px;
-          background: ${config.colors.paper};
-          border-top: 1px solid rgba(15, 23, 42, 0.06);
-          text-align: center;
-        }
-        .tmc311-powered {
-          color: rgba(11, 27, 20, 0.70);
-          text-decoration: none;
-          font-size: 11px;
-          font-weight: 700;
-        }
-        .tmc311-powered:hover { color: ${config.colors.ink}; text-decoration: underline; }
-
-        /* Nudge */
-        .tmc311-nudge {
-          position: absolute;
-          right: 0;
-          bottom: 78px;
-          width: 320px;
-          max-width: calc(100vw - 32px);
-          border-radius: 18px;
-          background: rgba(255,255,255,0.92);
-          border: 1px solid rgba(15, 23, 42, 0.08);
-          box-shadow: 0 18px 45px rgba(2, 6, 23, 0.14);
-          padding: 12px 12px;
-          opacity: 0;
-          visibility: hidden;
-          transform: translateX(10px);
-          transition: all 220ms cubic-bezier(0.16, 1, 0.3, 1);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-        }
-        .tmc311-nudge.show {
-          opacity: 1;
-          visibility: visible;
-          transform: translateX(0);
-        }
-        .tmc311-nudgeClose {
-          position: absolute;
-          top: 8px;
-          right: 8px;
-          width: 28px;
-          height: 28px;
-          border-radius: 10px;
-          border: 1px solid rgba(15, 23, 42, 0.10);
-          background: rgba(255,255,255,0.9);
-          cursor: pointer;
-          font-size: 18px;
-          line-height: 0;
-          color: rgba(11, 27, 20, 0.65);
-        }
-        .tmc311-nudgeRow {
-          display: grid;
-          grid-template-columns: auto 1fr;
-          gap: 12px;
-          align-items: center;
-        }
-        .tmc311-nudgeAvatar {
-          width: 44px;
-          height: 44px;
-          border-radius: 14px;
-          background: white;
-          padding: 6px;
-          border: 1px solid rgba(15, 23, 42, 0.08);
-          box-shadow: 0 10px 24px rgba(2, 6, 23, 0.10);
-          display: grid;
-          place-items: center;
-        }
-        .tmc311-nudgeAvatar img { width: 100%; height: 100%; object-fit: contain; }
-        .tmc311-nudgeTitle { font-size: 12px; font-weight: 900; }
-        .tmc311-nudgeSub { font-size: 11px; color: ${config.colors.sub}; margin-top: 2px; line-height: 1.3; }
-
-        /* Mobile */
-        @media (max-width: 480px) {
-          .tmc311-widget { right: 14px; bottom: 14px; }
-          .tmc311-panel { bottom: 76px; }
-          .tmc311-qrImg { width: 210px; height: 210px; }
-        }
-
-        /* Reduce motion */
-        @media (prefers-reduced-motion: reduce) {
-          .tmc311-panel, .tmc311-tile, .tmc311-btn, .tmc311-fab-inner, .tmc311-nudge { transition: none !important; }
-          .tmc311-fab-ring { box-shadow: 0 18px 45px rgba(2, 132, 93, 0.28) !important; }
-        }
-
-        /* Print */
-        @media print { .tmc311-widget { display: none !important; } }
-      </style>
-    `;
-  };
-
-  const openWhatsApp = (message) => {
-    const url = `https://wa.me/${config.phoneNumber}?text=${encodeURIComponent(message || config.defaultMessage)}`;
-    window.open(url, "_blank", "noopener");
-  };
-
-  const copyToClipboard = async (text) => {
-    try {
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(text);
-        return true;
-      }
-      // fallback
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      ta.setAttribute("readonly", "");
-      ta.style.position = "absolute";
-      ta.style.left = "-9999px";
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-      return true;
-    } catch {
-      return false;
+    };
+    
+    // Public API
+    window.TMC311Widget = {
+        open: () => document.getElementById('tmcChat')?.classList.add('show'),
+        close: () => document.getElementById('tmcChat')?.classList.remove('show'),
+        toggle: () => document.getElementById('tmcFab')?.click()
+    };
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initWidget);
+    } else {
+        initWidget();
     }
-  };
-
-  const initWidget = () => {
-    try {
-      let container = document.getElementById("tmc-311-chat-widget-container");
-      if (!container) {
-        container = document.createElement("div");
-        container.id = "tmc-311-chat-widget-container";
-        document.body.appendChild(container);
-      }
-
-      container.innerHTML = createWidget();
-
-      const fab = document.getElementById("tmc311Fab");
-      const panel = document.getElementById("tmc311Panel");
-      const close = document.getElementById("tmc311Close");
-      const tiles = container.querySelectorAll(".tmc311-tile");
-      const nudge = document.getElementById("tmc311Nudge");
-      const nudgeClose = document.getElementById("tmc311NudgeClose");
-      const startBtn = document.getElementById("tmc311StartBtn");
-      const copyBtn = document.getElementById("tmc311CopyBtn");
-
-      const setOpen = (open) => {
-        if (open) {
-          panel.classList.add("show");
-          panel.setAttribute("aria-hidden", "false");
-          nudge.classList.remove("show");
-          nudge.setAttribute("aria-hidden", "true");
-        } else {
-          panel.classList.remove("show");
-          panel.setAttribute("aria-hidden", "true");
-        }
-      };
-
-      fab.addEventListener("click", () => setOpen(!panel.classList.contains("show")));
-      close.addEventListener("click", () => setOpen(false));
-
-      startBtn.addEventListener("click", () => openWhatsApp(config.defaultMessage));
-
-      copyBtn.addEventListener("click", async () => {
-        const ok = await copyToClipboard(config.waLink);
-        copyBtn.textContent = ok ? "Copied!" : "Copy failed";
-        setTimeout(() => (copyBtn.textContent = "Copy Link"), 1200);
-      });
-
-      tiles.forEach((tile) => {
-        tile.addEventListener("click", function () {
-          const message = this.getAttribute("data-message") || config.defaultMessage;
-          openWhatsApp(message);
-        });
-      });
-
-      // Click outside closes
-      document.addEventListener("click", (e) => {
-        if (!container.contains(e.target) && panel.classList.contains("show")) setOpen(false);
-      });
-
-      // Escape closes
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && panel.classList.contains("show")) setOpen(false);
-      });
-
-      // Nudge behavior (delayed)
-      const showNudge = () => {
-        if (!panel.classList.contains("show")) {
-          nudge.classList.add("show");
-          nudge.setAttribute("aria-hidden", "false");
-          setTimeout(() => {
-            nudge.classList.remove("show");
-            nudge.setAttribute("aria-hidden", "true");
-          }, 10000);
-        }
-      };
-      setTimeout(showNudge, 3500);
-
-      nudgeClose.addEventListener("click", () => {
-        nudge.classList.remove("show");
-        nudge.setAttribute("aria-hidden", "true");
-      });
-
-      console.log("✅ TMC 311 Widget initialized (v3.0.0)");
-    } catch (error) {
-      console.error("❌ Widget init failed:", error);
-    }
-  };
-
-  // Public API
-  window.TMC311Widget = {
-    version: "3.0.0",
-    open: () => document.getElementById("tmc311Panel")?.classList.add("show"),
-    close: () => document.getElementById("tmc311Panel")?.classList.remove("show"),
-    toggle: () => document.getElementById("tmc311Fab")?.click(),
-  };
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initWidget);
-  } else {
-    initWidget();
-  }
 })();

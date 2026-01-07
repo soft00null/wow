@@ -9,10 +9,10 @@
   // TMC Configuration
   const TMC_CONFIG = {
     orgId: 'TMC',
-    name: 'TMC',
+    name: 'TMC AI',
     fullName: 'Thane Municipal Corporation',
     phone: '912225331590',
-    welcome: '👋 Welcome to TMC Grievance Portal! I can help you report civic issues in Thane instantly. What would you like to report?',
+    welcome: '👋 Namaste! I am the TMC AI Assistant. I understand English & Marathi. You can report issues by sending text 📝, voice notes 🎤, or photos 📸. How can I help?',
     poweredBy: 'WoW-Strategies Private Limited',
     poweredByUrl: 'https://wow-strategies.com/',
     autoOpen: true,
@@ -22,7 +22,7 @@
     forceDark: false
   };
 
-  // Grievance Categories
+  // Grievance Categories - kept as conversation starters
   const grievances = [
     { id: 'pothole', label: 'Report Pothole', icon: '🚧', message: 'I want to report a pothole' },
     { id: 'garbage', label: 'Garbage Dump', icon: '🗑️', message: 'I want to report uncollected garbage' },
@@ -140,14 +140,14 @@
         position: absolute;
         top: -4px;
         right: -4px;
-        background: linear-gradient(135deg, #FF6B6B 0%, #EE5253 100%);
+        background: linear-gradient(135deg, #7B61FF 0%, #6246EA 100%); /* AI Purple branding */
         color: white;
-        font-size: 9px;
+        font-size: 10px;
         line-height: 1;
-        padding: 5px 7px;
+        padding: 5px 6px;
         border-radius: 12px;
         font-weight: 800;
-        box-shadow: 0 2px 8px rgba(238, 82, 83, .4);
+        box-shadow: 0 2px 8px rgba(98, 70, 234, .4);
         letter-spacing: 0.5px;
         animation: wa-badge-pop .6s cubic-bezier(.68,-.55,.265,1.55);
         border: 2px solid var(--wa-bg-light);
@@ -365,6 +365,14 @@
         font-weight: 700;
       }
 
+      .wa-ai-features {
+        font-size: 11px;
+        color: #7B61FF;
+        font-weight: 600;
+        margin-top: 8px;
+        display: block;
+      }
+
       .wa-footer {
         font-size: 11px;
         color: var(--wa-text-secondary);
@@ -378,6 +386,9 @@
         animation: wa-pill-in .6s cubic-bezier(.68,-.55,.265,1.55) backwards;
         animation-delay: 0.6s;
         backdrop-filter: blur(5px);
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
       }
       
       .wa-powered-link {
@@ -388,6 +399,7 @@
         color: var(--wa-text-secondary);
         font-weight: 600;
         transition: all .3s;
+        justify-content: center;
       }
       
       .wa-powered-link:hover {
@@ -458,16 +470,16 @@
     // Create tooltip
     const tooltip = document.createElement('div');
     tooltip.className = 'wa-tooltip';
-    tooltip.textContent = 'TMC Grievance Assistant';
+    tooltip.textContent = 'TMC AI Assistant'; // Updated tooltip
     shadow.appendChild(tooltip);
 
     // Create launcher button
     const launcher = document.createElement('button');
     launcher.type = 'button';
     launcher.className = 'wa-launcher';
-    launcher.setAttribute('aria-label', 'Open TMC Grievance Assistant');
+    launcher.setAttribute('aria-label', 'Open TMC AI Assistant');
     launcher.innerHTML = `
-      <span class="wa-badge-ai">HELP</span>
+      <span class="wa-badge-ai">AI</span> <!-- Changed from HELP to AI -->
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
       </svg>
@@ -489,7 +501,7 @@
       shelf = document.createElement('div');
       shelf.className = 'wa-shelf';
       shelf.setAttribute('role', 'dialog');
-      shelf.setAttribute('aria-label', 'TMC Grievance Assistant');
+      shelf.setAttribute('aria-label', 'TMC AI Assistant');
 
       const greetKey = '__tmc_greeting_dismiss_' + TMC_CONFIG.orgId;
       const showGreeting = !TMC_CONFIG.suppressGreet && (TMC_CONFIG.forceGreet || !localStorage.getItem(greetKey));
@@ -532,12 +544,12 @@
       const qrPanel = document.createElement('div');
       qrPanel.className = 'wa-qr-panel';
       qrPanel.innerHTML = `
-        <div class="wa-label">Quick Report</div>
+        <div class="wa-label">AI Report</div>
         <img alt="WhatsApp QR Code" src="${qrImageUrl}" />
         <div class="wa-scan-text">
-          <strong>Scan to report instantly!</strong><br>
-          Point your phone camera at this QR code<br>
-          to chat with TMC Grievance Bot
+          <strong>Chat with TMC AI!</strong><br>
+          Send text, audio, or photos<br>
+          <span class="wa-ai-features">English • Marathi • Audio • Image</span>
         </div>
       `;
 
@@ -547,6 +559,7 @@
       const footer = document.createElement('div');
       footer.className = 'wa-footer';
       footer.innerHTML = `
+        <div>Supports: English, Marathi | Text, Audio, Photo</div>
         <a class="wa-powered-link" href="${TMC_CONFIG.poweredByUrl}" target="_blank" rel="noopener" aria-label="Visit WoW-Strategies website">
           <span>Powered by <strong>${TMC_CONFIG.poweredBy}</strong></span>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>

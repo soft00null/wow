@@ -559,7 +559,7 @@
       const footer = document.createElement('div');
       footer.className = 'wa-footer';
       footer.innerHTML = `
-        <div>Supports: English, Marathi | Text, Audio, Photo</div>
+        
         <a class="wa-powered-link" href="${TMC_CONFIG.poweredByUrl}" target="_blank" rel="noopener" aria-label="Visit WoW-Strategies website">
           <span>Powered by <strong>${TMC_CONFIG.poweredBy}</strong></span>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>

@@ -17,10 +17,10 @@
     }
     
     const config = {
-        phoneNumber: '15558830019',
+        phoneNumber: '912225331590',
         defaultMessage: 'Hi',
         logoUrl: 'https://wow-strategies.com/tmc.png',
-        qrCodeUrl: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://wa.me/15558830019?text=Hi&margin=10&bgcolor=ffffff',
+        qrCodeUrl: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://wa.me/912225331590?text=Hi&margin=10&bgcolor=ffffff',
         poweredBy: {
             text: 'Powered by WoW-Strategies Private Limited',
             url: 'https://wow-strategies.com/'

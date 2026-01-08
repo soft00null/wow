@@ -46,7 +46,7 @@
   // Build and inject widget
   async function initWidget() {
     const waBase = `https://wa.me/${TMC_CONFIG.phone}`;
-    const defaultMsg = 'Hi, I want to report a grievance to TMC';
+    const defaultMsg = 'Hi';
     const qrImageUrl = generateQRUrl(TMC_CONFIG.phone, defaultMsg);
 
     // Create host element

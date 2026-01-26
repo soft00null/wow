@@ -15,7 +15,7 @@
     welcome: '👋 Namaste! I am the TMC AI Assistant. I understand English & Marathi. You can report issues by sending text 📝, voice notes 🎤, or photos 📸. How can I help?',
     poweredBy: 'WoW-Strategies Private Limited',
     poweredByUrl: 'https://wow-strategies.com/',
-    autoOpen: true,
+    autoOpen: false,
     openDelay: 1800,
     forceGreet: false,
     suppressGreet: false,

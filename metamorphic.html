@@ -1,103 +1,1423 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Metamorphic: The Bioactive Air Rejuvenator</title>
-    <style>
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-            color: #333;
-        }
-        header {
-            background: linear-gradient(to right, #4CAF50, #2E7D32);
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .container {
-            padding: 30px;
-            max-width: 900px;
-            margin: 40px auto;
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            border-radius: 8px;
-        }
-        h1, h2 {
-            color: #2E7D32;
-        }
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-        }
-        h2 {
-            font-size: 1.8em;
-            margin-bottom: 10px;
-        }
-        p {
-            line-height: 1.8;
-            margin-bottom: 20px;
-        }
-        ul {
-            margin: 20px 0;
-            padding-left: 20px;
-        }
-        ul li {
-            margin-bottom: 10px;
-        }
-        footer {
-            text-align: center;
-            padding: 20px 0;
-            background-color: #2E7D32;
-            color: white;
-            position: relative;
-            bottom: 0;
-            width: 100%;
-        }
-        a {
-            color: #4CAF50;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+  <!-- SEO META -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metamorphic | Self Powered Bioactive Air Rejuvenator</title>
+
+  <meta name="description" content="Metamorphic is a self powered bioactive air rejuvenator designed for dense urban environments where trees cannot be planted. A nature-inspired climate infrastructure converting polluted air into oxygen and biological value." />
+  <meta name="keywords" content="air pollution solution, urban air purification, bioactive air rejuvenator, climate infrastructure, algae photobioreactor, self powered air purifier, sustainable cities, carbon capture biology, smart city environment, green urban technology" />
+  <meta name="author" content="WoW-Strategies Private Limited" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- OPEN GRAPH -->
+  <meta property="og:title" content="Metamorphic – Self Powered Bioactive Air Rejuvenator" />
+  <meta property="og:description" content="A nature-inspired climate infrastructure for cities where trees cannot grow." />
+  <meta property="og:type" content="website" />
+
+  <!-- FONTS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ======================== CUSTOM PROPERTIES ======================== */
+    :root {
+      --bg-primary: #060d0a;
+      --bg-secondary: #0c1814;
+      --bg-tertiary: #101f1a;
+      --bg-card: rgba(255,255,255,0.025);
+      --bg-card-hover: rgba(255,255,255,0.05);
+      --bg-light: #f2f6f4;
+      --bg-light-card: #ffffff;
+
+      --accent-green: #2fd27a;
+      --accent-green-dim: rgba(47,210,122,0.12);
+      --accent-cyan: #00bcd4;
+      --accent-cyan-dim: rgba(0,188,212,0.10);
+
+      --text-white: #ffffff;
+      --text-light: #c4d4cc;
+      --text-muted: #7a9189;
+      --text-dark: #152019;
+      --text-dark-secondary: #3e5a4e;
+
+      --border-subtle: rgba(255,255,255,0.06);
+      --border-green: rgba(47,210,122,0.25);
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+
+      --shadow-card: 0 2px 24px rgba(0,0,0,0.18);
+      --shadow-glow: 0 0 60px rgba(47,210,122,0.06);
+
+      --transition-fast: 0.2s ease;
+      --transition-base: 0.35s ease;
+      --transition-slow: 0.5s cubic-bezier(0.22,1,0.36,1);
+    }
+
+    /* ======================== RESET ======================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-white);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    /* ======================== UTILITY ======================== */
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* ======================== HEADER / NAV ======================== */
+    header {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      z-index: 1000;
+      background: rgba(6,13,10,0.7);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border-subtle);
+      transition: background var(--transition-base);
+    }
+
+    header.scrolled {
+      background: rgba(6,13,10,0.92);
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+    }
+
+    .logo {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--text-white);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-dot {
+      width: 8px; height: 8px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      display: inline-block;
+      animation: pulse-dot 2.4s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.4); }
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      transition: color var(--transition-fast);
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1.5px;
+      background: var(--accent-green);
+      transition: width var(--transition-base);
+    }
+
+    .nav-links a:hover {
+      color: var(--text-white);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 22px; height: 2px;
+      background: var(--text-white);
+      border-radius: 2px;
+      transition: var(--transition-fast);
+    }
+
+    /* ======================== HERO ======================== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 140px 28px 100px;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 40%, rgba(47,210,122,0.05) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 70%, rgba(0,188,212,0.03) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 200px;
+      background: linear-gradient(to top, var(--bg-primary), transparent);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      text-align: center;
+      max-width: 860px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 20px;
+      border: 1px solid var(--border-green);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent-green);
+      margin-bottom: 36px;
+      background: var(--accent-green-dim);
+    }
+
+    .hero h1 {
+      font-size: clamp(38px, 5.5vw, 68px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      margin-bottom: 28px;
+    }
+
+    .hero h1 .highlight {
+      background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 19px;
+      color: var(--text-light);
+      max-width: 640px;
+      margin: 0 auto 48px;
+      line-height: 1.75;
+      font-weight: 300;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 36px;
+      background: var(--accent-green);
+      color: var(--bg-primary);
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 100px;
+      letter-spacing: 0.5px;
+      transition: transform var(--transition-base), box-shadow var(--transition-base);
+    }
+
+    .hero-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(47,210,122,0.3);
+    }
+
+    .hero-cta svg {
+      width: 16px; height: 16px;
+      transition: transform var(--transition-fast);
+    }
+
+    .hero-cta:hover svg {
+      transform: translateY(2px);
+    }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      animation: float-hint 2.5s ease-in-out infinite;
+    }
+
+    .hero-scroll-hint .line {
+      width: 1px; height: 32px;
+      background: linear-gradient(to bottom, var(--text-muted), transparent);
+    }
+
+    @keyframes float-hint {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ======================== SECTION COMMONS ======================== */
+    section {
+      padding: 120px 0;
+      position: relative;
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent-green);
+      margin-bottom: 16px;
+    }
+
+    .section-label::before {
+      content: '';
+      width: 20px; height: 1px;
+      background: var(--accent-green);
+    }
+
+    .section-title {
+      font-size: clamp(28px, 3.5vw, 42px);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.8px;
+      margin-bottom: 18px;
+    }
+
+    .section-desc {
+      font-size: 17px;
+      color: var(--text-light);
+      max-width: 620px;
+      line-height: 1.75;
+      font-weight: 300;
+      margin-bottom: 64px;
+    }
+
+    /* ======================== STATS BAR ======================== */
+    .stats-bar {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 60px 0;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      text-align: center;
+    }
+
+    .stat-item {
+      padding: 16px;
+    }
+
+    .stat-number {
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 6px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+
+    /* ======================== PROBLEM SECTION ======================== */
+    #problem {
+      background: var(--bg-primary);
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .problem-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 40px 32px;
+      transition: transform var(--transition-slow), border-color var(--transition-base), background var(--transition-base);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .problem-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--accent-green), transparent);
+      opacity: 0;
+      transition: opacity var(--transition-base);
+    }
+
+    .problem-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-green);
+      background: var(--bg-card-hover);
+    }
+
+    .problem-card:hover::before {
+      opacity: 1;
+    }
+
+    .problem-icon {
+      width: 48px; height: 48px;
+      border-radius: var(--radius-md);
+      background: var(--accent-green-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .problem-icon svg {
+      width: 22px; height: 22px;
+      stroke: var(--accent-green);
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .problem-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text-white);
+    }
+
+    .problem-card p {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ======================== SOLUTION SECTION ======================== */
+    #solution {
+      background: var(--bg-secondary);
+    }
+
+    .solution-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .solution-visual {
+      position: relative;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .solution-visual-inner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .bio-circle {
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      border: 2px solid var(--accent-green);
+      position: relative;
+      animation: rotate-slow 20s linear infinite;
+    }
+
+    .bio-circle::before {
+      content: '';
+      position: absolute;
+      inset: 12px;
+      border-radius: 50%;
+      border: 1px dashed rgba(47,210,122,0.3);
+    }
+
+    .bio-circle::after {
+      content: '';
+      position: absolute;
+      inset: 28px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(47,210,122,0.15) 0%, transparent 70%);
+    }
+
+    @keyframes rotate-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .bio-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .solution-content .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-top: 8px;
+    }
+
+    .feature-list li {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .feature-list .feat-icon {
+      flex-shrink: 0;
+      width: 40px; height: 40px;
+      border-radius: var(--radius-sm);
+      background: var(--accent-green-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    .feature-list .feat-icon svg {
+      width: 18px; height: 18px;
+      stroke: var(--accent-green);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .feature-list h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .feature-list p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ======================== PROCESS / HOW IT WORKS ======================== */
+    #process {
+      background: var(--bg-primary);
+    }
+
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      position: relative;
+    }
+
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 36px;
+      left: 12.5%;
+      width: 75%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-green), var(--border-green), transparent);
+    }
+
+    .step {
+      text-align: center;
+      position: relative;
+    }
+
+    .step-num {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: var(--bg-tertiary);
+      border: 2px solid var(--border-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent-green);
+      font-family: 'JetBrains Mono', monospace;
+      position: relative;
+      z-index: 2;
+    }
+
+    .step h4 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .step p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 200px;
+      margin: 0 auto;
+    }
+
+    /* ======================== WHY SECTION ======================== */
+    #why {
+      background: var(--bg-secondary);
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+    }
+
+    .why-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 40px 36px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      transition: transform var(--transition-slow), border-color var(--transition-base);
+    }
+
+    .why-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--border-green);
+    }
+
+    .why-card .why-icon {
+      flex-shrink: 0;
+      width: 52px; height: 52px;
+      border-radius: var(--radius-md);
+      background: var(--accent-green-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .why-card .why-icon svg {
+      width: 24px; height: 24px;
+      stroke: var(--accent-green);
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .why-card h3 {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .why-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ======================== IMPACT SECTION ======================== */
+    #impact {
+      background: var(--bg-primary);
+    }
+
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .impact-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 48px 32px;
+      text-align: center;
+      transition: transform var(--transition-slow), border-color var(--transition-base);
+    }
+
+    .impact-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-green);
+    }
+
+    .impact-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: var(--accent-green-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+    }
+
+    .impact-icon svg {
+      width: 26px; height: 26px;
+      stroke: var(--accent-green);
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .impact-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .impact-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ======================== CTA BANNER ======================== */
+    .cta-banner {
+      background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 100px 0;
+      text-align: center;
+    }
+
+    .cta-banner h2 {
+      font-size: clamp(26px, 3vw, 38px);
+      font-weight: 700;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+
+    .cta-banner p {
+      font-size: 17px;
+      color: var(--text-light);
+      max-width: 540px;
+      margin: 0 auto 40px;
+      font-weight: 300;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 40px;
+      background: var(--accent-green);
+      color: var(--bg-primary);
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 100px;
+      letter-spacing: 0.5px;
+      transition: transform var(--transition-base), box-shadow var(--transition-base);
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 36px rgba(47,210,122,0.3);
+    }
+
+    /* ======================== FOOTER ======================== */
+    footer {
+      background: var(--bg-primary);
+      border-top: 1px solid var(--border-subtle);
+      padding: 60px 0 40px;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+
+    .footer-brand .logo {
+      margin-bottom: 12px;
+    }
+
+    .footer-brand p {
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 300px;
+      line-height: 1.65;
+    }
+
+    .footer-contact h4 {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .footer-contact-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-contact-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text-light);
+    }
+
+    .footer-contact-list svg {
+      width: 16px; height: 16px;
+      stroke: var(--accent-green);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    .footer-bottom {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-bottom p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ======================== SCROLL TO TOP ======================== */
+    .scroll-top {
+      position: fixed;
+      bottom: 32px; right: 32px;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      color: var(--bg-primary);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(12px);
+      transition: opacity var(--transition-base), visibility var(--transition-base), transform var(--transition-base);
+      z-index: 900;
+      box-shadow: 0 4px 20px rgba(47,210,122,0.3);
+    }
+
+    .scroll-top.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .scroll-top svg {
+      width: 18px; height: 18px;
+    }
+
+    /* ======================== ANIMATIONS (SCROLL REVEAL) ======================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1);
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ======================== RESPONSIVE ======================== */
+    @media (max-width: 1024px) {
+      .solution-layout {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+
+      .solution-visual {
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      .process-steps {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .process-steps::before {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      section { padding: 80px 0; }
+
+      .nav-links { display: none; }
+
+      .nav-toggle { display: flex; }
+
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%; left: 0;
+        width: 100%;
+        background: rgba(6,13,10,0.97);
+        backdrop-filter: blur(18px);
+        padding: 24px 28px;
+        gap: 20px;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .problem-grid,
+      .impact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .why-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .process-steps {
+        grid-template-columns: 1fr;
+        max-width: 320px;
+        margin: 0 auto;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .hero-scroll-hint { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
+
+      .hero h1 { font-size: 32px; }
+
+      .hero-sub { font-size: 16px; }
+
+      .stat-number { font-size: 34px; }
+    }
+  </style>
 </head>
+
 <body>
-    <header>
-        <h1>Metamorphic: The Bioactive Air Rejuvenator</h1>
-    </header>
-    <div class="container">
-        <h2>Overview</h2>
-        <p>Metamorphic is a groundbreaking device designed to improve air quality in urban areas where planting trees is challenging. Inspired by the natural process of photosynthesis used by algae, Metamorphic captures carbon dioxide (CO₂) from the air and converts it into life-sustaining oxygen (O₂), while also removing harmful volatile organic compounds (VOCs).</p>
 
-        <h2>How It Works</h2>
-        <p>Metamorphic employs a wind-powered microfluidic high-density photo-bioreactor. This advanced technology harnesses the power of algae-inspired artificial photosynthesis to transform CO₂ into O₂. The process involves:</p>
-        <ul>
-            <li><strong>Capturing CO₂:</strong> Metamorphic absorbs carbon dioxide from the surrounding air.</li>
-            <li><strong>Transforming CO₂:</strong> Using artificial photosynthesis, it converts the absorbed CO₂ into oxygen.</li>
-            <li><strong>Purifying Air:</strong> It removes harmful VOCs, improving overall air quality.</li>
-        </ul>
+<!-- ========== HEADER ========== -->
+<header id="header">
+  <div class="container">
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+      <a href="#" class="logo" aria-label="Metamorphic Home">
+        <span class="logo-dot" aria-hidden="true"></span>
+        METAMORPHIC
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#problem">Problem</a></li>
+        <li><a href="#solution">Solution</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#why">Why Us</a></li>
+        <li><a href="#impact">Impact</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </div>
+</header>
 
-        <h2>Efficiency and Scalability</h2>
-        <p>Metamorphic operates without the need for external power, relying solely on wind energy. It is efficient and effective in urban environments, occupying only a fraction of the space required by full-grown trees and incurring significantly lower costs. Each unit provides the air-purifying benefits equivalent to 3-5 mature trees.</p>
+<main>
 
-        <h2>Scientific References</h2>
-        <p>1. <strong>Algae and Photosynthesis:</strong> Algae play a crucial role in transforming atmospheric CO₂ into O₂ through photosynthesis. According to research, algae contribute to more than 50% of the Earth's oxygen production. (<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4290369/" target="_blank">NCBI</a>)</p>
-        <p>2. <strong>Artificial Photosynthesis:</strong> Advances in artificial photosynthesis have enabled the development of systems that mimic natural processes to convert CO₂ into O₂ efficiently. (<a href="https://www.sciencedirect.com/science/article/pii/S1369702119303303" target="_blank">ScienceDirect</a>)</p>
-        <p>3. <strong>VOC Removal:</strong> The importance of removing VOCs from the air to improve indoor and outdoor air quality is well-documented. (<a href="https://www.epa.gov/indoor-air-quality-iaq/what-are-volatile-organic-compounds-vocs" target="_blank">EPA</a>)</p>
+<!-- ========== HERO ========== -->
+<section class="hero" id="hero">
+  <div class="hero-inner">
+    <div class="hero-badge reveal">Climate Infrastructure</div>
+    <h1 class="reveal reveal-delay-1">
+      Reimagining <span class="highlight">Urban Air</span><br>
+      Where Trees Cannot Grow
+    </h1>
+    <p class="hero-sub reveal reveal-delay-2">
+      Metamorphic is a self-powered bioactive air rejuvenator designed for dense cities — 
+      transforming polluted air into oxygen through nature-inspired biological systems.
+    </p>
+    <a href="#solution" class="hero-cta reveal reveal-delay-3">
+      Explore the Solution
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+    </a>
+  </div>
+  <div class="hero-scroll-hint" aria-hidden="true">
+    <span>Scroll</span>
+    <div class="line"></div>
+  </div>
+</section>
 
-        <h2>Contact Us</h2>
-        <p>For more information about Metamorphic and how it can benefit your urban environment, please visit our website or contact us at:</p>
-        <p><strong>Email:</strong> <a href="mailto:hello@wow-strategies.com">hello@wow-strategies.com</a></p>
-        <p><strong>Phone:</strong> +91 022 4880 8695</p>
+<!-- ========== STATS BAR ========== -->
+<div class="stats-bar">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item reveal">
+        <div class="stat-number" data-target="24" data-suffix="×7">24×7</div>
+        <div class="stat-label">Continuous Operation</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-1">
+        <div class="stat-number" data-target="0">0</div>
+        <div class="stat-label">External Power Required</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-2">
+        <div class="stat-number" data-target="100" data-suffix="%">100%</div>
+        <div class="stat-label">Biological Process</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-3">
+        <div class="stat-number">∞</div>
+        <div class="stat-label">Urban Scalability</div>
+      </div>
     </div>
-    <footer>
-        <p>&copy; 2024 WoW-Strategies Private Limited. All rights reserved.</p>
-    </footer>
+  </div>
+</div>
+
+<!-- ========== PROBLEM ========== -->
+<section id="problem">
+  <div class="container">
+    <div class="section-label reveal">The Urban Reality</div>
+    <h2 class="section-title reveal">Cities Are Suffocating.<br>The Ground Has No Room for Trees.</h2>
+    <p class="section-desc reveal">
+      Modern urban centres face extreme air pollution, shrinking green cover, and 
+      zero space for traditional nature-based solutions. The infrastructure gap demands a new approach.
+    </p>
+    <div class="problem-grid">
+      <div class="problem-card reveal">
+        <div class="problem-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>
+        </div>
+        <h3>Space Scarcity</h3>
+        <p>Dense urban land is fully consumed by buildings, roads, and transit corridors. Large-scale tree plantations are structurally impossible.</p>
+      </div>
+      <div class="problem-card reveal reveal-delay-1">
+        <div class="problem-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2v4"/><circle cx="12" cy="12" r="5"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/></svg>
+        </div>
+        <h3>Continuous Pollution</h3>
+        <p>Vehicular emissions, industrial VOCs, and PM2.5 particulates are generated around the clock without pause or seasonal rest.</p>
+      </div>
+      <div class="problem-card reveal reveal-delay-2">
+        <div class="problem-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <h3>Climate Urgency</h3>
+        <p>Cities need measurable, visible, and immediately deployable climate interventions — not distant promises or decade-long timelines.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SOLUTION ========== -->
+<section id="solution">
+  <div class="container">
+    <div class="solution-layout">
+      <div class="solution-content">
+        <div class="section-label reveal">The Solution</div>
+        <h2 class="section-title reveal">A Living Climate Asset<br>for Urban Ground Zero</h2>
+        <p class="section-desc reveal">
+          Metamorphic deploys biological carbon fixation through algae, 
+          combined with self-powered air circulation, to act as a continuously 
+          operating urban air rejuvenation system.
+        </p>
+        <ul class="feature-list">
+          <li class="reveal">
+            <div class="feat-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4"/><path d="M12 19v4"/><path d="M5 5l2.5 2.5"/><path d="M16.5 16.5L19 19"/><path d="M1 12h4"/><path d="M19 12h4"/><path d="M5 19l2.5-2.5"/><path d="M16.5 7.5L19 5"/></svg>
+            </div>
+            <div>
+              <h4>Bioactive Photobioreactor Core</h4>
+              <p>High-density algae cultivation converts CO₂ into oxygen through natural photosynthesis — continuously and silently.</p>
+            </div>
+          </li>
+          <li class="reveal reveal-delay-1">
+            <div class="feat-icon">
+              <svg viewBox="0 0 24 24"><path d="M9.59 4.59A2 2 0 1 1 11 8H2"/><path d="M12.59 19.41A2 2 0 1 0 14 16H2"/><path d="M17.73 7.73A2.5 2.5 0 1 1 19.5 12H2"/></svg>
+            </div>
+            <div>
+              <h4>Self-Powered Operation</h4>
+              <p>An integrated vertical-axis wind turbine generates the energy required for essential circulation — no grid dependency.</p>
+            </div>
+          </li>
+          <li class="reveal reveal-delay-2">
+            <div class="feat-icon">
+              <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <div>
+              <h4>Urban-Compatible Design</h4>
+              <p>Engineered for pavements, corporate campuses, transit hubs, and dense urban corridors where space is critically limited.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="solution-visual reveal">
+        <div class="solution-visual-inner">
+          <div class="bio-circle" aria-hidden="true"></div>
+          <span class="bio-label">Bioactive Core</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PROCESS ========== -->
+<section id="process">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:64px;">
+      <div class="section-label reveal" style="justify-content:center;">How It Works</div>
+      <h2 class="section-title reveal">From Polluted Air to<br>Biological Value</h2>
+      <p class="section-desc reveal" style="margin-left:auto; margin-right:auto;">
+        A continuous, autonomous cycle that transforms urban atmospheric pollutants into clean oxygen and valuable biomass.
+      </p>
+    </div>
+    <div class="process-steps">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <h4>Air Intake</h4>
+        <p>Polluted urban air is drawn into the system through passive and wind-assisted intake.</p>
+      </div>
+      <div class="step reveal reveal-delay-1">
+        <div class="step-num">02</div>
+        <h4>Biological Fixation</h4>
+        <p>Algae cultures within the photobioreactor absorb CO₂ and volatile pollutants naturally.</p>
+      </div>
+      <div class="step reveal reveal-delay-2">
+        <div class="step-num">03</div>
+        <h4>Oxygen Release</h4>
+        <p>Photosynthesis converts captured carbon into breathable oxygen, released back into the environment.</p>
+      </div>
+      <div class="step reveal reveal-delay-3">
+        <div class="step-num">04</div>
+        <h4>Biomass Yield</h4>
+        <p>Captured carbon is transformed into biological biomass with potential secondary applications.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== WHY METAMORPHIC ========== -->
+<section id="why">
+  <div class="container">
+    <div class="section-label reveal">Differentiation</div>
+    <h2 class="section-title reveal">Why Metamorphic</h2>
+    <p class="section-desc reveal">
+      Not a gadget. Not a filter. Metamorphic is deployable climate infrastructure 
+      aligned with sustainable cities and long-term environmental resilience.
+    </p>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div>
+          <h3>Continuous &amp; Autonomous</h3>
+          <p>Operates around the clock without human intervention, grid power, or consumable replacements.</p>
+        </div>
+      </div>
+      <div class="why-card reveal reveal-delay-1">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        </div>
+        <div>
+          <h3>Biological, Not Chemical</h3>
+          <p>Uses living organisms for carbon fixation — no filters, no chemical agents, no waste byproducts to manage.</p>
+        </div>
+      </div>
+      <div class="why-card reveal reveal-delay-2">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div>
+          <h3>Measurable Impact</h3>
+          <p>Delivers quantifiable air quality improvement and carbon conversion data for reporting and compliance.</p>
+        </div>
+      </div>
+      <div class="why-card reveal reveal-delay-3">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <div>
+          <h3>City-Scale Deployable</h3>
+          <p>Designed for municipal and corporate deployment across entire urban corridors, districts, and campuses.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== IMPACT ========== -->
+<section id="impact">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:64px;">
+      <div class="section-label reveal" style="justify-content:center;">Impact &amp; Sustainability</div>
+      <h2 class="section-title reveal">Designed for Environmental<br>and Institutional Relevance</h2>
+      <p class="section-desc reveal" style="margin-left:auto; margin-right:auto;">
+        Metamorphic supports the environmental objectives of municipalities, corporations, 
+        ESG frameworks, and climate action commitments.
+      </p>
+    </div>
+    <div class="impact-grid">
+      <div class="impact-card reveal">
+        <div class="impact-icon">
+          <svg viewBox="0 0 24 24"><path d="M18 10h-4V4a2 2 0 0 0-4 0v6H6l6 8 6-8z"/><path d="M3 20h18"/></svg>
+        </div>
+        <h3>Air Quality Improvement</h3>
+        <p>Reduces localized concentrations of CO₂, VOCs, and fine particulate matter in immediate surroundings.</p>
+      </div>
+      <div class="impact-card reveal reveal-delay-1">
+        <div class="impact-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M5 12l7-9 7 9"/><circle cx="12" cy="21" r="1"/></svg>
+        </div>
+        <h3>Biological Carbon Conversion</h3>
+        <p>Transforms captured atmospheric carbon into useful biological biomass through natural metabolic processes.</p>
+      </div>
+      <div class="impact-card reveal reveal-delay-2">
+        <div class="impact-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <h3>ESG &amp; Sustainability Goals</h3>
+        <p>Directly supports climate action, urban wellbeing, and sustainability reporting for corporates and city administrations.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CTA BANNER ========== -->
+<div class="cta-banner">
+  <div class="container">
+    <h2 class="reveal">Ready to Deploy Climate Infrastructure?</h2>
+    <p class="reveal reveal-delay-1">
+      Metamorphic is designed for municipalities, corporate campuses, ESG leaders, 
+      and policymakers committed to measurable urban air improvement.
+    </p>
+    <a href="mailto:hello@wow-strategies.com" class="cta-btn reveal reveal-delay-2">
+      Get in Touch
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </a>
+  </div>
+</div>
+
+</main>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo">
+          <span class="logo-dot" aria-hidden="true"></span>
+          METAMORPHIC
+        </div>
+        <p>A self-powered bioactive air rejuvenation system — climate infrastructure for the cities of today and tomorrow.</p>
+      </div>
+      <div class="footer-contact">
+        <h4>Contact</h4>
+        <ul class="footer-contact-list">
+          <li>
+            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span>+91 022 4880 8695</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <a href="mailto:hello@wow-strategies.com">hello@wow-strategies.com</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 - 2026 Metamorphic. A climate innovation by <strong>WoW-Strategies Private Limited</strong>.</p>
+      <p>All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ========== SCROLL TO TOP ========== -->
+<button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 19V5"/><path d="m5 12 7-7 7 7"/>
+  </svg>
+</button>
+
+<!-- ========== JAVASCRIPT ========== -->
+<script>
+  // === SCROLL REVEAL ===
+  const revealElements = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  revealElements.forEach(el => revealObserver.observe(el));
+
+  // === HEADER SCROLL STATE ===
+  const header = document.getElementById('header');
+  const scrollTopBtn = document.getElementById('scrollTop');
+
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    header.classList.toggle('scrolled', scrollY > 60);
+    scrollTopBtn.classList.toggle('visible', scrollY > 500);
+  }, { passive: true });
+
+  scrollTopBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // === MOBILE NAV TOGGLE ===
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+
+  navToggle.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', isOpen);
+  });
+
+  // Close mobile nav on link click
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  // === SMOOTH ANCHOR OFFSET (for fixed header) ===
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const targetId = this.getAttribute('href');
+      if (targetId === '#') return;
+      const target = document.querySelector(targetId);
+      if (target) {
+        e.preventDefault();
+        const headerHeight = header.offsetHeight;
+        const targetPosition = target.getBoundingClientRect().top + window.scrollY - headerHeight - 20;
+        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+
 </body>
 </html>

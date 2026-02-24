@@ -12,7 +12,8 @@
     name: 'TMC AI',
     fullName: 'Thane Municipal Corporation',
     phone: '912225331590',
-    welcome: '👋 Namaste! I am the TMC AI Assistant. I understand English & Marathi. You can report issues by sending text 📝, voice notes 🎤 or photos 📸. How can I help?',
+    // Default language shifted to Marathi with strong focus on Property Tax
+    welcome: '👋 नमस्कार! मी ठाणे महानगरपालिकेचा (TMC) AI असिस्टंट आहे. तुम्ही येथे 💳 मालमत्ता कर (Property Tax) भरू शकता किंवा तुमच्या तक्रारी नोंदवू शकता. मला मराठी आणि इंग्रजी समजते. मी तुमची कशी मदत करू?',
     poweredBy: 'WoW-Strategies Private Limited',
     poweredByUrl: 'https://wow-strategies.com/',
     autoOpen: true,
@@ -22,14 +23,21 @@
     forceDark: false
   };
 
-  // Grievance Categories - kept as conversation starters
-  const grievances = [
-    { id: 'pothole', label: 'Report Pothole', icon: '🚧', message: 'I want to report a pothole' },
-    { id: 'garbage', label: 'Garbage Dump', icon: '🗑️', message: 'I want to report uncollected garbage' },
-    { id: 'light', label: 'Street Light', icon: '💡', message: 'Street light not working' },
-    { id: 'drain', label: 'Drainage Issue', icon: '💧', message: 'Report drainage overflow' },
-    { id: 'tree', label: 'Tree Trimming', icon: '🌳', message: 'Request tree trimming' },
-    { id: 'animal', label: 'Dead Animal', icon: '🐄', message: 'Report dead animal' }
+  // Action Categories - Highlights Property Tax as the primary use case
+  const actionItems = [
+    { 
+      id: 'tax', 
+      label: 'मालमत्ता कर भरा (Pay Property Tax)', 
+      icon: '💳', 
+      message: 'मला मालमत्ता कर भरायचा आहे', 
+      highlight: true 
+    },
+    { id: 'pothole', label: 'खड्ड्याची तक्रार (Report Pothole)', icon: '🚧', message: 'मला रस्त्यावरील खड्ड्याची तक्रार करायची आहे' },
+    { id: 'garbage', label: 'कचरा समस्या (Garbage Dump)', icon: '🗑️', message: 'मला न उचललेल्या कचऱ्याची तक्रार करायची आहे' },
+    { id: 'light', label: 'पथदिवे (Street Light)', icon: '💡', message: 'पथदिवे बंद असल्याची तक्रार करायची आहे' },
+    { id: 'drain', label: 'गटार समस्या (Drainage Issue)', icon: '💧', message: 'गटार तुंबल्याची तक्रार करायची आहे' },
+    { id: 'tree', label: 'झाडांची छाटणी (Tree Trimming)', icon: '🌳', message: 'झाडाची फांदी छाटणीसाठी विनंती करायची आहे' },
+    { id: 'animal', label: 'मृत प्राणी (Dead Animal)', icon: '🐄', message: 'मृत प्राण्याची नोंद करायची आहे' }
   ];
 
   // Helper functions
@@ -38,7 +46,7 @@
   }
 
   // Generate proper QR Code URL
-  function generateQRUrl(phoneNumber, message = 'Hi') {
+  function generateQRUrl(phoneNumber, message = 'नमस्कार') {
     const waLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     return `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(waLink)}&bgcolor=FFFFFF&color=128C7E&margin=1`;
   }
@@ -46,7 +54,7 @@
   // Build and inject widget
   async function initWidget() {
     const waBase = `https://wa.me/${TMC_CONFIG.phone}`;
-    const defaultMsg = 'Hi';
+    const defaultMsg = 'नमस्कार'; // Default Marathi greeting
     const qrImageUrl = generateQRUrl(TMC_CONFIG.phone, defaultMsg);
 
     // Create host element
@@ -55,7 +63,7 @@
     const shadow = host.attachShadow({ mode: 'open' });
     if (TMC_CONFIG.forceDark) host.classList.add('force-dark');
 
-    // Inject styles with professional color scheme
+    // Inject styles with professional color scheme and highlight support
     const style = document.createElement('style');
     style.textContent = `
       :host {
@@ -140,7 +148,7 @@
         position: absolute;
         top: -4px;
         right: -4px;
-        background: linear-gradient(135deg, #7B61FF 0%, #6246EA 100%); /* AI Purple branding */
+        background: linear-gradient(135deg, #7B61FF 0%, #6246EA 100%); 
         color: white;
         font-size: 10px;
         line-height: 1;
@@ -264,6 +272,23 @@
         transform: translateY(-3px) translateX(-5px) scale(1.02);
         box-shadow: 0 8px 20px rgba(18, 140, 126, .35);
       }
+
+      /* Highlight styling specifically for Property Tax */
+      .wa-pill.wa-highlight {
+        background: linear-gradient(135deg, #FF8C00 0%, #FF6D00 100%);
+        color: white;
+        border-color: transparent;
+        font-weight: 800;
+        font-size: 15px;
+        padding: 14px 22px;
+        box-shadow: 0 6px 15px rgba(255, 109, 0, 0.3);
+      }
+
+      .wa-pill.wa-highlight:hover {
+        background: linear-gradient(135deg, #FF6D00 0%, #DD2C00 100%);
+        transform: translateY(-3px) translateX(-5px) scale(1.02);
+        box-shadow: 0 8px 20px rgba(221, 44, 0, 0.4);
+      }
       
       .wa-pill:active {
         transform: translateY(-1px) scale(.98);
@@ -279,7 +304,7 @@
         100% { opacity: 1; transform: translateX(0) scale(1); }
       }
       
-      .wa-pill[data-recent="1"] {
+      .wa-pill[data-recent="1"]:not(.wa-highlight) {
         background: linear-gradient(135deg, var(--wa-light-green) 0%, rgba(18, 140, 126, 0.08) 100%);
         border-color: var(--wa-green);
       }
@@ -470,7 +495,7 @@
     // Create tooltip
     const tooltip = document.createElement('div');
     tooltip.className = 'wa-tooltip';
-    tooltip.textContent = 'TMC AI Assistant'; // Updated tooltip
+    tooltip.textContent = 'TMC AI Assistant'; 
     shadow.appendChild(tooltip);
 
     // Create launcher button
@@ -479,7 +504,7 @@
     launcher.className = 'wa-launcher';
     launcher.setAttribute('aria-label', 'Open TMC AI Assistant');
     launcher.innerHTML = `
-      <span class="wa-badge-ai">AI</span> <!-- Changed from HELP to AI -->
+      <span class="wa-badge-ai">AI</span>
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
       </svg>
@@ -520,14 +545,26 @@
       const recentKey = '__tmc_recent_' + TMC_CONFIG.orgId;
       const recent = JSON.parse(localStorage.getItem(recentKey) || '[]');
 
-      grievances.forEach((item, idx) => {
+      // Generate action item buttons
+      actionItems.forEach((item, idx) => {
         const pill = document.createElement('button');
         pill.type = 'button';
         pill.className = 'wa-pill';
+        
+        // Apply highlight class for designated items like Property Tax
+        if (item.highlight) {
+          pill.classList.add('wa-highlight');
+        }
+
         pill.style.animationDelay = (idx * 0.08) + 's';
         pill.innerHTML = `<span class="wa-pill-icon">${item.icon}</span> <span>${escapeHtml(item.label)}</span>`;
-        if (recent.includes(item.id)) pill.dataset.recent = '1';
-        pill.addEventListener('click', () => handleGrievance(item, recentKey, pill));
+        
+        // Only set recent flag visually if it's not a highlighted item
+        if (recent.includes(item.id) && !item.highlight) {
+          pill.dataset.recent = '1';
+        }
+        
+        pill.addEventListener('click', () => handleAction(item, recentKey, pill));
         shelf.appendChild(pill);
       });
 
@@ -544,12 +581,12 @@
       const qrPanel = document.createElement('div');
       qrPanel.className = 'wa-qr-panel';
       qrPanel.innerHTML = `
-        <div class="wa-label">AI Report</div>
+        <div class="wa-label">AI Report & Pay</div>
         <img alt="WhatsApp QR Code" src="${qrImageUrl}" />
         <div class="wa-scan-text">
-          <strong>Chat with TMC AI!</strong><br>
-          Send text, audio, or photos<br>
-          <span class="wa-ai-features">English • Marathi • Audio • Image</span>
+          <strong>TMC AI शी चॅट करा!</strong><br>
+          मालमत्ता कर भरा किंवा तक्रार करा<br>
+          <span class="wa-ai-features">मराठी • English • Audio • Image</span>
         </div>
       `;
 
@@ -576,7 +613,7 @@
       shelf = null;
     }
 
-    function handleGrievance(item, recentKey, pill) {
+    function handleAction(item, recentKey, pill) {
       const waLink = `${waBase}?text=${encodeURIComponent(item.message)}`;
       
       window.open(waLink, '_blank', 'noopener');

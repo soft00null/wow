@@ -3,1387 +3,1257 @@
 <head>
 <meta charset="UTF-8" />
 <title>AI-Powered QR & WhatsApp CRM Platform – Strategic Concept Note</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
 <meta name="description" content="Strategic concept note proposing an AI-powered QR + WhatsApp real estate compliance-to-growth platform with integrated CRM & analytics." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <style>
-/* ---------------------------
-   A4 PRINT / SCREEN HYBRID
-   --------------------------- */
+/* ============================================================
+   DESIGN TOKENS (Tier-1 Consulting Aesthetic)
+   ============================================================ */
 :root {
-  --brand-navy:#0b253d;
-  --brand-accent:#0d6efd;
-  --brand-teal:#00a0b0;
-  --brand-green:#19b469;
-  --brand-amber:#f5b300;
-  --brand-bg:#ffffff;
-  --brand-bg-alt:#f5f8fa;
-  --border:#d9e2eb;
-  --text:#1d2732;
-  --text-alt:#5b6572;
-  --radius:10px;
-  --shadow:0 2px 6px rgba(0,0,0,0.06);
-  --shadow-strong:0 4px 18px rgba(0,0,0,0.08);
-  --gradient:linear-gradient(90deg,var(--brand-teal),var(--brand-accent));
-  --code-bg:#1e2933;
-  --accent-soft:rgba(0,160,176,0.08);
-  --page-w:210mm;
-  --page-h:297mm;
-  --header-h:14mm;
-  --footer-h:14mm;
-  --content-max:178mm;
-  --font-stack:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  /* Core Consulting Palette */
+  --exec-navy:  #051c2c;
+  --exec-blue:  #00508f;
+  --exec-light: #eceff1;
+  --accent:     #003b5c;
+  
+  /* Standard Colors */
+  --gray-900:   #1a1a1a;
+  --gray-700:   #333333;
+  --gray-500:   #666666;
+  --gray-300:   #cccccc;
+  --gray-100:   #f4f5f7;
+  --white:      #ffffff;
+  --black:      #000000;
+  
+  --bg:         #e5e7eb;
+  --bg-card:    #ffffff;
+  --bg-alt:     #f8f9fa;
+  --border:     #d1d5db;
+  --border-mid: #9ca3af;
+  
+  /* Typography */
+  --font-serif: "Merriweather", Georgia, "Times New Roman", serif;
+  --font-sans:  "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  
+  /* Geometry - Sharp edges for formal look */
+  --radius-sm:  0px;
+  --radius:     0px;
+  --radius-lg:  0px;
+  
+  /* Subtle depth */
+  --shadow-xs:  0 1px 2px rgba(0,0,0,0.05);
+  --shadow:     0 4px 6px rgba(0,0,0,0.05);
+  --shadow-md:  0 10px 15px rgba(0,0,0,0.1);
+  --shadow-lg:  0 20px 25px rgba(0,0,0,0.15);
+  
+  /* Document Sizing */
+  --page-w:     210mm;
+  --page-h:     297mm;
+  --header-h:   16mm;
+  --footer-h:   16mm;
 }
 
-* { box-sizing:border-box; }
-html,body { margin:0; padding:0; font-family:var(--font-stack); color:var(--text); background:var(--brand-bg-alt); -webkit-font-smoothing:antialiased; }
-body { line-height:1.38; }
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html, body {
+  margin: 0; padding: 0;
+  font-family: var(--font-sans);
+  color: var(--gray-700);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
 
-h1,h2,h3,h4 { line-height:1.15; font-weight:700; margin:0 0 .5rem; letter-spacing:-0.5px; }
-h1 { font-size:26pt; }
-h2 { font-size:18pt; }
-h3 { font-size:13.2pt; }
-h4 { font-size:11pt; font-weight:600; text-transform:uppercase; letter-spacing:.5px; color:var(--brand-navy); }
+/* ============================================================
+   TYPOGRAPHY SCALE
+   ============================================================ */
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-serif);
+  line-height: 1.2;
+  color: var(--exec-navy);
+  margin: 0 0 0.5rem;
+  font-weight: 700;
+}
+h1 { font-size: clamp(20pt, 3.5vw, 26pt); font-weight: 900; }
+h2 { font-size: clamp(14pt, 2.5vw, 18pt); font-weight: 700; border-bottom: 2px solid var(--exec-navy); padding-bottom: 4px; margin-bottom: 12px; }
+h3 { font-size: clamp(11pt, 1.8vw, 13pt); font-weight: 700; color: var(--exec-blue); }
+h4 { font-family: var(--font-sans); font-size: clamp(9pt, 1.5vw, 10pt); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-500); }
+p  { margin: 0 0 0.8rem; font-size: clamp(9.5pt, 1.4vw, 10.5pt); }
+ul, ol { margin: 0.3rem 0 0.9rem 1.2rem; padding: 0; }
+li { margin: 0.3rem 0; font-size: clamp(9pt, 1.4vw, 10pt); }
+strong { font-weight: 600; color: var(--exec-navy); }
+a { color: var(--exec-blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+small { font-size: 0.8em; color: var(--gray-500); }
 
-p { margin:0 0 .8rem; font-size:10.2pt; }
-ul,ol { margin:.2rem 0 .9rem 1.1rem; padding:0; }
-li { margin:.25rem 0; font-size:10pt; }
-strong { font-weight:600; }
-
-a { color:var(--brand-accent); text-decoration:none; }
-a:hover { text-decoration:underline; }
-
-/* Password Protection Styles */
+/* ============================================================
+   PASSWORD SCREEN
+   ============================================================ */
 #password-screen {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--brand-navy);
+  inset: 0;
+  background: var(--exec-navy);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 10000;
+  padding: 16px;
 }
-
-.password-container {
-  background: white;
-  padding: 40px;
-  border-radius: 15px;
-  box-shadow: var(--shadow-strong);
-  text-align: center;
-  max-width: 400px;
-  width: 90%;
+.pw-card {
+  background: var(--white);
+  padding: clamp(32px, 5vw, 56px) clamp(24px, 5vw, 48px);
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 440px;
+  border-top: 6px solid var(--exec-blue);
 }
-
-.password-container h2 {
-  color: var(--brand-navy);
-  margin-bottom: 20px;
-  font-size: 24px;
-}
-
-.password-container p {
-  color: var(--text-alt);
-  margin-bottom: 25px;
-}
-
-.password-input {
+.pw-card h2 { color: var(--exec-navy); margin-bottom: 12px; font-size: 18pt; border: none; padding: 0; text-align: center; }
+.pw-card p  { color: var(--gray-500); margin-bottom: 24px; font-size: 10pt; text-align: center; }
+.pw-input {
   width: 100%;
   padding: 12px 16px;
-  border: 2px solid var(--border);
-  border-radius: 8px;
-  font-size: 16px;
-  margin-bottom: 20px;
-  font-family: var(--font-stack);
-  transition: border-color 0.3s ease;
-}
-
-.password-input:focus {
+  border: 1px solid var(--border-mid);
+  font-size: 14px;
+  font-family: var(--font-sans);
+  color: var(--gray-900);
+  transition: border-color 0.2s;
   outline: none;
-  border-color: var(--brand-teal);
+  margin-bottom: 16px;
+  background: var(--bg-alt);
 }
-
-.password-btn {
-  background: var(--gradient);
-  color: white;
+.pw-input:focus { border-color: var(--exec-blue); background: var(--white); }
+.pw-btn {
+  width: 100%;
+  background: var(--exec-navy);
+  color: var(--white);
   border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 16px;
+  padding: 14px 24px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s ease;
-  font-family: var(--font-stack);
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background 0.2s;
 }
-
-.password-btn:hover {
-  transform: translateY(-2px);
-}
-
-.error-message {
-  color: #d94848;
-  font-size: 14px;
-  margin-top: 10px;
+.pw-btn:hover  { background: var(--exec-blue); }
+.pw-error {
+  color: #b91c1c;
+  font-size: 13px;
+  margin-top: 12px;
   display: none;
+  font-weight: 500;
+  padding: 8px 12px;
+  background: #fef2f2;
+  border: 1px solid #f87171;
 }
+.pw-footer-note { font-size: 8pt; color: var(--gray-500); margin-top: 32px; line-height: 1.4; text-align: center; font-family: var(--font-serif); font-style: italic; }
 
-.content {
+/* ============================================================
+   MAIN CONTENT WRAPPER
+   ============================================================ */
+#main-content { display: none; }
+#main-content.unlocked { display: block; }
+
+/* ============================================================
+   MOBILE STICKY HEADER
+   ============================================================ */
+.mobile-nav {
   display: none;
+  position: sticky;
+  top: 0;
+  z-index: 500;
+  background: var(--exec-navy);
+  color: var(--white);
+  padding: 12px 20px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: var(--shadow);
 }
+.mobile-nav .brand { font-weight: 600; font-size: 10pt; line-height: 1.2; }
+.mobile-nav .brand small { display: block; font-weight: 400; font-size: 7.5pt; opacity: 0.8; }
+.mobile-nav .conf-tag { font-size: 7.5pt; font-weight: 600; text-transform: uppercase; padding: 2px 6px; border: 1px solid rgba(255,255,255,0.4); }
 
-.content.unlocked {
-  display: block;
+/* ============================================================
+   PAGE LAYOUT
+   ============================================================ */
+.doc-wrap {
+  max-width: var(--page-w);
+  margin: 0 auto;
+  padding: 32px 0 64px;
 }
-
 .page {
-  width:var(--page-w);
-  height:var(--page-h);
-  margin:0 auto 12mm;
-  background:#fff;
-  position:relative;
-  padding:calc(var(--header-h) + 8mm) 18mm calc(var(--footer-h) + 10mm);
-  overflow:hidden;
-  box-shadow:var(--shadow);
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-start;
+  background: var(--white);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 24px;
+  width: var(--page-w);
+  min-height: var(--page-h);
+  padding: calc(var(--header-h) + 12mm) 20mm calc(var(--footer-h) + 12mm);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
-.page.compact { padding-top:calc(var(--header-h) + 6mm); }
-
-.header, .footer {
-  position:absolute;
-  left:0; right:0;
-  height:var(--header-h);
-  padding:0 16mm;
-  display:flex;
-  align-items:center;
-  font-size:8.8pt;
-  color:var(--text-alt);
-  letter-spacing:.2px;
+/* Page header / footer */
+.pg-header, .pg-footer {
+  position: absolute;
+  left: 0; right: 0;
+  height: var(--header-h);
+  padding: 0 20mm;
+  display: flex;
+  align-items: center;
+  font-size: 8pt;
+  color: var(--gray-500);
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
-.header { top:0; justify-content:space-between; border-bottom:1px solid var(--border); background:linear-gradient(180deg,#ffffffd9,#ffffffd9); backdrop-filter:blur(3px); }
-.footer { bottom:0; justify-content:space-between; border-top:1px solid var(--border); background:linear-gradient(0deg,#ffffffd9,#ffffffd9); backdrop-filter:blur(3px); }
+.pg-header { top: 0; justify-content: space-between; border-bottom: 1px solid var(--border); }
+.pg-footer { bottom: 0; justify-content: space-between; border-top: 1px solid var(--border); }
+.pg-header .doc-title { font-weight: 600; color: var(--exec-navy); }
+.pg-header .conf-tag  { font-weight: 600; color: #b91c1c; }
+.pg-footer .contact   { font-weight: 500; }
+.pg-footer .pg-num    { font-weight: 600; }
 
-.header .doc-title { font-weight:700; color:var(--brand-navy); font-size:9.5pt; }
-.header .confidential { font-weight:600; color:var(--brand-teal); }
+/* ============================================================
+   LAYOUT UTILITIES
+   ============================================================ */
+.grid-2  { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6mm; margin: 3mm 0; }
+.grid-3  { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6mm; margin: 3mm 0; }
+.grid-4  { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6mm; margin: 3mm 0; }
+.flex-row { display: flex; gap: 6mm; flex-wrap: wrap; }
+.spacer-2 { height: 2mm; }
+.spacer-4 { height: 4mm; }
 
-.footer .contact { font-weight:600; color:var(--brand-navy); }
-.page-number:before { content:attr(data-label) " "; font-weight:500; color:var(--text-alt); }
-
-.grid-2, .grid-3, .grid-4 {
-  display:grid;
-  gap:10mm 9mm;
-  margin:2mm 0 3mm;
-}
-.grid-2 { grid-template-columns:repeat(2, minmax(0,1fr)); }
-.grid-3 { grid-template-columns:repeat(3, minmax(0,1fr)); }
-.grid-4 { grid-template-columns:repeat(4, minmax(0,1fr)); }
-
+/* ============================================================
+   CARD / BLOCK (McKinsey Style)
+   ============================================================ */
 .block {
-  background:var(--brand-bg);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:7mm 6.5mm 6.5mm;
-  position:relative;
-  box-shadow:var(--shadow);
-  display:flex;
-  flex-direction:column;
-  gap:3.5mm;
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 6mm;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2mm;
 }
+.block.alt { background: var(--bg-alt); }
+.block.gradient-top { border-top: 4px solid var(--exec-blue); }
+.block h3 { margin-bottom: 2mm; border-bottom: 1px solid var(--exec-light); padding-bottom: 4px; }
 
-.block.tight { padding:5.5mm 6mm; gap:3mm; }
-.block.alt { background:var(--brand-bg-alt); }
-.block.gradient-header { padding-top:11mm; }
-.block.gradient-header:before {
-  content:"";
-  position:absolute; top:0; left:0; right:0; height:8mm;
-  background:var(--gradient);
-  border-radius:var(--radius) var(--radius) 0 0;
-}
-
-.tagline {
-  font-size:11pt;
-  font-weight:500;
-  margin:2mm 0 8mm;
-  color:var(--brand-teal);
-  letter-spacing:.3px;
-}
-
-.lead {
-  font-size:12.2pt;
-  font-weight:500;
-  max-width:150mm;
-  line-height:1.38;
-  margin:4mm 0 10mm;
-  color:var(--brand-navy);
-}
-
+/* ============================================================
+   HERO / COVER ELEMENTS
+   ============================================================ */
 .hero-title {
-  font-size:32pt;
-  font-weight:800;
-  background:var(--gradient);
-  -webkit-background-clip:text;
-  color:transparent;
-  margin:0 0 6mm;
-  letter-spacing:-1px;
+  font-size: clamp(28pt, 4.5vw, 34pt);
+  font-weight: 900;
+  color: var(--exec-navy);
+  margin: 0 0 4mm;
+  line-height: 1.1;
+  border: none;
 }
-
-.badge-row { display:flex; flex-wrap:wrap; gap:6px; margin:4mm 0 10mm; }
+.tagline {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(11pt, 2vw, 13pt);
+  color: var(--exec-blue);
+  margin: 0 0 8mm;
+  line-height: 1.4;
+}
+.lead {
+  font-size: clamp(10pt, 1.6vw, 11pt);
+  color: var(--gray-900);
+  line-height: 1.6;
+  margin: 4mm 0 8mm;
+  max-width: 155mm;
+  border-left: 3px solid var(--exec-blue);
+  padding-left: 4mm;
+}
+.badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 4mm 0 8mm; }
 .badge {
-  background:var(--accent-soft);
-  border:1px solid rgba(0,160,176,0.25);
-  padding:4px 10px 3px;
-  font-size:8.4pt;
-  font-weight:600;
-  letter-spacing:.5px;
-  text-transform:uppercase;
-  border-radius:40px;
-  color:var(--brand-navy);
+  background: var(--bg-alt);
+  border: 1px solid var(--border-mid);
+  padding: 4px 12px;
+  font-size: 7.5pt;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--exec-navy);
 }
 
-.metric {
-  display:flex; flex-direction:column;
-}
-.metric .value {
-  font-size:19pt;
-  font-weight:800;
-  line-height:1;
-  color:var(--brand-teal);
-  margin-bottom:2mm;
-}
-.metric .label {
-  font-size:8.6pt;
-  font-weight:600;
-  letter-spacing:.6px;
-  text-transform:uppercase;
-  color:var(--text-alt);
-}
-
-.divider {
-  height:1px;
-  background:linear-gradient(90deg,transparent,var(--border),transparent);
-  margin:6mm 0 5mm;
-}
-
+/* ============================================================
+   CALLOUT (Insights Box)
+   ============================================================ */
 .callout {
-  background:linear-gradient(135deg,var(--brand-teal),var(--brand-accent));
-  color:#fff;
-  padding:6mm 7mm;
-  border-radius:var(--radius);
-  font-size:10.2pt;
-  position:relative;
-  box-shadow:var(--shadow);
+  background: var(--exec-light);
+  border-left: 4px solid var(--exec-navy);
+  padding: 5mm 6mm;
+  font-size: clamp(9.5pt, 1.5vw, 10.5pt);
+  margin: 4mm 0;
+  color: var(--gray-900);
 }
-.callout h3, .callout h4 { color:#fff; margin-top:0; }
-.callout:before {
-  content:""";
-  position:absolute;
-  font-size:60pt;
-  font-weight:300;
-  opacity:.12;
-  top:-18px; left:10px;
-  line-height:1;
-  pointer-events:none;
-}
+.callout h3, .callout h4 { color: var(--exec-navy); margin-bottom: 2mm; border: none; font-family: var(--font-sans); text-transform: uppercase; font-size: 9pt; letter-spacing: 1px; }
+.callout p { margin-bottom: 0; font-family: var(--font-serif); font-style: italic; }
 
-.inline-list { display:flex; flex-wrap:wrap; gap:6px 10px; margin:0 0 6mm; }
-.inline-list span {
-  font-size:8.6pt;
-  background:#eef3f6;
-  padding:3px 8px;
-  border-radius:6px;
-  font-weight:500;
-}
-
-.tick-list { list-style:none; margin:0 0 5mm; padding:0; }
-.tick-list li {
-  position:relative;
-  padding-left:14px;
-}
-.tick-list li:before {
-  content:"✓";
-  position:absolute;
-  left:0;
-  top:0;
-  font-weight:700;
-  color:var(--brand-teal);
-  font-size:9pt;
-}
-
-.risk-list li:before { content:"▲"; color:#d97706; }
-.warn-list li:before { content:"!"; color:#d94848; font-weight:800; }
-
-.table {
-  width:100%;
-  border-collapse:separate;
-  border-spacing:0;
-  font-size:9.6pt;
-  margin:4mm 0 5mm;
-}
-.table th {
-  text-align:left;
-  background:var(--brand-bg-alt);
-  font-weight:600;
-  padding:6px 8px;
-  border-bottom:1px solid var(--border);
-  font-size:9pt;
-  letter-spacing:.4px;
-}
-.table td {
-  padding:5px 8px;
-  border-bottom:1px solid #edf1f4;
-}
-.table tr:last-child td { border-bottom:none; }
-.table.striped tr:nth-child(odd) td { background:#fafcfd; }
-
-.kpi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:6mm; margin:4mm 0 2mm; }
+/* ============================================================
+   METRICS / KPIs
+   ============================================================ */
+.kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; margin: 4mm 0; }
 .kpi {
-  background:var(--brand-bg);
-  border:1px solid var(--border);
-  border-radius:8px;
-  padding:5mm 5mm 4.5mm;
-  display:flex;
-  flex-direction:column;
-  gap:2.5mm;
-  box-shadow:var(--shadow);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--exec-navy);
+  padding: 5mm;
+  display: flex;
+  flex-direction: column;
 }
-.kpi .kpi-value {
-  font-size:16pt;
-  font-weight:800;
-  color:var(--brand-teal);
-  line-height:1;
-}
-.kpi small { font-size:8pt; color:var(--text-alt); font-weight:500; }
+.kpi .kpi-val { font-family: var(--font-serif); font-size: clamp(16pt, 2.5vw, 20pt); font-weight: 900; color: var(--exec-navy); line-height: 1.1; margin-bottom: 2mm; }
+.kpi .kpi-label { font-size: 8pt; font-weight: 600; text-transform: uppercase; color: var(--gray-700); margin-bottom: 2mm; }
+.kpi small { font-size: 8pt; color: var(--gray-500); line-height: 1.3; border-top: 1px solid var(--exec-light); padding-top: 2mm; }
 
+/* ============================================================
+   STAGE FLOW (Chevron style)
+   ============================================================ */
 .stage-flow {
-  display:flex;
-  justify-content:space-between;
-  gap:4mm;
-  margin:5mm 0 6mm;
+  display: flex;
+  justify-content: space-between;
+  gap: 2mm;
+  margin: 6mm 0;
 }
 .stage {
-  flex:1;
-  text-align:center;
-  position:relative;
-  padding:4mm 3mm 3mm;
-  background:var(--brand-bg);
-  border:1px solid var(--border);
-  border-radius:9px;
-  font-size:8.8pt;
-  font-weight:600;
-  color:var(--brand-navy);
-  box-shadow:var(--shadow);
+  flex: 1;
+  text-align: center;
+  position: relative;
+  padding: 4mm;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  font-size: 8.5pt;
+  font-weight: 600;
+  color: var(--exec-navy);
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
-.stage:not(:last-child):after {
-  content:"→";
-  position:absolute;
-  top:50%; right:-10px;
-  transform:translateY(-50%);
-  font-weight:700;
-  color:var(--brand-teal);
+.stage-num {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 14pt;
+  font-weight: 900;
+  color: var(--exec-blue);
+  margin-bottom: 2mm;
 }
-
-.timeline {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8mm;
-  margin:4mm 0 2mm;
-}
-.phase {
-  border:1px solid var(--border);
-  background:#fff;
-  padding:5.5mm 5mm;
-  border-radius:9px;
-  position:relative;
-  box-shadow:var(--shadow);
-  display:flex;
-  flex-direction:column;
-  gap:3mm;
-}
-.phase:before {
-  content:attr(data-phase);
-  position:absolute;
-  top:-10px; left:10px;
-  background:var(--gradient);
-  color:#fff;
-  font-size:8pt;
-  padding:3px 8px 2px;
-  border-radius:14px;
-  font-weight:600;
-  letter-spacing:.5px;
-  box-shadow:0 2px 4px rgba(0,0,0,0.15);
+.stage:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 50%; right: -1mm;
+  transform: translateY(-50%) rotate(45deg);
+  width: 8px; height: 8px;
+  border-top: 2px solid var(--border-mid);
+  border-right: 2px solid var(--border-mid);
+  z-index: 1;
 }
 
-.ribbon {
-  background:var(--gradient);
-  color:#fff;
-  padding:4.5mm 6mm;
-  border-radius:var(--radius);
-  font-weight:600;
-  font-size:11pt;
-  letter-spacing:.3px;
-  margin:2mm 0 5mm;
-  box-shadow:var(--shadow-strong);
+/* ============================================================
+   STRATEGY PILLARS
+   ============================================================ */
+.strategy-box { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6mm; margin: 4mm 0; }
+.pillar {
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 6mm;
+  display: flex;
+  flex-direction: column;
 }
+.pillar h4 { border-bottom: 1px solid var(--exec-light); padding-bottom: 4px; margin-bottom: 8px; }
 
-.emphasis { color:var(--brand-teal); font-weight:600; }
-
-.footer-note {
-  font-size:7.8pt;
-  color:var(--text-alt);
-  line-height:1.25;
-  margin:5mm 0 0;
-}
-
-code {
-  font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-  background:var(--code-bg);
-  color:#e2f7ff;
-  padding:2px 5px 3px;
-  border-radius:4px;
-  font-size:8.4pt;
-}
-
-.strategy-box {
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:6mm;
-  margin:4mm 0 6mm;
-}
-.strategy-box .pillar {
-  background:var(--brand-bg-alt);
-  border:1px solid var(--border);
-  border-radius:8px;
-  padding:6mm;
-  display:flex;
-  flex-direction:column;
-  gap:3mm;
-  box-shadow:var(--shadow);
-}
-.pillar h4 { margin:0; }
-
-.fin-model { display:grid; grid-template-columns:repeat(4,1fr); gap:6mm; margin:5mm 0 6mm; }
+/* ============================================================
+   REVENUE CARDS
+   ============================================================ */
+.fin-model { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; margin: 4mm 0; }
 .rev-card {
-  background:#0d264095;
-  background:linear-gradient(135deg,#0b3c57,#0d6efd);
-  color:#fff;
-  padding:6mm 5.5mm;
-  border-radius:9px;
-  position:relative;
-  overflow:hidden;
-  box-shadow:var(--shadow);
-  font-size:9pt;
-  display:flex;
-  flex-direction:column;
-  gap:4mm;
+  background: var(--white);
+  border: 1px solid var(--exec-navy);
+  color: var(--exec-navy);
+  padding: 5mm;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
 }
-.rev-card:after {
-  content:"";
-  position:absolute;
-  width:140%; height:140%;
-  top:-50%; left:-20%;
-  background:radial-gradient(circle at 70% 30%,rgba(255,255,255,0.25),transparent 60%);
-  opacity:.25;
-  transform:rotate(18deg);
-  pointer-events:none;
-}
-.rev-card .amt {
-  font-size:15pt;
-  font-weight:800;
-  line-height:1;
-}
-.rev-card small { font-size:8pt; opacity:.85; }
+.rev-card .amt { font-family: var(--font-serif); font-size: clamp(12pt, 2vw, 14pt); font-weight: 900; margin-bottom: 2mm; color: var(--exec-blue); }
+.rev-card .rev-label { font-size: 8pt; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid var(--border); padding-bottom: 2mm; margin-bottom: 2mm; }
+.rev-card small { font-size: 8pt; color: var(--gray-700); line-height: 1.3; }
 
-.impact-matrix {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:6mm;
-  margin:4mm 0 6mm;
-}
+/* ============================================================
+   IMPACT MATRIX
+   ============================================================ */
+.impact-matrix { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; margin: 4mm 0; }
 .impact {
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:9px;
-  padding:5.5mm;
-  display:flex;
-  flex-direction:column;
-  gap:3.5mm;
-  box-shadow:var(--shadow);
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 5mm;
+  display: flex;
+  flex-direction: column;
 }
-.impact h3 { font-size:11pt; margin:0 0 1mm; }
-.impact em { font-style:normal; font-weight:600; color:var(--brand-teal); font-size:9pt; }
+.impact h3 { font-size: 10.5pt; margin: 0 0 2mm; color: var(--exec-navy); }
+.impact em  { font-style: normal; font-weight: 400; color: var(--gray-500); font-family: var(--font-serif); font-size: 9pt; display: block; margin-top: 2px; }
 
-.badge-inline {
-  display:inline-block;
-  background:var(--gradient);
-  color:#fff;
-  padding:2px 8px 3px;
-  font-size:7.8pt;
-  font-weight:600;
-  border-radius:12px;
-  letter-spacing:.5px;
-  margin-left:6px;
+/* ============================================================
+   TIMELINE PHASES
+   ============================================================ */
+.timeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; margin: 6mm 0; }
+.phase {
+  border: 1px solid var(--border);
+  background: var(--white);
+  padding: 5mm;
+  display: flex;
+  flex-direction: column;
+}
+.phase h3 { border-bottom: 2px solid var(--exec-blue); padding-bottom: 4px; margin-bottom: 8px; display: inline-block; }
+.phase::before {
+  content: attr(data-phase);
+  display: block;
+  font-size: 7.5pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  margin-bottom: 2mm;
+  letter-spacing: 0.5px;
 }
 
-hr.rule {
-  border:none;
-  height:1px;
-  background:linear-gradient(90deg,transparent,var(--border),transparent);
-  margin:4mm 0 5mm;
+/* ============================================================
+   LIST VARIANTS
+   ============================================================ */
+.tick-list { list-style: none; margin: 0 0 3mm; padding: 0; }
+.tick-list li { position: relative; padding-left: 16px; margin-bottom: 6px; }
+.tick-list li::before { content: "■"; position: absolute; left: 0; top: 1px; color: var(--exec-blue); font-size: 7pt; }
+.risk-list li::before { content: "▲"; color: var(--gray-700); font-size: 7pt; }
+
+/* ============================================================
+   TABLE (Consulting Format)
+   ============================================================ */
+.table-wrap { width: 100%; margin: 4mm 0; border-top: 2px solid var(--exec-navy); border-bottom: 2px solid var(--exec-navy); }
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: clamp(8.5pt, 1.3vw, 9.5pt);
+}
+.table th {
+  text-align: left;
+  font-weight: 700;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--exec-navy);
+  font-size: 8.5pt;
+  text-transform: uppercase;
+  color: var(--exec-navy);
+}
+.table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.table tr:last-child td { border-bottom: none; }
+.table.striped tbody tr:nth-child(even) td { background: var(--bg-alt); }
+
+/* ============================================================
+   MISC
+   ============================================================ */
+.ribbon {
+  background: var(--exec-navy);
+  color: var(--white);
+  padding: 4mm 6mm;
+  font-weight: 600;
+  font-size: 11pt;
+  margin: 4mm 0;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+.emphasis { color: var(--exec-navy); font-weight: 700; }
+.footer-note { font-size: 8pt; color: var(--gray-500); line-height: 1.4; margin: 6mm 0 0; border-top: 1px solid var(--border); padding-top: 2mm; font-family: var(--font-serif); font-style: italic; }
+
+/* ============================================================
+   SECTION LABEL (McKinsey-style tag)
+   ============================================================ */
+.section-label {
+  display: inline-block;
+  background: var(--exec-navy);
+  color: var(--white);
+  padding: 2px 8px;
+  font-size: 7.5pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
 }
 
+/* ============================================================
+   PRINT STYLES
+   ============================================================ */
 @media print {
-  @page {
-    size:A4;
-    margin:0;
+  @page { size: A4; margin: 0; }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  body { background: #fff; }
+  #password-screen { display: none !important; }
+  #main-content { display: block !important; }
+  .mobile-nav { display: none !important; }
+  .doc-wrap { padding: 0; max-width: none; }
+  .page {
+    box-shadow: none;
+    margin: 0;
+    page-break-after: always;
+    page-break-inside: avoid;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    padding: calc(var(--header-h) + 12mm) 20mm calc(var(--footer-h) + 12mm) !important;
   }
-  body { background:#fff; }
-  .page { box-shadow:none; margin:0; page-break-after:always; }
-  .page:last-child { page-break-after:auto; }
-  a { text-decoration:none; color:inherit; }
-  .rev-card { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  .callout, .ribbon { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
 }
 
-@media (max-width:1000px) {
-  body { background:#fff; }
-  .page { width:100%; height:auto; padding:80px 32px 80px; box-shadow:none; margin:0 0 40px; }
-  .header, .footer { position:fixed; left:0; right:0; padding:0 24px; }
-  .header { top:0; }
-  .footer { bottom:0; }
-  .grid-3 { grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); }
-  .grid-2, .strategy-box { grid-template-columns:1fr; }
-  .timeline { grid-template-columns:1fr; }
-  .impact-matrix { grid-template-columns:1fr; }
-  .fin-model { grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); }
-  .stage-flow { flex-direction:column; }
-  .stage:not(:last-child):after { display:none; }
-  .kpi-grid { grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media screen and (max-width: 1024px) {
+  .doc-wrap { padding: 16px 12px 40px; }
+  .page { width: 100%; min-height: auto; padding: calc(var(--header-h) + 8mm) 6% calc(var(--footer-h) + 10mm); }
+  .fin-model { grid-template-columns: repeat(2, 1fr); }
+  .grid-4    { grid-template-columns: repeat(2, 1fr); }
 }
 
-/* Minimal fade-in screen */
-@media (prefers-reduced-motion:no-preference) {
-  .content.unlocked .page { opacity:0; animation:fadeIn .5s ease forwards; }
-  .content.unlocked .page:nth-child(2){ animation-delay:.05s;}
-  .content.unlocked .page:nth-child(3){ animation-delay:.1s;}
-  .content.unlocked .page:nth-child(4){ animation-delay:.15s;}
-  .content.unlocked .page:nth-child(5){ animation-delay:.2s;}
-  .content.unlocked .page:nth-child(6){ animation-delay:.25s;}
-  .content.unlocked .page:nth-child(7){ animation-delay:.3s;}
-  .content.unlocked .page:nth-child(8){ animation-delay:.35s;}
-  .content.unlocked .page:nth-child(9){ animation-delay:.4s;}
-  .content.unlocked .page:nth-child(10){ animation-delay:.45s;}
-  .content.unlocked .page:nth-child(11){ animation-delay:.5s;}
-  @keyframes fadeIn { to { opacity:1; } }
+@media screen and (max-width: 768px) {
+  :root { --header-h: 12mm; --footer-h: 12mm; }
+  .mobile-nav { display: flex; }
+  .doc-wrap { padding: 0 0 32px; max-width: 100%; }
+  .page {
+    width: 100%;
+    padding: calc(var(--header-h) + 10mm) 5% calc(var(--footer-h) + 10mm);
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .grid-2, .grid-3, .grid-4, .strategy-box, .timeline, .impact-matrix { grid-template-columns: 1fr; }
+  .fin-model, .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .stage-flow { flex-direction: column; }
+  .stage:not(:last-child)::after { display: none; }
 }
 </style>
 </head>
 <body>
 
-<!-- Password Protection Screen -->
-<div id="password-screen">
-  <div class="password-container">
-    <h2>🔒 Document Access</h2>
-    <p>This document is confidential and requires authentication to view.</p>
-    <input type="password" id="password-input" class="password-input" placeholder="Enter password" />
-    <br/>
-    <button onclick="checkPassword()" class="password-btn">Access Document</button>
-    <div id="error-message" class="error-message">Incorrect password. Please try again.</div>
+<!-- ══════════════════════════════════════════════════════════
+     PASSWORD SCREEN
+     ══════════════════════════════════════════════════════════ -->
+<div id="password-screen" role="dialog" aria-modal="true" aria-labelledby="pw-title">
+  <div class="pw-card">
+    <h2 id="pw-title">Document Access</h2>
+    <p>This document contains confidential strategic intelligence and requires authorization.</p>
+    <input
+      type="password"
+      id="password-input"
+      class="pw-input"
+      placeholder="Enter authorization code"
+      aria-label="Password"
+      autocomplete="current-password"
+    />
+    <button onclick="checkPassword()" class="pw-btn">Authenticate</button>
+    <div id="error-message" class="pw-error" role="alert" aria-live="polite">
+      Authentication failed. Please verify your credentials.
+    </div>
+    <p class="pw-footer-note">WoW‑Strategies Private Limited. Confidential &amp; Proprietary.</p>
   </div>
 </div>
 
-<!-- Main Content (Hidden by default) -->
-<div class="content" id="main-content">
+<!-- ══════════════════════════════════════════════════════════
+     MAIN CONTENT
+     ══════════════════════════════════════════════════════════ -->
+<div id="main-content" class="content">
 
-<!-- PAGE 1: COVER -->
-<section class="page" data-page="1">
-  <div class="header">
-    <span class="doc-title">AI-Powered QR & WhatsApp CRM Platform</span>
-    <span class="confidential">Confidential • Strategic Concept Note</span>
-  </div>
-  <div class="footer">
-    <span class="contact">WoW‑Strategies Private Limited • +91 022 4880 8695 • hello@wow-strategies.com</span>
-    <span class="page-number" data-label="Page">1</span>
-  </div>
+  <!-- Mobile sticky nav -->
+  <nav class="mobile-nav" aria-label="Document navigation">
+    <div class="brand">
+      Strategic Concept Note
+      <small>WoW‑Strategies</small>
+    </div>
+    <span class="conf-tag">Confidential</span>
+  </nav>
 
-  <h1 class="hero-title">Compliance → Intelligent Growth</h1>
-  <div class="tagline">Transforming mandatory real estate disclosure into a trust, data, and conversion engine</div>
+  <div class="doc-wrap">
 
-  <div class="badge-row">
-    <div class="badge">QR-Enabled</div>
-    <div class="badge">Blockchain Verifiable</div>
-    <div class="badge">AI Orchestration</div>
-    <div class="badge">WhatsApp Conversational</div>
-    <div class="badge">Integrated CRM</div>
-    <div class="badge">Analytics & Attribution</div>
-  </div>
+  <!-- ──────────────────────────────────────────────────────
+       PAGE 1: COVER
+       ────────────────────────────────────────────────────── -->
+  <section class="page" data-page="1" aria-label="Cover">
+    <div class="pg-header">
+      <span class="doc-title">AI-Powered QR &amp; WhatsApp CRM</span>
+      <span class="conf-tag">Confidential</span>
+    </div>
+    <div class="pg-footer">
+      <span class="contact">WoW‑Strategies Private Limited &nbsp;|&nbsp; +91 022 4880 8695 &nbsp;|&nbsp; hello@wow-strategies.com</span>
+      <span class="pg-num">Page 1</span>
+    </div>
 
-  <p class="lead">
-    This concept note proposes an AI-powered, QR-triggered, WhatsApp-native engagement and CRM platform
-    that converts passive statutory compliance into an active, attributable, multi-stakeholder value network.
-  </p>
+    <div style="margin-top: 10vh;">
+      <div class="section-label">Strategic Concept Note</div>
+      <h1 class="hero-title">From Compliance to Intelligent Growth</h1>
+      <p class="tagline">Transforming mandatory real estate disclosure into a verifiable trust, data, and conversion ecosystem.</p>
 
-  <div class="callout">
-    <h3>Strategic Thesis</h3>
-    <p>
-      Every registered project already holds verified disclosures. We weaponize this dormant asset by binding it to a
-      tamper-evident QR and conversational AI layer, collapsing verification friction, amplifying trust signals,
-      capturing intent data early, and routing structured, high-confidence demand directly into an integrated CRM.
+      <div class="badge-row" aria-label="Core Capabilities">
+        <div class="badge">QR Enablement</div>
+        <div class="badge">Cryptographic Provenance</div>
+        <div class="badge">AI Orchestration</div>
+        <div class="badge">Conversational Engagement</div>
+        <div class="badge">CRM Integration</div>
+      </div>
+
+      <p class="lead">
+        This memorandum outlines an AI-powered, QR-triggered engagement infrastructure designed to convert static, statutory compliance into an active, attributable multi-stakeholder value network.
+      </p>
+
+      <div class="callout" role="note">
+        <h4>Strategic Imperative</h4>
+        <p>
+          Registered projects hold verified disclosures as dormant assets. By linking these to a tamper-evident QR and conversational AI layer, we systematically collapse verification friction, amplify trust signals, capture intent early, and route high-confidence demand directly into enterprise CRMs.
+        </p>
+      </div>
+
+      <p class="footer-note" style="margin-top: 15vh;">
+        Prepared by WoW‑Strategies Private Limited. This document is strictly confidential and intended solely for strategic evaluation.
+      </p>
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────────────────────
+       PAGE 2: EXECUTIVE SUMMARY
+       ──���─────────────────────────────────────────────────── -->
+  <section class="page" data-page="2" aria-label="Executive Summary">
+    <div class="pg-header">
+      <span class="doc-title">Executive Summary</span>
+      <span class="conf-tag">Confidential</span>
+    </div>
+    <div class="pg-footer">
+      <span class="contact">WoW‑Strategies Private Limited &nbsp;|&nbsp; +91 022 4880 8695 &nbsp;|&nbsp; hello@wow-strategies.com</span>
+      <span class="pg-num">Page 2</span>
+    </div>
+
+    <div class="section-label">Executive Summary</div>
+    <h2>The Opportunity: Monetizing Compliance Operations</h2>
+
+    <div class="grid-3">
+      <div class="block gradient-top">
+        <h3>Current State Context</h3>
+        <p>Regulatory listings fulfill base compliance but fail to accelerate buyer conviction or structured lead capture. Channel fragmentation continues to erode attribution, operational speed, and consumer trust.</p>
+      </div>
+      <div class="block gradient-top">
+        <h3>Proposed Architecture</h3>
+        <p>Deploy mandatory, tamper-evident QR mechanisms linked to a dynamic AI and WhatsApp conversational gateway. This shifts the paradigm from passive verification to guided data intake.</p>
+      </div>
+      <div class="block gradient-top">
+        <h3>Value Creation</h3>
+        <p>Yields compressed decision cycles, highly attributable pipeline generation, and real-time market intelligence, unlocking defensive monetization across the entire stakeholder ecosystem.</p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="block">
+        <h3>Primary Value Levers</h3>
+        <ul class="tick-list">
+          <li>Frictionless trust validation <em>in situ</em></li>
+          <li>AI-guided conversational discovery</li>
+          <li>Unified inbound intent capture</li>
+          <li>Predictive scoring &amp; intelligent routing</li>
+          <li>Market intelligence flywheel</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h3>Structural Differentiators</h3>
+        <ul class="tick-list">
+          <li>Compliance-first data legitimacy</li>
+          <li>Conversation-to-CRM auto-binding (zero manual entry)</li>
+          <li>Real-time auditability &amp; cryptographic immutability</li>
+          <li>API-ready architecture for ecosystem interoperability</li>
+          <li>Scalable, multi-jurisdictional blueprint</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="kpi-val">₹840 Cr</div>
+        <div class="kpi-label">Estimated TAM (3 Yrs)</div>
+        <small>Assuming 70% adoption across issuance, core platform, and value-added services.</small>
+      </div>
+      <div class="kpi">
+        <div class="kpi-val">35–50%</div>
+        <div class="kpi-label">Conversion Uplift</div>
+        <small>Projected delta via digital trust &amp; guided journey optimization.</small>
+      </div>
+      <div class="kpi">
+        <div class="kpi-val">20–30%</div>
+        <div class="kpi-label">CAC Reduction</div>
+        <small>Driven by workflow automation and high-fidelity attributed intent.</small>
+      </div>
+    </div>
+
+    <div class="callout">
+      <h4>The North Star Metric</h4>
+      <p>Transforming regulatory "cost centers" into a highly scalable demand-generation engine, delivering durable competitive advantage and precise operational intelligence.</p>
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────────────────────
+       PAGE 3: PROBLEM LANDSCAPE
+       ────────────────────────────────────────────────────── -->
+  <section class="page" data-page="3" aria-label="Problem Landscape">
+    <div class="pg-header">
+      <span class="doc-title">Strategic Context</span>
+      <span class="conf-tag">Confidential</span>
+    </div>
+    <div class="pg-footer">
+      <span class="contact">WoW‑Strategies Private Limited &nbsp;|&nbsp; +91 022 4880 8695 &nbsp;|&nbsp; hello@wow-strategies.com</span>
+      <span class="pg-num">Page 3</span>
+    </div>
+
+    <div class="section-label">Problem Landscape</div>
+    <h2>Systemic Inefficiencies Suppressing Market Velocity</h2>
+
+    <div class="grid-2">
+      <div class="block">
+        <h3>Buyer-Side Friction</h3>
+        <ul class="tick-list">
+          <li>Disjointed steps across verification, enquiry, and follow-up.</li>
+          <li>Manual authenticity checks delay conviction and capital commitment.</li>
+          <li>Misinformation risk significantly elevates diligence overhead.</li>
+          <li>Absence of structured capture for early exploratory intent.</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h3>Developer-Side Constraints</h3>
+        <ul class="tick-list">
+          <li>Static compliance pages yield zero conversion-optimized UX.</li>
+          <li>Fragmented inbound channels (phone, portals, disconnected chat).</li>
+          <li>Limited attribution renders marketing ROI fundamentally opaque.</li>
+          <li>Reliance on manual CRM entry creates inconsistent lead qualification.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Root Cause Analysis Matrix</h3>
+      <div class="table-wrap">
+        <table class="table striped">
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th>Status Quo Vulnerability</th>
+              <th>Strategic Consequence</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Trust Signaling</strong></td>
+              <td>Static, passive; impact decays rapidly over time.</td>
+              <td>Delayed conviction → suppressed funnel velocity.</td>
+            </tr>
+            <tr>
+              <td><strong>Data Cohesion</strong></td>
+              <td>Siloed channels with unstructured input mechanisms.</td>
+              <td>Sub-optimal intelligence → misallocated marketing spend.</td>
+            </tr>
+            <tr>
+              <td><strong>Engagement Model</strong></td>
+              <td>One-way disclosure (pull-only dynamics).</td>
+              <td>Parity experience → lack of competitive differentiation.</td>
+            </tr>
+            <tr>
+              <td><strong>Attribution</strong></td>
+              <td>Manual lineage tracing / incomplete mapping.</td>
+              <td>Severe optimization blind spots for enterprise.</td>
+            </tr>
+            <tr>
+              <td><strong>Scalability</strong></td>
+              <td>Heavy reliance on human-in-the-loop workflows.</td>
+              <td>Non-linear cost structures limiting growth margins.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="callout">
+      <h4>Strategic Intervention</h4>
+      <p>Embedding verified data directly inside a conversational workflow compresses cognitive load, forces real-time validation, and fundamentally shifts latent attention into declared intent earlier in the lifecycle.</p>
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────────────────────
+       PAGE 4: SOLUTION ARCHITECTURE
+       ────────────────────────────────────────────────────── -->
+  <section class="page" data-page="4" aria-label="Solution Architecture">
+    <div class="pg-header">
+      <span class="doc-title">Solution Architecture</span>
+      <span class="conf-tag">Confidential</span>
+    </div>
+    <div class="pg-footer">
+      <span class="contact">WoW‑Strategies Private Limited &nbsp;|&nbsp; +91 022 4880 8695 &nbsp;|&nbsp; hello@wow-strategies.com</span>
+      <span class="pg-num">Page 4</span>
+    </div>
+
+    <div class="section-label">Architecture</div>
+    <h2>A Five-Layer Platform Orchestrating Conversion</h2>
+
+    <div class="stage-flow" role="list">
+      <div class="stage" role="listitem"><span class="stage-num">01</span>Compliance<br>Data Backbone</div>
+      <div class="stage" role="listitem"><span class="stage-num">02</span>QR<br>Issuance Layer</div>
+      <div class="stage" role="listitem"><span class="stage-num">03</span>Conversational<br>AI Gateway</div>
+      <div class="stage" role="listitem"><span class="stage-num">04</span>Intent<br>Scoring Engine</div>
+      <div class="stage" role="listitem"><span class="stage-num">05</span>CRM &amp;<br>Analytics Sink</div>
+    </div>
+
+    <div class="strategy-box">
+      <div class="pillar">
+        <h4>Core Infrastructure Components</h4>
+        <ul class="tick-list">
+          <li>Cryptographic hash registry ensuring certificate provenance.</li>
+          <li>Unique QR plate deployment with anti-tamper serialization.</li>
+          <li>AI-driven WhatsApp integration (NLU + retrieval augmentation).</li>
+          <li>Dynamic property intelligence micro-sites.</li>
+          <li>Unified engagement and conversion API gateway.</li>
+        </ul>
+      </div>
+      <div class="pillar">
+        <h4>Advanced Intelligence Layer</h4>
+        <ul class="tick-list">
+          <li>RAG (Retrieval-Augmented Generation) over verified disclosures.</li>
+          <li>Automated buyer persona inference and qualification matrices.</li>
+          <li>Adaptive dialogue trees triggered by real-time intent signals.</li>
+          <li>Predictive funnel stage probability scoring.</li>
+          <li>Anomaly detection for fraud and misuse typologies.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Conversational Journey Orchestration</h3>
+      <ol style="margin: 0 0 0 1.2rem;">
+        <li><strong>Scan Initiation:</strong> QR triggers verified landing handoff or deep links to WhatsApp with secure session token.</li>
+        <li><strong>Verification Greeting:</strong> Chatbot delivers dynamic trust capsule (project snapshot + cryptographic hash).</li>
+        <li><strong>Adaptive Qualification:</strong> System identifies budget, timeline, and use-case (investment vs. end-user) via natural language.</li>
+        <li><strong>Data Structuring:</strong> Intent vectors are generated; scoring pipeline pushes updates to CRM in real-time.</li>
+        <li><strong>Asset Delivery:</strong> Personalized collateral (floor plans, pricing bands) is dispatched with monitored engagement telemetry.</li>
+      </ol>
+    </div>
+
+    <div class="callout">
+      <h4>Design Principle: Zero Re-Keying</h4>
+      <p>Every interaction yields structured, attributable data that augments a centralized market intelligence graph, establishing a self-reinforcing learning loop for enterprise deployment.</p>
+    </div>
+  </section>
+
+  <!-- ────────────────────────────────────��─────────────────
+       PAGE 5: DATA & AI LAYER
+       ────────────────────────────────────────────────────── -->
+  <section class="page" data-page="5" aria-label="Data and AI Layer">
+    <div class="pg-header">
+      <span class="doc-title">Data &amp; AI Enablement</span>
+      <span class="conf-tag">Confidential</span>
+    </div>
+    <div class="pg-footer">
+      <span class="contact">WoW‑Strategies Private Limited &nbsp;|&nbsp; +91 022 4880 8695 &nbsp;|&nbsp; hello@wow-strategies.com</span>
+      <span class="pg-num">Page 5</span>
+    </div>
+
+    <div class="section-label">Capabilities</div>
+    <h2>A Self-Reinforcing Data Fabric Powering Decision Intelligence</h2>
+
+    <div class="grid-2">
+      <div class="block">
+        <h3>Data Ingestion Vectors</h3>
+        <ul class="tick-list">
+          <li>Regulatory filings (mapped to normalized schemas).</li>
+          <li>Developer-supplied inventory and dynamic pricing APIs.</li>
+          <li>Token-curated chat interaction transcripts.</li>
+          <li>Behavioral intent telemetry (scans, dwells, re-engagements).</li>
+          <li>Granular session metadata (device fingerprinting, geolocation).</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h3>Processing Pipelines</h3>
+        <ul class="tick-list">
+          <li>High-throughput event streaming architecture.</li>
+          <li>Semantic enrichment and strict PII masking protocols.</li>
+          <li>Vectorization (embedding stores optimized for RAG).</li>
+          <li>Lead enrichment via aggregated external data signals.</li>
+          <li>Heuristic fraud pattern identification.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="block">
+        <h3>AI Model Typology</h3>
+        <ul class="tick-list">
+          <li>NLU intent classifier (verification vs. pricing vs. support).</li>
+          <li>Engagement propensity modeling (recency + feature vectors).</li>
+          <li>Composite lead scoring (budget fit + urgency + depth).</li>
+          <li>Churn risk and drop-off pattern recognition.</li>
+          <li>Response optimization via multi-arm bandit testing.</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h3>Governance &amp; Controls</h3>
+        <ul class="tick-list">
+          <li>PII redaction guardrails executed pre-embedding.</li>
+          <li>Fully auditable and explainable scoring thresholds.</li>
+          <li>Cryptographically hashed audit log immutability.</li>
+          <li>Centralized version registry for prompt templates.</li>
+          <li>Continuous model drift telemetry and feature monitoring.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>End-to-End Data Telemetry Flow</h3>
+      <p style="font-family: var(--font-serif); font-weight: 700; color: var(--exec-blue); font-size: 10pt;">
+        Scan QR → Session Token → AI Gateway → Intent Classification → RAG Generation → Event Stream → Scoring Engine → CRM Sink → Analytics Data Warehouse → Model Refinement.
+      </p>
+      <p>Each node appends structured metadata, producing a continuously compounding asset for business intelligence and model accuracy.</p>
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────────────────────
+       PAGE 6: STAKEHOLDER VALUE MATRIX
+       ────────────────────────────────────────────────────── -->
+  <section class="page" data-page="6" aria-label="Stakeholder Value Matrix">
+    <div class="pg-header">
+      <span class="doc-title">Value Proposition</span>
+      <span class="conf-tag">Confidential</span>
+    </div>
+    <div class="pg-footer">
+      <span class="contact">WoW‑Strategies Private Limited &nbsp;|&nbsp; +91 022 4880 8695 &nbsp;|&nbsp; hello@wow-strategies.com</span>
+      <span class="pg-num">Page 6</span>
+    </div>
+
+    <div class="section-label">Ecosystem Impact</div>
+    <h2>Multi-Sided Platform Economics &amp; Value Realization</h2>
+
+    <div class="impact-matrix">
+      <div class="impact">
+        <h3>Buyers</h3>
+        <em>Objective: Confidence &amp; Clarity</em>
+        <ul class="tick-list" style="margin-top: 8px;">
+          <li>Instant legitimacy validation on any device.</li>
+          <li>Structured, guided Q&amp;A eliminating ambiguity.</li>
+          <li>Contextual curation of digital collateral.</li>
+          <li>Dramatically reduced diligence friction.</li>
+        </ul>
+      </div>
+      <div class="impact">
+        <h3>Developers</h3>
+        <em>Objective: Revenue Velocity</em>
+        <ul class="tick-list" style="margin-top: 8px;">
+          <li>Real-time routing of qualified, attributable leads.</li>
+          <li>Automated, intelligent nurturing sequences.</li>
+          <li>Elimination of manual CRM data entry overhead.</li>
+          <li>Data-driven pricing and messaging optimization.</li>
+        </ul>
+      </div>
+      <div class="impact">
+        <h3>Regulators</h3>
+        <em>Objective: Market Integrity</em>
+        <ul class="tick-list" style="margin-top: 8px;">
+          <li>Systemic uplift in data transparency and disclosure.</li>
+          <li>Early anomaly detection across broad portfolios.</li>
+          <li>Aggregated, anonymized macro market intelligence.</li>
+          <li>Sustainable, non-extractive platform monetization.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="fin-model">
+      <div class="rev-card">
+        <div class="amt">₹10K–₹25K</div>
+        <div class="rev-label">Issuance Fee</div>
+        <small>One-time CAPEX per project (tiered by asset class/scale).</small>
+      </div>
+      <div class="rev-card">
+        <div class="amt">₹5K–₹15K</div>
+        <div class="rev-label">Annual OPEX</div>
+        <small>Platform maintenance, security updates, and QR refresh.</small>
+      </div>
+      <div class="rev-card">
+        <div class="amt">₹15K–₹50K</div>
+        <div class="rev-label">CRM &amp; AI Suite</div>
+        <small>Hosting, predictive scoring, and dashboard access.</small>
+      </div>
+      <div class="rev-card">
+        <div class="amt">Premium</div>
+        <div class="rev-label">Add-on Modules</div>
+        <small>Virtual tours, advanced APIs, benchmarking indices.</small>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Target Operational Metrics</h3>
+      <div class="kpi-grid">
+        <div class="kpi">
+          <div class="kpi-val">+50%</div>
+          <div class="kpi-label">Lead Capture Efficacy</div>
+          <small>QR-triggered workflows versus baseline organic web traffic.</small>
+        </div>
+        <div class="kpi">
+          <div class="kpi-val">−35%</div>
+          <div class="kpi-label">Cycle Compression</div>
+          <small>Reduction in end-to-end inquiry-to-booking timelines.</small>
+        </div>
+        <div class="kpi">
+          <div class="kpi-val">+90%</div>
+          <div class="kpi-label">Adoption Saturation</div>
+          <small>Targeted coverage within 24 months of regulatory mandate.</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────────────────────
+       PAGE 7: IMPLEMENTATION ROADMAP
+       ────────────────────────────────────────────────────── -->
+  <section class="page" data-page="7" aria-label="Implementation Roadmap">
+    <div class="pg-header">
+      <span class="doc-title">Execution Strategy</span>
+      <span class="conf-tag">Confidential</span>
+    </div>
+    <div class="pg-footer">
+      <span class="contact">WoW‑Strategies Private Limited &nbsp;|&nbsp; +91 022 4880 8695 &nbsp;|&nbsp; hello@wow-strategies.com</span>
+      <span class="pg-num">Page 7</span>
+    </div>
+
+    <div class="section-label">Roadmap</div>
+    <h2>Phased Execution Plan (24-Month Horizon)</h2>
+
+    <div class="timeline">
+      <div class="phase" data-phase="Phase 1 (Months 1–3)">
+        <h3>Pilot &amp; Validation</h3>
+        <ul class="tick-list">
+          <li>100 curated, high-visibility projects onboarded.</li>
+          <li>Core QR issuance and base chatbot logic deployed.</li>
+          <li>UX feedback instrumentation established.</li>
+          <li>Baseline KPI measurement initiated.</li>
+        </ul>
+      </div>
+      <div class="phase" data-phase="Phase 2 (Months 4–12)">
+        <h3>Scale &amp; Mandate</h3>
+        <ul class="tick-list">
+          <li>Statewide regulatory mandate rollout.</li>
+          <li>Advanced AI scoring and personalization features unlocked.</li>
+          <li>Public trust and awareness campaign launch.</li>
+          <li>Continuous performance optimization loops activated.</li>
+        </ul>
+      </div>
+      <div class="phase" data-phase="Phase 3 (Year 2+)">
+        <h3>Ecosystem Expansion</h3>
+        <ul class="tick-list">
+          <li>Multi-jurisdictional standardization efforts.</li>
+          <li>Predictive market intelligence data monetization.</li>
+          <li>Cross-portfolio benchmarking indices established.</li>
+          <li>Interoperable third-party data exchange APIs.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="block">
+        <h3>Risk Mitigation Strategies</h3>
+        <ul class="tick-list risk-list">
+          <li>Pilot-first staging limits technical and adoption friction exposure.</li>
+          <li>Progressive capability gating protects AI trust metrics.</li>
+          <li>Deterministic fallback flows insulate against LLM/messaging outages.</li>
+          <li>Endpoint redundancy ensures uninterrupted verification SLA.</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h3>Primary Success Criteria</h3>
+        <ul class="tick-list">
+          <li><strong>Adoption:</strong> Installed base coverage percentage.</li>
+          <li><strong>Speed:</strong> Lead qualification and routing SLA adherence.</li>
+          <li><strong>Conversion:</strong> Qualified prospect to booking ratio.</li>
+          <li><strong>Trust:</strong> Composite user confidence survey scores.</li>
+          <li><strong>Data:</strong> Schema fill rate and data fidelity metrics.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <h4>Architectural Scalability</h4>
+      <p>Strict modularity (QR microservice, ChatOps, Scoring Engine, Dashboard) allows for phased, jurisdictional onboarding without requiring core monolithic re-architecture, thereby maximizing CAPEX efficiency.</p>
+    </div>
+  </section>
+
+  <!-- ─────────────────────��────────────────────────────────
+       PAGE 8: CALL TO ACTION
+       ────────────────────────────────────────────────────── -->
+  <section class="page" data-page="8" aria-label="Call to Action">
+    <div class="pg-header">
+      <span class="doc-title">Next Steps</span>
+      <span class="conf-tag">Confidential</span>
+    </div>
+    <div class="pg-footer">
+      <span class="contact">WoW‑Strategies Private Limited &nbsp;|&nbsp; +91 022 4880 8695 &nbsp;|&nbsp; hello@wow-strategies.com</span>
+      <span class="pg-num">Page 8</span>
+    </div>
+
+    <div class="section-label">Conclusion &amp; Next Steps</div>
+    <h2>Initiating the Transformation Journey</h2>
+
+    <div class="ribbon">
+      "The window to pivot compliance operations into an AI-orchestrated market advantage is open."
+    </div>
+
+    <div class="grid-3">
+      <div class="block gradient-top">
+        <h3>Leadership Mandate</h3>
+        <p>Establish this platform as the definitive industry standard for verifiable project intelligence and uncompromising buyer assurance.</p>
+      </div>
+      <div class="block gradient-top">
+        <h3>Innovation Integration</h3>
+        <p>Synthesize cryptographic provenance with AI-led conversational workflows to measurably compress consumer decision timelines.</p>
+      </div>
+      <div class="block gradient-top">
+        <h3>Systemic Impact</h3>
+        <p>Drive confidence, structural transparency, and defensible monetization while elevating the operational baseline for all stakeholders.</p>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Recommended Action Plan</h3>
+      <ol style="margin: 0 0 0 1.2rem;">
+        <li><strong>Governance Formulation:</strong> Formally approve pilot charter and establish a joint steering committee.</li>
+        <li><strong>Technical Specification:</strong> Finalize data schemas, cryptographic requirements, and core API contracts.</li>
+        <li><strong>Development Sprints:</strong> Deploy foundational AI conversational flows (prioritizing English + primary local dialect).</li>
+        <li><strong>Benchmarking:</strong> Establish pre-deployment KPIs for conversion rates, response latencies, and trust indices.</li>
+        <li><strong>Controlled Launch:</strong> Execute 100-project pilot, instrumenting rigorous analytics for rapid hypothesis validation.</li>
+      </ol>
+    </div>
+
+    <div class="callout" role="note" aria-label="Contact information" style="margin-top: 6mm; background: var(--exec-navy); color: var(--white); border-left: none;">
+      <h4 style="color: var(--white); margin-bottom: 4px;">Strategic Engagement</h4>
+      <p style="font-family: var(--font-sans); font-style: normal; font-size: 10pt;">
+        <strong>WoW‑Strategies Private Limited</strong><br/>
+        Phone: <a href="tel:+912248808695" style="color:#60a5fa;">+91 022 4880 8695</a>
+        &nbsp;|&nbsp;
+        Email: <a href="mailto:hello@wow-strategies.com" style="color:#60a5fa;">hello@wow-strategies.com</a><br/><br/>
+        <em>We are prepared to operationalize this paradigm shift immediately.</em>
+      </p>
+    </div>
+
+    <p class="footer-note">
+      This concept note is directional, intended to facilitate executive alignment prior to definitive technical and commercial scoping. Financial projections are indicative and subject to rigorous market validation. &copy; 2025 WoW‑Strategies Private Limited. All rights reserved.
     </p>
-  </div>
+  </section>
 
-  <p class="footer-note">
-    Prepared by WoW‑Strategies Private Limited. This document is confidential and intended solely for strategic evaluation discussions.
-  </p>
-</section>
+  </div><!-- /.doc-wrap -->
+</div><!-- /#main-content -->
 
-<!-- PAGE 2: EXECUTIVE SUMMARY -->
-<section class="page" data-page="2">
-  <div class="header">
-    <span class="doc-title">Executive Summary</span>
-    <span class="confidential">Confidential</span>
-  </div>
-  <div class="footer">
-    <span class="contact">WoW‑Strategies Private Limited • +91 022 4880 8695 • hello@wow-strategies.com</span>
-    <span class="page-number" data-label="Page">2</span>
-  </div>
-
-  <h2>Executive Summary</h2>
-  <div class="divider"></div>
-
-  <div class="grid-3">
-    <div class="block">
-      <h3>Context</h3>
-      <p>Regulatory listings fulfill compliance but do not actively accelerate buyer conviction or structured lead capture. Fragmentation across channels erodes attribution, speed, and trust.</p>
-    </div>
-    <div class="block">
-      <h3>Solution</h3>
-      <p>Issue mandatory, tamper-evident QR plates per project linked to a dynamic AI + WhatsApp conversational layer and dashboard. Convert verification to guided engagement and data intake.</p>
-    </div>
-    <div class="block">
-      <h3>Value at Stake</h3>
-      <p>Shorter decision cycles, higher trust, attributable pipeline creation, and real-time intelligence unlocking defensible monetization & ecosystem uplift.</p>
-    </div>
-  </div>
-
-  <div class="grid-2">
-    <div class="block">
-      <h3>Strategic Levers</h3>
-      <ul class="tick-list">
-        <li>Frictionless trust validation in situ</li>
-        <li>AI-guided conversational discovery</li>
-        <li>Unified inbound intent capture</li>
-        <li>Predictive scoring & routing</li>
-        <li>Market intelligence flywheel</li>
-      </ul>
-    </div>
-    <div class="block">
-      <h3>Differentiation</h3>
-      <ul class="tick-list">
-        <li>Compliance-first data legitimacy</li>
-        <li>Conversation-to-CRM auto-binding</li>
-        <li>Real-time provenance & auditability</li>
-        <li>API-ready analytics layer</li>
-        <li>Scalable multi-jurisdiction blueprint</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="kpi-grid">
-    <div class="kpi">
-      <div class="kpi-value">₹840 Cr</div>
-      <div class="label">TAM (3 yrs @ 70% adoption)</div>
-      <small>Combined issuance + platform + value-added services.</small>
-    </div>
-    <div class="kpi">
-      <div class="kpi-value">35–50%</div>
-      <div class="label">Conversion uplift</div>
-      <small>Benchmark digital trust & guided journey deltas.</small>
-    </div>
-    <div class="kpi">
-      <div class="kpi-value">20–30%</div>
-      <div class="label">Acquisition cost reduction</div>
-      <small>Through automation & attributed intent.</small>
-    </div>
-  </div>
-
-  <div class="callout" style="margin-top:4mm;">
-    <h4>North Star</h4>
-    <p>Reframe "compliance cost" into a scalable demand-generation & intelligence platform delivering a durable advantage to all ecosystem stakeholders.</p>
-  </div>
-</section>
-
-<!-- PAGE 3: PROBLEM LANDSCAPE -->
-<section class="page" data-page="3">
-  <div class="header">
-    <span class="doc-title">Problem Landscape</span>
-    <span class="confidential">Confidential</span>
-  </div>
-  <div class="footer">
-    <span class="contact">WoW‑Strategies Private Limited • +91 022 4880 8695 • hello@wow-strategies.com</span>
-    <span class="page-number" data-label="Page">3</span>
-  </div>
-
-  <h2>Current Market Inefficiencies</h2>
-  <div class="divider"></div>
-
-  <div class="grid-2">
-    <div class="block">
-      <h3>Buyer Friction</h3>
-      <ul class="tick-list">
-        <li>Disjoint steps across verification, enquiry, and follow-up</li>
-        <li>Manual authenticity checks delay confidence</li>
-        <li>Misinformation risk raises diligence overhead</li>
-        <li>No structured capture of early exploratory signals</li>
-      </ul>
-    </div>
-    <div class="block">
-      <h3>Developer Constraints</h3>
-      <ul class="tick-list">
-        <li>Static compliance pages lack conversion UX</li>
-        <li>Fragmented inbound (phone/email/portal/chat)</li>
-        <li>Limited attribution — marketing ROI opacity</li>
-        <li>Manual CRM entry & inconsistent lead qualification</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="block">
-    <h3>Systemic Gaps</h3>
-    <table class="table striped">
-      <thead>
-        <tr><th>Dimension</th><th>Status Quo Weakness</th><th>Strategic Consequence</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>Trust Signaling</td><td>Static, passive, decays in impact</td><td>Delayed conviction → slower funnel velocity</td></tr>
-        <tr><td>Data Cohesion</td><td>Channel silos / unstructured inputs</td><td>Low intelligence & misallocated spend</td></tr>
-        <tr><td>Engagement Model</td><td>One-way disclosure (pull-only)</td><td>Low differentiation / parity experience</td></tr>
-        <tr><td>Attribution</td><td>Manual lineage / incomplete mapping</td><td>Optimisation blind spots</td></tr>
-        <tr><td>Scalability</td><td>Human-dependent workflows</td><td>Non-linear cost with growth</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="callout">
-    <h4>Opportunity Aperture</h4>
-    <p>Embedding verified data inside a conversational trust workflow compresses cognitive load, creates real-time validation, and converts latent attention to declared intent earlier.</p>
-  </div>
-</section>
-
-<!-- PAGE 4: SOLUTION OVERVIEW -->
-<section class="page" data-page="4">
-  <div class="header">
-    <span class="doc-title">Solution Architecture Overview</span>
-    <span class="confidential">Confidential</span>
-  </div>
-  <div class="footer">
-    <span class="contact">WoW‑Strategies Private Limited • +91 022 4880 8695 • hello@wow-strategies.com</span>
-    <span class="page-number" data-label="Page">4</span>
-  </div>
-
-  <h2>Solution Architecture – Layered View</h2>
-  <div class="divider"></div>
-
-  <div class="stage-flow">
-    <div class="stage">1. Compliance Data</div>
-    <div class="stage">2. QR Issuance</div>
-    <div class="stage">3. Conversational AI</div>
-    <div class="stage">4. Intent Scoring</div>
-    <div class="stage">5. CRM & Analytics</div>
-  </div>
-
-  <div class="strategy-box">
-    <div class="pillar">
-      <h4>Core Components</h4>
-      <ul class="tick-list">
-        <li>On-chain / cryptographic hash registry for certificate provenance</li>
-        <li>Unique QR plates with anti-tamper serialization</li>
-        <li>AI-driven WhatsApp chatbot (NLU + retrieval augmentation)</li>
-        <li>Property intelligence micro-site (dynamic components)</li>
-        <li>Unified engagement & conversion API gateway</li>
-      </ul>
-    </div>
-    <div class="pillar">
-      <h4>AI Intelligence Layer</h4>
-      <ul class="tick-list">
-        <li>RAG over verified disclosure corpus + FAQs</li>
-        <li>Buyer persona inference & lead qualification matrix</li>
-        <li>Adaptive dialogue flows based on interaction intent signals</li>
-        <li>Predictive funnel stage progression probability scoring</li>
-        <li>Anomaly detection for fraud / misuse patterns</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="block">
-    <h3>Conversational Journey Orchestration</h3>
-    <ol style="margin:0 0 4mm 1rem; padding:0;">
-      <li>Scan QR → Verified landing handoff or direct WhatsApp deep link.</li>
-      <li>Chatbot greets with dynamic trust capsule (project snapshot + legitimacy hash).</li>
-      <li>Adaptive questioning identifies budget, timeline, use-case (invest/live).</li>
-      <li>Structured intent vector generated → scoring pipeline updates CRM in real time.</li>
-      <li>Trigger personalized collateral (floor plans, pricing bands, offers) with monitored engagement event streams.</li>
-    </ol>
-  </div>
-
-  <div class="callout">
-    <h4>Design Principle</h4>
-    <p>Zero duplication, zero re-keying: each user action produces structured, attributable data augmenting an evolving market intelligence graph.</p>
-  </div>
-</section>
-
-<!-- PAGE 5: DATA & AI DETAIL -->
-<section class="page" data-page="5">
-  <div class="header">
-    <span class="doc-title">Data & AI Layer</span>
-    <span class="confidential">Confidential</span>
-  </div>
-  <div class="footer">
-    <span class="contact">WoW‑Strategies Private Limited • +91 022 4880 8695 • hello@wow-strategies.com</span>
-    <span class="page-number" data-label="Page">5</span>
-  </div>
-
-  <h2>Data Fabric & AI Enablement</h2>
-  <div class="divider"></div>
-
-  <div class="grid-2">
-    <div class="block">
-      <h3>Data Ingestion</h3>
-      <ul class="tick-list">
-        <li>Regulatory filings (structured → normalized schema)</li>
-        <li>Developer-provided inventory & pricing APIs</li>
-        <li>Chat interaction transcripts (token-curated)</li>
-        <li>Intent events (scan, dwell, asset open, re-engage)</li>
-        <li>Session metadata (device, geolocation granularity)</li>
-      </ul>
-    </div>
-    <div class="block">
-      <h3>Processing Pipelines</h3>
-      <ul class="tick-list">
-        <li>Event streaming (Kafka / Pulsar)</li>
-        <li>Semantic enrichment (entity resolution, PII masking)</li>
-        <li>Vectorization (embedding store for RAG)</li>
-        <li>Lead enrichment (external data signals optional)</li>
-        <li>Fraud heuristics (rate anomalies, signature mismatch)</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="grid-2">
-    <div class="block">
-      <h3>AI Models</h3>
-      <ul class="tick-list">
-        <li>NLU intent classifier (multi-label: verification / pricing / investment / support)</li>
-        <li>Engagement propensity model (time-based recency & feature vector)</li>
-        <li>Lead score (weighted composite: budget fit, urgency, interaction depth)</li>
-        <li>Churn risk (drop-off pattern recognition)</li>
-        <li>Response optimization (A/B multi-arm bandit for prompts)</li>
-      </ul>
-    </div>
-    <div class="block">
-      <h3>Governance</h3>
-      <ul class="tick-list">
-        <li>PII redaction guardrails pre-embedding</li>
-        <li>Explainable scoring thresholds archived</li>
-        <li>Audit log immutability hashing</li>
-        <li>Versioned prompt templates (registry)</li>
-        <li>Model drift telemetry (feature distribution watch)</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="block">
-    <h3>Illustrative Data Flow</h3>
-    <p><strong>Scan QR → Session Token → AI Gateway → Intent Classification → RAG Answer → Event Stream → Scoring Engine → CRM Sink → Analytics Warehouse.</strong></p>
-    <p>Each step appends structured metadata creating a continuously improving reinforcement loop for model refinement & business intelligence.</p>
-  </div>
-</section>
-
-<!-- PAGE 6: STAKEHOLDER VALUE -->
-<section class="page" data-page="6">
-  <div class="header">
-    <span class="doc-title">Stakeholder Value Matrix</span>
-    <span class="confidential">Confidential</span>
-  </div>
-  <div class="footer">
-    <span class="contact">WoW‑Strategies Private Limited • +91 022 4880 8695 • hello@wow-strategies.com</span>
-    <span class="page-number" data-label="Page">6</span>
-  </div>
-
-  <h2>Stakeholder Value & Impact</h2>
-  <div class="divider"></div>
-
-  <div class="impact-matrix">
-    <div class="impact">
-      <h3>Buyers <em>(Confidence)</em></h3>
-      <ul class="tick-list">
-        <li>Instant legitimacy check</li>
-        <li>Structured guided Q&A</li>
-        <li>Curated collateral delivery</li>
-        <li>Reduced decision ambiguity</li>
-      </ul>
-    </div>
-    <div class="impact">
-      <h3>Developers <em>(Revenue Velocity)</em></h3>
-      <ul class="tick-list">
-        <li>Qualified, attributable leads</li>
-        <li>Automated nurturing triggers</li>
-        <li>Lower manual CRM burden</li>
-        <li>Pricing & messaging optimization</li>
-      </ul>
-    </div>
-    <div class="impact">
-      <h3>Regulator <em>(Market Integrity)</em></h3>
-      <ul class="tick-list">
-        <li>Data transparency uplift</li>
-        <li>Early anomaly detection</li>
-        <li>Aggregated market intelligence</li>
-        <li>Sustainable platform monetization</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="fin-model">
-    <div class="rev-card">
-      <div class="amt">₹10K–₹25K</div>
-      <div>Issuance Fee<br><small>One-time per project (size / asset class)</small></div>
-    </div>
-    <div class="rev-card">
-      <div class="amt">₹5K–₹15K</div>
-      <div>Annual Maintenance<br><small>Continuity, security, updates</small></div>
-    </div>
-    <div class="rev-card">
-      <div class="amt">₹15K–₹50K</div>
-      <div>CRM & AI Suite<br><small>Hosting, scoring, analytics</small></div>
-    </div>
-    <div class="rev-card">
-      <div class="amt">Premium</div>
-      <div>Add-ons<br><small>Virtual tours, predictive, benchmarking</small></div>
-    </div>
-  </div>
-
-  <div class="block">
-    <h3>Illustrative KPIs</h3>
-    <div class="kpi-grid">
-      <div class="kpi">
-        <div class="kpi-value">+50%</div>
-        <div class="label">Lead capture rate</div>
-        <small>QR vs baseline web traffic.</small>
-      </div>
-      <div class="kpi">
-        <div class="kpi-value">-35%</div>
-        <div class="label">Decision time</div>
-        <small>Inquiry to booking cycle.</small>
-      </div>
-      <div class="kpi">
-        <div class="kpi-value">+90%</div>
-        <div class="label">Adoption target</div>
-        <small>Post-mandate steady state.</small>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PAGE 7: IMPLEMENTATION ROADMAP -->
-<section class="page" data-page="7">
-  <div class="header">
-    <span class="doc-title">Implementation Roadmap</span>
-    <span class="confidential">Confidential</span>
-  </div>
-  <div class="footer">
-    <span class="contact">WoW‑Strategies Private Limited • +91 022 4880 8695 • hello@wow-strategies.com</span>
-    <span class="page-number" data-label="Page">7</span>
-  </div>
-
-  <h2>Strategic Implementation Roadmap</h2>
-  <div class="divider"></div>
-
-  <div class="timeline">
-    <div class="phase" data-phase="Phase 1">
-      <h3>Pilot (3 Months)</h3>
-      <ul class="tick-list">
-        <li>100 curated projects onboarded</li>
-        <li>QR issuance + base chatbot flows</li>
-        <li>Feedback instrumentation</li>
-        <li>Baseline metric capture</li>
-      </ul>
-    </div>
-    <div class="phase" data-phase="Phase 2">
-      <h3>Scale (9–12 Months)</h3>
-      <ul class="tick-list">
-        <li>Mandated statewide roll-out</li>
-        <li>Advanced AI scoring & personalization</li>
-        <li>Public trust campaign</li>
-        <li>Performance optimization loops</li>
-      </ul>
-    </div>
-    <div class="phase" data-phase="Phase 3">
-      <h3>Expansion (Year 2+)</h3>
-      <ul class="tick-list">
-        <li>Multi-jurisdiction standardization</li>
-        <li>Predictive market intelligence modules</li>
-        <li>Cross-portfolio benchmarking</li>
-        <li>Interoperable data exchange APIs</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="grid-2">
-    <div class="block">
-      <h3>Risk Mitigation</h3>
-      <ul class="risk-list">
-        <li>Pilot-first de-risks technical & adoption friction</li>
-        <li>Progressive AI capability release gating</li>
-        <li>Fallback flows for message delivery outages</li>
-        <li>Redundancy in QR verification endpoints</li>
-      </ul>
-    </div>
-    <div class="block">
-      <h3>Success Metrics</h3>
-      <ul class="tick-list">
-        <li>Adoption (install base coverage %)</li>
-        <li>Speed (lead qualification SLA)</li>
-        <li>Conversion (qualified → booking)</li>
-        <li>Trust Index (survey composite)</li>
-        <li>Data Completeness (schema fill rate)</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="callout">
-    <h4>Scalability Lens</h4>
-    <p>Platform modularity (QR service, ChatOps, Scoring, Analytics, Dashboard) supports phased jurisdictional onboarding without re-architecting core primitives.</p>
-  </div>
-</section>
-
-<!-- PAGE 8: ECONOMICS & MODEL -->
-<section class="page" data-page="8">
-  <div class="header">
-    <span class="doc-title">Economics & Sustainability</span>
-    <span class="confidential">Confidential</span>
-  </div>
-  <div class="footer">
-    <span class="contact">WoW‑Strategies Private Limited • +91 022 4880 8695 • hello@wow-strategies.com</span>
-    <span class="page-number" data-label="Page">8</span>
-  </div>
-
-  <h2>Revenue Architecture & Sustainability</h2>
-  <div class="divider"></div>
-
-  <div class="grid-2">
-    <div class="block">
-      <h3>Revenue Streams</h3>
-      <ul class="tick-list">
-        <li>QR issuance (one-time)</li>
-        <li>Annual platform subscription</li>
-        <li>Advanced AI analytics tier</li>
-        <li>Developer premium modules (virtual tours, segmentation)</li>
-        <li>Aggregated anonymized market insights (ethical commercialization)</li>
-      </ul>
-    </div>
-    <div class="block">
-      <h3>Cost Drivers</h3>
-      <ul class="tick-list">
-        <li>Messaging & infrastructure usage (elastic)</li>
-        <li>AI inference & vector storage</li>
-        <li>Security & compliance (penetration, audits)</li>
-        <li>Support & onboarding success</li>
-        <li>Feature R&D (model refinement)</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="block">
-    <h3>Scaling Efficiency</h3>
-    <p><strong>Marginal cost ↓</strong> as QR & AI inference amortize over larger project base. Data network effects increase predictive accuracy → improves conversion → amplifies platform indispensability.</p>
-    <p>Path to <span class="emphasis">operational breakeven</span> accelerated by early adoption concentration in high-value urban clusters producing disproportionate lead velocity data.</p>
-  </div>
-
-  <table class="table striped">
-    <thead>
-      <tr><th>Year</th><th>Adoption (%)</th><th>Projects (Cum)</th><th>Avg Rev / Project</th><th>Indicative Gross (₹ Cr)</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>Year 1</td><td>~12%</td><td>~5,000</td><td>20K</td><td>≈50</td></tr>
-      <tr><td>Year 2</td><td>~40%</td><td>~16,800</td><td>24K</td><td>≈200</td></tr>
-      <tr><td>Year 3</td><td>~70%</td><td>~29,400</td><td>28K</td><td>≈500+</td></tr>
-    </tbody>
-  </table>
-
-  <div class="callout">
-    <h4>Economic Flywheel</h4>
-    <p>More verified interactions → richer behavioral dataset → improved AI intent / conversion predictions → higher developer ROI → stronger adoption & retention → incremental monetization scope.</p>
-  </div>
-</section>
-
-<!-- PAGE 9: GOVERNANCE & RISK -->
-<section class="page" data-page="9">
-  <div class="header">
-    <span class="doc-title">Governance & Risk</span>
-    <span class="confidential">Confidential</span>
-  </div>
-  <div class="footer">
-    <span class="contact">WoW‑Strategies Private Limited • +91 022 4880 8695 • hello@wow-strategies.com</span>
-    <span class="page-number" data-label="Page">9</span>
-  </div>
-
-  <h2>Governance, Compliance & Risk Controls</h2>
-  <div class="divider"></div>
-
-  <div class="grid-3">
-    <div class="block">
-      <h3>Data Protection</h3>
-      <ul class="tick-list">
-        <li>Role-based access & least privilege</li>
-        <li>PII encryption at rest / transit (TLS 1.3, AES-256)</li>
-        <li>Attribute-based redaction for analytics exports</li>
-        <li>Consent-managed user preferences (revocable)</li>
-      </ul>
-    </div>
-    <div class="block">
-      <h3>AI Ethics</h3>
-      <ul class="tick-list">
-        <li>Prompt version registry & audit diffing</li>
-        <li>Bias evaluation on classification outputs</li>
-        <li>Explainability payload (score rationale)</li>
-        <li>Fallback deterministic response templates</li>
-      </ul>
-    </div>
-    <div class="block">
-      <h3>Operational Controls</h3>
-      <ul class="tick-list">
-        <li>Incident SLA matrix (P1–P4)</li>
-        <li>Automated anomaly alerts (scan surges)</li>
-        <li>Key health dashboards (latency, fail rate)</li>
-        <li>Quarterly model performance review</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="block">
-    <h3>Key Risks & Mitigations</h3>
-    <table class="table striped">
-      <thead><tr><th>Risk</th><th>Impact</th><th>Mitigation</th></tr></thead>
-      <tbody>
-        <tr><td>Adoption inertia</td><td>Delayed revenue ramp</td><td>Incentivized early mover bundle + ROI proof metrics</td></tr>
-        <tr><td>Data quality variance</td><td>Model drift / erroneous scoring</td><td>Schema validation gates + anomaly flagging</td></tr>
-        <tr><td>Messaging platform rate caps</td><td>Throughput bottlenecks</td><td>Adaptive queuing + multi-provider abstraction</td></tr>
-        <tr><td>Security breach attempt</td><td>Trust erosion</td><td>Continuous scanning + zero trust segmentation</td></tr>
-        <tr><td>Regulatory update shifts</td><td>Workflow misalignment</td><td>Config-driven policy layer decoupled from code</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="callout">
-    <h4>Governance Charter</h4>
-    <p>Establish a joint steering forum (regulator + platform + developer council) ensuring transparency, escalation clarity, and iterative enhancement aligned to market integrity objectives.</p>
-  </div>
-</section>
-
-<!-- PAGE 10: IMPLEMENTATION DETAIL -->
-<section class="page" data-page="10">
-  <div class="header">
-    <span class="doc-title">Implementation Framework Detail</span>
-    <span class="confidential">Confidential</span>
-  </div>
-  <div class="footer">
-    <span class="contact">WoW‑Strategies Private Limited • +91 022 4880 8695 • hello@wow-strategies.com</span>
-    <span class="page-number" data-label="Page">10</span>
-  </div>
-
-  <h2>Implementation Framework – Expanded View</h2>
-  <div class="divider"></div>
-
-  <div class="grid-2">
-    <div class="block">
-      <h3>Phase 1 (Pilot) Objectives</h3>
-      <ul class="tick-list">
-        <li>Validate buyer engagement latency reduction</li>
-        <li>Benchmark conversion uplift vs control cohort</li>
-        <li>Calibrate intent scoring thresholds</li>
-        <li>Collect qualitative CX feedback loops</li>
-      </ul>
-    </div>
-    <div class="block">
-      <h3>Tech Deliverables</h3>
-      <ul class="tick-list">
-        <li>QR issuance engine MVP</li>
-        <li>Conversation orchestration v1</li>
-        <li>Lead scoring (linear baseline)</li>
-        <li>Analytics dashboards (core KPIs)</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="grid-2">
-    <div class="block">
-      <h3>Phase 2 (Scale) Enhancements</h3>
-      <ul class="tick-list">
-        <li>Adaptive AI (reinforcement policy tuning)</li>
-        <li>Predictive probability-of-close estimator</li>
-        <li>Multi-language conversational expansion</li>
-        <li>Self-service developer portal</li>
-      </ul>
-    </div>
-    <div class="block">
-      <h3>Phase 3 (Expansion) Focus</h3>
-      <ul class="tick-list">
-        <li>Benchmark indices across geos</li>
-        <li>Portfolio optimization analytics</li>
-        <li>Cross-jurisdiction compliance abstraction</li>
-        <li>Third-party integration marketplace</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="block">
-    <h3>Success Dashboard (Illustrative Metrics)</h3>
-    <div class="kpi-grid">
-      <div class="kpi">
-        <div class="kpi-value">≤ 20s</div>
-        <div class="label">Median response latency</div>
-        <small>Conversational exchange.</small>
-      </div>
-      <div class="kpi">
-        <div class="kpi-value">+2.1x</div>
-        <div class="label">Lead enrichment depth</div>
-        <small>Fields vs baseline form.</small>
-      </div>
-      <div class="kpi">
-        <div class="kpi-value">95%</div>
-        <div class="label">QR integrity pass</div>
-        <small>Random audits.</small>
-      </div>
-    </div>
-  </div>
-
-  <div class="callout">
-    <h4>Change Management</h4>
-    <p>Provide modular onboarding kit: training videos, integration playbooks, benchmarking snapshots, and ROI calculators to accelerate internal stakeholder adoption & advocacy.</p>
-  </div>
-</section>
-
-<!-- PAGE 11: CALL TO ACTION -->
-<section class="page" data-page="11">
-  <div class="header">
-    <span class="doc-title">Call to Action</span>
-    <span class="confidential">Confidential</span>
-  </div>
-  <div class="footer">
-    <span class="contact">WoW‑Strategies Private Limited • +91 022 4880 8695 • hello@wow-strategies.com</span>
-    <span class="page-number" data-label="Page">11</span>
-  </div>
-
-  <h2>Call to Action – Unlock the Trust Flywheel</h2>
-  <div class="divider"></div>
-
-  <div class="ribbon">From passive compliance to intelligent, AI-orchestrated market advantage</div>
-
-  <div class="grid-3">
-    <div class="block">
-      <h3>Leadership</h3>
-      <p>Position the platform as the definitive standard for verifiable, real-time project intelligence and buyer assurance.</p>
-    </div>
-    <div class="block">
-      <h3>Innovation</h3>
-      <p>Integrate blockchain provenance, AI-led conversation, and predictive analytics to compress adoption & decision timelines.</p>
-    </div>
-    <div class="block">
-      <h3>Impact</h3>
-      <p>Drive confidence, transparency, and sustainable monetization while elevating systemic integrity across stakeholders.</p>
-    </div>
-  </div>
-
-  <div class="block">
-    <h3>Next Step Recommendations</h3>
-    <ol style="margin:0 0 4mm 1.1rem;">
-      <li>Approve pilot charter & governance structure.</li>
-      <li>Finalize data schemas & QR compliance specification.</li>
-      <li>Deploy foundational AI conversation flows (English + local language roadmap).</li>
-      <li>Establish baseline KPIs (conversion, latency, trust index).</li>
-      <li>Launch controlled pilot and instrument analytics for hypothesis validation.</li>
-    </ol>
-  </div>
-
-  <div class="callout">
-    <h4>Engage</h4>
-    <p><strong>WoW‑Strategies Private Limited</strong><br/>
-    Phone: +91 022 4880 8695 • Email: hello@wow-strategies.com<br/>
-    We are ready to operationalize the compliance-to-growth paradigm shift.</p>
-  </div>
-
-  <p class="footer-note">
-    This strategic concept note is directional and intended to facilitate stakeholder alignment prior to detailed technical and commercial finalization.
-  </p>
-</section>
-
-</div>
-
+<!-- ══════════════════════════════════════════════════════════
+     JAVASCRIPT
+     ══════════════════════════════════════════════════════════ -->
 <script>
-// Password protection functionality
-function checkPassword() {
-  const password = document.getElementById('password-input').value;
-  const correctPassword = 'wow#2025';
-  const errorMessage = document.getElementById('error-message');
-  const passwordScreen = document.getElementById('password-screen');
-  const mainContent = document.getElementById('main-content');
-  
-  if (password === correctPassword) {
-    passwordScreen.style.display = 'none';
-    mainContent.classList.add('unlocked');
-    
-    // Store authentication in session
-    sessionStorage.setItem('authenticated', 'true');
-    
-    // Set page numbers after unlocking
-    setPageNumbers();
-  } else {
-    errorMessage.style.display = 'block';
-    document.getElementById('password-input').value = '';
-    document.getElementById('password-input').focus();
-  }
-}
+(function () {
+  'use strict';
 
-// Allow Enter key to submit password
-document.getElementById('password-input').addEventListener('keypress', function(e) {
-  if (e.key === 'Enter') {
-    checkPassword();
-  }
-});
+  var CORRECT_PASSWORD = 'wow#2025';
+  var SESSION_KEY      = 'wow_authenticated';
 
-// Check if already authenticated on page load
-window.addEventListener('load', function() {
-  if (sessionStorage.getItem('authenticated') === 'true') {
-    document.getElementById('password-screen').style.display = 'none';
-    document.getElementById('main-content').classList.add('unlocked');
-    setPageNumbers();
-  } else {
-    // Focus on password input when page loads
-    document.getElementById('password-input').focus();
-  }
-});
+  /* ── DOM references ── */
+  var screen    = document.getElementById('password-screen');
+  var content   = document.getElementById('main-content');
+  var input     = document.getElementById('password-input');
+  var errorMsg  = document.getElementById('error-message');
 
-// Set page numbers
-function setPageNumbers() {
-  const pages = document.querySelectorAll('.page');
-  pages.forEach(p => {
-    const numEl = p.querySelector('.page-number');
-    if(numEl) {
-      const n = pages.length;
-      numEl.textContent = numEl.textContent.trim() + " / " + n;
+  /* ── Unlock the document ── */
+  function unlock() {
+    screen.style.display  = 'none';
+    content.classList.add('unlocked');
+    try { sessionStorage.setItem(SESSION_KEY, '1'); } catch (e) {}
+    updatePageNumbers();
+    document.body.focus();
+  }
+
+  /* ── Check password ── */
+  function checkPassword() {
+    var val = input.value.trim();
+    if (val === CORRECT_PASSWORD) {
+      errorMsg.style.display = 'none';
+      unlock();
+    } else {
+      errorMsg.style.display = 'block';
+      input.value = '';
+      input.focus();
+      input.classList.remove('shake');
+      void input.offsetWidth; 
+      input.classList.add('shake');
+    }
+  }
+
+  /* ── Update page numbers ── */
+  function updatePageNumbers() {
+    var pages  = document.querySelectorAll('.page');
+    var total  = pages.length;
+    pages.forEach(function (page, idx) {
+      var numEl = page.querySelector('.pg-num');
+      if (numEl) {
+        numEl.textContent = 'Page ' + (idx + 1) + ' / ' + total;
+      }
+    });
+  }
+
+  /* ── Event bindings ── */
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      e.preventDefault();
+      checkPassword();
     }
   });
-}
 
-// Clear authentication on page unload (optional - for extra security)
-window.addEventListener('beforeunload', function() {
-  // Uncomment the line below if you want to require password on every visit
-  // sessionStorage.removeItem('authenticated');
-});
+  input.addEventListener('input', function () {
+    if (errorMsg.style.display !== 'none') {
+      errorMsg.style.display = 'none';
+    }
+  });
+
+  window.checkPassword = checkPassword;
+
+  /* ── On load ── */
+  window.addEventListener('load', function () {
+    var alreadyAuth = false;
+    try { alreadyAuth = sessionStorage.getItem(SESSION_KEY) === '1'; } catch (e) {}
+
+    if (alreadyAuth) {
+      unlock();
+    } else {
+      input.focus();
+    }
+  });
+
+})();
 </script>
+
+<style>
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%      { transform: translateX(-6px); }
+  40%      { transform: translateX(6px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(4px); }
+}
+.pw-input.shake { animation: shake .4s ease; }
+</style>
+
 </body>
 </html>

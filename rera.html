@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>AI-Powered QR & WhatsApp CRM Platform – Strategic Concept Note</title>
+<title>MahaRERA × WoW‑Strategies — AI Conversational Layer: Strategic Engagement Proposal</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-<meta name="description" content="Strategic concept note proposing an AI-powered QR + WhatsApp real estate compliance-to-growth platform with integrated CRM & analytics." />
+<meta name="description" content="Strategic engagement proposal from WoW-Strategies Private Limited to MahaRERA: an AI-powered conversational CRM layer on top of existing QR infrastructure to create a new revenue stream and elevate citizen experience." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -13,7 +13,6 @@
    MCKINSEY-STYLE DESIGN TOKENS
    ============================================================ */
 :root {
-  /* Corporate Palette */
   --mck-navy:       #051c2c;
   --mck-blue:       #00508f;
   --mck-light-blue: #e6f0f9;
@@ -26,30 +25,20 @@
   --mck-white:      #ffffff;
   --mck-red:        #c92a2a;
   --mck-amber:      #e67700;
-  
-  /* Typography */
+  --mck-green:      #2b8a3e;
   --font-main:      "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-  
-  /* Structure & Styling */
   --radius-sm:      2px;
   --radius:         4px;
   --radius-lg:      8px;
   --border-light:   1px solid var(--mck-gray-200);
   --border-heavy:   2px solid var(--mck-navy);
-  
-  /* Shadows (Subtle & Crisp) */
   --shadow-sm:      0 1px 2px rgba(5, 28, 44, 0.05);
   --shadow-md:      0 4px 12px rgba(5, 28, 44, 0.08);
   --shadow-lg:      0 12px 24px rgba(5, 28, 44, 0.12);
-
-  /* Layout */
   --page-w:         1100px;
   --spacing-base:   1.5rem;
 }
 
-/* ============================================================
-   RESET & BASE
-   ============================================================ */
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; font-size: 16px; }
 body {
@@ -62,9 +51,6 @@ body {
   line-height: 1.6;
 }
 
-/* ============================================================
-   TYPOGRAPHY SCALE
-   ============================================================ */
 h1, h2, h3, h4, h5 {
   font-family: var(--font-main);
   line-height: 1.2;
@@ -86,141 +72,77 @@ a:hover { color: var(--mck-teal); text-decoration: underline; }
 a:focus-visible { outline: 2px solid var(--mck-teal); outline-offset: 2px; }
 small { font-size: 0.8rem; color: var(--mck-gray-600); }
 
-/* ============================================================
-   PASSWORD SCREEN
-   ============================================================ */
+/* PASSWORD SCREEN */
 #password-screen {
-  position: fixed;
-  inset: 0;
+  position: fixed; inset: 0;
   background: var(--mck-navy);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10000;
-  padding: 1rem;
+  display: flex; justify-content: center; align-items: center;
+  z-index: 10000; padding: 1rem;
 }
 .pw-card {
-  background: var(--mck-white);
-  padding: 3rem 2.5rem;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-lg);
-  text-align: center;
-  width: 100%;
-  max-width: 440px;
+  background: var(--mck-white); padding: 3rem 2.5rem;
+  border-radius: var(--radius); box-shadow: var(--shadow-lg);
+  text-align: center; width: 100%; max-width: 440px;
   border-top: 6px solid var(--mck-blue);
 }
 .pw-icon {
-  width: 48px; height: 48px;
-  background: var(--mck-light-blue);
-  color: var(--mck-blue);
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  margin: 0 auto 1.5rem;
+  width: 48px; height: 48px; background: var(--mck-light-blue);
+  color: var(--mck-blue); border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; margin: 0 auto 1.5rem;
 }
 .pw-card h2 { color: var(--mck-navy); border-bottom: none; margin-bottom: 0.5rem; font-size: 1.75rem; }
 .pw-card p  { color: var(--mck-gray-600); margin-bottom: 2rem; font-size: 0.95rem; }
 .pw-input {
-  width: 100%;
-  padding: 0.875rem 1rem;
-  border: 1px solid var(--mck-gray-400);
-  border-radius: var(--radius-sm);
-  font-size: 1rem;
-  font-family: var(--font-main);
-  color: var(--mck-gray-800);
-  transition: all 0.2s;
-  outline: none;
-  margin-bottom: 1.5rem;
+  width: 100%; padding: 0.875rem 1rem;
+  border: 1px solid var(--mck-gray-400); border-radius: var(--radius-sm);
+  font-size: 1rem; font-family: var(--font-main);
+  color: var(--mck-gray-800); transition: all 0.2s;
+  outline: none; margin-bottom: 1.5rem;
 }
 .pw-input:focus { border-color: var(--mck-blue); box-shadow: 0 0 0 3px rgba(0, 80, 143, 0.15); }
 .pw-btn {
-  width: 100%;
-  background: var(--mck-blue);
-  color: var(--mck-white);
-  border: none;
-  padding: 0.875rem 1.5rem;
-  border-radius: var(--radius-sm);
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
+  width: 100%; background: var(--mck-blue); color: var(--mck-white);
+  border: none; padding: 0.875rem 1.5rem; border-radius: var(--radius-sm);
+  font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s;
 }
 .pw-btn:hover  { background: var(--mck-navy); }
 .pw-error {
-  color: var(--mck-red);
-  font-size: 0.85rem;
-  margin-top: 1rem;
-  display: none;
-  font-weight: 500;
-  padding: 0.75rem;
-  background: rgba(201, 42, 42, 0.05);
-  border-left: 3px solid var(--mck-red);
-  text-align: left;
+  color: var(--mck-red); font-size: 0.85rem; margin-top: 1rem;
+  display: none; font-weight: 500; padding: 0.75rem;
+  background: rgba(201, 42, 42, 0.05); border-left: 3px solid var(--mck-red); text-align: left;
 }
 .pw-footer-note { font-size: 0.75rem; color: var(--mck-gray-400); margin-top: 2rem; border-top: var(--border-light); padding-top: 1rem; }
 
-/* ============================================================
-   MAIN CONTENT WRAPPER
-   ============================================================ */
 #main-content { display: none; }
 #main-content.unlocked { display: block; }
 
-/* ============================================================
-   MOBILE STICKY HEADER
-   ============================================================ */
+/* MOBILE NAV */
 .mobile-nav {
-  display: none;
-  position: sticky;
-  top: 0;
-  z-index: 500;
-  background: var(--mck-white);
-  border-bottom: var(--border-light);
-  padding: 1rem;
-  align-items: center;
-  justify-content: space-between;
+  display: none; position: sticky; top: 0; z-index: 500;
+  background: var(--mck-white); border-bottom: var(--border-light);
+  padding: 1rem; align-items: center; justify-content: space-between;
   box-shadow: var(--shadow-sm);
 }
 .mobile-nav .brand { font-weight: 700; font-size: 1rem; color: var(--mck-navy); line-height: 1.2; }
 .mobile-nav .brand small { display: block; font-weight: 400; font-size: 0.75rem; color: var(--mck-gray-600); margin-top: 0.1rem; }
 .mobile-nav .conf-tag { font-size: 0.7rem; font-weight: 600; color: var(--mck-red); text-transform: uppercase; letter-spacing: 0.05em; padding: 0.25rem 0.5rem; background: rgba(201, 42, 42, 0.05); border-radius: var(--radius-sm); }
 
-/* ============================================================
-   PAGE LAYOUT
-   ============================================================ */
-.doc-wrap {
-  max-width: var(--page-w);
-  margin: 0 auto;
-  padding: 2rem 1rem;
-}
+/* PAGE LAYOUT */
+.doc-wrap { max-width: var(--page-w); margin: 0 auto; padding: 2rem 1rem; }
 .page {
-  background: var(--mck-white);
-  border: var(--border-light);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-md);
-  margin-bottom: 2rem;
-  padding: 3rem 4rem;
-  position: relative;
-  display: flex;
-  flex-direction: column;
+  background: var(--mck-white); border: var(--border-light);
+  border-radius: var(--radius-sm); box-shadow: var(--shadow-md);
+  margin-bottom: 2rem; padding: 3rem 4rem;
+  position: relative; display: flex; flex-direction: column;
 }
-
-/* Page header / footer */
 .pg-header, .pg-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  color: var(--mck-gray-600);
-  letter-spacing: 0.02em;
-  padding-bottom: 1rem;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid var(--mck-gray-200);
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 0.75rem; color: var(--mck-gray-600); letter-spacing: 0.02em;
+  padding-bottom: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--mck-gray-200);
 }
 .pg-footer {
-  padding-bottom: 0; padding-top: 1rem;
-  margin-bottom: 0; margin-top: auto;
+  padding-bottom: 0; padding-top: 1rem; margin-bottom: 0; margin-top: auto;
   border-bottom: none; border-top: 1px solid var(--mck-gray-200);
 }
 .pg-header .doc-title { font-weight: 600; color: var(--mck-navy); text-transform: uppercase; }
@@ -228,302 +150,166 @@ small { font-size: 0.8rem; color: var(--mck-gray-600); }
 .pg-footer .contact   { font-weight: 500; }
 .pg-footer .pg-num    { font-weight: 600; color: var(--mck-navy); }
 
-/* ============================================================
-   LAYOUT UTILITIES
-   ============================================================ */
+/* GRID UTILITIES */
 .grid-2  { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin: 1.5rem 0; }
 .grid-3  { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin: 1.5rem 0; }
 .grid-4  { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin: 1.5rem 0; }
-.divider { display: none; } /* Removed redundant divider since h2 has border-bottom */
 
-/* ============================================================
-   CARD / BLOCK (McKinsey Style: Minimalist, structured)
-   ============================================================ */
+/* BLOCK / CARD */
 .block {
-  background: var(--mck-white);
-  border: 1px solid var(--mck-gray-200);
-  padding: 1.5rem;
-  border-top: 4px solid var(--mck-blue);
-  box-shadow: var(--shadow-sm);
-  display: flex;
-  flex-direction: column;
+  background: var(--mck-white); border: 1px solid var(--mck-gray-200);
+  padding: 1.5rem; border-top: 4px solid var(--mck-blue);
+  box-shadow: var(--shadow-sm); display: flex; flex-direction: column;
 }
 .block.alt { background: var(--mck-gray-100); border-top-color: var(--mck-gray-400); }
 .block.gradient-top { border-top: 4px solid var(--mck-teal); }
+.block.green-top { border-top: 4px solid var(--mck-green); }
 .block h3 { margin-bottom: 0.75rem; font-size: 1.1rem; }
 
-/* ============================================================
-   HERO / COVER ELEMENTS
-   ============================================================ */
+/* HERO */
 .hero-title {
-  font-size: clamp(2.5rem, 4vw, 3.5rem);
-  font-weight: 800;
-  color: var(--mck-navy);
-  margin: 1rem 0 1.5rem;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
+  font-size: clamp(2.5rem, 4vw, 3.5rem); font-weight: 800;
+  color: var(--mck-navy); margin: 1rem 0 1.5rem;
+  letter-spacing: -0.03em; line-height: 1.1;
 }
 .tagline {
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
-  font-weight: 400;
-  color: var(--mck-gray-600);
-  margin: 0 0 2rem;
-  line-height: 1.4;
-  border-left: 4px solid var(--mck-teal);
-  padding-left: 1rem;
+  font-size: clamp(1.1rem, 2vw, 1.4rem); font-weight: 400;
+  color: var(--mck-gray-600); margin: 0 0 2rem; line-height: 1.4;
+  border-left: 4px solid var(--mck-teal); padding-left: 1rem;
 }
 .lead {
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: var(--mck-navy);
-  line-height: 1.6;
-  margin: 1.5rem 0;
-  max-width: 800px;
+  font-size: 1.1rem; font-weight: 500; color: var(--mck-navy);
+  line-height: 1.6; margin: 1.5rem 0; max-width: 800px;
 }
 .badge-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0; }
 .badge {
-  background: var(--mck-light-blue);
-  border: 1px solid var(--mck-blue);
-  padding: 0.35rem 0.75rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--mck-navy);
-  white-space: nowrap;
+  background: var(--mck-light-blue); border: 1px solid var(--mck-blue);
+  padding: 0.35rem 0.75rem; font-size: 0.75rem; font-weight: 600;
+  letter-spacing: 0.05em; text-transform: uppercase; color: var(--mck-navy); white-space: nowrap;
 }
 
-/* ============================================================
-   CALLOUT (Insights / Thesis)
-   ============================================================ */
+/* CALLOUT */
 .callout {
-  background: var(--mck-navy);
-  color: var(--mck-white);
-  padding: 1.5rem 2rem;
-  border-left: 6px solid var(--mck-teal);
-  margin: 1.5rem 0;
-  font-size: 1.05rem;
-  box-shadow: var(--shadow-md);
+  background: var(--mck-navy); color: var(--mck-white);
+  padding: 1.5rem 2rem; border-left: 6px solid var(--mck-teal);
+  margin: 1.5rem 0; font-size: 1.05rem; box-shadow: var(--shadow-md);
 }
 .callout h3, .callout h4 { color: var(--mck-white); margin-bottom: 0.75rem; font-size: 1.2rem; }
 .callout p { color: var(--mck-gray-100); margin-bottom: 0; font-size: inherit; font-weight: 300; }
+.callout.green { border-left-color: var(--mck-green); }
 
-/* ============================================================
-   METRICS / KPIs
-   ============================================================ */
+/* KPI */
 .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin: 2rem 0; }
 .kpi {
-  padding: 1.5rem;
-  border: 1px solid var(--mck-gray-200);
-  border-left: 4px solid var(--mck-blue);
-  background: var(--mck-white);
-  box-shadow: var(--shadow-sm);
+  padding: 1.5rem; border: 1px solid var(--mck-gray-200);
+  border-left: 4px solid var(--mck-blue); background: var(--mck-white); box-shadow: var(--shadow-sm);
 }
 .kpi .kpi-val { font-size: clamp(1.5rem, 3vw, 2.5rem); font-weight: 700; color: var(--mck-navy); line-height: 1; margin-bottom: 0.5rem; }
 .kpi .kpi-label { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--mck-gray-600); margin-bottom: 0.5rem; letter-spacing: 0.02em; }
 .kpi small { font-size: 0.8rem; color: var(--mck-gray-600); line-height: 1.4; display: block; }
+.kpi.green { border-left-color: var(--mck-green); }
 
-/* ============================================================
-   STAGE FLOW
-   ============================================================ */
-.stage-flow {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  margin: 2rem 0;
-  align-items: stretch;
-}
+/* STAGE FLOW */
+.stage-flow { display: flex; justify-content: space-between; gap: 1rem; margin: 2rem 0; align-items: stretch; }
 .stage {
-  flex: 1;
-  text-align: center;
-  position: relative;
-  padding: 1.5rem 1rem;
-  background: var(--mck-white);
-  border: 1px solid var(--mck-gray-200);
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--mck-navy);
-  box-shadow: var(--shadow-sm);
+  flex: 1; text-align: center; position: relative; padding: 1.5rem 1rem;
+  background: var(--mck-white); border: 1px solid var(--mck-gray-200);
+  font-size: 0.9rem; font-weight: 600; color: var(--mck-navy); box-shadow: var(--shadow-sm);
 }
 .stage-num {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px; height: 32px;
-  background: var(--mck-blue);
-  color: var(--mck-white);
-  border-radius: 50%;
-  font-size: 0.9rem;
-  font-weight: 700;
-  margin: 0 auto 0.75rem;
+  display: flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; background: var(--mck-blue); color: var(--mck-white);
+  border-radius: 50%; font-size: 0.9rem; font-weight: 700; margin: 0 auto 0.75rem;
 }
 .stage:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  top: 50%; right: -12px;
-  transform: translateY(-50%);
-  width: 0; height: 0;
-  border-top: 8px solid transparent;
-  border-bottom: 8px solid transparent;
-  border-left: 8px solid var(--mck-gray-400);
-  z-index: 1;
+  content: ""; position: absolute; top: 50%; right: -12px; transform: translateY(-50%);
+  width: 0; height: 0; border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent; border-left: 8px solid var(--mck-gray-400); z-index: 1;
 }
 
-/* ============================================================
-   STRATEGY PILLARS
-   ============================================================ */
+/* STRATEGY BOX */
 .strategy-box { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin: 1.5rem 0; }
 .pillar {
-  background: var(--mck-gray-100);
-  border: 1px solid var(--mck-gray-200);
-  padding: 1.5rem;
-  border-top: 4px solid var(--mck-navy);
+  background: var(--mck-gray-100); border: 1px solid var(--mck-gray-200);
+  padding: 1.5rem; border-top: 4px solid var(--mck-navy);
 }
 .pillar h4 { margin: 0 0 1rem 0; color: var(--mck-navy); }
 
-/* ============================================================
-   REVENUE CARDS
-   ============================================================ */
+/* REVENUE CARDS */
 .fin-model { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2rem 0; }
 .rev-card {
-  background: var(--mck-navy);
-  color: var(--mck-white);
-  padding: 1.5rem;
-  border-bottom: 4px solid var(--mck-teal);
-  box-shadow: var(--shadow-md);
-  display: flex;
-  flex-direction: column;
+  background: var(--mck-navy); color: var(--mck-white); padding: 1.5rem;
+  border-bottom: 4px solid var(--mck-teal); box-shadow: var(--shadow-md);
+  display: flex; flex-direction: column;
 }
 .rev-card .amt { font-size: 1.5rem; font-weight: 700; line-height: 1; margin-bottom: 0.5rem; }
 .rev-card .rev-label { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--mck-light-blue); }
 .rev-card small { font-size: 0.75rem; color: var(--mck-gray-200); line-height: 1.4; }
 
-/* ============================================================
-   IMPACT MATRIX
-   ============================================================ */
+/* IMPACT MATRIX */
 .impact-matrix { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin: 1.5rem 0; }
 .impact {
-  background: var(--mck-white);
-  border: 1px solid var(--mck-gray-200);
-  padding: 1.5rem;
-  border-top: 4px solid var(--mck-blue);
+  background: var(--mck-white); border: 1px solid var(--mck-gray-200);
+  padding: 1.5rem; border-top: 4px solid var(--mck-blue);
 }
 .impact h3 { font-size: 1.1rem; margin-bottom: 1rem; }
 .impact em  { font-style: normal; font-weight: 400; color: var(--mck-gray-600); display: block; font-size: 0.85rem; margin-top: 0.2rem; }
 
-/* ============================================================
-   TIMELINE PHASES
-   ============================================================ */
+/* TIMELINE */
 .timeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin: 2rem 0; }
 .phase {
-  border: 1px solid var(--mck-gray-200);
-  background: var(--mck-white);
-  padding: 2rem 1.5rem 1.5rem;
-  position: relative;
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--mck-gray-200); background: var(--mck-white);
+  padding: 2rem 1.5rem 1.5rem; position: relative; box-shadow: var(--shadow-sm);
 }
 .phase::before {
-  content: attr(data-phase);
-  position: absolute;
-  top: -12px; left: 1rem;
-  background: var(--mck-navy);
-  color: var(--mck-white);
-  font-size: 0.75rem;
-  padding: 0.25rem 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  content: attr(data-phase); position: absolute; top: -12px; left: 1rem;
+  background: var(--mck-navy); color: var(--mck-white); font-size: 0.75rem;
+  padding: 0.25rem 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
 }
 
-/* ============================================================
-   LIST VARIANTS
-   ============================================================ */
+/* LISTS */
 .tick-list { list-style: none; margin: 0 0 1rem; padding: 0; }
 .tick-list li { position: relative; padding-left: 1.5rem; margin-bottom: 0.5rem; }
-.tick-list li::before { 
-  content: ""; 
-  position: absolute; 
-  left: 0; top: 0.4rem; 
-  width: 6px; height: 6px; 
-  background-color: var(--mck-blue); 
-  border-radius: 50%; 
-}
-.risk-list li::before { background-color: var(--mck-amber); shape-outside: polygon(50% 0%, 0% 100%, 100% 100%); clip-path: polygon(50% 0%, 0% 100%, 100% 100%); border-radius: 0; top: 0.3rem; width: 8px; height: 8px;}
-.warn-list li::before { background-color: var(--mck-red); border-radius: 0; width: 6px; height: 6px; }
+.tick-list li::before { content: ""; position: absolute; left: 0; top: 0.4rem; width: 6px; height: 6px; background-color: var(--mck-blue); border-radius: 50%; }
+.risk-list li::before { background-color: var(--mck-amber); clip-path: polygon(50% 0%, 0% 100%, 100% 100%); border-radius: 0; top: 0.3rem; width: 8px; height: 8px;}
 
-/* ============================================================
-   TABLE (McKinsey Style)
-   ============================================================ */
+/* TABLE */
 .table-wrap { width: 100%; overflow-x: auto; margin: 1.5rem 0; }
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-  min-width: 600px;
-}
+.table { width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 600px; }
 .table th {
-  text-align: left;
-  font-weight: 700;
-  padding: 0.75rem 1rem;
-  border-top: 2px solid var(--mck-navy);
-  border-bottom: 2px solid var(--mck-gray-400);
-  color: var(--mck-navy);
-  text-transform: uppercase;
-  font-size: 0.8rem;
-  letter-spacing: 0.02em;
+  text-align: left; font-weight: 700; padding: 0.75rem 1rem;
+  border-top: 2px solid var(--mck-navy); border-bottom: 2px solid var(--mck-gray-400);
+  color: var(--mck-navy); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.02em;
 }
-.table td {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--mck-gray-200);
-  vertical-align: top;
-}
+.table td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--mck-gray-200); vertical-align: top; }
 .table tr:last-child td { border-bottom: 2px solid var(--mck-gray-400); }
 .table.striped tbody tr:nth-child(even) td { background: var(--mck-gray-100); }
 
-/* ============================================================
-   MISC
-   ============================================================ */
+/* MISC */
 .ribbon {
-  background: var(--mck-light-blue);
-  color: var(--mck-navy);
-  padding: 1rem 1.5rem;
-  border-left: 4px solid var(--mck-blue);
-  font-weight: 600;
-  font-size: 1.1rem;
-  margin: 1rem 0 2rem;
+  background: var(--mck-light-blue); color: var(--mck-navy);
+  padding: 1rem 1.5rem; border-left: 4px solid var(--mck-blue);
+  font-weight: 600; font-size: 1.1rem; margin: 1rem 0 2rem;
 }
 .emphasis { color: var(--mck-blue); font-weight: 700; }
 .footer-note { font-size: 0.8rem; color: var(--mck-gray-600); line-height: 1.5; margin: 2rem 0 0; padding-top: 1rem; border-top: 1px solid var(--mck-gray-200); }
+.section-label { display: flex; align-items: center; gap: 0.75rem; margin: 0 0 1rem; }
+.section-label .sl-bar { width: 24px; height: 2px; background: var(--mck-teal); }
+.section-label .sl-text { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mck-gray-600); }
 
-/* ============================================================
-   SECTION DIVIDER / EYEBROW
-   ============================================================ */
-.section-label {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin: 0 0 1rem;
-}
-.section-label .sl-bar {
-  width: 24px;
-  height: 2px;
-  background: var(--mck-teal);
-}
-.section-label .sl-text {
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--mck-gray-600);
-}
+/* BEFORE-AFTER COMPARE */
+.compare-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; margin: 1.5rem 0; align-items: stretch; }
+.compare-col { padding: 1.5rem; }
+.compare-col.before { background: var(--mck-gray-100); border: 1px solid var(--mck-gray-200); }
+.compare-col.after  { background: var(--mck-navy); color: var(--mck-white); border: 1px solid var(--mck-navy); }
+.compare-col.after h3 { color: var(--mck-teal); }
+.compare-col.after .tick-list li::before { background-color: var(--mck-teal); }
+.compare-arrow { display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--mck-teal); padding: 0 0.75rem; font-weight: 700; }
 
-/* ============================================================
-   ANIMATION
-   ============================================================ */
+/* ANIMATION */
 @media (prefers-reduced-motion: no-preference) {
   #main-content.unlocked .page {
-    opacity: 0;
-    transform: translateY(10px);
+    opacity: 0; transform: translateY(10px);
     animation: pgIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
   #main-content.unlocked .page:nth-child(n+2) { animation-delay: calc((var(--page-i, 1) - 1) * 0.1s); }
@@ -538,58 +324,37 @@ small { font-size: 0.8rem; color: var(--mck-gray-600); }
   #main-content.unlocked .page:nth-child(9)  { --page-i:9; }
   #main-content.unlocked .page:nth-child(10) { --page-i:10; }
   #main-content.unlocked .page:nth-child(11) { --page-i:11; }
+  #main-content.unlocked .page:nth-child(12) { --page-i:12; }
   @keyframes pgIn { to { opacity: 1; transform: none; } }
 }
 
-/* ============================================================
-   RESPONSIVE — TABLET  (≤ 1024px)
-   ============================================================ */
+/* RESPONSIVE — TABLET */
 @media screen and (max-width: 1024px) {
   .doc-wrap { padding: 1.5rem; max-width: 100%; }
   .page { padding: 2.5rem; }
   .grid-4, .fin-model { grid-template-columns: repeat(2, 1fr); }
   .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .compare-row { grid-template-columns: 1fr; }
+  .compare-arrow { transform: rotate(90deg); padding: 0.5rem 0; }
 }
 
-/* ============================================================
-   RESPONSIVE — MOBILE  (≤ 768px)
-   ============================================================ */
+/* RESPONSIVE — MOBILE */
 @media screen and (max-width: 768px) {
   .mobile-nav { display: flex; }
   .doc-wrap { padding: 1rem 0; }
-  .page {
-    padding: 2rem 1.25rem;
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-    box-shadow: none;
-    margin-bottom: 1rem;
-  }
-  
-  .grid-2, .grid-3, .grid-4, .strategy-box, .timeline, .impact-matrix, .kpi-grid, .fin-model { 
-    grid-template-columns: 1fr; 
-    gap: 1.25rem; 
-  }
-  
+  .page { padding: 2rem 1.25rem; border-radius: 0; border-left: none; border-right: none; box-shadow: none; margin-bottom: 1rem; }
+  .grid-2, .grid-3, .grid-4, .strategy-box, .timeline, .impact-matrix, .kpi-grid, .fin-model { grid-template-columns: 1fr; gap: 1.25rem; }
   .stage-flow { flex-direction: column; gap: 0.75rem; }
-  .stage:not(:last-child)::after {
-    top: auto; bottom: -12px; left: 50%; right: auto;
-    transform: translateX(-50%);
-    border-top: 8px solid var(--mck-gray-400);
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-bottom: 0;
-  }
-  
+  .stage:not(:last-child)::after { top: auto; bottom: -12px; left: 50%; right: auto; transform: translateX(-50%); border-top: 8px solid var(--mck-gray-400); border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 0; }
   .pg-header, .pg-footer { font-size: 0.7rem; flex-wrap: wrap; gap: 0.5rem; }
   h1 { font-size: 2rem; }
   h2 { font-size: 1.5rem; }
   .callout { padding: 1.25rem; }
+  .compare-row { grid-template-columns: 1fr; }
+  .compare-arrow { transform: rotate(90deg); padding: 0.5rem 0; }
 }
 
-/* ============================================================
-   PRINT STYLES
-   ============================================================ */
+/* PRINT */
 @media print {
   @page { size: A4; margin: 15mm; }
   body { background: #fff; }
@@ -597,18 +362,10 @@ small { font-size: 0.8rem; color: var(--mck-gray-600); }
   #main-content { display: block !important; }
   .mobile-nav { display: none !important; }
   .doc-wrap { padding: 0; max-width: none; }
-  .page {
-    box-shadow: none;
-    border: none;
-    margin: 0;
-    padding: 0 !important;
-    page-break-after: always;
-    page-break-inside: avoid;
-  }
+  .page { box-shadow: none; border: none; margin: 0; padding: 0 !important; page-break-after: always; page-break-inside: avoid; }
   .page:last-child { page-break-after: auto; }
   .table-wrap { overflow: visible !important; }
   .table { min-width: 0 !important; }
-  .pg-header, .pg-footer { display: flex !important; }
 }
 </style>
 </head>
@@ -624,19 +381,10 @@ small { font-size: 0.8rem; color: var(--mck-gray-600); }
     </div>
     <h2 id="pw-title">Restricted Access</h2>
     <p>This document contains confidential strategic concepts and requires authorization.</p>
-    <input
-      type="password"
-      id="password-input"
-      class="pw-input"
-      placeholder="Enter authorization key"
-      aria-label="Password"
-      autocomplete="current-password"
-    />
+    <input type="password" id="password-input" class="pw-input" placeholder="Enter authorization key" aria-label="Password" autocomplete="current-password" />
     <button onclick="checkPassword()" class="pw-btn">Authenticate</button>
-    <div id="error-message" class="pw-error" role="alert" aria-live="polite">
-      Authentication failed. Please verify your credentials and try again.
-    </div>
-    <p class="pw-footer-note">WoW‑Strategies Private Limited. Confidential &amp; proprietary.</p>
+    <div id="error-message" class="pw-error" role="alert" aria-live="polite">Authentication failed. Please verify your credentials and try again.</div>
+    <p class="pw-footer-note">WoW‑Strategies Private Limited · Confidential &amp; Proprietary</p>
   </div>
 </div>
 
@@ -645,50 +393,47 @@ small { font-size: 0.8rem; color: var(--mck-gray-600); }
      ══════════════════════════════════════════════════════════ -->
 <div id="main-content" class="content">
 
-  <!-- Mobile sticky nav -->
   <nav class="mobile-nav" aria-label="Document navigation">
-    <div class="brand">
-      AI-Powered QR &amp; WhatsApp CRM
-      <small>WoW‑Strategies Private Limited</small>
-    </div>
+    <div class="brand">MahaRERA × WoW‑Strategies<small>Strategic Engagement Proposal</small></div>
     <span class="conf-tag">Confidential</span>
   </nav>
 
   <div class="doc-wrap">
 
-  <!-- ──────────────────────────────────────────────────────
+  <!-- ══════════════════════════════════════════════════════════
        PAGE 1: COVER
-       ────────────────────────────────────────────────────── -->
+       ══════════════════════════════════════════════════════════ -->
   <section class="page" data-page="1" aria-label="Cover">
     <div class="pg-header">
-      <span class="doc-title">AI-Powered QR &amp; WhatsApp CRM Platform</span>
-      <span class="conf-tag">Confidential · Strategic Concept Note</span>
+      <span class="doc-title">MahaRERA × WoW‑Strategies · Strategic Engagement</span>
+      <span class="conf-tag">Confidential · For MahaRERA Leadership Only</span>
     </div>
 
     <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center;">
-      <h1 class="hero-title">Compliance → Intelligent Growth</h1>
-      <p class="tagline">Transforming mandatory real estate disclosure into a trust, data, and conversion engine.</p>
+      <h4 style="color: var(--mck-teal); margin-bottom: 0.5rem;">Presented by WoW‑Strategies Private Limited</h4>
+      <h1 class="hero-title">Activate the QR.<br/>Monetize the Interaction.</h1>
+      <p class="tagline">An AI conversational CRM layer — built on top of MahaRERA's existing PwC-managed QR infrastructure — that converts every citizen scan into a new revenue stream for the Authority while elevating buyer protection.</p>
 
       <div class="badge-row" aria-label="Platform capabilities">
-        <div class="badge">QR-Enabled</div>
-        <div class="badge">Blockchain Verifiable</div>
-        <div class="badge">AI Orchestration</div>
-        <div class="badge">WhatsApp Conversational</div>
-        <div class="badge">Integrated CRM</div>
-        <div class="badge">Analytics &amp; Attribution</div>
+        <div class="badge">Zero Infrastructure Replacement</div>
+        <div class="badge">AI + WhatsApp Conversational Layer</div>
+        <div class="badge">New Revenue for MahaRERA</div>
+        <div class="badge">50,000+ Projects Addressable</div>
+        <div class="badge">Citizen-First Design</div>
       </div>
 
       <p class="lead">
-        This concept note proposes an AI-powered, QR-triggered, WhatsApp-native engagement and CRM platform
-        that converts passive statutory compliance into an active, attributable, multi-stakeholder value network.
+        MahaRERA already mandates QR codes on 50,000+ registered projects. Today, those QR codes link to a static webpage.
+        We propose adding an intelligent conversational layer that transforms each scan into an active, AI-guided citizen engagement —
+        and creates a scalable, recurring revenue model for the Authority in the process.
       </p>
 
       <div class="callout" role="note">
-        <h3>Strategic Thesis</h3>
+        <h3>Core Proposition to MahaRERA</h3>
         <p>
-          Every registered project already holds verified disclosures. We weaponize this dormant asset by binding it to a
-          tamper-evident QR and conversational AI layer — collapsing verification friction, amplifying trust signals,
-          capturing intent data early, and routing structured, high-confidence demand directly into an integrated CRM.
+          WoW‑Strategies does not replace PwC or any existing technology. We add a monetizable AI engagement layer
+          on top of the current QR infrastructure — turning MahaRERA's compliance mandate into a ₹100+ Cr annual
+          revenue opportunity while making Maharashtra's real estate market the most transparent in India.
         </p>
       </div>
     </div>
@@ -699,77 +444,67 @@ small { font-size: 0.8rem; color: var(--mck-gray-600); }
     </div>
   </section>
 
-  <!-- ──────────────────────────────────────────────────────
-       PAGE 2: EXECUTIVE SUMMARY
-       ────────────────────────────────────────────────────── -->
-  <section class="page" data-page="2" aria-label="Executive Summary">
+  <!-- ══════════════════════════════════════════════════════════
+       PAGE 2: THE OPPORTUNITY — WHY NOW
+       ══════════════════════════════════════════════════════════ -->
+  <section class="page" data-page="2" aria-label="The Opportunity">
     <div class="pg-header">
-      <span class="doc-title">Executive Summary</span>
+      <span class="doc-title">The Opportunity</span>
       <span class="conf-tag">Confidential</span>
     </div>
 
-    <div class="section-label"><div class="sl-bar"></div><span class="sl-text">Executive Summary</span></div>
-    <h2>The Opportunity: Compliance as a Growth Asset</h2>
+    <div class="section-label"><div class="sl-bar"></div><span class="sl-text">Why Now</span></div>
+    <h2>MahaRERA Sits on a Dormant Digital Asset Worth ₹100+ Cr/Year</h2>
 
-    <div class="grid-3">
-      <div class="block gradient-top">
-        <h3>Context</h3>
-        <p>Regulatory listings fulfill compliance but do not actively accelerate buyer conviction or structured lead capture. Channel fragmentation erodes attribution, speed, and trust.</p>
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="kpi-val">50,162</div>
+        <div class="kpi-label">Registered Projects</div>
+        <small>Highest of any RERA in India. 35% of national total (1,44,617). Each project already has a QR code.</small>
       </div>
-      <div class="block gradient-top">
-        <h3>Solution</h3>
-        <p>Issue mandatory, tamper-evident QR plates per project linked to a dynamic AI + WhatsApp conversational layer and real-time dashboard. Convert verification into guided engagement and data intake.</p>
+      <div class="kpi">
+        <div class="kpi-val">~4,500</div>
+        <div class="kpi-label">New Projects / Year</div>
+        <small>4,332 registrations in FY 2023-24 alone. Growing steadily as Maharashtra market expands.</small>
       </div>
-      <div class="block gradient-top">
-        <h3>Value at Stake</h3>
-        <p>Shorter decision cycles, higher trust, attributable pipeline creation, and real-time intelligence unlocking defensible monetization &amp; ecosystem uplift across all stakeholders.</p>
+      <div class="kpi">
+        <div class="kpi-val">1.5 Lakh+</div>
+        <div class="kpi-label">Annual Property Transactions</div>
+        <small>Mumbai alone recorded 1,50,231 property registrations in 2025 — each buyer potentially scans a QR code.</small>
       </div>
     </div>
 
     <div class="grid-2">
-      <div class="block">
-        <h3>Strategic Levers</h3>
+      <div class="block gradient-top">
+        <h3>What MahaRERA Has Today</h3>
         <ul class="tick-list">
-          <li>Frictionless trust validation in situ</li>
-          <li>AI-guided conversational discovery</li>
-          <li>Unified inbound intent capture</li>
-          <li>Predictive scoring &amp; intelligent routing</li>
-          <li>Market intelligence flywheel</li>
+          <li>PwC-managed tech stack handling registrations &amp; QR issuance</li>
+          <li>~₹4,000 per registration as government charges (existing revenue)</li>
+          <li>Mandatory QR codes on all project advertisements (₹50,000 penalty for non-compliance)</li>
+          <li>Static project detail page when QR is scanned</li>
+          <li>No engagement, no lead capture, no follow-up, no monetization post-scan</li>
         </ul>
       </div>
-      <div class="block">
-        <h3>Key Differentiators</h3>
+      <div class="block green-top">
+        <h3>What MahaRERA Could Have</h3>
         <ul class="tick-list">
-          <li>Compliance-first data legitimacy &amp; provenance</li>
-          <li>Conversation-to-CRM auto-binding (zero re-keying)</li>
-          <li>Real-time auditability &amp; immutability</li>
-          <li>API-ready analytics layer for ecosystem interop</li>
-          <li>Scalable multi-jurisdiction blueprint</li>
+          <li>AI chatbot activates on every QR scan via WhatsApp</li>
+          <li>Citizens get instant, guided, intelligent project Q&amp;A</li>
+          <li>Structured buyer intent captured and scored automatically</li>
+          <li>Developers pay ₹2,000–₹5,000/month for AI CRM access to qualified leads</li>
+          <li><strong>New annual revenue stream: ₹100–₹175 Cr</strong> at scale — on top of existing fees</li>
         </ul>
       </div>
     </div>
 
-    <div class="kpi-grid">
-      <div class="kpi">
-        <div class="kpi-val">₹840 Cr</div>
-        <div class="kpi-label">TAM (3 yrs @ 70% adoption)</div>
-        <small>Combined issuance + platform + VAS.</small>
-      </div>
-      <div class="kpi">
-        <div class="kpi-val">35–50%</div>
-        <div class="kpi-label">Conversion uplift</div>
-        <small>Benchmark digital trust deltas.</small>
-      </div>
-      <div class="kpi">
-        <div class="kpi-val">20–30%</div>
-        <div class="kpi-label">CAC reduction</div>
-        <small>Via automation &amp; attributed intent.</small>
-      </div>
-    </div>
-
-    <div class="callout">
-      <h4>North Star</h4>
-      <p>Reframe "compliance cost" into a scalable demand-generation &amp; intelligence platform delivering a durable competitive advantage to all ecosystem stakeholders.</p>
+    <div class="callout green">
+      <h4>The Insight</h4>
+      <p>
+        Every QR scan is a moment of citizen intent — a homebuyer actively checking a project's legitimacy.
+        Today that moment dies on a static page. With an AI layer, it becomes a guided conversation that protects the citizen,
+        generates qualified demand for the developer, and creates a per-transaction revenue model for MahaRERA.
+        The infrastructure already exists. Only the intelligence layer is missing.
+      </p>
     </div>
 
     <div class="pg-footer">
@@ -778,84 +513,92 @@ small { font-size: 0.8rem; color: var(--mck-gray-600); }
     </div>
   </section>
 
-  <!-- ──────────────────────────────────────────────────────
-       PAGE 3: PROBLEM LANDSCAPE
-       ────────────────────────────────────────────────────── -->
-  <section class="page" data-page="3" aria-label="Problem Landscape">
+  <!-- ══════════════════════════════════════════════════════════
+       PAGE 3: THE GAP — BEFORE vs. AFTER
+       ══════════════════════════════════════════════════════════ -->
+  <section class="page" data-page="3" aria-label="Current Gap Analysis">
     <div class="pg-header">
-      <span class="doc-title">Problem Landscape</span>
+      <span class="doc-title">Current Gap Analysis</span>
       <span class="conf-tag">Confidential</span>
     </div>
 
-    <div class="section-label"><div class="sl-bar"></div><span class="sl-text">Problem Landscape</span></div>
-    <h2>Five Systemic Inefficiencies Suppress Market Velocity</h2>
+    <div class="section-label"><div class="sl-bar"></div><span class="sl-text">Before &amp; After</span></div>
+    <h2>From Passive Compliance to Active Citizen Engagement</h2>
 
-    <div class="grid-2">
-      <div class="block">
-        <h3>Buyer Friction</h3>
+    <div class="compare-row">
+      <div class="compare-col before">
+        <h3 style="color: var(--mck-gray-600);">Today (Static QR)</h3>
         <ul class="tick-list">
-          <li>Disjoint steps across verification, enquiry, and follow-up</li>
-          <li>Manual authenticity checks delay confidence &amp; commitment</li>
-          <li>Misinformation risk raises diligence overhead significantly</li>
-          <li>No structured capture of early exploratory intent signals</li>
+          <li>Citizen scans QR → sees static project page on MahaRERA website</li>
+          <li>No interaction, no Q&amp;A, no guidance</li>
+          <li>Citizen leaves → zero data captured</li>
+          <li>Developer gets no notification of buyer interest</li>
+          <li>MahaRERA earns nothing post-registration</li>
+          <li>No analytics on citizen behavior or market demand</li>
+          <li>Compliance fulfilled but zero value extracted</li>
         </ul>
       </div>
-      <div class="block">
-        <h3>Developer Constraints</h3>
+      <div class="compare-arrow">→</div>
+      <div class="compare-col after">
+        <h3>Proposed (AI Conversational QR)</h3>
         <ul class="tick-list">
-          <li>Static compliance pages lack conversion-optimized UX</li>
-          <li>Fragmented inbound across phone, email, portals &amp; chat</li>
-          <li>Limited attribution — marketing ROI remains opaque</li>
-          <li>Manual CRM entry &amp; inconsistent lead qualification</li>
+          <li>Citizen scans QR → WhatsApp AI chatbot activates instantly</li>
+          <li>Guided conversation: project details, pricing, approvals, amenities</li>
+          <li>Structured intent captured: budget, timeline, unit preference</li>
+          <li>Developer receives real-time qualified lead in CRM dashboard</li>
+          <li>MahaRERA earns recurring revenue per developer per month</li>
+          <li>Rich market intelligence: demand heatmaps, pricing trends, buyer sentiment</li>
+          <li>Compliance amplified into citizen protection &amp; market transparency</li>
         </ul>
       </div>
     </div>
 
     <div class="block alt">
-      <h3>Systemic Gap Analysis</h3>
+      <h3>Quantifying the Engagement Gap</h3>
       <div class="table-wrap">
         <table class="table striped">
           <thead>
             <tr>
-              <th>Dimension</th>
-              <th>Status Quo Weakness</th>
-              <th>Strategic Consequence</th>
+              <th>Metric</th>
+              <th>Today (Static QR)</th>
+              <th>With AI Layer</th>
+              <th>Improvement</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>Trust Signaling</strong></td>
-              <td>Static, passive, decays in impact over time</td>
-              <td>Delayed conviction → slower funnel velocity</td>
+              <td><strong>Avg. engagement per scan</strong></td>
+              <td>12 seconds (page view)</td>
+              <td>3–5 minutes (conversation)</td>
+              <td><strong>15–25×</strong></td>
             </tr>
             <tr>
-              <td><strong>Data Cohesion</strong></td>
-              <td>Channel silos &amp; unstructured inputs</td>
-              <td>Low intelligence &amp; misallocated spend</td>
+              <td><strong>Data points captured</strong></td>
+              <td>0 (anonymous page view)</td>
+              <td>8–12 structured fields per citizen</td>
+              <td><strong>∞</strong></td>
             </tr>
             <tr>
-              <td><strong>Engagement Model</strong></td>
-              <td>One-way disclosure (pull-only)</td>
-              <td>Low differentiation / parity experience</td>
+              <td><strong>Lead qualification</strong></td>
+              <td>None</td>
+              <td>AI-scored (budget, timeline, intent)</td>
+              <td><strong>From 0 → automated</strong></td>
             </tr>
             <tr>
-              <td><strong>Attribution</strong></td>
-              <td>Manual lineage / incomplete mapping</td>
-              <td>Optimisation blind spots</td>
+              <td><strong>Developer notification</strong></td>
+              <td>None</td>
+              <td>Real-time CRM push within 30 seconds</td>
+              <td><strong>From 0 → instant</strong></td>
             </tr>
             <tr>
-              <td><strong>Scalability</strong></td>
-              <td>Human-dependent workflows throughout</td>
-              <td>Non-linear cost with growth</td>
+              <td><strong>Revenue to MahaRERA post-registration</strong></td>
+              <td>₹0</td>
+              <td>₹2,000–₹5,000/month per project</td>
+              <td><strong>New stream entirely</strong></td>
             </tr>
           </tbody>
         </table>
       </div>
-    </div>
-
-    <div class="callout">
-      <h4>Opportunity Aperture</h4>
-      <p>Embedding verified data inside a conversational trust workflow compresses cognitive load, creates real-time validation, and converts latent attention to declared intent significantly earlier in the buyer journey.</p>
     </div>
 
     <div class="pg-footer">
@@ -864,63 +607,63 @@ small { font-size: 0.8rem; color: var(--mck-gray-600); }
     </div>
   </section>
 
-  <!-- ──────────────────────────────────────────────────────
-       PAGE 4: SOLUTION ARCHITECTURE
-       ────────────────────────────────────────────────────── -->
-  <section class="page" data-page="4" aria-label="Solution Architecture">
+  <!-- ══════════════════════════════════════════════════════════
+       PAGE 4: HOW IT WORKS
+       ══════════════════════════════════════════════════════════ -->
+  <section class="page" data-page="4" aria-label="How It Works">
     <div class="pg-header">
-      <span class="doc-title">Solution Architecture Overview</span>
+      <span class="doc-title">How It Works</span>
       <span class="conf-tag">Confidential</span>
     </div>
 
     <div class="section-label"><div class="sl-bar"></div><span class="sl-text">Solution Architecture</span></div>
-    <h2>A Five-Layer Platform That Converts Compliance into Pipeline</h2>
+    <h2>An Additive Layer — Not a Replacement — On Existing Infrastructure</h2>
 
-    <div class="stage-flow" role="list" aria-label="Platform layers">
-      <div class="stage" role="listitem"><span class="stage-num">1</span>Compliance<br>Data</div>
-      <div class="stage" role="listitem"><span class="stage-num">2</span>QR<br>Issuance</div>
-      <div class="stage" role="listitem"><span class="stage-num">3</span>Conversational<br>AI</div>
-      <div class="stage" role="listitem"><span class="stage-num">4</span>Intent<br>Scoring</div>
-      <div class="stage" role="listitem"><span class="stage-num">5</span>CRM &amp;<br>Analytics</div>
+    <div class="stage-flow" role="list" aria-label="Citizen journey">
+      <div class="stage" role="listitem"><span class="stage-num">1</span>Citizen<br>Scans QR</div>
+      <div class="stage" role="listitem"><span class="stage-num">2</span>WhatsApp<br>AI Activates</div>
+      <div class="stage" role="listitem"><span class="stage-num">3</span>Guided<br>Conversation</div>
+      <div class="stage" role="listitem"><span class="stage-num">4</span>Intent<br>Captured</div>
+      <div class="stage" role="listitem"><span class="stage-num">5</span>Lead → Developer<br>CRM Dashboard</div>
     </div>
 
     <div class="strategy-box">
       <div class="pillar">
-        <h4>Core Components</h4>
+        <h4>What Stays the Same (PwC Layer)</h4>
         <ul class="tick-list">
-          <li>On-chain / cryptographic hash registry for certificate provenance</li>
-          <li>Unique QR plates with anti-tamper serialization</li>
-          <li>AI-driven WhatsApp chatbot (NLU + retrieval augmentation)</li>
-          <li>Property intelligence micro-site (dynamic components)</li>
-          <li>Unified engagement &amp; conversion API gateway</li>
+          <li>MahaRERA registration portal &amp; database</li>
+          <li>QR code issuance &amp; physical/digital plates</li>
+          <li>Project detail pages on MahaRERA website</li>
+          <li>Government fee collection (~₹4,000 per registration)</li>
+          <li>Compliance monitoring &amp; enforcement workflows</li>
         </ul>
       </div>
-      <div class="pillar">
-        <h4>AI Intelligence Layer</h4>
+      <div class="pillar" style="border-top-color: var(--mck-teal);">
+        <h4>What WoW‑Strategies Adds (AI Layer)</h4>
         <ul class="tick-list">
-          <li>RAG over verified disclosure corpus + FAQ library</li>
-          <li>Buyer persona inference &amp; lead qualification matrix</li>
-          <li>Adaptive dialogue flows based on real-time intent signals</li>
-          <li>Predictive funnel stage progression probability scoring</li>
-          <li>Anomaly detection for fraud &amp; misuse patterns</li>
+          <li>WhatsApp chatbot triggered on QR scan (deep-link integration)</li>
+          <li>AI-driven Q&amp;A using MahaRERA's verified project data (RAG)</li>
+          <li>Structured citizen intent capture &amp; lead scoring engine</li>
+          <li>Developer-facing CRM dashboard with real-time lead alerts</li>
+          <li>Analytics engine: demand heatmaps, pricing intelligence, conversion tracking</li>
         </ul>
       </div>
     </div>
 
     <div class="block">
-      <h3>Conversational Journey Orchestration — 5-Step Flow</h3>
+      <h3>Citizen Conversation Flow — What the Buyer Experiences</h3>
       <ol>
-        <li><strong>Scan QR</strong> → Verified landing handoff or direct WhatsApp deep link with session token.</li>
-        <li><strong>Chatbot greeting</strong> with dynamic trust capsule (project snapshot + legitimacy hash).</li>
-        <li><strong>Adaptive questioning</strong> identifies budget, timeline, and use-case (invest / live / commercial).</li>
-        <li><strong>Structured intent vector</strong> generated → scoring pipeline updates CRM in real time.</li>
-        <li><strong>Personalized collateral</strong> triggered (floor plans, pricing bands) with monitored engagement event streams.</li>
+        <li><strong>Scan QR at project site / in advertisement</strong> → WhatsApp opens with pre-loaded project context.</li>
+        <li><strong>AI greets with trust capsule:</strong> "This project is MahaRERA verified ✓ — Registration P51234567890. Here's what I can help you with."</li>
+        <li><strong>Guided Q&amp;A:</strong> Floor plans, pricing range, completion timeline, RERA compliance status, builder track record — all from verified data.</li>
+        <li><strong>Intent capture:</strong> "Are you looking to buy for self-use or investment? What's your budget range? When are you planning to purchase?"</li>
+        <li><strong>Handoff:</strong> Qualified lead with full context pushed to developer's CRM. Citizen receives personalized brochure + site visit link.</li>
       </ol>
     </div>
 
     <div class="callout">
-      <h4>Design Principle</h4>
-      <p>Zero duplication, zero re-keying: each user action produces structured, attributable data augmenting an evolving market intelligence graph — self-improving with every interaction.</p>
+      <h4>Technical Principle</h4>
+      <p>The AI layer reads from MahaRERA's existing project database via API. It does not modify, store, or duplicate any regulatory data. All citizen conversations are consent-based, PII-compliant, and auditable. WoW‑Strategies operates as a licensed technology partner — not a data controller.</p>
     </div>
 
     <div class="pg-footer">
@@ -929,70 +672,103 @@ small { font-size: 0.8rem; color: var(--mck-gray-600); }
     </div>
   </section>
 
-  <!-- ──────────────────────────────────────────────────────
-       PAGE 5: DATA & AI LAYER
-       ────────────────────────────────────────────────────── -->
-  <section class="page" data-page="5" aria-label="Data and AI Layer">
+  <!-- ══════════════════════════════════════════════════════════
+       PAGE 5: REVENUE MODEL FOR MAHARERA
+       ══════════════════════════════════════════════════════════ -->
+  <section class="page" data-page="5" aria-label="Revenue Model for MahaRERA">
     <div class="pg-header">
-      <span class="doc-title">Data &amp; AI Layer</span>
+      <span class="doc-title">Revenue Model for MahaRERA</span>
       <span class="conf-tag">Confidential</span>
     </div>
 
-    <div class="section-label"><div class="sl-bar"></div><span class="sl-text">Data &amp; AI Enablement</span></div>
-    <h2>A Self-Reinforcing Data Fabric Powering Smarter Decisions</h2>
+    <div class="section-label"><div class="sl-bar"></div><span class="sl-text">New Revenue Architecture</span></div>
+    <h2>Four Revenue Streams — All Incremental to Existing Fees</h2>
 
-    <div class="grid-2">
-      <div class="block">
-        <h3>Data Ingestion</h3>
-        <ul class="tick-list">
-          <li>Regulatory filings (structured → normalized schema)</li>
-          <li>Developer-provided inventory &amp; pricing APIs</li>
-          <li>Chat interaction transcripts (token-curated)</li>
-          <li>Intent events (scan, dwell, asset open, re-engage)</li>
-          <li>Session metadata (device, geolocation granularity)</li>
-        </ul>
+    <div class="fin-model">
+      <div class="rev-card">
+        <div class="amt">₹2K–₹5K</div>
+        <div class="rev-label">Monthly AI CRM Fee</div>
+        <small>Per active project. Developers pay for qualified lead access &amp; CRM dashboard. Tiered by city &amp; project size.</small>
       </div>
-      <div class="block">
-        <h3>Processing Pipelines</h3>
-        <ul class="tick-list">
-          <li>Event streaming (Kafka / Pulsar)</li>
-          <li>Semantic enrichment (entity resolution, PII masking)</li>
-          <li>Vectorization (embedding store for RAG)</li>
-          <li>Lead enrichment via optional external data signals</li>
-          <li>Fraud heuristics (rate anomalies, signature mismatch)</li>
-        </ul>
+      <div class="rev-card">
+        <div class="amt">₹500–₹1,500</div>
+        <div class="rev-label">Per Qualified Lead</div>
+        <small>Performance-based pricing option. Developer pays only for leads that meet scoring threshold.</small>
       </div>
-    </div>
-
-    <div class="grid-2">
-      <div class="block alt">
-        <h3>AI Model Stack</h3>
-        <ul class="tick-list">
-          <li>NLU intent classifier (multi-label mapping)</li>
-          <li>Engagement propensity model (recency &amp; feature vector)</li>
-          <li>Lead score (weighted: budget fit, urgency, depth)</li>
-          <li>Churn risk (drop-off pattern recognition)</li>
-          <li>Response optimization (multi-arm bandit prompts)</li>
-        </ul>
+      <div class="rev-card">
+        <div class="amt">₹10K–₹25K</div>
+        <div class="rev-label">Premium Analytics</div>
+        <small>Monthly. Demand heatmaps, pricing benchmarks, competitor intelligence for developers &amp; banks.</small>
       </div>
-      <div class="block alt">
-        <h3>AI Governance</h3>
-        <ul class="tick-list">
-          <li>PII redaction guardrails pre-embedding pipeline</li>
-          <li>Explainable scoring thresholds — archived &amp; auditable</li>
-          <li>Audit log immutability via cryptographic hashing</li>
-          <li>Versioned prompt templates in central registry</li>
-          <li>Model drift telemetry (feature distribution watch)</li>
-        </ul>
+      <div class="rev-card">
+        <div class="amt">License Fee</div>
+        <div class="rev-label">MahaRERA Share</div>
+        <small>WoW‑Strategies pays MahaRERA a platform licensing fee + revenue share on all transactions.</small>
       </div>
     </div>
 
     <div class="block">
-      <h3>Illustrative End-to-End Data Flow</h3>
-      <p style="background: var(--mck-gray-100); padding: 1rem; border-left: 3px solid var(--mck-blue); font-family: monospace; font-size: 0.85rem;">
-        Scan QR → Session Token → AI Gateway → Intent Classification → RAG Answer Generation → Event Stream → Scoring Engine → CRM Sink → Analytics Warehouse → Model Refinement Loop
-      </p>
-      <p>Each step appends structured metadata creating a continuously improving reinforcement loop for both model refinement and business intelligence.</p>
+      <h3>Conservative Revenue Projection — MahaRERA's Share</h3>
+      <div class="table-wrap">
+        <table class="table striped">
+          <thead>
+            <tr>
+              <th>Scenario</th>
+              <th>Active Projects</th>
+              <th>Avg. Monthly Fee</th>
+              <th>Annual Gross Revenue</th>
+              <th>MahaRERA Share (30%)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Year 1 — Pilot</strong></td>
+              <td>5,000 (10% of 50K)</td>
+              <td>₹3,000</td>
+              <td>₹18 Cr</td>
+              <td><strong>₹5.4 Cr</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Year 2 — Scale</strong></td>
+              <td>15,000 (30%)</td>
+              <td>₹3,500</td>
+              <td>₹63 Cr</td>
+              <td><strong>₹18.9 Cr</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Year 3 — Mature</strong></td>
+              <td>30,000 (60%)</td>
+              <td>₹4,000</td>
+              <td>₹144 Cr</td>
+              <td><strong>₹43.2 Cr</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p><small>Note: Revenue share structure is indicative and subject to commercial negotiation. Excludes premium analytics &amp; per-lead fees which represent additional upside. Active projects include both new registrations and existing projects with ongoing sales activity.</small></p>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi green">
+        <div class="kpi-val">₹43+ Cr</div>
+        <div class="kpi-label">MahaRERA Annual Share (Yr 3)</div>
+        <small>Pure incremental revenue. Zero cost to MahaRERA. No infrastructure change needed.</small>
+      </div>
+      <div class="kpi green">
+        <div class="kpi-val">₹0</div>
+        <div class="kpi-label">MahaRERA's Technology Cost</div>
+        <small>WoW‑Strategies builds, operates &amp; maintains the entire AI layer at its own expense.</small>
+      </div>
+      <div class="kpi green">
+        <div class="kpi-val">30%+</div>
+        <div class="kpi-label">Revenue Share to MahaRERA</div>
+        <small>MahaRERA earns from Day 1 without any capital commitment or operational overhead.</small>
+      </div>
+    </div>
+
+    <div class="callout green">
+      <h4>Why This Matters for MahaRERA</h4>
+      <p>This is not a cost center. This is a new revenue source that leverages an asset MahaRERA already owns — the 50,000+ project QR ecosystem. WoW‑Strategies takes the execution risk. MahaRERA earns a licensing fee and revenue share. The citizen gets a better experience. The developer gets qualified leads. Everyone wins.</p>
     </div>
 
     <div class="pg-footer">
@@ -1001,89 +777,69 @@ small { font-size: 0.8rem; color: var(--mck-gray-600); }
     </div>
   </section>
 
-  <!-- ──────────────────────────────────────────────────────
-       PAGE 6: STAKEHOLDER VALUE MATRIX
-       ────────────────────────────────────────────────────── -->
-  <section class="page" data-page="6" aria-label="Stakeholder Value Matrix">
+  <!-- ══════════════════════════════════════════════════════════
+       PAGE 6: STAKEHOLDER VALUE
+       ══════════════════════════════════════════════════════════ -->
+  <section class="page" data-page="6" aria-label="Stakeholder Value">
     <div class="pg-header">
       <span class="doc-title">Stakeholder Value Matrix</span>
       <span class="conf-tag">Confidential</span>
     </div>
 
-    <div class="section-label"><div class="sl-bar"></div><span class="sl-text">Stakeholder Value &amp; Impact</span></div>
-    <h2>Every Stakeholder Wins — A True Multi-Sided Platform</h2>
+    <div class="section-label"><div class="sl-bar"></div><span class="sl-text">Multi-Stakeholder Impact</span></div>
+    <h2>Every Participant in the Ecosystem Benefits</h2>
 
     <div class="impact-matrix">
-      <div class="impact">
-        <h3>Buyers <em>(Confidence &amp; Clarity)</em></h3>
+      <div class="impact" style="border-top-color: var(--mck-navy);">
+        <h3>MahaRERA <em>(Revenue &amp; Mandate Enhancement)</em></h3>
         <ul class="tick-list">
-          <li>Instant legitimacy check on any device</li>
-          <li>Structured, guided Q&amp;A reduces ambiguity</li>
-          <li>Curated collateral delivered contextually</li>
+          <li><strong>₹43+ Cr/year</strong> new revenue at scale</li>
+          <li>Elevated citizen protection via AI-guided verification</li>
+          <li>Real-time market intelligence dashboard (demand, pricing, sentiment)</li>
+          <li>National leadership — first RERA with AI-powered citizen engagement</li>
+          <li>Data-driven policy input on housing demand &amp; developer compliance</li>
+        </ul>
+      </div>
+      <div class="impact">
+        <h3>Citizens / Homebuyers <em>(Trust &amp; Clarity)</em></h3>
+        <ul class="tick-list">
+          <li>Instant, AI-guided project verification via WhatsApp</li>
+          <li>Answers to pricing, timeline, approvals in conversational format</li>
+          <li>98% message open rate vs. 20% for email — faster information access</li>
+          <li>Reduced risk of misinformation or fraud</li>
           <li>Shorter, less stressful decision journey</li>
         </ul>
       </div>
-      <div class="impact">
+      <div class="impact" style="border-top-color: var(--mck-teal);">
         <h3>Developers <em>(Revenue Velocity)</em></h3>
         <ul class="tick-list">
-          <li>Qualified, attributable leads in real time</li>
-          <li>Automated nurturing trigger sequences</li>
-          <li>Reduced manual CRM burden &amp; data entry</li>
-          <li>Pricing &amp; messaging optimization via data</li>
+          <li>Qualified leads delivered to CRM in real time (vs. 0 today)</li>
+          <li>2–3× higher conversion rate vs. traditional channels</li>
+          <li>Structured buyer data: budget, timeline, unit preference pre-filled</li>
+          <li>Reduced marketing CAC by 20–30% through attributed demand</li>
+          <li>Willingness to pay ₹3K–₹5K/month — proven in comparable SaaS models</li>
         </ul>
       </div>
-      <div class="impact">
-        <h3>Regulator <em>(Market Integrity)</em></h3>
+    </div>
+
+    <div class="grid-2">
+      <div class="block">
+        <h3>Banks &amp; Housing Finance Companies</h3>
         <ul class="tick-list">
-          <li>Data transparency &amp; disclosure uplift</li>
-          <li>Early anomaly detection across portfolio</li>
-          <li>Aggregated, anonymized market intelligence</li>
-          <li>Sustainable platform monetization model</li>
+          <li>Pre-qualified buyer intent data for home loan cross-sell</li>
+          <li>Verified project data reduces underwriting risk</li>
+          <li>Premium analytics subscription: ₹10K–₹25K/month</li>
+          <li>Co-branded buyer journey integration potential</li>
         </ul>
       </div>
-    </div>
-
-    <div class="fin-model">
-      <div class="rev-card">
-        <div class="amt">₹10K–₹25K</div>
-        <div class="rev-label">Issuance Fee</div>
-        <small>One-time per project (size tiered)</small>
-      </div>
-      <div class="rev-card">
-        <div class="amt">₹5K–₹15K</div>
-        <div class="rev-label">Annual Maintenance</div>
-        <small>Continuity, security &amp; QR refresh</small>
-      </div>
-      <div class="rev-card">
-        <div class="amt">₹15K–₹50K</div>
-        <div class="rev-label">CRM &amp; AI Suite</div>
-        <small>Hosting, scoring &amp; dashboard</small>
-      </div>
-      <div class="rev-card">
-        <div class="amt">Premium</div>
-        <div class="rev-label">Add-on Modules</div>
-        <small>Virtual tours, benchmarking APIs</small>
-      </div>
-    </div>
-
-    <div class="block">
-      <h3>Illustrative Performance KPIs</h3>
-      <div class="kpi-grid" style="margin: 1rem 0 0;">
-        <div class="kpi">
-          <div class="kpi-val">+50%</div>
-          <div class="kpi-label">Lead capture rate</div>
-          <small>QR-triggered vs baseline web.</small>
-        </div>
-        <div class="kpi">
-          <div class="kpi-val">−35%</div>
-          <div class="kpi-label">Decision cycle time</div>
-          <small>Inquiry-to-booking compression.</small>
-        </div>
-        <div class="kpi">
-          <div class="kpi-val">+90%</div>
-          <div class="kpi-label">Adoption target</div>
-          <small>Post-mandate coverage.</small>
-        </div>
+      <div class="block">
+        <h3>Real Estate Agents (32,000+ Registered)</h3>
+        <ul class="tick-list">
+          <li>AI assists their clients with instant project verification</li>
+          <li>Agent-specific CRM view for their portfolio</li>
+          <li>Attribution: every lead tracked to the agent's referral</li>
+          <li>Additional subscription tier: ₹1,000–₹2,000/month</li>
+        </ul>
       </div>
     </div>
 
@@ -1093,73 +849,104 @@ small { font-size: 0.8rem; color: var(--mck-gray-600); }
     </div>
   </section>
 
-  <!-- ──────────────────────────────────────────────────────
-       PAGE 7: IMPLEMENTATION ROADMAP
-       ────────────────────────────────────────────────────── -->
-  <section class="page" data-page="7" aria-label="Implementation Roadmap">
+  <!-- ══════════════════════════════════════════════════════════
+       PAGE 7: MARKET VALIDATION — REAL NUMBERS
+       ══════════════════════════════════════════════════════════ -->
+  <section class="page" data-page="7" aria-label="Market Validation">
     <div class="pg-header">
-      <span class="doc-title">Implementation Roadmap</span>
+      <span class="doc-title">Market Validation</span>
       <span class="conf-tag">Confidential</span>
     </div>
 
-    <div class="section-label"><div class="sl-bar"></div><span class="sl-text">Implementation Roadmap</span></div>
-    <h2>Three Phases Delivering Value Within 24 Months</h2>
+    <div class="section-label"><div class="sl-bar"></div><span class="sl-text">Market Evidence</span></div>
+    <h2>The Numbers Are Already Proven — We're Connecting the Dots</h2>
 
-    <div class="timeline">
-      <div class="phase" data-phase="Phase 1 · Months 1–3">
-        <h3>Pilot</h3>
-        <ul class="tick-list">
-          <li>100 curated projects onboarded</li>
-          <li>QR issuance + base chatbot flows live</li>
-          <li>Feedback instrumentation deployed</li>
-          <li>Baseline metric capture initiated</li>
-        </ul>
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="kpi-val">98%</div>
+        <div class="kpi-label">WhatsApp Open Rate</div>
+        <small>vs. 20% for email, 5% for SMS. India has 500M+ WhatsApp users — the default communication channel.</small>
       </div>
-      <div class="phase" data-phase="Phase 2 · Months 4–12">
-        <h3>Scale</h3>
-        <ul class="tick-list">
-          <li>Mandated statewide roll-out</li>
-          <li>Advanced AI scoring &amp; personalization</li>
-          <li>Public trust campaign launch</li>
-          <li>Performance optimization loops active</li>
-        </ul>
+      <div class="kpi">
+        <div class="kpi-val">11%</div>
+        <div class="kpi-label">Lead-to-Close Rate (WhatsApp)</div>
+        <small>vs. 4% via traditional call/email follow-up. 2.75× improvement documented by Indian developers.</small>
       </div>
-      <div class="phase" data-phase="Phase 3 · Year 2+">
-        <h3>Expansion</h3>
-        <ul class="tick-list">
-          <li>Multi-jurisdiction standardization</li>
-          <li>Predictive market intelligence modules</li>
-          <li>Cross-portfolio benchmarking indices</li>
-          <li>Interoperable data exchange APIs</li>
-        </ul>
+      <div class="kpi">
+        <div class="kpi-val">₹13,487 Cr</div>
+        <div class="kpi-label">Mumbai Stamp Duty (2025)</div>
+        <small>1.5L+ property registrations. Each transaction = a buyer who likely scanned a MahaRERA QR code.</small>
+      </div>
+    </div>
+
+    <div class="block alt">
+      <h3>Maharashtra Real Estate Transaction Volume — Context</h3>
+      <div class="table-wrap">
+        <table class="table striped">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>2024</th>
+              <th>2025</th>
+              <th>Trend</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Mumbai property registrations</strong></td>
+              <td>1,41,202</td>
+              <td>1,50,231</td>
+              <td>+6% YoY</td>
+            </tr>
+            <tr>
+              <td><strong>Primary residential units sold (Mumbai)</strong></td>
+              <td>96,187</td>
+              <td>~1,02,000 (est.)</td>
+              <td>+6% YoY</td>
+            </tr>
+            <tr>
+              <td><strong>Stamp duty collected (Mumbai)</strong></td>
+              <td>₹12,138 Cr</td>
+              <td>₹13,487 Cr</td>
+              <td>+11% YoY</td>
+            </tr>
+            <tr>
+              <td><strong>MahaRERA registered projects (cumulative)</strong></td>
+              <td>~45,680</td>
+              <td>50,162</td>
+              <td>+10% YoY</td>
+            </tr>
+            <tr>
+              <td><strong>New project registrations (annual)</strong></td>
+              <td>4,332</td>
+              <td>~4,500 (est.)</td>
+              <td>Steady growth</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <div class="grid-2">
       <div class="block">
-        <h3>Risk Mitigation</h3>
-        <ul class="tick-list risk-list">
-          <li>Pilot-first approach de-risks technical friction</li>
-          <li>Progressive AI capability release gating</li>
-          <li>Fallback flows for messaging delivery outages</li>
-          <li>Redundancy in QR verification endpoints</li>
+        <h3>Developer Willingness to Pay — Benchmarks</h3>
+        <ul class="tick-list">
+          <li>99acres, MagicBricks charge ₹5K–₹50K/month per project for leads</li>
+          <li>Facebook/Google ads: ₹200–₹500 per real estate lead (unqualified)</li>
+          <li>Our model: ₹3K–₹5K/month for <strong>pre-qualified, intent-scored</strong> leads from a government-verified source</li>
+          <li>Dramatically lower cost, dramatically higher trust signal</li>
         </ul>
       </div>
       <div class="block">
-        <h3>Success Metrics</h3>
+        <h3>Why Developers Will Adopt</h3>
         <ul class="tick-list">
-          <li>Adoption (install base coverage %)</li>
-          <li>Speed (lead qualification SLA)</li>
-          <li>Conversion (qualified → booking rate)</li>
-          <li>Trust Index (survey composite score)</li>
-          <li>Data Completeness (schema fill rate)</li>
+          <li>Leads come from MahaRERA-verified source — highest trust</li>
+          <li>Citizen has already demonstrated active interest (QR scan)</li>
+          <li>Pre-qualified: budget, timeline, preference captured by AI</li>
+          <li>Real-time delivery — no 24-hour lag like portal leads</li>
+          <li>ROI provable: one conversion (avg. ₹80L+ ticket) pays for years of subscription</li>
         </ul>
       </div>
-    </div>
-
-    <div class="callout">
-      <h4>Scalability Lens</h4>
-      <p>Platform modularity — QR service, ChatOps, Scoring, Analytics, Dashboard — supports phased jurisdictional onboarding without re-architecting core primitives, ensuring investment protection at every stage.</p>
     </div>
 
     <div class="pg-footer">
@@ -1168,86 +955,57 @@ small { font-size: 0.8rem; color: var(--mck-gray-600); }
     </div>
   </section>
 
-  <!-- ──────────────────────────────────────────────────────
-       PAGE 8: ECONOMICS & SUSTAINABILITY
-       ────────────────────────────────────────────────────── -->
-  <section class="page" data-page="8" aria-label="Economics and Sustainability">
+  <!-- ══════════════════════════════════════════════════════════
+       PAGE 8: DATA & AI INTELLIGENCE
+       ══════════════════════════════════════════════════════════ -->
+  <section class="page" data-page="8" aria-label="Data and AI Intelligence">
     <div class="pg-header">
-      <span class="doc-title">Economics &amp; Sustainability</span>
+      <span class="doc-title">Data &amp; AI Intelligence</span>
       <span class="conf-tag">Confidential</span>
     </div>
 
-    <div class="section-label"><div class="sl-bar"></div><span class="sl-text">Revenue Architecture &amp; Sustainability</span></div>
-    <h2>A Compounding Economic Model With Network-Effect Upside</h2>
+    <div class="section-label"><div class="sl-bar"></div><span class="sl-text">AI Engine &amp; Market Intelligence</span></div>
+    <h2>A Self-Improving Intelligence Layer That Gets Smarter With Every Scan</h2>
 
     <div class="grid-2">
-      <div class="block alt">
-        <h3>Revenue Streams</h3>
+      <div class="block">
+        <h3>AI Capabilities (Citizen-Facing)</h3>
         <ul class="tick-list">
-          <li>QR issuance fee (one-time per project)</li>
-          <li>Annual platform subscription (renewal)</li>
-          <li>Advanced AI analytics tier (premium)</li>
-          <li>Developer premium modules (virtual tours, segmentation)</li>
-          <li>Aggregated anonymized market insights</li>
+          <li><strong>RAG on verified data:</strong> Answers grounded in MahaRERA's actual project filings — no hallucination</li>
+          <li><strong>Multi-language:</strong> English, Hindi, Marathi — conversation in citizen's preferred language</li>
+          <li><strong>Intent classification:</strong> Budget, timeline, use-case (self-use / investment / commercial)</li>
+          <li><strong>Adaptive dialogue:</strong> Different flows for first-time buyer vs. investor vs. NRI</li>
+          <li><strong>Trust capsule:</strong> Every conversation starts with verified RERA status &amp; builder compliance score</li>
         </ul>
       </div>
-      <div class="block alt">
-        <h3>Cost Drivers</h3>
+      <div class="block">
+        <h3>Intelligence Layer (MahaRERA Dashboard)</h3>
         <ul class="tick-list">
-          <li>Messaging &amp; infrastructure usage (elastic)</li>
-          <li>AI inference &amp; vector storage (scales with volume)</li>
-          <li>Security &amp; compliance (penetration tests, audits)</li>
-          <li>Support &amp; onboarding success teams</li>
-          <li>Feature R&amp;D (model refinement &amp; new modules)</li>
+          <li><strong>Demand heatmaps:</strong> Where are citizens scanning? Which micro-markets are heating up?</li>
+          <li><strong>Pricing intelligence:</strong> What budget ranges are citizens expressing? Mismatches with listed prices?</li>
+          <li><strong>Compliance signals:</strong> Projects with low engagement may indicate stalled development</li>
+          <li><strong>Buyer sentiment:</strong> Common concerns, frequently asked questions, trust barriers</li>
+          <li><strong>Policy input:</strong> Data-driven evidence for regulatory decisions</li>
         </ul>
       </div>
     </div>
 
-    <div class="block">
-      <h3>Scaling Efficiency Dynamics</h3>
-      <p><strong>Marginal cost ↓</strong> as QR issuance &amp; AI inference amortize over a larger project base. Data network effects increase predictive accuracy → improves conversion → amplifies platform indispensability.</p>
-      
-      <div class="table-wrap">
-        <table class="table striped">
-          <thead>
-            <tr>
-              <th>Year</th>
-              <th>Adoption (%)</th>
-              <th>Projects (Cum.)</th>
-              <th>Avg Rev / Project</th>
-              <th>Indicative Gross (₹ Cr)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Year 1</strong></td>
-              <td>~12%</td>
-              <td>~5,000</td>
-              <td>₹20K</td>
-              <td><strong>≈ 50</strong></td>
-            </tr>
-            <tr>
-              <td><strong>Year 2</strong></td>
-              <td>~40%</td>
-              <td>~16,800</td>
-              <td>₹24K</td>
-              <td><strong>≈ 200</strong></td>
-            </tr>
-            <tr>
-              <td><strong>Year 3</strong></td>
-              <td>~70%</td>
-              <td>~29,400</td>
-              <td>₹28K</td>
-              <td><strong>≈ 500+</strong></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div class="block alt">
+      <h3>Data Flow — Compliant by Design</h3>
+      <p style="background: var(--mck-white); padding: 1rem; border-left: 3px solid var(--mck-blue); font-family: monospace; font-size: 0.85rem;">
+        QR Scan → WhatsApp Deep Link → AI Chatbot (reads MahaRERA DB via API) → Citizen Conversation → Intent Scoring → Anonymized Analytics to MahaRERA Dashboard + Qualified Lead to Developer CRM
+      </p>
+      <ul class="tick-list" style="margin-top: 1rem;">
+        <li><strong>No regulatory data is copied or stored</strong> by WoW‑Strategies — AI reads via live API</li>
+        <li><strong>Citizen consent</strong> obtained before any data is shared with developer</li>
+        <li><strong>PII encryption</strong> at rest and in transit, redacted in analytics</li>
+        <li><strong>All conversations auditable</strong> — full trail available to MahaRERA on demand</li>
+      </ul>
     </div>
 
     <div class="callout">
-      <h4>Economic Flywheel</h4>
-      <p>More verified interactions → richer behavioral dataset → improved AI intent &amp; conversion predictions → higher developer ROI → stronger adoption &amp; retention → incremental monetization scope. Each cycle reinforces the next.</p>
+      <h4>Network Effect Flywheel</h4>
+      <p>More scans → more conversations → richer intent data → better AI scoring → higher developer ROI → higher adoption → more revenue for MahaRERA → more data → smarter AI. Each cycle compounds the value of the platform.</p>
     </div>
 
     <div class="pg-footer">
@@ -1256,93 +1014,72 @@ small { font-size: 0.8rem; color: var(--mck-gray-600); }
     </div>
   </section>
 
-  <!-- ──────────────────────────────────────────────────────
-       PAGE 9: GOVERNANCE & RISK
-       ────────────────────────────────────────────────────── -->
-  <section class="page" data-page="9" aria-label="Governance and Risk">
+  <!-- ══════════════════════════════════════════════════════════
+       PAGE 9: IMPLEMENTATION ROADMAP
+       ══════════════════════════════════════════════════════════ -->
+  <section class="page" data-page="9" aria-label="Implementation Roadmap">
     <div class="pg-header">
-      <span class="doc-title">Governance &amp; Risk</span>
+      <span class="doc-title">Implementation Roadmap</span>
       <span class="conf-tag">Confidential</span>
     </div>
 
-    <div class="section-label"><div class="sl-bar"></div><span class="sl-text">Governance, Compliance &amp; Risk Controls</span></div>
-    <h2>Trust-by-Design: Controls Embedded at Every Layer</h2>
+    <div class="section-label"><div class="sl-bar"></div><span class="sl-text">Phased Rollout</span></div>
+    <h2>Three Phases — Value Visible Within 90 Days</h2>
 
-    <div class="grid-3">
-      <div class="block">
-        <h3>Data Protection</h3>
+    <div class="timeline">
+      <div class="phase" data-phase="Phase 1 · Months 1–3">
+        <h3>Controlled Pilot</h3>
         <ul class="tick-list">
-          <li>Role-based access &amp; least-privilege</li>
-          <li>PII encryption at rest &amp; transit</li>
-          <li>Attribute-based redaction</li>
-          <li>Consent-managed user preferences</li>
+          <li><strong>500 projects</strong> in Mumbai &amp; Pune (top 2 markets)</li>
+          <li>WhatsApp AI chatbot live with English + Marathi</li>
+          <li>Basic CRM dashboard for participating developers</li>
+          <li>MahaRERA analytics dashboard (scan volume, intent trends)</li>
+          <li>Baseline metrics established: scans → conversations → leads → conversions</li>
         </ul>
       </div>
-      <div class="block">
-        <h3>AI Ethics</h3>
+      <div class="phase" data-phase="Phase 2 · Months 4–12">
+        <h3>State-Wide Scale</h3>
         <ul class="tick-list">
-          <li>Prompt version registry &amp; audit</li>
-          <li>Bias evaluation on outputs</li>
-          <li>Explainability payload</li>
-          <li>Fallback deterministic templates</li>
+          <li><strong>15,000 projects</strong> across all 6 MahaRERA regions</li>
+          <li>Advanced AI scoring &amp; multi-language expansion (Hindi)</li>
+          <li>Developer self-service onboarding portal</li>
+          <li>Bank &amp; HFC integration for home loan cross-sell</li>
+          <li>Premium analytics tier launched</li>
         </ul>
       </div>
-      <div class="block">
-        <h3>Operational Controls</h3>
+      <div class="phase" data-phase="Phase 3 · Year 2+">
+        <h3>Full Ecosystem</h3>
         <ul class="tick-list">
-          <li>Incident SLA matrix (P1–P4)</li>
-          <li>Automated anomaly alerts</li>
-          <li>Key health dashboards</li>
-          <li>Quarterly model review cycle</li>
+          <li><strong>30,000+ projects</strong> — majority of active inventory</li>
+          <li>Real estate agent CRM integration</li>
+          <li>Predictive market intelligence modules</li>
+          <li>Blueprint for other state RERAs (licensing model)</li>
+          <li>API marketplace for third-party integrations</li>
         </ul>
       </div>
     </div>
 
-    <div class="block alt">
-      <h3>Key Risks &amp; Mitigations</h3>
-      <div class="table-wrap">
-        <table class="table striped">
-          <thead>
-            <tr>
-              <th>Risk</th>
-              <th>Impact</th>
-              <th>Mitigation</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Adoption inertia</strong></td>
-              <td>Delayed revenue ramp</td>
-              <td>Incentivized early-mover bundle + ROI metrics</td>
-            </tr>
-            <tr>
-              <td><strong>Data quality variance</strong></td>
-              <td>Model drift / erroneous scoring</td>
-              <td>Schema validation gates + anomaly flagging</td>
-            </tr>
-            <tr>
-              <td><strong>Messaging rate caps</strong></td>
-              <td>Throughput bottlenecks</td>
-              <td>Adaptive queuing + multi-provider abstraction</td>
-            </tr>
-            <tr>
-              <td><strong>Security breach attempt</strong></td>
-              <td>Trust erosion &amp; reputational damage</td>
-              <td>Continuous scanning + zero-trust network</td>
-            </tr>
-            <tr>
-              <td><strong>Regulatory shifts</strong></td>
-              <td>Workflow misalignment</td>
-              <td>Config-driven policy layer decoupled from code</td>
-            </tr>
-          </tbody>
-        </table>
+    <div class="grid-2">
+      <div class="block">
+        <h3>Risk Mitigation</h3>
+        <ul class="tick-list risk-list">
+          <li><strong>Pilot-first:</strong> Validate with 500 projects before committing to scale</li>
+          <li><strong>No infrastructure change:</strong> PwC stack untouched — API integration only</li>
+          <li><strong>Revenue share model:</strong> MahaRERA earns from Day 1 — no upfront commitment</li>
+          <li><strong>Kill switch:</strong> Can be deactivated without affecting existing QR functionality</li>
+          <li><strong>Compliance-first AI:</strong> Deterministic fallbacks for any question the AI cannot answer</li>
+        </ul>
       </div>
-    </div>
-
-    <div class="callout">
-      <h4>Governance Charter</h4>
-      <p>Establish a joint steering forum — regulator + platform + developer council — ensuring transparency, clear escalation paths, and iterative enhancement continuously aligned to market integrity objectives.</p>
+      <div class="block">
+        <h3>Pilot Success Criteria</h3>
+        <ul class="tick-list">
+          <li><strong>&gt;15% scan-to-conversation rate</strong> (vs. 0% today)</li>
+          <li><strong>&gt;60% conversation completion rate</strong></li>
+          <li><strong>&gt;30% lead qualification rate</strong> from conversations</li>
+          <li><strong>&gt;80% developer satisfaction score</strong> (NPS survey)</li>
+          <li><strong>Revenue generation within 90 days</strong></li>
+        </ul>
+      </div>
     </div>
 
     <div class="pg-footer">
@@ -1351,84 +1088,96 @@ small { font-size: 0.8rem; color: var(--mck-gray-600); }
     </div>
   </section>
 
-  <!-- ──────────────────────────────────────────────────────
-       PAGE 10: IMPLEMENTATION FRAMEWORK DETAIL
-       ────────────────────────────────────────────────────── -->
-  <section class="page" data-page="10" aria-label="Implementation Framework Detail">
+  <!-- ══════════════════════════════════════════════════════════
+       PAGE 10: GOVERNANCE & COMPLIANCE
+       ══════════════════════════════════════════════════════════ -->
+  <section class="page" data-page="10" aria-label="Governance and Compliance">
     <div class="pg-header">
-      <span class="doc-title">Implementation Framework Detail</span>
+      <span class="doc-title">Governance &amp; Compliance</span>
       <span class="conf-tag">Confidential</span>
     </div>
 
-    <div class="section-label"><div class="sl-bar"></div><span class="sl-text">Implementation Framework — Expanded View</span></div>
-    <h2>Phased Execution Minimizes Risk While Maximizing Learning</h2>
+    <div class="section-label"><div class="sl-bar"></div><span class="sl-text">Governance Framework</span></div>
+    <h2>Trust-by-Design: MahaRERA Retains Full Oversight</h2>
 
-    <div class="grid-2">
+    <div class="grid-3">
       <div class="block">
-        <h3>Phase 1 (Pilot) Objectives</h3>
+        <h3>MahaRERA's Controls</h3>
         <ul class="tick-list">
-          <li>Validate buyer engagement latency reduction</li>
-          <li>Benchmark conversion uplift vs. control cohort</li>
-          <li>Calibrate intent scoring thresholds precisely</li>
-          <li>Collect qualitative CX feedback loops</li>
+          <li>Full audit access to all conversations &amp; data flows</li>
+          <li>Approval authority on AI conversation templates</li>
+          <li>Real-time dashboard on platform performance</li>
+          <li>Right to pause or terminate at any time</li>
+          <li>All citizen data remains MahaRERA's property</li>
         </ul>
       </div>
       <div class="block">
-        <h3>Tech Deliverables — Phase 1</h3>
+        <h3>Data Protection</h3>
         <ul class="tick-list">
-          <li>QR issuance engine MVP (tamper-evident)</li>
-          <li>Conversation orchestration v1 (WhatsApp)</li>
-          <li>Lead scoring model (linear baseline)</li>
-          <li>Analytics dashboards (core KPIs only)</li>
+          <li>IT Act 2000 &amp; DPDP Act 2023 compliant</li>
+          <li>PII encryption at rest &amp; in transit (AES-256)</li>
+          <li>Consent-based data sharing only</li>
+          <li>Anonymized aggregation for analytics</li>
+          <li>Annual third-party security audit</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h3>AI Ethics &amp; Quality</h3>
+        <ul class="tick-list">
+          <li>Answers grounded only in verified RERA data</li>
+          <li>Prompt templates reviewed &amp; approved by MahaRERA</li>
+          <li>Deterministic fallback for ambiguous queries</li>
+          <li>Bias evaluation on scoring outputs</li>
+          <li>Quarterly model review &amp; performance reporting</li>
         </ul>
       </div>
     </div>
 
-    <div class="grid-2">
-      <div class="block alt">
-        <h3>Phase 2 (Scale) Enhancements</h3>
-        <ul class="tick-list">
-          <li>Adaptive AI (reinforcement policy tuning)</li>
-          <li>Predictive probability-of-close estimator</li>
-          <li>Multi-language conversational expansion</li>
-          <li>Self-service developer onboarding portal</li>
-        </ul>
-      </div>
-      <div class="block alt">
-        <h3>Phase 3 (Expansion) Focus</h3>
-        <ul class="tick-list">
-          <li>Geo-specific benchmark indices</li>
-          <li>Portfolio-level optimization analytics</li>
-          <li>Cross-jurisdiction compliance abstraction</li>
-          <li>Third-party integration marketplace</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="block">
-      <h3>Success Dashboard — Illustrative Targets</h3>
-      <div class="kpi-grid" style="margin: 1rem 0 0;">
-        <div class="kpi">
-          <div class="kpi-val">≤ 20s</div>
-          <div class="kpi-label">Median response latency</div>
-          <small>Conversational exchange end-to-end.</small>
-        </div>
-        <div class="kpi">
-          <div class="kpi-val">+2.1×</div>
-          <div class="kpi-label">Lead enrichment depth</div>
-          <small>Structured fields vs. baseline form.</small>
-        </div>
-        <div class="kpi">
-          <div class="kpi-val">95%</div>
-          <div class="kpi-label">QR integrity pass rate</div>
-          <small>Random audit verification score.</small>
-        </div>
+    <div class="block alt">
+      <h3>Proposed Engagement Structure</h3>
+      <div class="table-wrap">
+        <table class="table striped">
+          <thead>
+            <tr>
+              <th>Element</th>
+              <th>MahaRERA's Role</th>
+              <th>WoW‑Strategies' Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Infrastructure</strong></td>
+              <td>Existing PwC stack; API access provision</td>
+              <td>Build &amp; operate AI layer at own cost</td>
+            </tr>
+            <tr>
+              <td><strong>Data</strong></td>
+              <td>Data owner &amp; controller; approval authority</td>
+              <td>Data processor under MahaRERA's terms</td>
+            </tr>
+            <tr>
+              <td><strong>Revenue</strong></td>
+              <td>Licensing fee + 30%+ revenue share</td>
+              <td>Developer subscription collection &amp; management</td>
+            </tr>
+            <tr>
+              <td><strong>Governance</strong></td>
+              <td>Joint steering committee chair; policy oversight</td>
+              <td>Operational execution; quarterly reporting</td>
+            </tr>
+            <tr>
+              <td><strong>Brand</strong></td>
+              <td>"Powered by MahaRERA" — authority's credibility</td>
+              <td>White-label technology; WoW branding only on backend</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <div class="callout">
-      <h4>Change Management Accelerator</h4>
-      <p>Provide a modular onboarding kit — training videos, integration playbooks, benchmarking snapshots, and ROI calculators — to accelerate internal stakeholder adoption and build grassroots advocacy from Day 1.</p>
+      <h4>Governance Commitment</h4>
+      <p>WoW‑Strategies proposes a Joint Steering Committee with MahaRERA leadership — quarterly reviews, transparent reporting, KPI-driven performance gates, and MahaRERA's unilateral right to modify or terminate the engagement at any review cycle.</p>
     </div>
 
     <div class="pg-footer">
@@ -1437,44 +1186,137 @@ small { font-size: 0.8rem; color: var(--mck-gray-600); }
     </div>
   </section>
 
-  <!-- ──────────────────────────────────────────────────────
-       PAGE 11: CALL TO ACTION
-       ────────────────────────────────────────────────────── -->
-  <section class="page" data-page="11" aria-label="Call to Action">
+  <!-- ══════════════════════════════════════════════════════════
+       PAGE 11: STRATEGIC POSITIONING
+       ══════════════════════════════════════════════════════════ -->
+  <section class="page" data-page="11" aria-label="Strategic Positioning">
+    <div class="pg-header">
+      <span class="doc-title">Strategic Positioning</span>
+      <span class="conf-tag">Confidential</span>
+    </div>
+
+    <div class="section-label"><div class="sl-bar"></div><span class="sl-text">National Leadership Opportunity</span></div>
+    <h2>MahaRERA Becomes India's First AI-Powered Real Estate Regulator</h2>
+
+    <div class="grid-3">
+      <div class="block gradient-top">
+        <h3>National First-Mover</h3>
+        <p>No state RERA in India has an AI-powered citizen engagement layer. MahaRERA — already the largest with 35% of national registrations — cements its position as the most innovative regulator in the country.</p>
+      </div>
+      <div class="block gradient-top">
+        <h3>Replicable Blueprint</h3>
+        <p>Success in Maharashtra creates a licensable template for 30+ other state RERAs. MahaRERA can position itself as the standard-setter, with potential advisory revenue from other states adopting the model.</p>
+      </div>
+      <div class="block gradient-top">
+        <h3>Global Recognition</h3>
+        <p>An AI-enabled regulatory engagement platform is globally novel. Positions MahaRERA for international recognition — World Bank, UN-Habitat, and global PropTech forums — as a model for emerging market regulation.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <h4>The Big Picture</h4>
+      <p>
+        Maharashtra's real estate market generates ₹13,000+ Cr in annual stamp duty revenue and ₹50,000+ Cr in primary residential sales.
+        MahaRERA's QR mandate already touches every project and every buyer in this ecosystem.
+        Adding an AI conversational layer transforms a regulatory compliance mechanism into an active market infrastructure —
+        one that protects citizens, accelerates developers, generates intelligence, and creates a durable new revenue stream for the Authority.
+        The question is not whether this will happen. The question is whether MahaRERA leads it — or follows another state.
+      </p>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi green">
+        <div class="kpi-val">1st</div>
+        <div class="kpi-label">AI-Powered RERA in India</div>
+        <small>No state regulator currently offers conversational AI to citizens.</small>
+      </div>
+      <div class="kpi green">
+        <div class="kpi-val">50,000+</div>
+        <div class="kpi-label">Projects Already QR-Enabled</div>
+        <small>The distribution channel already exists. Only the intelligence layer is needed.</small>
+      </div>
+      <div class="kpi green">
+        <div class="kpi-val">30+ States</div>
+        <div class="kpi-label">Replication Potential</div>
+        <small>Template can be licensed to other state RERAs — with MahaRERA as the anchor.</small>
+      </div>
+    </div>
+
+    <div class="pg-footer">
+      <span class="contact">WoW‑Strategies Private Limited</span>
+      <span class="pg-num">Page 11</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       PAGE 12: CALL TO ACTION
+       ══════════════════════════════════════════════════════════ -->
+  <section class="page" data-page="12" aria-label="Call to Action">
     <div class="pg-header">
       <span class="doc-title">Call to Action</span>
       <span class="conf-tag">Confidential</span>
     </div>
 
-    <div class="section-label"><div class="sl-bar"></div><span class="sl-text">Call to Action</span></div>
-    <h2>Unlock the Trust Flywheel — Five Steps to Begin</h2>
+    <div class="section-label"><div class="sl-bar"></div><span class="sl-text">Next Steps</span></div>
+    <h2>Recommended Path Forward — Three Decisions</h2>
 
-    <div class="ribbon">From passive compliance to intelligent, AI-orchestrated market advantage — the window to lead is now.</div>
+    <div class="ribbon">MahaRERA already has the infrastructure, the mandate, and the market. WoW‑Strategies brings the AI intelligence layer and execution. Together, we activate the QR.</div>
 
     <div class="grid-3">
-      <div class="block">
-        <h3>Leadership</h3>
-        <p>Position the platform as the definitive standard for verifiable, real-time project intelligence and buyer assurance in the market.</p>
+      <div class="block" style="border-top-color: var(--mck-navy);">
+        <h3>Decision 1: Approve Pilot</h3>
+        <p>Authorize a 90-day controlled pilot with 500 projects in Mumbai &amp; Pune. Zero cost to MahaRERA. WoW‑Strategies deploys at its own expense. Revenue share starts from Day 1.</p>
       </div>
-      <div class="block">
-        <h3>Innovation</h3>
-        <p>Integrate blockchain provenance, AI-led conversation, and predictive analytics to compress adoption &amp; decision timelines measurably.</p>
+      <div class="block" style="border-top-color: var(--mck-navy);">
+        <h3>Decision 2: Define Terms</h3>
+        <p>Establish the commercial framework: API access terms, revenue share structure, data governance protocol, and Joint Steering Committee composition.</p>
       </div>
-      <div class="block">
-        <h3>Impact</h3>
-        <p>Drive confidence, transparency, and sustainable monetization while elevating systemic integrity across all stakeholder groups.</p>
+      <div class="block" style="border-top-color: var(--mck-navy);">
+        <h3>Decision 3: Set KPIs</h3>
+        <p>Agree on pilot success criteria — scan-to-conversation rate, lead quality scores, developer adoption, citizen satisfaction — with clear go/no-go gates for scale-up.</p>
       </div>
     </div>
 
     <div class="block alt">
-      <h3>Next Step Recommendations</h3>
-      <ol>
-        <li><strong>Approve</strong> pilot charter &amp; governance structure with joint steering forum.</li>
-        <li><strong>Finalize</strong> data schemas, QR compliance specification &amp; API contracts.</li>
-        <li><strong>Deploy</strong> foundational AI conversation flows (English + local language roadmap).</li>
-        <li><strong>Establish</strong> baseline KPIs — conversion rate, response latency, trust index.</li>
-        <li><strong>Launch</strong> controlled pilot and instrument analytics for hypothesis validation.</li>
-      </ol>
+      <h3>Proposed 90-Day Pilot Timeline</h3>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Week</th>
+              <th>Milestone</th>
+              <th>Deliverable</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Week 1–2</strong></td>
+              <td>Commercial &amp; API agreement</td>
+              <td>Signed MoU, API access credentials</td>
+            </tr>
+            <tr>
+              <td><strong>Week 3–4</strong></td>
+              <td>Technical integration</td>
+              <td>AI chatbot connected to MahaRERA project DB via API</td>
+            </tr>
+            <tr>
+              <td><strong>Week 5–6</strong></td>
+              <td>UAT &amp; developer onboarding</td>
+              <td>500 projects live, 100 developers on CRM dashboard</td>
+            </tr>
+            <tr>
+              <td><strong>Week 7–10</strong></td>
+              <td>Live pilot operation</td>
+              <td>Citizen conversations, lead delivery, data collection</td>
+            </tr>
+            <tr>
+              <td><strong>Week 11–12</strong></td>
+              <td>Review &amp; recommendation</td>
+              <td>Performance report, go/no-go for state-wide scale</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="callout" role="note" aria-label="Contact information">
@@ -1483,19 +1325,20 @@ small { font-size: 0.8rem; color: var(--mck-gray-600); }
         <strong>WoW‑Strategies Private Limited</strong><br/>
         Phone: <a href="tel:+912248808695" style="color:rgba(255,255,255,0.9);">+91 022 4880 8695</a>
         &nbsp;·&nbsp;
-        Email: <a href="mailto:hello@wow-strategies.com" style="color:rgba(255,255,255,0.9);">hello@wow-strategies.com</a><br/>
-        We are ready to operationalize the compliance-to-growth paradigm shift — together.
+        Email: <a href="mailto:hello@wow-strategies.com" style="color:rgba(255,255,255,0.9);">hello@wow-strategies.com</a><br/><br/>
+        We are ready to activate MahaRERA's QR ecosystem into India's first AI-powered regulator-citizen engagement platform — at zero cost and zero risk to the Authority. The next step is yours.
       </p>
     </div>
 
     <p class="footer-note">
-      This strategic concept note is directional and intended to facilitate stakeholder alignment prior to detailed technical and commercial finalization.
-      All financial projections are indicative and subject to market validation. &copy; 2025 WoW‑Strategies Private Limited. All rights reserved.
+      This strategic engagement proposal is prepared by WoW‑Strategies Private Limited for the exclusive consideration of MahaRERA leadership.
+      All projections are based on publicly available market data and are indicative, subject to validation during the proposed pilot phase.
+      &copy; 2026 WoW‑Strategies Private Limited. All rights reserved. Reproduction or distribution without written consent is prohibited.
     </p>
 
     <div class="pg-footer">
       <span class="contact">WoW‑Strategies Private Limited</span>
-      <span class="pg-num">Page 11</span>
+      <span class="pg-num">Page 12</span>
     </div>
   </section>
 
@@ -1512,23 +1355,19 @@ small { font-size: 0.8rem; color: var(--mck-gray-600); }
   var CORRECT_PASSWORD = 'wow#2025';
   var SESSION_KEY      = 'wow_authenticated';
 
-  /* ── DOM references ── */
   var screen    = document.getElementById('password-screen');
   var content   = document.getElementById('main-content');
   var input     = document.getElementById('password-input');
   var errorMsg  = document.getElementById('error-message');
 
-  /* ── Unlock the document ── */
   function unlock() {
     screen.style.display  = 'none';
     content.classList.add('unlocked');
     try { sessionStorage.setItem(SESSION_KEY, '1'); } catch (e) {}
     updatePageNumbers();
-    // Restore focus to document for accessibility
     document.body.focus();
   }
 
-  /* ── Check password ── */
   function checkPassword() {
     var val = input.value.trim();
     if (val === CORRECT_PASSWORD) {
@@ -1538,14 +1377,12 @@ small { font-size: 0.8rem; color: var(--mck-gray-600); }
       errorMsg.style.display = 'block';
       input.value = '';
       input.focus();
-      // Shake animation for UX feedback
       input.classList.remove('shake');
-      void input.offsetWidth; // reflow to restart animation
+      void input.offsetWidth;
       input.classList.add('shake');
     }
   }
 
-  /* ── Update page numbers with total count ── */
   function updatePageNumbers() {
     var pages  = document.querySelectorAll('.page');
     var total  = pages.length;
@@ -1557,40 +1394,24 @@ small { font-size: 0.8rem; color: var(--mck-gray-600); }
     });
   }
 
-  /* ── Event: Enter key ── */
   input.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter' || e.keyCode === 13) {
-      e.preventDefault();
-      checkPassword();
-    }
+    if (e.key === 'Enter' || e.keyCode === 13) { e.preventDefault(); checkPassword(); }
   });
 
-  /* ── Event: clear error on typing ── */
   input.addEventListener('input', function () {
-    if (errorMsg.style.display !== 'none') {
-      errorMsg.style.display = 'none';
-    }
+    if (errorMsg.style.display !== 'none') { errorMsg.style.display = 'none'; }
   });
 
-  /* ── Expose checkPassword globally (called by onclick) ── */
   window.checkPassword = checkPassword;
 
-  /* ── On load: check session ── */
   window.addEventListener('load', function () {
     var alreadyAuth = false;
     try { alreadyAuth = sessionStorage.getItem(SESSION_KEY) === '1'; } catch (e) {}
-
-    if (alreadyAuth) {
-      unlock();
-    } else {
-      input.focus();
-    }
+    if (alreadyAuth) { unlock(); } else { input.focus(); }
   });
-
 })();
 </script>
 
-<!-- Shake animation for wrong password -->
 <style>
 @keyframes shake {
   0%,100% { transform: translateX(0); }

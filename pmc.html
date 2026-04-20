@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>आपला पुणेकर | WhatsUp.city</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            /* McKinsey-inspired Corporate Palette */
+            --primary-navy: #051C2C;
+            --mckinsey-blue: #002855;
+            --accent-blue: #005F9E;
+            --accent-gold: #B38F36;
+            --light-gray: #F4F7F6;
+            --bg-white: #FFFFFF;
+            
+            /* Text & Borders */
+            --text-dark: #0F172A;
+            --text-muted: #475569;
+            --text-light: #FFFFFF;
+            --border-soft: #E2E8F0;
+            --border-medium: #CBD5E1;
+            
+            /* UI Elements */
+            --danger-red: #DC2626;
+            --success-green: #059669;
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+            --transition: all 0.3s ease;
+            --max-content-width: 1200px;
+            --br-card: 4px; /* Sharp, professional corners */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-white);
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            line-height: 1.6;
+        }
+
+        /* ── Slide Container ── */
+        .slide {
+            min-height: 100vh;
+            width: 100%;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 5vw;
+            position: relative;
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--border-soft);
+        }
+
+        .slide.bg-navy {
+            background: var(--primary-navy);
+            color: var(--text-light);
+        }
+
+        .slide.bg-gray {
+            background: var(--light-gray);
+        }
+
+        .slide-content {
+            width: min(100%, var(--max-content-width));
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── Typography ── */
+        h1 {
+            font-size: clamp(3rem, 5vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            color: inherit;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 3vw, 2.75rem);
+            font-weight: 300;
+            margin-bottom: 1rem;
+            color: var(--mckinsey-blue);
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+        }
+
+        .bg-navy h2 { color: var(--text-light); }
+
+        h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; line-height: 1.3; color: var(--text-dark); }
+        .bg-navy h3 { color: var(--text-light); }
+
+        h4 { font-size: 1.1rem; font-weight: 600; line-height: 1.4; margin-bottom: 0.5rem; color: var(--primary-navy); }
+
+        p { font-size: 1.05rem; line-height: 1.6; margin-bottom: 1rem; color: var(--text-muted); }
+        .bg-navy p { color: #94A3B8; }
+
+        .eyebrow {
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--accent-gold);
+            padding-bottom: 0.25rem;
+        }
+
+        .tagline {
+            font-size: clamp(1.25rem, 2vw, 1.5rem);
+            font-weight: 400;
+            margin-bottom: 2rem;
+            color: var(--text-light);
+            max-width: 800px;
+            line-height: 1.5;
+            border-left: 4px solid var(--accent-gold);
+            padding-left: 1.5rem;
+        }
+
+        .section-header { margin-bottom: 3rem; max-width: 900px; }
+        .section-header p { font-size: 1.15rem; color: var(--text-muted); }
+        .highlight { color: var(--accent-blue); font-weight: 600; }
+
+        /* ── Structural Layouts ── */
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; width: 100%; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; width: 100%; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; width: 100%; }
+        .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; width: 100%; }
+
+        /* ── Universal Consultant Cards ── */
+        .card {
+            background: var(--bg-white);
+            border: 1px solid var(--border-soft);
+            border-radius: var(--br-card);
+            padding: 2rem;
+            box-shadow: var(--shadow-card);
+            transition: var(--transition);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .card.top-accent-blue { border-top: 4px solid var(--accent-blue); }
+        .card.top-accent-red { border-top: 4px solid var(--danger-red); }
+        .card.top-accent-gold { border-top: 4px solid var(--accent-gold); }
+        .card.top-accent-green { border-top: 4px solid var(--success-green); }
+
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+            border-color: var(--border-medium);
+        }
+
+        /* ── Lists ── */
+        .bullet-list { list-style: none; margin: 1rem 0; padding: 0; }
+        .bullet-list li { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; color: var(--text-dark); font-size: 1.05rem; }
+        .bullet-list li::before {
+            content: "■";
+            color: var(--accent-blue);
+            font-size: 0.8rem;
+            margin-top: 0.2rem;
+        }
+        .bullet-list.gap-list li::before { color: var(--danger-red); }
+
+        /* ── Layer Stack (Slide 3) ── */
+        .layer-stack { display: flex; flex-direction: column; gap: 1rem; }
+        .layer-row {
+            background: var(--bg-white);
+            border: 1px solid var(--border-soft);
+            border-left: 4px solid var(--accent-blue);
+            padding: 1.5rem 2rem;
+            display: grid;
+            grid-template-columns: 40px minmax(200px, 25%) 1fr;
+            align-items: center;
+            gap: 1.5rem;
+            box-shadow: var(--shadow-card);
+        }
+        .layer-row .layer-num { font-size: 1.25rem; font-weight: 700; color: var(--border-medium); }
+        .layer-row h4 { margin: 0; font-size: 1.15rem; }
+        .layer-row p { margin: 0; font-size: 1rem; }
+
+        /* ── Process/Journey Flows ── */
+        .process-container {
+            display: flex;
+            align-items: stretch;
+            justify-content: space-between;
+            gap: 0.5rem;
+            width: 100%;
+        }
+        .process-step {
+            flex: 1;
+            background: var(--bg-white);
+            border: 1px solid var(--border-soft);
+            padding: 1.5rem 1rem;
+            text-align: center;
+            position: relative;
+            box-shadow: var(--shadow-card);
+        }
+        .process-step h4 { font-size: 1rem; margin-bottom: 0.5rem; }
+        .process-step p { font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.4; }
+        
+        .process-icon {
+            width: 48px; height: 48px;
+            background: var(--light-gray);
+            border: 1px solid var(--border-medium);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.25rem; margin: 0 auto 1rem;
+            border-radius: var(--br-card);
+            color: var(--primary-navy);
+        }
+
+        .process-arrow {
+            display: flex; align-items: center; justify-content: center;
+            color: var(--border-medium); width: 30px;
+        }
+
+        .step-tag {
+            display: inline-block;
+            font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+            padding: 0.25rem 0.5rem;
+            background: var(--light-gray);
+            border: 1px solid var(--border-soft);
+            color: var(--text-muted);
+            margin-top: auto;
+        }
+
+        /* ── Chat Example Interface ── */
+        .chat-container {
+            display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem;
+            padding: 2rem; background: var(--light-gray); border: 1px solid var(--border-soft);
+        }
+        .chat-bubble {
+            background: var(--bg-white); border: 1px solid var(--border-soft);
+            padding: 1rem 1.5rem; width: 300px;
+            border-radius: 8px 8px 8px 0;
+            box-shadow: var(--shadow-card);
+        }
+        .chat-bubble.reply {
+            border-radius: 8px 8px 0 8px;
+            border-left: 4px solid var(--accent-gold);
+        }
+        .chat-bubble p { font-size: 0.95rem; margin: 0; color: var(--text-dark); }
+        .chat-meta {
+            font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+            color: var(--text-muted); margin-bottom: 0.5rem; display: block;
+        }
+
+        /* ── Map Container ── */
+        .map-container {
+            width: 100%; min-height: 450px; background: var(--light-gray);
+            border: 1px solid var(--border-soft); display: flex; align-items: center; justify-content: center;
+        }
+
+        /* ── QR Image Frame ── */
+        .qr-frame {
+            background: var(--bg-white); border: 1px solid var(--border-soft);
+            padding: 1.5rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center;
+        }
+        .qr-frame img { width: 100%; max-width: 140px; mix-blend-mode: multiply; }
+
+        /* ── Navigation Dots ── */
+        .nav-dots {
+            position: fixed; right: 2rem; top: 50%; transform: translateY(-50%);
+            display: flex; flex-direction: column; gap: 0.75rem; z-index: 100;
+        }
+        .dot {
+            width: 8px; height: 8px; background: var(--border-medium);
+            transition: var(--transition); border-radius: 2px;
+        }
+        .dot:hover, .dot.active { background: var(--accent-blue); transform: scale(1.2); }
+
+        .watermark {
+            position: absolute; bottom: 1.5rem; right: 2rem; font-size: 0.75rem; font-weight: 700;
+            color: var(--border-medium); letter-spacing: 0.1em; z-index: 2; text-transform: uppercase;
+        }
+        .bg-navy .watermark { color: rgba(255,255,255,0.2); }
+
+        /* ── Animation ── */
+        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* ── Responsive ── */
+        @media (max-width: 1024px) {
+            .grid-4, .grid-5, .process-container { grid-template-columns: repeat(2, 1fr); display: grid; }
+            .process-arrow { display: none; }
+        }
+        @media (max-width: 768px) {
+            .slide { padding: 3rem 1.5rem; height: auto; scroll-snap-align: none; }
+            body { scroll-snap-type: none; }
+            .grid-2, .grid-3, .grid-4, .grid-5, .process-container, .layer-row { grid-template-columns: 1fr; display: grid; }
+            .nav-dots { display: none; }
+            .layer-row { padding: 1.5rem; gap: 0.5rem; }
+            .layer-row .layer-num { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Nav Dots -->
+    <div class="nav-dots">
+        <a href="#slide1" class="dot active" aria-label="Go to slide 1"></a>
+        <a href="#slide2" class="dot" aria-label="Go to slide 2"></a>
+        <a href="#slide3" class="dot" aria-label="Go to slide 3"></a>
+        <a href="#slide4" class="dot" aria-label="Go to slide 4"></a>
+        <a href="#slide5" class="dot" aria-label="Go to slide 5"></a>
+        <a href="#slide6" class="dot" aria-label="Go to slide 6"></a>
+        <a href="#slide7" class="dot" aria-label="Go to slide 7"></a>
+        <a href="#slide8" class="dot" aria-label="Go to slide 8"></a>
+        <a href="#slide9" class="dot" aria-label="Go to slide 9"></a>
+        <a href="#slide10" class="dot" aria-label="Go to slide 10"></a>
+    </div>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- Slide 1: Hero -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section class="slide bg-navy" id="slide1">
+        <div class="slide-content fade-in" style="max-width: 900px;">
+            <div class="eyebrow">Powered by WhatsUp.city</div>
+            <h1>आपला पुणेकर <span style="font-size: 1.5rem; vertical-align: super; color: var(--accent-gold);">AI</span></h1>
+            <div class="tagline">
+                तुमचं शहर, तुमचा आवाज, तुमची सोय… फक्त एका संदेशावर<br>
+                <span style="font-size: 1.1rem; opacity: 0.8; margin-top: 0.5rem; display: block;">Your city, your voice, your convenience… just a message away.</span>
+            </div>
+            <p style="font-size: 1.25rem; color: var(--border-soft);">Turning Pune into a conversational, Scan-to-Service, AI-powered city ecosystem.</p>
+        </div>
+        <div class="watermark">WHATSUP.CITY</div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- Slide 2: Context & The Gap -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section class="slide bg-gray" id="slide2">
+        <div class="slide-content fade-in">
+            <div class="section-header">
+                <div class="eyebrow">Context & Challenges</div>
+                <h2>The Paradigm Shift &amp; The Operational Gap</h2>
+            </div>
+            <div class="grid-2">
+                <div class="card top-accent-blue">
+                    <h3>The New Baseline</h3>
+                    <p>Citizen behavior has fundamentally shifted towards instant, conversational, mobile-first digital interactions.</p>
+                    <ul class="bullet-list">
+                        <li><strong>WhatsApp Dependency:</strong> Traditional portals and separate apps suffer from high friction and low adoption.</li>
+                        <li><strong>Real-Time Expectations:</strong> Modern governance requires immediate responsiveness, bypassing delayed workflows.</li>
+                    </ul>
+                </div>
+                <div class="card top-accent-red">
+                    <h3>The Current Gap</h3>
+                    <p>Fragmented digital systems lead to weak governance outcomes, data silos, and reduced citizen trust.</p>
+                    <ul class="bullet-list gap-list">
+                        <li>Multiple disconnected platforms across municipal departments.</li>
+                        <li>Grievance systems act as mere ticket loggers without resolution tracking.</li>
+                        <li>Lack of last-mile accountability and field execution visibility.</li>
+                        <li>Civic assets remain physically present but digitally invisible.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="watermark">WHATSUP.CITY</div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- Slide 3: The Architecture (REORDERED STORYLINE) -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section class="slide" id="slide3">
+        <div class="slide-content fade-in">
+            <div class="section-header">
+                <div class="eyebrow">Architecture</div>
+                <h2>The Solution: A Unified Civic Operating Layer</h2>
+                <p>A WhatsApp-native ecosystem designed not as a simple chatbot, but as a comprehensive city operating system.</p>
+            </div>
+            <div class="layer-stack">
+                <!-- 1. AI -->
+                <div class="layer-row">
+                    <div class="layer-num">01</div>
+                    <h4>AI Interaction Layer</h4>
+                    <p>Text, audio, and image-based citizen interaction. Multi-lingual intent recognition (e.g., "I want to register my marriage" triggers native flows).</p>
+                </div>
+                <!-- 2. Geo -->
+                <div class="layer-row">
+                    <div class="layer-num">02</div>
+                    <h4>Geospatial Intelligence</h4>
+                    <p>Ward mapping, jurisdiction routing, and location-based insights for targeted governance and rapid resource allocation.</p>
+                </div>
+                <!-- 3. Workflow -->
+                <div class="layer-row">
+                    <div class="layer-num">03</div>
+                    <h4>Workflow Orchestration</h4>
+                    <p>End-to-end grievance &amp; service lifecycle management. Forms, fee payments, and blockchain tamper-proof QR certificates on WhatsApp.</p>
+                </div>
+                <!-- 4. Scan -->
+                <div class="layer-row">
+                    <div class="layer-num">04</div>
+                    <h4>Scan-to-Service Network</h4>
+                    <p>Aadhaar for City Assets. QR-enabled digital identity for physical infrastructure bridging the physical-digital divide.</p>
+                </div>
+                <!-- 5. Broadcast -->
+                <div class="layer-row">
+                    <div class="layer-num">05</div>
+                    <h4>City Intelligence &amp; Comm.</h4>
+                    <p>Proactive alerts, targeted broadcasts, sentiment analysis (WhatsApp-to-ward), and predictive trend detection.</p>
+                </div>
+            </div>
+        </div>
+        <div class="watermark">WHATSUP.CITY</div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!-- Slide 4: Intuitive Services Layer (AI/Chat)          -->
+    <!-- ════════════════════════════════════════════════════════ -->
+    <section class="slide bg-gray" id="slide4">
+        <div class="slide-content fade-in">
+            <div class="section-header">
+                <div class="eyebrow">01. AI Interaction</div>
+                <h2>Intuitive Services Layer</h2>
+                <p>Text or audio, English or Marathi — the AI extracts intent, triggers native WhatsApp Flows, and delivers verified certificates in one continuous chat.</p>
+            </div>
+
+            <div class="process-container">
+                <div class="process-step">
+                    <div class="process-icon">💬</div>
+                    <h4>Citizen Message</h4>
+                    <p>Text or voice note in any language.</p>
+                </div>
+                <div class="process-arrow">→</div>
+                
+                <div class="process-step">
+                    <div class="process-icon">🧠</div>
+                    <h4>Intent Recognition</h4>
+                    <p>AI understands the core service request.</p>
+                </div>
+                <div class="process-arrow">→</div>
+
+                <div class="process-step">
+                    <div class="process-icon">📋</div>
+                    <h4>Native Flow</h4>
+                    <p>Structured form opens inside WhatsApp.</p>
+                </div>
+                <div class="process-arrow">→</div>
+
+                <div class="process-step">
+                    <div class="process-icon">💳</div>
+                    <h4>Submission &amp; Pay</h4>
+                    <p>Details filled and fees paid natively.</p>
+                </div>
+                <div class="process-arrow">→</div>
+
+                <div class="process-step">
+                    <div class="process-icon">🔐</div>
+                    <h4>QR Delivery</h4>
+                    <p>Blockchain verified certificate issued.</p>
+                </div>
+            </div>
+
+            <div class="chat-container">
+                <div class="chat-bubble">
+                    <span class="chat-meta">Citizen (English)</span>
+                    <p>"I want to register my marriage"</p>
+                </div>
+                <div class="chat-bubble">
+                    <span class="chat-meta">Citizen (मराठी)</span>
+                    <p>"मला माझ्या लग्नाची नोंदणी करायची आहे"</p>
+                </div>
+                <div class="chat-bubble reply">
+                    <span class="chat-meta" style="color: var(--accent-gold);">WhatsUp.city AI</span>
+                    <p>Marriage Registration Flow initiated ✓<br>Please fill the form below to proceed.</p>
+                </div>
+            </div>
+        </div>
+        <div class="watermark">WHATSUP.CITY</div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- Slide 5: Geospatial Intelligence -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section class="slide" id="slide5">
+        <div class="slide-content fade-in">
+            <div class="section-header">
+                <div class="eyebrow">02. Geospatial Intelligence</div>
+                <h2>Geospatial Intelligence Layer</h2>
+                <p>WhatsApp-to-ward sentiment analysis and location-based governance. Real-time ticket routing based strictly on geographic boundaries.</p>
+            </div>
+            <div class="map-container">
+                <!-- Clean, structured geometric representation of a map -->
+                <svg viewBox="0 0 800 400" width="100%" height="100%" aria-label="Abstract ward map visualization">
+                    <path d="M 200,150 L 250,80 L 350,100 L 400,200 L 300,250 Z" fill="#E2E8F0" stroke="#FFFFFF" stroke-width="2"/>
+                    <path d="M 350,100 L 450,50 L 550,120 L 500,220 L 400,200 Z" fill="#F1F5F9" stroke="#FFFFFF" stroke-width="2"/>
+                    <path d="M 400,200 L 500,220 L 520,320 L 380,350 L 300,250 Z" fill="#CBD5E1" stroke="#FFFFFF" stroke-width="2"/>
+                    <path d="M 200,150 L 300,250 L 380,350 L 250,380 L 150,280 Z" fill="#F8FAFC" stroke="#FFFFFF" stroke-width="2"/>
+                    
+                    <!-- Plot points -->
+                    <circle cx="280" cy="160" r="6" fill="var(--primary-navy)" />
+                    <circle cx="450" cy="280" r="8" fill="var(--danger-red)" />
+                    <circle cx="480" cy="140" r="5" fill="var(--primary-navy)" />
+                    <circle cx="250" cy="300" r="5" fill="var(--primary-navy)" />
+                    
+                    <!-- Labels -->
+                    <rect x="470" y="240" width="110" height="30" rx="2" fill="var(--bg-white)" stroke="var(--danger-red)"/>
+                    <text x="480" y="260" fill="var(--text-dark)" font-size="11" font-weight="600">High Grievance</text>
+                    
+                    <rect x="230" y="110" width="110" height="30" rx="2" fill="var(--bg-white)" stroke="var(--accent-blue)"/>
+                    <text x="240" y="130" fill="var(--text-dark)" font-size="11" font-weight="600">Fast Resolution</text>
+                </svg>
+            </div>
+        </div>
+        <div class="watermark">WHATSUP.CITY</div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- Slide 6: End-to-End Governance Loop -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section class="slide bg-gray" id="slide6">
+        <div class="slide-content fade-in">
+            <div class="section-header">
+                <div class="eyebrow">03. Workflow Orchestration</div>
+                <h2>End-to-End Governance Loop</h2>
+                <p>A closed-loop framework providing full lifecycle visibility — from citizen complaint intake to ground execution and verification.</p>
+            </div>
+            
+            <div class="process-container">
+                <div class="process-step">
+                    <div class="process-icon">📱</div>
+                    <h4>1. Citizen Intake</h4>
+                    <p>Sends grievance via text, image, or audio message.</p>
+                    <span class="step-tag">Omni-Channel</span>
+                </div>
+                
+                <div class="process-arrow">→</div>
+
+                <div class="process-step">
+                    <div class="process-icon">🤖</div>
+                    <h4>2. AI Routing</h4>
+                    <p>Extracts intent, maps ward, auto-assigns local officer.</p>
+                    <span class="step-tag">Auto-Assigned</span>
+                </div>
+
+                <div class="process-arrow">→</div>
+
+                <div class="process-step">
+                    <div class="process-icon">💻</div>
+                    <h4>3. Real-Time Oversight</h4>
+                    <p>Executives monitor on Web; Corporators direct via App.</p>
+                    <span class="step-tag">Web &amp; App</span>
+                </div>
+
+                <div class="process-arrow">→</div>
+
+                <div class="process-step">
+                    <div class="process-icon">📍</div>
+                    <h4>4. Field Execution</h4>
+                    <p>Officer visits spot, submits geo-fenced proof of work.</p>
+                    <span class="step-tag" style="color: var(--success-green); border-color: var(--success-green);">&lt;50m Geo-Fence</span>
+                </div>
+
+                <div class="process-arrow">→</div>
+
+                <div class="process-step">
+                    <div class="process-icon">✅</div>
+                    <h4>5. Review &amp; Closure</h4>
+                    <p>Senior review triggers auto-notification to citizen.</p>
+                    <span class="step-tag">Auto-Notified</span>
+                </div>
+            </div>
+        </div>
+        <div class="watermark">WHATSUP.CITY</div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- Slide 7: Scan-to-Service Network -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section class="slide" id="slide7">
+        <div class="slide-content fade-in">
+            <div class="section-header">
+                <div class="eyebrow">04. Scan-to-Service Network</div>
+                <h2>Scan-to-Service Infrastructure</h2>
+                <p>Turning static city assets into interactive service endpoints. Every physical asset becomes digitally actionable via designated QR identities.</p>
+            </div>
+            <div class="grid-4">
+                <div class="card">
+                    <div class="qr-frame">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/pune-whatsup.firebasestorage.app/o/Scan-to-Service-QR%2FPKG-18-001.png?alt=media&token=24901f10-803d-4ca8-918a-a10a22b4797f" alt="Property QR">
+                    </div>
+                    <h4>Properties</h4>
+                    <p>Tax, dues, ownership workflows, and certificates.</p>
+                </div>
+                <div class="card">
+                    <div class="qr-frame">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/pune-whatsup.firebasestorage.app/o/Scan-to-Service-QR%2FPT-18-001.png?alt=media&token=6ce295a5-e4b3-47a9-8d57-4c1254d40064" alt="Public Toilet QR">
+                    </div>
+                    <h4>Public Toilets</h4>
+                    <p>Cleanliness complaints, feedback, and maintenance logs.</p>
+                </div>
+                <div class="card">
+                    <div class="qr-frame">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/pune-whatsup.firebasestorage.app/o/Scan-to-Service-QR%2FGRD-14-001.png?alt=media&token=a9848994-5da2-473f-9e21-77ea5a7e0957" alt="Garden QR">
+                    </div>
+                    <h4>Gardens</h4>
+                    <p>Timings, tickets, amenities, and issue reporting.</p>
+                </div>
+                <div class="card">
+                    <div class="qr-frame">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/pune-whatsup.firebasestorage.app/o/Scan-to-Service-QR%2FBS-SWG-001.png?alt=media&token=0c36dc52-8ae0-47fb-827d-16230dd63f35" alt="Bus Stop QR">
+                    </div>
+                    <h4>Transport &amp; Parking</h4>
+                    <p>Civic issues, payments, violations, and occupancy.</p>
+                </div>
+            </div>
+        </div>
+        <div class="watermark">WHATSUP.CITY</div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!-- Slide 8: Alert & Broadcast Intelligence               -->
+    <!-- ════════════════════════════════════════════════════════ -->
+    <section class="slide bg-gray" id="slide8">
+        <div class="slide-content fade-in">
+            <div class="section-header">
+                <div class="eyebrow">05. City Intelligence</div>
+                <h2>Alert &amp; Broadcast Layer</h2>
+                <p>Proactive, targeted, WhatsApp-native communication enabling data-driven ward-level responses.</p>
+            </div>
+
+            <div class="grid-2">
+                <div class="card top-accent-red">
+                    <h4>🚨 Emergency Alerts</h4>
+                    <p>Instant push to affected wards — flood warnings, water cuts, road closures. Geo-targeted, not city-wide spam.</p>
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-soft); font-size: 0.9rem;">
+                        <strong>Example:</strong> Ward 18 — Water Supply Disruption tonight.
+                    </div>
+                </div>
+                <div class="card top-accent-blue">
+                    <h4>📊 WhatsApp-to-Ward Sentiment</h4>
+                    <p>AI-powered analysis of incoming citizen messages. Surfaces rising frustration and emerging localized patterns.</p>
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-soft); font-size: 0.9rem;">
+                        <strong>Example:</strong> Citizen satisfaction in Hadapsar rose 18%.
+                    </div>
+                </div>
+                <div class="card top-accent-gold">
+                    <h4>📡 Targeted Broadcasts</h4>
+                    <p>Ward-specific service announcements, scheme awareness, event updates, and seasonal reminders.</p>
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-soft); font-size: 0.9rem;">
+                        <strong>Example:</strong> Ward 14 — Saras Baug timings updated to 5 AM.
+                    </div>
+                </div>
+                <div class="card top-accent-green">
+                    <h4>📈 Trend Detection</h4>
+                    <p>Automated early-warning when complaint categories spike (e.g. potholes, garbage), enabling proactive deployment.</p>
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-soft); font-size: 0.9rem;">
+                        <strong>Example:</strong> 340% spike in pothole complaints in Kothrud.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="watermark">WHATSUP.CITY</div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- Slide 9: Impact Matrix -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section class="slide" id="slide9">
+        <div class="slide-content fade-in">
+            <div class="section-header">
+                <div class="eyebrow">Value Proposition</div>
+                <h2>Systemic Impact for PMC Ecosystem</h2>
+                <p>Creating faster response times, unified accountability, and restored citizen trust.</p>
+            </div>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Municipal Commissioner</h3>
+                    <p><strong>Unified Command:</strong> Full visibility over city operations. Data-driven decision making fueled by real-time ward intelligence and sentiment tracking.</p>
+                </div>
+                <div class="card">
+                    <h3>Departments &amp; HODs</h3>
+                    <p><strong>Operational Efficiency:</strong> Reduced manual triage through AI. Better routing algorithms ensuring faster ticket closures and optimal resource allocation.</p>
+                </div>
+                <div class="card">
+                    <h3>Corporators</h3>
+                    <p><strong>Hyper-local Governance:</strong> Direct ward-level visibility. Transparent escalation matrices allowing tracking of work executed strictly within jurisdictions.</p>
+                </div>
+                <div class="card">
+                    <h3>Citizens</h3>
+                    <p><strong>Zero Friction:</strong> No app downloads required. One simple, intuitive interface (WhatsApp) for reporting, services, and payments natively.</p>
+                </div>
+            </div>
+        </div>
+        <div class="watermark">WHATSUP.CITY</div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- Slide 10: Closing -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section class="slide bg-navy" id="slide10">
+        <div class="slide-content fade-in" style="max-width: 900px; text-align: center; margin: 0 auto;">
+            <h2 style="color: var(--text-light); margin-bottom: 2rem;">Positioning Pune as India's Benchmark Smart Governance City</h2>
+            <div style="font-size: clamp(1.5rem, 2.5vw, 2.25rem); font-weight: 300; line-height: 1.4; color: var(--accent-gold); margin-bottom: 3rem;">
+                Pune does not need another digital platform.<br><br>
+                <span style="color: var(--bg-white); font-weight: 600;">Pune can build a living, intelligent, conversational city — on WhatsApp.</span>
+            </div>
+            <p style="font-size: 0.9rem; font-weight: 700; letter-spacing: 0.15em; color: var(--border-soft); text-transform: uppercase;">Powered by WhatsUp.city</p>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const slides = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('.dot');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
+                        const id = entry.target.getAttribute('id');
+                        dots.forEach(dot => {
+                            dot.classList.remove('active');
+                            if (dot.getAttribute('href') === `#${id}`) dot.classList.add('active');
+                        });
+                    }
+                });
+            }, { root: null, rootMargin: '0px', threshold: 0.4 });
+
+            slides.forEach(slide => observer.observe(slide));
+        });
+    </script>
+</body>
+</html>

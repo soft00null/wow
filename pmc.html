@@ -6,31 +6,36 @@
     <title>आपला पुणेकर | WhatsUp.city</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&display=swap');
 
         :root {
-            /* McKinsey-inspired Corporate Palette */
-            --primary-navy: #051C2C;
-            --mckinsey-blue: #002855;
-            --accent-blue: #005F9E;
-            --accent-gold: #B38F36;
-            --light-gray: #F4F7F6;
+            /* Logo-Inspired Corporate Palette */
+            --primary-navy: #1B3A6B;       /* Deep navy from logo outline */
+            --deep-navy: #0F2547;           /* Darker shade for hero/depth */
+            --accent-blue: #2E5A9E;         /* Mid blue */
+            --soft-blue: #B8CCE5;           /* Light periwinkle from logo dots */
+            --pale-blue: #EAF1F9;           /* Subtle background tint */
+            --accent-orange: #F5A623;       /* Warm orange from phone signal */
+            --deep-orange: #E08A0E;         /* Hover/emphasis orange */
+            --soft-orange: #FDF1DC;         /* Tint */
+
             --bg-white: #FFFFFF;
-            
-            /* Text & Borders */
-            --text-dark: #0F172A;
-            --text-muted: #475569;
+            --light-gray: #F6F8FB;
+
+            --text-dark: #0F1E33;
+            --text-muted: #5A6B82;
             --text-light: #FFFFFF;
-            --border-soft: #E2E8F0;
-            --border-medium: #CBD5E1;
-            
-            /* UI Elements */
-            --danger-red: #DC2626;
-            --success-green: #059669;
-            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+            --border-soft: #DCE5F0;
+            --border-medium: #B8CCE5;
+
+            --danger-red: #C8341E;
+            --success-green: #2F7A5A;
+
+            --shadow-card: 0 4px 6px -1px rgba(27, 58, 107, 0.06), 0 2px 4px -1px rgba(27, 58, 107, 0.04);
+            --shadow-hover: 0 12px 20px -4px rgba(27, 58, 107, 0.12), 0 4px 8px -2px rgba(27, 58, 107, 0.06);
             --transition: all 0.3s ease;
             --max-content-width: 1200px;
-            --br-card: 4px; /* Sharp, professional corners */
+            --br-card: 6px;
         }
 
         * {
@@ -51,6 +56,12 @@
             line-height: 1.6;
         }
 
+        /* Devanagari typography */
+        .devanagari {
+            font-family: 'Tiro Devanagari Marathi', 'Inter', serif;
+            font-weight: 400;
+        }
+
         /* ── Slide Container ── */
         .slide {
             min-height: 100vh;
@@ -66,12 +77,21 @@
         }
 
         .slide.bg-navy {
-            background: var(--primary-navy);
+            background: linear-gradient(135deg, var(--deep-navy) 0%, var(--primary-navy) 100%);
             color: var(--text-light);
         }
 
-        .slide.bg-gray {
-            background: var(--light-gray);
+        .slide.bg-gray { background: var(--light-gray); }
+        .slide.bg-pale { background: var(--pale-blue); }
+
+        /* Subtle decorative dot pattern echoing logo dotted ring */
+        .slide.bg-navy::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(184, 204, 229, 0.08) 1px, transparent 1px);
+            background-size: 28px 28px;
+            pointer-events: none;
         }
 
         .slide-content {
@@ -80,6 +100,29 @@
             position: relative;
             z-index: 1;
         }
+
+        /* ── Header Logo Bar ── */
+        .slide-logo-bar {
+            position: absolute;
+            top: 1.5rem;
+            left: 5vw;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 5;
+        }
+        .slide-logo-bar img {
+            width: 36px; height: 36px;
+            object-fit: contain;
+        }
+        .slide-logo-bar .logo-text {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary-navy);
+            letter-spacing: 0.05em;
+        }
+        .bg-navy .slide-logo-bar .logo-text { color: var(--text-light); }
+        .bg-navy .slide-logo-bar img { filter: brightness(0) invert(1); }
 
         /* ── Typography ── */
         h1 {
@@ -95,12 +138,13 @@
             font-size: clamp(2rem, 3vw, 2.75rem);
             font-weight: 300;
             margin-bottom: 1rem;
-            color: var(--mckinsey-blue);
+            color: var(--primary-navy);
             line-height: 1.2;
             letter-spacing: -0.01em;
         }
-
+        h2 strong { font-weight: 600; color: var(--primary-navy); }
         .bg-navy h2 { color: var(--text-light); }
+        .bg-navy h2 strong { color: var(--accent-orange); }
 
         h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; line-height: 1.3; color: var(--text-dark); }
         .bg-navy h3 { color: var(--text-light); }
@@ -108,18 +152,18 @@
         h4 { font-size: 1.1rem; font-weight: 600; line-height: 1.4; margin-bottom: 0.5rem; color: var(--primary-navy); }
 
         p { font-size: 1.05rem; line-height: 1.6; margin-bottom: 1rem; color: var(--text-muted); }
-        .bg-navy p { color: #94A3B8; }
+        .bg-navy p { color: #C7D5E8; }
 
         .eyebrow {
             display: inline-block;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--accent-gold);
+            letter-spacing: 0.12em;
+            color: var(--accent-orange);
             margin-bottom: 1rem;
-            border-bottom: 2px solid var(--accent-gold);
-            padding-bottom: 0.25rem;
+            border-bottom: 2px solid var(--accent-orange);
+            padding-bottom: 0.3rem;
         }
 
         .tagline {
@@ -129,7 +173,7 @@
             color: var(--text-light);
             max-width: 800px;
             line-height: 1.5;
-            border-left: 4px solid var(--accent-gold);
+            border-left: 4px solid var(--accent-orange);
             padding-left: 1.5rem;
         }
 
@@ -137,13 +181,13 @@
         .section-header p { font-size: 1.15rem; color: var(--text-muted); }
         .highlight { color: var(--accent-blue); font-weight: 600; }
 
-        /* ── Structural Layouts ── */
+        /* ── Layouts ── */
         .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; width: 100%; }
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; width: 100%; }
         .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; width: 100%; }
         .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; width: 100%; }
 
-        /* ── Universal Consultant Cards ── */
+        /* ── Cards ── */
         .card {
             background: var(--bg-white);
             border: 1px solid var(--border-soft);
@@ -158,13 +202,14 @@
         }
 
         .card.top-accent-blue { border-top: 4px solid var(--accent-blue); }
+        .card.top-accent-orange { border-top: 4px solid var(--accent-orange); }
         .card.top-accent-red { border-top: 4px solid var(--danger-red); }
-        .card.top-accent-gold { border-top: 4px solid var(--accent-gold); }
+        .card.top-accent-navy { border-top: 4px solid var(--primary-navy); }
         .card.top-accent-green { border-top: 4px solid var(--success-green); }
 
         .card:hover {
             box-shadow: var(--shadow-hover);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
             border-color: var(--border-medium);
         }
 
@@ -175,11 +220,12 @@
             content: "■";
             color: var(--accent-blue);
             font-size: 0.8rem;
-            margin-top: 0.2rem;
+            margin-top: 0.3rem;
+            flex-shrink: 0;
         }
-        .bullet-list.gap-list li::before { color: var(--danger-red); }
+        .bullet-list.gap-list li::before { color: var(--accent-orange); }
 
-        /* ── Layer Stack (Slide 3) ── */
+        /* ── Layer Stack ── */
         .layer-stack { display: flex; flex-direction: column; gap: 1rem; }
         .layer-row {
             background: var(--bg-white);
@@ -187,16 +233,27 @@
             border-left: 4px solid var(--accent-blue);
             padding: 1.5rem 2rem;
             display: grid;
-            grid-template-columns: 40px minmax(200px, 25%) 1fr;
+            grid-template-columns: 60px minmax(220px, 25%) 1fr;
             align-items: center;
             gap: 1.5rem;
             box-shadow: var(--shadow-card);
+            border-radius: var(--br-card);
+            transition: var(--transition);
         }
-        .layer-row .layer-num { font-size: 1.25rem; font-weight: 700; color: var(--border-medium); }
+        .layer-row:hover {
+            border-left-color: var(--accent-orange);
+            box-shadow: var(--shadow-hover);
+            transform: translateX(4px);
+        }
+        .layer-row .layer-num {
+            font-size: 1.5rem; font-weight: 700;
+            color: var(--accent-orange);
+            font-variant-numeric: tabular-nums;
+        }
         .layer-row h4 { margin: 0; font-size: 1.15rem; }
         .layer-row p { margin: 0; font-size: 1rem; }
 
-        /* ── Process/Journey Flows ── */
+        /* ── Process / Journey Flow ── */
         .process-container {
             display: flex;
             align-items: stretch;
@@ -212,68 +269,112 @@
             text-align: center;
             position: relative;
             box-shadow: var(--shadow-card);
+            border-radius: var(--br-card);
+            display: flex;
+            flex-direction: column;
         }
         .process-step h4 { font-size: 1rem; margin-bottom: 0.5rem; }
-        .process-step p { font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.4; }
-        
+        .process-step p { font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.4; flex-grow: 1; }
+
         .process-icon {
-            width: 48px; height: 48px;
-            background: var(--light-gray);
+            width: 52px; height: 52px;
+            background: var(--pale-blue);
             border: 1px solid var(--border-medium);
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.25rem; margin: 0 auto 1rem;
-            border-radius: var(--br-card);
+            font-size: 1.4rem; margin: 0 auto 1rem;
+            border-radius: 50%;
             color: var(--primary-navy);
         }
 
         .process-arrow {
             display: flex; align-items: center; justify-content: center;
-            color: var(--border-medium); width: 30px;
+            color: var(--accent-orange); width: 30px;
+            font-size: 1.5rem; font-weight: 700;
         }
 
         .step-tag {
             display: inline-block;
             font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
-            padding: 0.25rem 0.5rem;
-            background: var(--light-gray);
-            border: 1px solid var(--border-soft);
-            color: var(--text-muted);
+            padding: 0.3rem 0.6rem;
+            background: var(--pale-blue);
+            border: 1px solid var(--border-medium);
+            color: var(--primary-navy);
             margin-top: auto;
+            border-radius: 3px;
+            letter-spacing: 0.05em;
         }
 
-        /* ── Chat Example Interface ── */
+        /* ── Chat Interface ── */
         .chat-container {
             display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem;
-            padding: 2rem; background: var(--light-gray); border: 1px solid var(--border-soft);
+            padding: 2rem; background: var(--bg-white); border: 1px solid var(--border-soft);
+            border-radius: var(--br-card);
         }
         .chat-bubble {
-            background: var(--bg-white); border: 1px solid var(--border-soft);
+            background: var(--pale-blue);
+            border: 1px solid var(--border-soft);
             padding: 1rem 1.5rem; width: 300px;
-            border-radius: 8px 8px 8px 0;
+            border-radius: 12px 12px 12px 2px;
             box-shadow: var(--shadow-card);
         }
         .chat-bubble.reply {
-            border-radius: 8px 8px 0 8px;
-            border-left: 4px solid var(--accent-gold);
+            background: var(--bg-white);
+            border-radius: 12px 12px 2px 12px;
+            border-left: 4px solid var(--accent-orange);
         }
         .chat-bubble p { font-size: 0.95rem; margin: 0; color: var(--text-dark); }
         .chat-meta {
             font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
             color: var(--text-muted); margin-bottom: 0.5rem; display: block;
+            letter-spacing: 0.08em;
         }
 
         /* ── Map Container ── */
         .map-container {
-            width: 100%; min-height: 450px; background: var(--light-gray);
+            width: 100%; min-height: 450px; background: var(--bg-white);
             border: 1px solid var(--border-soft); display: flex; align-items: center; justify-content: center;
+            border-radius: var(--br-card);
+            padding: 1rem;
         }
 
-        /* ── QR Image Frame ── */
+        /* ── QR Frame ── */
         .qr-frame {
             background: var(--bg-white); border: 1px solid var(--border-soft);
-            padding: 1.5rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center;
+            padding: 1.25rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center;
+            border-radius: var(--br-card);
         }
         .qr-frame img { width: 100%; max-width: 140px; mix-blend-mode: multiply; }
+
+        /* ── Hero Logo Block ── */
+        .hero-logo {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+        .hero-logo img {
+            width: 110px; height: 110px;
+            object-fit: contain;
+            background: var(--bg-white);
+            padding: 8px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+        }
+        .hero-logo .hero-logo-text {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-orange);
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+        .hero-logo .hero-logo-text small {
+            display: block;
+            color: var(--soft-blue);
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            margin-top: 0.25rem;
+        }
 
         /* ── Navigation Dots ── */
         .nav-dots {
@@ -281,16 +382,16 @@
             display: flex; flex-direction: column; gap: 0.75rem; z-index: 100;
         }
         .dot {
-            width: 8px; height: 8px; background: var(--border-medium);
-            transition: var(--transition); border-radius: 2px;
+            width: 10px; height: 10px; background: var(--border-medium);
+            transition: var(--transition); border-radius: 50%;
         }
-        .dot:hover, .dot.active { background: var(--accent-blue); transform: scale(1.2); }
+        .dot:hover, .dot.active { background: var(--accent-orange); transform: scale(1.3); }
 
         .watermark {
             position: absolute; bottom: 1.5rem; right: 2rem; font-size: 0.75rem; font-weight: 700;
             color: var(--border-medium); letter-spacing: 0.1em; z-index: 2; text-transform: uppercase;
         }
-        .bg-navy .watermark { color: rgba(255,255,255,0.2); }
+        .bg-navy .watermark { color: rgba(184, 204, 229, 0.3); }
 
         /* ── Animation ── */
         .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
@@ -302,12 +403,13 @@
             .process-arrow { display: none; }
         }
         @media (max-width: 768px) {
-            .slide { padding: 3rem 1.5rem; height: auto; scroll-snap-align: none; }
+            .slide { padding: 5rem 1.5rem 3rem; height: auto; scroll-snap-align: none; }
             body { scroll-snap-type: none; }
             .grid-2, .grid-3, .grid-4, .grid-5, .process-container, .layer-row { grid-template-columns: 1fr; display: grid; }
             .nav-dots { display: none; }
             .layer-row { padding: 1.5rem; gap: 0.5rem; }
-            .layer-row .layer-num { display: none; }
+            .layer-row .layer-num { font-size: 1.25rem; }
+            .hero-logo { flex-direction: column; align-items: flex-start; gap: 1rem; }
         }
     </style>
 </head>
@@ -331,14 +433,20 @@
     <!-- Slide 1: Hero -->
     <!-- ════════════════════════════════════════════════ -->
     <section class="slide bg-navy" id="slide1">
-        <div class="slide-content fade-in" style="max-width: 900px;">
-            <div class="eyebrow">Powered by WhatsUp.city</div>
-            <h1>आपला पुणेकर <span style="font-size: 1.5rem; vertical-align: super; color: var(--accent-gold);">AI</span></h1>
-            <div class="tagline">
-                तुमचं शहर, तुमचा आवाज, तुमची सोय… फक्त एका संदेशावर<br>
-                <span style="font-size: 1.1rem; opacity: 0.8; margin-top: 0.5rem; display: block;">Your city, your voice, your convenience… just a message away.</span>
+        <div class="slide-content fade-in" style="max-width: 950px;">
+            <div class="hero-logo">
+                <img src="https://firebasestorage.googleapis.com/v0/b/pune-whatsup.firebasestorage.app/o/aaplaPunekar.png?alt=media&token=ffc64b46-ea5a-41df-9fa1-df8944cedb99" alt="Aapla Punekar Logo">
+                <div class="hero-logo-text">
+                    Powered by WhatsUp.city
+                    <small>An Initiative for Pune Municipal Corporation</small>
+                </div>
             </div>
-            <p style="font-size: 1.25rem; color: var(--border-soft);">Turning Pune into a conversational, Scan-to-Service, AI-powered city ecosystem.</p>
+            <h1 class="devanagari">आपला पुणेकर <span style="font-size: 1.5rem; vertical-align: super; color: var(--accent-orange); font-family: 'Inter', sans-serif;">AI</span></h1>
+            <div class="tagline">
+                <span class="devanagari">तुमचं शहर, तुमचा आवाज, तुमची सोय… फक्त एका संदेशावर</span><br>
+                <span style="font-size: 1.1rem; opacity: 0.85; margin-top: 0.5rem; display: block;">Your city, your voice, your convenience… just a message away.</span>
+            </div>
+            <p style="font-size: 1.25rem; color: var(--soft-blue);">Turning Pune into a conversational, Scan-to-Service, AI-powered city ecosystem.</p>
         </div>
         <div class="watermark">WHATSUP.CITY</div>
     </section>
@@ -347,10 +455,14 @@
     <!-- Slide 2: Context & The Gap -->
     <!-- ════════════════════════════════════════════════ -->
     <section class="slide bg-gray" id="slide2">
+        <div class="slide-logo-bar">
+            <img src="https://firebasestorage.googleapis.com/v0/b/pune-whatsup.firebasestorage.app/o/aaplaPunekar.png?alt=media&token=ffc64b46-ea5a-41df-9fa1-df8944cedb99" alt="Logo">
+            <span class="logo-text">आपला पुणेकर</span>
+        </div>
         <div class="slide-content fade-in">
             <div class="section-header">
                 <div class="eyebrow">Context & Challenges</div>
-                <h2>The Paradigm Shift &amp; The Operational Gap</h2>
+                <h2>The Paradigm Shift &amp; <strong>The Operational Gap</strong></h2>
             </div>
             <div class="grid-2">
                 <div class="card top-accent-blue">
@@ -361,7 +473,7 @@
                         <li><strong>Real-Time Expectations:</strong> Modern governance requires immediate responsiveness, bypassing delayed workflows.</li>
                     </ul>
                 </div>
-                <div class="card top-accent-red">
+                <div class="card top-accent-orange">
                     <h3>The Current Gap</h3>
                     <p>Fragmented digital systems lead to weak governance outcomes, data silos, and reduced citizen trust.</p>
                     <ul class="bullet-list gap-list">
@@ -376,42 +488,41 @@
         <div class="watermark">WHATSUP.CITY</div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!-- Slide 3: The Architecture (REORDERED STORYLINE) -->
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- Slide 3: The Architecture -->
     <!-- ════════════════════════════════════════════════ -->
     <section class="slide" id="slide3">
+        <div class="slide-logo-bar">
+            <img src="https://firebasestorage.googleapis.com/v0/b/pune-whatsup.firebasestorage.app/o/aaplaPunekar.png?alt=media&token=ffc64b46-ea5a-41df-9fa1-df8944cedb99" alt="Logo">
+            <span class="logo-text">आपला पुणेकर</span>
+        </div>
         <div class="slide-content fade-in">
             <div class="section-header">
                 <div class="eyebrow">Architecture</div>
-                <h2>The Solution: A Unified Civic Operating Layer</h2>
+                <h2>The Solution: <strong>A Unified Civic Operating Layer</strong></h2>
                 <p>A WhatsApp-native ecosystem designed not as a simple chatbot, but as a comprehensive city operating system.</p>
             </div>
             <div class="layer-stack">
-                <!-- 1. AI -->
                 <div class="layer-row">
                     <div class="layer-num">01</div>
                     <h4>AI Interaction Layer</h4>
                     <p>Text, audio, and image-based citizen interaction. Multi-lingual intent recognition (e.g., "I want to register my marriage" triggers native flows).</p>
                 </div>
-                <!-- 2. Geo -->
                 <div class="layer-row">
                     <div class="layer-num">02</div>
                     <h4>Geospatial Intelligence</h4>
                     <p>Ward mapping, jurisdiction routing, and location-based insights for targeted governance and rapid resource allocation.</p>
                 </div>
-                <!-- 3. Workflow -->
                 <div class="layer-row">
                     <div class="layer-num">03</div>
                     <h4>Workflow Orchestration</h4>
                     <p>End-to-end grievance &amp; service lifecycle management. Forms, fee payments, and blockchain tamper-proof QR certificates on WhatsApp.</p>
                 </div>
-                <!-- 4. Scan -->
                 <div class="layer-row">
                     <div class="layer-num">04</div>
                     <h4>Scan-to-Service Network</h4>
                     <p>Aadhaar for City Assets. QR-enabled digital identity for physical infrastructure bridging the physical-digital divide.</p>
                 </div>
-                <!-- 5. Broadcast -->
                 <div class="layer-row">
                     <div class="layer-num">05</div>
                     <h4>City Intelligence &amp; Comm.</h4>
@@ -422,14 +533,18 @@
         <div class="watermark">WHATSUP.CITY</div>
     </section>
 
-    <!-- ════════════════════════════════════════════════════════ -->
-    <!-- Slide 4: Intuitive Services Layer (AI/Chat)          -->
-    <!-- ════════════════════════════════════════════════════════ -->
-    <section class="slide bg-gray" id="slide4">
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- Slide 4: Intuitive Services Layer -->
+    <!-- ════════════════════════════════════════════════ -->
+    <section class="slide bg-pale" id="slide4">
+        <div class="slide-logo-bar">
+            <img src="https://firebasestorage.googleapis.com/v0/b/pune-whatsup.firebasestorage.app/o/aaplaPunekar.png?alt=media&token=ffc64b46-ea5a-41df-9fa1-df8944cedb99" alt="Logo">
+            <span class="logo-text">आपला पुणेकर</span>
+        </div>
         <div class="slide-content fade-in">
             <div class="section-header">
                 <div class="eyebrow">01. AI Interaction</div>
-                <h2>Intuitive Services Layer</h2>
+                <h2><strong>Intuitive Services Layer</strong></h2>
                 <p>Text or audio, English or Marathi — the AI extracts intent, triggers native WhatsApp Flows, and delivers verified certificates in one continuous chat.</p>
             </div>
 
@@ -440,28 +555,24 @@
                     <p>Text or voice note in any language.</p>
                 </div>
                 <div class="process-arrow">→</div>
-                
                 <div class="process-step">
                     <div class="process-icon">🧠</div>
                     <h4>Intent Recognition</h4>
                     <p>AI understands the core service request.</p>
                 </div>
                 <div class="process-arrow">→</div>
-
                 <div class="process-step">
                     <div class="process-icon">📋</div>
                     <h4>Native Flow</h4>
                     <p>Structured form opens inside WhatsApp.</p>
                 </div>
                 <div class="process-arrow">→</div>
-
                 <div class="process-step">
                     <div class="process-icon">💳</div>
                     <h4>Submission &amp; Pay</h4>
                     <p>Details filled and fees paid natively.</p>
                 </div>
                 <div class="process-arrow">→</div>
-
                 <div class="process-step">
                     <div class="process-icon">🔐</div>
                     <h4>QR Delivery</h4>
@@ -476,10 +587,10 @@
                 </div>
                 <div class="chat-bubble">
                     <span class="chat-meta">Citizen (मराठी)</span>
-                    <p>"मला माझ्या लग्नाची नोंदणी करायची आहे"</p>
+                    <p class="devanagari">"मला माझ्या लग्नाची नोंदणी करायची आहे"</p>
                 </div>
                 <div class="chat-bubble reply">
-                    <span class="chat-meta" style="color: var(--accent-gold);">WhatsUp.city AI</span>
+                    <span class="chat-meta" style="color: var(--accent-orange);">आपला पुणेकर AI</span>
                     <p>Marriage Registration Flow initiated ✓<br>Please fill the form below to proceed.</p>
                 </div>
             </div>
@@ -491,32 +602,39 @@
     <!-- Slide 5: Geospatial Intelligence -->
     <!-- ════════════════════════════════════════════════ -->
     <section class="slide" id="slide5">
+        <div class="slide-logo-bar">
+            <img src="https://firebasestorage.googleapis.com/v0/b/pune-whatsup.firebasestorage.app/o/aaplaPunekar.png?alt=media&token=ffc64b46-ea5a-41df-9fa1-df8944cedb99" alt="Logo">
+            <span class="logo-text">आपला पुणेकर</span>
+        </div>
         <div class="slide-content fade-in">
             <div class="section-header">
                 <div class="eyebrow">02. Geospatial Intelligence</div>
-                <h2>Geospatial Intelligence Layer</h2>
+                <h2><strong>Geospatial Intelligence Layer</strong></h2>
                 <p>WhatsApp-to-ward sentiment analysis and location-based governance. Real-time ticket routing based strictly on geographic boundaries.</p>
             </div>
             <div class="map-container">
-                <!-- Clean, structured geometric representation of a map -->
                 <svg viewBox="0 0 800 400" width="100%" height="100%" aria-label="Abstract ward map visualization">
-                    <path d="M 200,150 L 250,80 L 350,100 L 400,200 L 300,250 Z" fill="#E2E8F0" stroke="#FFFFFF" stroke-width="2"/>
-                    <path d="M 350,100 L 450,50 L 550,120 L 500,220 L 400,200 Z" fill="#F1F5F9" stroke="#FFFFFF" stroke-width="2"/>
-                    <path d="M 400,200 L 500,220 L 520,320 L 380,350 L 300,250 Z" fill="#CBD5E1" stroke="#FFFFFF" stroke-width="2"/>
-                    <path d="M 200,150 L 300,250 L 380,350 L 250,380 L 150,280 Z" fill="#F8FAFC" stroke="#FFFFFF" stroke-width="2"/>
-                    
+                    <path d="M 200,150 L 250,80 L 350,100 L 400,200 L 300,250 Z" fill="#EAF1F9" stroke="#FFFFFF" stroke-width="2"/>
+                    <path d="M 350,100 L 450,50 L 550,120 L 500,220 L 400,200 Z" fill="#DCE5F0" stroke="#FFFFFF" stroke-width="2"/>
+                    <path d="M 400,200 L 500,220 L 520,320 L 380,350 L 300,250 Z" fill="#B8CCE5" stroke="#FFFFFF" stroke-width="2"/>
+                    <path d="M 200,150 L 300,250 L 380,350 L 250,380 L 150,280 Z" fill="#F6F8FB" stroke="#FFFFFF" stroke-width="2"/>
+
                     <!-- Plot points -->
-                    <circle cx="280" cy="160" r="6" fill="var(--primary-navy)" />
-                    <circle cx="450" cy="280" r="8" fill="var(--danger-red)" />
-                    <circle cx="480" cy="140" r="5" fill="var(--primary-navy)" />
-                    <circle cx="250" cy="300" r="5" fill="var(--primary-navy)" />
-                    
+                    <circle cx="280" cy="160" r="6" fill="#1B3A6B" />
+                    <circle cx="450" cy="280" r="9" fill="#F5A623" />
+                    <circle cx="450" cy="280" r="14" fill="none" stroke="#F5A623" stroke-width="2" opacity="0.4">
+                        <animate attributeName="r" from="9" to="20" dur="1.5s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" from="0.6" to="0" dur="1.5s" repeatCount="indefinite" />
+                    </circle>
+                    <circle cx="480" cy="140" r="5" fill="#1B3A6B" />
+                    <circle cx="250" cy="300" r="5" fill="#1B3A6B" />
+
                     <!-- Labels -->
-                    <rect x="470" y="240" width="110" height="30" rx="2" fill="var(--bg-white)" stroke="var(--danger-red)"/>
-                    <text x="480" y="260" fill="var(--text-dark)" font-size="11" font-weight="600">High Grievance</text>
-                    
-                    <rect x="230" y="110" width="110" height="30" rx="2" fill="var(--bg-white)" stroke="var(--accent-blue)"/>
-                    <text x="240" y="130" fill="var(--text-dark)" font-size="11" font-weight="600">Fast Resolution</text>
+                    <rect x="470" y="240" width="120" height="32" rx="3" fill="#FFFFFF" stroke="#F5A623" stroke-width="1.5"/>
+                    <text x="480" y="260" fill="#0F1E33" font-size="11" font-weight="600" font-family="Inter, sans-serif">High Grievance</text>
+
+                    <rect x="230" y="110" width="120" height="32" rx="3" fill="#FFFFFF" stroke="#2E5A9E" stroke-width="1.5"/>
+                    <text x="240" y="130" fill="#0F1E33" font-size="11" font-weight="600" font-family="Inter, sans-serif">Fast Resolution</text>
                 </svg>
             </div>
         </div>
@@ -527,13 +645,17 @@
     <!-- Slide 6: End-to-End Governance Loop -->
     <!-- ════════════════════════════════════════════════ -->
     <section class="slide bg-gray" id="slide6">
+        <div class="slide-logo-bar">
+            <img src="https://firebasestorage.googleapis.com/v0/b/pune-whatsup.firebasestorage.app/o/aaplaPunekar.png?alt=media&token=ffc64b46-ea5a-41df-9fa1-df8944cedb99" alt="Logo">
+            <span class="logo-text">आपला पुणेकर</span>
+        </div>
         <div class="slide-content fade-in">
             <div class="section-header">
                 <div class="eyebrow">03. Workflow Orchestration</div>
-                <h2>End-to-End Governance Loop</h2>
+                <h2><strong>End-to-End Governance Loop</strong></h2>
                 <p>A closed-loop framework providing full lifecycle visibility — from citizen complaint intake to ground execution and verification.</p>
             </div>
-            
+
             <div class="process-container">
                 <div class="process-step">
                     <div class="process-icon">📱</div>
@@ -541,36 +663,28 @@
                     <p>Sends grievance via text, image, or audio message.</p>
                     <span class="step-tag">Omni-Channel</span>
                 </div>
-                
                 <div class="process-arrow">→</div>
-
                 <div class="process-step">
                     <div class="process-icon">🤖</div>
                     <h4>2. AI Routing</h4>
                     <p>Extracts intent, maps ward, auto-assigns local officer.</p>
                     <span class="step-tag">Auto-Assigned</span>
                 </div>
-
                 <div class="process-arrow">→</div>
-
                 <div class="process-step">
                     <div class="process-icon">💻</div>
                     <h4>3. Real-Time Oversight</h4>
                     <p>Executives monitor on Web; Corporators direct via App.</p>
                     <span class="step-tag">Web &amp; App</span>
                 </div>
-
                 <div class="process-arrow">→</div>
-
                 <div class="process-step">
                     <div class="process-icon">📍</div>
                     <h4>4. Field Execution</h4>
                     <p>Officer visits spot, submits geo-fenced proof of work.</p>
-                    <span class="step-tag" style="color: var(--success-green); border-color: var(--success-green);">&lt;50m Geo-Fence</span>
+                    <span class="step-tag" style="color: var(--success-green); border-color: var(--success-green); background: #E8F4EE;">&lt;50m Geo-Fence</span>
                 </div>
-
                 <div class="process-arrow">→</div>
-
                 <div class="process-step">
                     <div class="process-icon">✅</div>
                     <h4>5. Review &amp; Closure</h4>
@@ -586,10 +700,14 @@
     <!-- Slide 7: Scan-to-Service Network -->
     <!-- ════════════════════════════════════════════════ -->
     <section class="slide" id="slide7">
+        <div class="slide-logo-bar">
+            <img src="https://firebasestorage.googleapis.com/v0/b/pune-whatsup.firebasestorage.app/o/aaplaPunekar.png?alt=media&token=ffc64b46-ea5a-41df-9fa1-df8944cedb99" alt="Logo">
+            <span class="logo-text">आपला पुणेकर</span>
+        </div>
         <div class="slide-content fade-in">
             <div class="section-header">
                 <div class="eyebrow">04. Scan-to-Service Network</div>
-                <h2>Scan-to-Service Infrastructure</h2>
+                <h2><strong>Scan-to-Service Infrastructure</strong></h2>
                 <p>Turning static city assets into interactive service endpoints. Every physical asset becomes digitally actionable via designated QR identities.</p>
             </div>
             <div class="grid-4">
@@ -626,14 +744,18 @@
         <div class="watermark">WHATSUP.CITY</div>
     </section>
 
-    <!-- ════════════════════════════════════════════════════════ -->
-    <!-- Slide 8: Alert & Broadcast Intelligence               -->
-    <!-- ════════════════════════════════════════════════════════ -->
+    <!-- ════════════════════════════════════════════════ -->
+    <!-- Slide 8: Alert & Broadcast Intelligence -->
+    <!-- ════════════════════════════════════════════════ -->
     <section class="slide bg-gray" id="slide8">
+        <div class="slide-logo-bar">
+            <img src="https://firebasestorage.googleapis.com/v0/b/pune-whatsup.firebasestorage.app/o/aaplaPunekar.png?alt=media&token=ffc64b46-ea5a-41df-9fa1-df8944cedb99" alt="Logo">
+            <span class="logo-text">आपला पुणेकर</span>
+        </div>
         <div class="slide-content fade-in">
             <div class="section-header">
                 <div class="eyebrow">05. City Intelligence</div>
-                <h2>Alert &amp; Broadcast Layer</h2>
+                <h2><strong>Alert &amp; Broadcast Layer</strong></h2>
                 <p>Proactive, targeted, WhatsApp-native communication enabling data-driven ward-level responses.</p>
             </div>
 
@@ -641,28 +763,28 @@
                 <div class="card top-accent-red">
                     <h4>🚨 Emergency Alerts</h4>
                     <p>Instant push to affected wards — flood warnings, water cuts, road closures. Geo-targeted, not city-wide spam.</p>
-                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-soft); font-size: 0.9rem;">
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-soft); font-size: 0.9rem; color: var(--text-dark);">
                         <strong>Example:</strong> Ward 18 — Water Supply Disruption tonight.
                     </div>
                 </div>
                 <div class="card top-accent-blue">
                     <h4>📊 WhatsApp-to-Ward Sentiment</h4>
                     <p>AI-powered analysis of incoming citizen messages. Surfaces rising frustration and emerging localized patterns.</p>
-                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-soft); font-size: 0.9rem;">
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-soft); font-size: 0.9rem; color: var(--text-dark);">
                         <strong>Example:</strong> Citizen satisfaction in Hadapsar rose 18%.
                     </div>
                 </div>
-                <div class="card top-accent-gold">
+                <div class="card top-accent-orange">
                     <h4>📡 Targeted Broadcasts</h4>
                     <p>Ward-specific service announcements, scheme awareness, event updates, and seasonal reminders.</p>
-                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-soft); font-size: 0.9rem;">
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-soft); font-size: 0.9rem; color: var(--text-dark);">
                         <strong>Example:</strong> Ward 14 — Saras Baug timings updated to 5 AM.
                     </div>
                 </div>
                 <div class="card top-accent-green">
                     <h4>📈 Trend Detection</h4>
                     <p>Automated early-warning when complaint categories spike (e.g. potholes, garbage), enabling proactive deployment.</p>
-                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-soft); font-size: 0.9rem;">
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-soft); font-size: 0.9rem; color: var(--text-dark);">
                         <strong>Example:</strong> 340% spike in pothole complaints in Kothrud.
                     </div>
                 </div>
@@ -671,30 +793,34 @@
         <div class="watermark">WHATSUP.CITY</div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════ -->
+    <!-- ════════════════════════════════════════════════ -->
     <!-- Slide 9: Impact Matrix -->
     <!-- ════════════════════════════════════════════════ -->
     <section class="slide" id="slide9">
+        <div class="slide-logo-bar">
+            <img src="https://firebasestorage.googleapis.com/v0/b/pune-whatsup.firebasestorage.app/o/aaplaPunekar.png?alt=media&token=ffc64b46-ea5a-41df-9fa1-df8944cedb99" alt="Logo">
+            <span class="logo-text">आपला पुणेकर</span>
+        </div>
         <div class="slide-content fade-in">
             <div class="section-header">
                 <div class="eyebrow">Value Proposition</div>
-                <h2>Systemic Impact for PMC Ecosystem</h2>
+                <h2>Systemic Impact for <strong>PMC Ecosystem</strong></h2>
                 <p>Creating faster response times, unified accountability, and restored citizen trust.</p>
             </div>
             <div class="grid-2">
-                <div class="card">
+                <div class="card top-accent-navy">
                     <h3>Municipal Commissioner</h3>
                     <p><strong>Unified Command:</strong> Full visibility over city operations. Data-driven decision making fueled by real-time ward intelligence and sentiment tracking.</p>
                 </div>
-                <div class="card">
+                <div class="card top-accent-blue">
                     <h3>Departments &amp; HODs</h3>
                     <p><strong>Operational Efficiency:</strong> Reduced manual triage through AI. Better routing algorithms ensuring faster ticket closures and optimal resource allocation.</p>
                 </div>
-                <div class="card">
+                <div class="card top-accent-orange">
                     <h3>Corporators</h3>
                     <p><strong>Hyper-local Governance:</strong> Direct ward-level visibility. Transparent escalation matrices allowing tracking of work executed strictly within jurisdictions.</p>
                 </div>
-                <div class="card">
+                <div class="card top-accent-green">
                     <h3>Citizens</h3>
                     <p><strong>Zero Friction:</strong> No app downloads required. One simple, intuitive interface (WhatsApp) for reporting, services, and payments natively.</p>
                 </div>
@@ -707,13 +833,14 @@
     <!-- Slide 10: Closing -->
     <!-- ════════════════════════════════════════════════ -->
     <section class="slide bg-navy" id="slide10">
-        <div class="slide-content fade-in" style="max-width: 900px; text-align: center; margin: 0 auto;">
-            <h2 style="color: var(--text-light); margin-bottom: 2rem;">Positioning Pune as India's Benchmark Smart Governance City</h2>
-            <div style="font-size: clamp(1.5rem, 2.5vw, 2.25rem); font-weight: 300; line-height: 1.4; color: var(--accent-gold); margin-bottom: 3rem;">
+        <div class="slide-content fade-in" style="max-width: 950px; text-align: center; margin: 0 auto;">
+            <img src="https://firebasestorage.googleapis.com/v0/b/pune-whatsup.firebasestorage.app/o/aaplaPunekar.png?alt=media&token=ffc64b46-ea5a-41df-9fa1-df8944cedb99" alt="Aapla Punekar Logo" style="width: 130px; height: 130px; object-fit: contain; background: var(--bg-white); padding: 10px; border-radius: 16px; margin: 0 auto 2rem; display: block; box-shadow: 0 8px 30px rgba(0,0,0,0.3);">
+            <h2 style="color: var(--text-light); margin-bottom: 2rem;">Positioning Pune as <strong>India's Benchmark Smart Governance City</strong></h2>
+            <div style="font-size: clamp(1.5rem, 2.5vw, 2.25rem); font-weight: 300; line-height: 1.4; color: var(--accent-orange); margin-bottom: 3rem;">
                 Pune does not need another digital platform.<br><br>
                 <span style="color: var(--bg-white); font-weight: 600;">Pune can build a living, intelligent, conversational city — on WhatsApp.</span>
             </div>
-            <p style="font-size: 0.9rem; font-weight: 700; letter-spacing: 0.15em; color: var(--border-soft); text-transform: uppercase;">Powered by WhatsUp.city</p>
+            <p style="font-size: 0.85rem; font-weight: 700; letter-spacing: 0.18em; color: var(--soft-blue); text-transform: uppercase;">आपला पुणेकर &nbsp;·&nbsp; Powered by WhatsUp.city</p>
         </div>
     </section>
 

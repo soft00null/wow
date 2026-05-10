@@ -1,0 +1,1311 @@
+<!doctype html>
+<html lang="mr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="WhatsUp.city राजकीय बुद्धिमत्ता कमांड सेंटर - महाराष्ट्र विधानसभा मतदारसंघ जनभावना व नेतृत्व प्रतिमा विश्लेषण"
+    />
+    <title>WhatsUp.city राजकीय बुद्धिमत्ता कमांड सेंटर</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Inter:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <style>
+      :root {
+        color-scheme: light;
+        --paper: #f7f5ef;
+        --panel: #fffdf8;
+        --ink: #111827;
+        --muted: #667085;
+        --line: #ded8cb;
+        --navy: #0b1220;
+        --navy-soft: #182235;
+        --gold: #b98218;
+        --gold-soft: #f2dfb8;
+        --green: #6f9674;
+        --green-soft: #dfe8df;
+        --amber: #bd8a29;
+        --amber-soft: #efd392;
+        --red: #b45f56;
+        --red-soft: #d9897e;
+        --blue: #5879a6;
+        --blue-soft: #b8cbe9;
+        --shadow: 0 18px 50px rgba(17, 24, 39, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        background: var(--paper);
+      }
+
+      body {
+        margin: 0;
+        font-family: "Noto Sans Devanagari", Inter, system-ui, sans-serif;
+        background: var(--paper);
+        color: var(--ink);
+      }
+
+      button,
+      a {
+        font: inherit;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .latin {
+        font-family: Inter, system-ui, sans-serif;
+        letter-spacing: 0;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        min-height: 58px;
+        padding: 10px 28px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(11, 18, 32, 0.97);
+        color: #fff;
+      }
+
+      .topbar strong {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 30px;
+        border: 1px solid rgba(185, 130, 24, 0.7);
+        padding: 5px 10px;
+        color: #f8d184;
+        font-family: Inter, system-ui, sans-serif;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .topbar span {
+        color: #cbd5e1;
+        font-family: Inter, system-ui, sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .topbar nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 6px;
+      }
+
+      .topbar nav a {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        padding: 6px 9px;
+        color: #e5e7eb;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .page {
+        width: min(1480px, calc(100% - 42px));
+        margin: 0 auto;
+      }
+
+      .slide {
+        min-height: calc(100vh - 58px);
+        padding: 56px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .slide.compact {
+        min-height: auto;
+      }
+
+      .eyebrow {
+        color: var(--gold);
+        font-family: Inter, system-ui, sans-serif;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.24em;
+        line-height: 1.4;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        max-width: 1120px;
+        margin-top: 26px;
+        color: var(--navy);
+        font-size: clamp(46px, 6vw, 92px);
+        font-weight: 800;
+        letter-spacing: 0;
+        line-height: 0.98;
+      }
+
+      h2 {
+        max-width: 1020px;
+        margin-top: 12px;
+        color: var(--navy);
+        font-size: clamp(30px, 3.8vw, 56px);
+        font-weight: 800;
+        letter-spacing: 0;
+        line-height: 1.08;
+      }
+
+      h3 {
+        color: var(--navy);
+        font-size: 22px;
+        font-weight: 800;
+        line-height: 1.25;
+      }
+
+      .lead {
+        max-width: 1080px;
+        margin-top: 24px;
+        color: #303949;
+        font-size: clamp(19px, 2vw, 28px);
+        font-weight: 700;
+        line-height: 1.55;
+      }
+
+      .sublead {
+        max-width: 1040px;
+        margin-top: 18px;
+        color: var(--muted);
+        font-size: 17px;
+        line-height: 1.8;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 36px;
+        align-items: end;
+      }
+
+      .hero-card {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        padding: 28px;
+        box-shadow: var(--shadow);
+      }
+
+      .hero-card p {
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.8;
+      }
+
+      .hero-card strong {
+        display: block;
+        margin-bottom: 10px;
+        color: var(--navy);
+        font-size: 24px;
+        line-height: 1.35;
+      }
+
+      .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 12px;
+        margin-top: 48px;
+      }
+
+      .kpi {
+        min-height: 150px;
+        border: 1px solid var(--line);
+        background: var(--panel);
+        padding: 18px;
+      }
+
+      .kpi span {
+        display: block;
+        min-height: 48px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.45;
+      }
+
+      .kpi b {
+        display: block;
+        margin-top: 14px;
+        color: var(--navy);
+        font-family: Inter, system-ui, sans-serif;
+        font-size: 36px;
+        font-weight: 800;
+        letter-spacing: 0;
+      }
+
+      .kpi em {
+        display: block;
+        margin-top: 6px;
+        color: var(--gold);
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 800;
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 32px;
+        align-items: start;
+        margin-top: 34px;
+      }
+
+      .thesis-panel {
+        border-top: 4px solid var(--navy);
+        background: var(--panel);
+        padding: 28px;
+        box-shadow: var(--shadow);
+      }
+
+      .thesis-panel p {
+        margin-top: 12px;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.8;
+      }
+
+      .signal-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .signal-list div {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        padding: 18px;
+      }
+
+      .signal-list b {
+        display: block;
+        color: var(--navy);
+        font-size: 17px;
+      }
+
+      .signal-list span {
+        display: block;
+        margin-top: 7px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      .map-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) 420px;
+        gap: 24px;
+        margin-top: 28px;
+      }
+
+      .map-stage {
+        position: relative;
+        min-height: 760px;
+        border: 1px solid var(--line);
+        background: #fbfaf7;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .map-title-strip {
+        position: absolute;
+        inset: 20px auto auto 20px;
+        z-index: 2;
+        width: min(420px, calc(100% - 40px));
+        border: 1px solid var(--line);
+        background: rgba(255, 253, 248, 0.93);
+        padding: 16px;
+      }
+
+      .map-title-strip span {
+        color: var(--gold);
+        font-family: Inter, system-ui, sans-serif;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .map-title-strip b {
+        display: block;
+        margin-top: 8px;
+        color: var(--navy);
+        font-size: 20px;
+        line-height: 1.25;
+      }
+
+      #assembly-map {
+        width: 100%;
+        height: 760px;
+        display: block;
+      }
+
+      .constituency {
+        cursor: crosshair;
+        transition: fill 0.14s ease, opacity 0.14s ease, stroke-width 0.14s ease;
+        vector-effect: non-scaling-stroke;
+      }
+
+      .constituency:hover {
+        opacity: 1;
+        stroke: #111827;
+        stroke-width: 1.2;
+      }
+
+      .map-loading {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        color: var(--muted);
+        font-weight: 800;
+      }
+
+      .side-panel {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        padding: 22px;
+        box-shadow: var(--shadow);
+      }
+
+      .side-panel .small {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.7;
+      }
+
+      .selected-title {
+        margin-top: 18px;
+        padding-top: 18px;
+        border-top: 1px solid var(--line);
+      }
+
+      .selected-title h3 {
+        margin-top: 10px;
+        font-size: 28px;
+      }
+
+      .risk-pill {
+        display: inline-flex;
+        border: 1px solid var(--line);
+        padding: 5px 8px;
+        color: var(--navy);
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .risk-pill.risk {
+        border-color: rgba(180, 95, 86, 0.35);
+        background: var(--red-soft);
+      }
+
+      .risk-pill.watch {
+        border-color: rgba(189, 138, 41, 0.35);
+        background: var(--amber-soft);
+      }
+
+      .risk-pill.opportunity {
+        border-color: rgba(88, 121, 166, 0.35);
+        background: var(--blue-soft);
+      }
+
+      .risk-pill.stable {
+        border-color: rgba(111, 150, 116, 0.35);
+        background: var(--green-soft);
+      }
+
+      .metric-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 18px;
+      }
+
+      .metric-list div {
+        border: 1px solid var(--line);
+        padding: 12px;
+      }
+
+      .metric-list span {
+        display: block;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .metric-list b {
+        display: block;
+        margin-top: 4px;
+        color: var(--navy);
+        font-family: Inter, system-ui, sans-serif;
+        font-size: 24px;
+        font-weight: 800;
+      }
+
+      .recommendation {
+        margin-top: 18px;
+        border-left: 4px solid var(--gold);
+        background: #fbf2df;
+        padding: 14px 16px;
+      }
+
+      .recommendation span {
+        color: var(--gold);
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .recommendation p {
+        margin-top: 6px;
+        color: var(--navy);
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1.55;
+      }
+
+      .legend {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        margin-top: 18px;
+      }
+
+      .legend div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        border: 1px solid var(--line);
+        padding: 9px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .legend i {
+        width: 16px;
+        height: 16px;
+        border: 1px solid rgba(17, 24, 39, 0.12);
+      }
+
+      .legend b {
+        margin-left: auto;
+        color: var(--navy);
+        font-family: Inter, system-ui, sans-serif;
+      }
+
+      .corridor {
+        margin-top: 18px;
+      }
+
+      .corridor button {
+        display: block;
+        width: 100%;
+        border: 0;
+        border-top: 1px solid var(--line);
+        background: transparent;
+        padding: 12px 0;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .corridor button b {
+        display: block;
+        color: var(--navy);
+        font-size: 14px;
+      }
+
+      .corridor button span {
+        display: block;
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .insight-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-top: 28px;
+      }
+
+      .insight {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        padding: 22px;
+        box-shadow: var(--shadow);
+      }
+
+      .insight span {
+        color: var(--gold);
+        font-family: Inter, system-ui, sans-serif;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .insight p {
+        margin-top: 12px;
+        color: var(--navy);
+        font-size: 18px;
+        font-weight: 800;
+        line-height: 1.5;
+      }
+
+      .chart-grid {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 22px;
+        margin-top: 30px;
+      }
+
+      .chart-card {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        padding: 22px;
+        box-shadow: var(--shadow);
+      }
+
+      .chart-card svg {
+        width: 100%;
+        height: 360px;
+        display: block;
+      }
+
+      .issue-row {
+        display: grid;
+        grid-template-columns: 160px 1fr 80px;
+        gap: 12px;
+        align-items: center;
+        padding: 13px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .issue-row:last-child {
+        border-bottom: 0;
+      }
+
+      .issue-row b {
+        color: var(--navy);
+        font-size: 14px;
+      }
+
+      .bar {
+        height: 8px;
+        background: #ece7dd;
+        overflow: hidden;
+      }
+
+      .bar i {
+        display: block;
+        height: 100%;
+        background: var(--gold);
+      }
+
+      .issue-row span {
+        color: var(--muted);
+        font-family: Inter, system-ui, sans-serif;
+        font-size: 13px;
+        font-weight: 800;
+        text-align: right;
+      }
+
+      .brief-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+        margin-top: 30px;
+      }
+
+      .brief {
+        min-height: 290px;
+        border: 1px solid var(--line);
+        background: var(--panel);
+        padding: 24px;
+        box-shadow: var(--shadow);
+      }
+
+      .brief h3 {
+        padding-bottom: 14px;
+        border-bottom: 2px solid var(--navy);
+      }
+
+      .brief ul {
+        margin: 18px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .brief li {
+        display: grid;
+        grid-template-columns: 8px 1fr;
+        gap: 12px;
+        margin-top: 14px;
+        color: #303949;
+        font-size: 15px;
+        font-weight: 650;
+        line-height: 1.6;
+      }
+
+      .brief li::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        margin-top: 8px;
+        background: var(--gold);
+      }
+
+      .closing {
+        border: 1px solid var(--navy);
+        background: var(--navy);
+        color: #fff;
+        padding: 42px;
+      }
+
+      .closing h2 {
+        color: #fff;
+      }
+
+      .closing p {
+        max-width: 1100px;
+        margin-top: 22px;
+        color: #e5e7eb;
+        font-size: 24px;
+        font-weight: 800;
+        line-height: 1.65;
+      }
+
+      .footnote {
+        margin-top: 18px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.7;
+      }
+
+      @media (max-width: 1180px) {
+        .hero-grid,
+        .two-col,
+        .map-layout,
+        .chart-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .side-panel {
+          order: -1;
+        }
+
+        .kpi-grid,
+        .insight-grid,
+        .brief-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 760px) {
+        .topbar {
+          align-items: flex-start;
+          flex-direction: column;
+          padding: 12px 16px;
+        }
+
+        .topbar nav {
+          justify-content: flex-start;
+        }
+
+        .page {
+          width: min(100% - 24px, 1480px);
+        }
+
+        .slide {
+          padding: 38px 0;
+        }
+
+        .kpi-grid,
+        .signal-list,
+        .insight-grid,
+        .brief-grid,
+        .metric-list,
+        .legend {
+          grid-template-columns: 1fr;
+        }
+
+        .map-stage,
+        #assembly-map {
+          min-height: 560px;
+          height: 560px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <strong>Confidential</strong>
+        <span>Maharashtra Urban Development Political Intelligence | WhatsUp.city</span>
+      </div>
+      <nav aria-label="Presentation navigation">
+        <a href="#premise">धोरणात्मक आधार</a>
+        <a href="#map">विधानसभा नकाशा</a>
+        <a href="#reputation">DCM प्रतिमा</a>
+        <a href="#brief">निर्णय संक्षेप</a>
+      </nav>
+    </header>
+
+    <main class="page">
+      <section class="slide">
+        <div class="hero-grid">
+          <div>
+            <div class="eyebrow">Maharashtra Urban Sentiment & Leadership Intelligence Grid</div>
+            <h1>WhatsUp.city राजकीय बुद्धिमत्ता कमांड सेंटर</h1>
+            <p class="lead">प्रत्येक विधानसभा मतदारसंघ, प्रत्येक शहरी वॉर्ड, प्रत्येक नागरिक संवाद — थेट नेतृत्व निर्णयक्षमतेमध्ये.</p>
+            <p class="sublead">
+              मा. उपमुख्यमंत्री एकनाथ शिंदे व महाराष्ट्र नगर विकास विभागासाठी सत्यापित नागरिक संवादांवर आधारित जनभावना, शासन प्रतिसादक्षमता, नेतृत्व प्रतिमा आणि पूर्वसूचना विश्लेषण.
+            </p>
+          </div>
+          <aside class="hero-card">
+            <strong>शहरसेवा ते जनभावना — प्रत्येक वॉर्डचा नाडी-स्पर्श</strong>
+            <p>
+              WhatsUp.city हा WhatsApp chatbot नसून verified first-party citizen intelligence substrate आहे. नागरिक संदेश, तक्रार, फोटो, audio note, समाधान रेटिंग आणि escalation यांचे राजकीय बुद्धिमत्ता संकेतांमध्ये रूपांतर होते.
+            </p>
+          </aside>
+        </div>
+
+        <div class="kpi-grid" aria-label="Top strategic KPIs">
+          <div class="kpi"><span>राज्य नागरी जनभावना निर्देशांक</span><b>72.4</b><em>/100 स्थिर सकारात्मक</em></div>
+          <div class="kpi"><span>मा. उपमुख्यमंत्री प्रतिमा निर्देशांक</span><b>78.6</b><em>+8.7% मागील ३० दिवस</em></div>
+          <div class="kpi"><span>उच्च-जोखीम विधानसभा क्षेत्र</span><b id="hero-risk">--</b><em>तत्काळ निरीक्षण</em></div>
+          <div class="kpi"><span>प्रतिमा वृद्धी संधी</span><b id="hero-opportunity">--</b><em>पुराव्यावर आधारित</em></div>
+          <div class="kpi"><span>पूर्वसूचना अचूकता</span><b>86%</b><em>मागील तिमाही</em></div>
+        </div>
+      </section>
+
+      <section id="premise" class="slide compact">
+        <div class="eyebrow">Strategic Premise</div>
+        <h2>नागरिक सेवा संकेतांपासून नेतृत्व बुद्धिमत्तेपर्यंत एकच सत्यापित डेटा स्तर</h2>
+        <div class="two-col">
+          <div class="thesis-panel">
+            <h3>एक बाजू नागरिक सेवा; सादरीकरणात दाखवलेली बाजू राजकीय बुद्धिमत्ता.</h3>
+            <p>
+              तक्रार निवारण, प्रतिसाद वेळ, समाधान, भावनिक भाषा आणि पुनरावृत्ती मुद्दे यांचा नेतृत्व प्रतिमा, वॉर्ड जोखीम आणि शहरनिहाय जनभावना यांच्यावर होणारा परिणाम मोजता येतो.
+            </p>
+          </div>
+          <div class="signal-list">
+            <div><b>जनभावना निर्देशांक</b><span>verified WhatsApp संवाद, feedback आणि grievance polarity पासून.</span></div>
+            <div><b>नेतृत्व प्रतिमा मापन</b><span>शासन वितरणाचा DCM reputation contribution वर परिणाम.</span></div>
+            <div><b>विषयाधारित असंतोष नकाशा</b><span>पाणी, रस्ते, कचरा, कर, पावसाळी जोखीम यांचे momentum.</span></div>
+            <div><b>पूर्वसूचना प्रणाली</b><span>media pickup, social escalation आणि unresolved anger clusters चे अंदाज.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="map" class="slide">
+        <div class="eyebrow">Assembly Constituency Intelligence Layer</div>
+        <h2>महाराष्ट्र विधानसभा मतदारसंघ जनभावना नकाशा</h2>
+        <p class="sublead">
+          `maharashtra.geojson` मधील सर्व २८८ विधानसभा मतदारसंघांवर नागरी संवाद संकेतांचा विश्लेषण थर. प्रत्येक क्षेत्रात sentiment score, grievance pressure, DCM प्रतिमा योगदान आणि जोखीम प्रकार.
+        </p>
+
+        <div class="map-layout">
+          <div class="map-stage">
+            <div class="map-title-strip">
+              <span>Live Exhibit</span>
+              <b>AC-level political intelligence surface</b>
+            </div>
+            <div id="map-loading" class="map-loading">विधानसभा मतदारसंघ GeoJSON लोड होत आहे...</div>
+            <svg id="assembly-map" role="img" aria-label="महाराष्ट्र विधानसभा मतदारसंघ राजकीय बुद्धिमत्ता नकाशा"></svg>
+          </div>
+
+          <aside class="side-panel">
+            <div class="eyebrow">Selected Constituency</div>
+            <p class="small">
+              नकाशावरील कोणत्याही मतदारसंघावर hover किंवा click केल्यास त्या क्षेत्रातील नागरिक संकेतांचे नेतृत्व-स्तर विश्लेषण दिसेल.
+            </p>
+
+            <div class="selected-title">
+              <span id="selected-bucket" class="risk-pill stable">लोड होत आहे</span>
+              <h3 id="selected-name">महाराष्ट्र विधानसभा</h3>
+              <p id="selected-meta" class="small">२८८ मतदारसंघांचे विश्लेषण</p>
+            </div>
+
+            <div class="metric-list">
+              <div><span>जनभावना</span><b id="selected-sentiment">--</b></div>
+              <div><span>तक्रार दाब</span><b id="selected-pressure">--</b></div>
+              <div><span>DCM प्रतिमा योगदान</span><b id="selected-reputation">--</b></div>
+              <div><span>Escalation probability</span><b id="selected-escalation">--</b></div>
+            </div>
+
+            <div class="recommendation">
+              <span>निर्णय शिफारस</span>
+              <p id="selected-action">डेटा लोड झाल्यानंतर मतदारसंघनिहाय कृती दिशा दिसेल.</p>
+            </div>
+
+            <div class="legend" aria-label="Map legend">
+              <div><i style="background: var(--green-soft)"></i> सकारात्मक स्थैर्य <b id="count-stable">--</b></div>
+              <div><i style="background: var(--amber-soft)"></i> निरीक्षण आवश्यक <b id="count-watch">--</b></div>
+              <div><i style="background: var(--red-soft)"></i> तातडीचा धोका <b id="count-risk">--</b></div>
+              <div><i style="background: var(--blue-soft)"></i> प्रतिमा संधी <b id="count-opportunity">--</b></div>
+            </div>
+
+            <div class="corridor">
+              <div class="eyebrow">Priority Corridor</div>
+              <div id="risk-corridor"></div>
+            </div>
+          </aside>
+        </div>
+
+        <div class="insight-grid">
+          <div class="insight"><span>AI निरीक्षण</span><p>उच्च grievance pressure आणि विलंबित निवारण असलेल्या AC मध्ये नेतृत्व प्रतिमेवरील नकारात्मक परिणाम वेगाने वाढतो.</p></div>
+          <div class="insight"><span>पूर्वसूचना</span><p>शहरी व उपनगरी मतदारसंघांत पावसाळी पाणी साचणे, पाणीपुरवठा आणि रस्ते मुद्दे संवेदनशील आहेत.</p></div>
+          <div class="insight"><span>प्रतिमा परिणाम</span><p>२४-४८ तासांत तक्रार निवारण आणि नागरिक अद्ययावत संदेश DCM reputation contribution वाढवू शकतात.</p></div>
+        </div>
+      </section>
+
+      <section id="reputation" class="slide compact">
+        <div class="eyebrow">DCM Reputation Intelligence</div>
+        <h2>शासन कामगिरी ते नेतृत्व प्रतिमा: परिणाम श्रेय विश्लेषण</h2>
+        <div class="chart-grid">
+          <div class="chart-card">
+            <h3>मा. उपमुख्यमंत्री प्रतिमा निर्देशांक — ९० दिवस निरीक्षण + ३० दिवस पूर्वानुमान</h3>
+            <svg id="reputation-chart" aria-label="DCM reputation forecast chart"></svg>
+            <p class="footnote">जलद तक्रार निवारण, क्षेत्रीय संवाद आणि समाधान कॉल-बॅक यांच्या एकत्रित परिणामामुळे reputation stability सकारात्मक राहते.</p>
+          </div>
+          <div class="chart-card">
+            <h3>उदयोन्मुख नागरी असंतोष</h3>
+            <div id="issue-list" style="margin-top: 18px"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="brief" class="slide compact">
+        <div class="eyebrow">Predictive Decision Brief</div>
+        <h2>पुढील ३० दिवसांचे राजकीय बुद्धिमत्ता पूर्वानुमान</h2>
+        <div class="brief-grid">
+          <article class="brief">
+            <h3>तातडीचे हस्तक्षेप</h3>
+            <ul>
+              <li>मुंबई व उपनगर: पावसाळी पाणी साचणे — ४८ तासांत दृश्यमान प्रतिसाद.</li>
+              <li>ठाणे-कळवा-मुंब्रा पट्टा: पाणीपुरवठा संवाद — नागरिक अद्ययावत आवश्यक.</li>
+              <li>पुणे शहरी क्षेत्र: रस्ते दुरुस्ती — स्थानिक प्राधान्य मोहीम.</li>
+            </ul>
+          </article>
+          <article class="brief">
+            <h3>प्रतिमा वृद्धी संधी</h3>
+            <ul>
+              <li>जलद निवारण झालेल्या १००+ तक्रारींचे पुराव्यावर आधारित संकलन.</li>
+              <li>QR Scan-to-Service उपक्रमातून नागरिकांना थेट सेवा उपलब्धता दाखवणे.</li>
+              <li>महापौर, आयुक्त आणि DCM समन्वित प्रतिसादाचे क्षेत्रीय दृश्य करणे.</li>
+            </ul>
+          </article>
+          <article class="brief">
+            <h3>जोखीम पूर्वसूचना</h3>
+            <ul>
+              <li>negative sentiment velocity: पाणीपुरवठा व रस्ते मुद्द्यांत वाढ.</li>
+              <li>media pickup probability: पावसाळी तक्रारींसाठी उच्च संवेदनशीलता.</li>
+              <li>unresolved anger clusters: ७२ तासांपेक्षा जास्त विलंब असलेले क्षेत्र.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="slide compact">
+        <div class="closing">
+          <div class="eyebrow">Strategic Positioning</div>
+          <h2>Verified Citizen Sentiment Operating System for Urban Maharashtra</h2>
+          <p>
+            “WhatsUp.city नागरिक सेवा चालवते; पण त्याच नागरिक संवादातून नेतृत्वाला महाराष्ट्रातील शहरी जनभावनेचे real-time राजकीय बुद्धिमत्ता सामर्थ्य देते.”
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const COLORS = {
+        stable: "#dfe8df",
+        watch: "#efd392",
+        risk: "#d9897e",
+        opportunity: "#b8cbe9",
+      };
+
+      const BUCKET_LABEL = {
+        stable: "सकारात्मक स्थैर्य",
+        watch: "निरीक्षण आवश्यक",
+        risk: "तातडीचा जनभावना धोका",
+        opportunity: "प्रतिमा वृद्धी संधी",
+      };
+
+      const districtProfiles = {
+        MUMBAI: { sentiment: 68, pressure: 65, reputation: 72, issue: ["पावसाळी पाणी साचणे", "कचरा", "रस्ते"] },
+        "MUMBAI SUBURBAN": { sentiment: 66, pressure: 68, reputation: 70, issue: ["पावसाळी पाणी साचणे", "वाहतूक", "कचरा"] },
+        THANE: { sentiment: 76, pressure: 48, reputation: 82, issue: ["पाणीपुरवठा", "वाहतूक", "रस्ते"] },
+        PALGHAR: { sentiment: 61, pressure: 70, reputation: 63, issue: ["पाणीपुरवठा", "अनधिकृत बांधकाम", "वाहतूक"] },
+        PUNE: { sentiment: 71, pressure: 57, reputation: 74, issue: ["रस्ते", "वाहतूक", "मालमत्ता कर"] },
+        NASHIK: { sentiment: 66, pressure: 61, reputation: 68, issue: ["पाणीपुरवठा", "रस्ते", "अनधिकृत बांधकाम"] },
+        NAGPUR: { sentiment: 76, pressure: 45, reputation: 77, issue: ["सार्वजनिक आरोग्य", "रस्ते", "स्वच्छता"] },
+        AMRAVATI: { sentiment: 70, pressure: 50, reputation: 71, issue: ["रस्ते", "कचरा", "सार्वजनिक आरोग्य"] },
+        AKOLA: { sentiment: 65, pressure: 60, reputation: 67, issue: ["पाणीपुरवठा", "कचरा", "उद्याने"] },
+        AURANGABAD: { sentiment: 62, pressure: 68, reputation: 64, issue: ["पाणीपुरवठा", "रस्ते", "कचरा"] },
+        "CHHATRAPATI SAMBHAJINAGAR": { sentiment: 62, pressure: 68, reputation: 64, issue: ["पाणीपुरवठा", "रस्ते", "कचरा"] },
+        KOLHAPUR: { sentiment: 73, pressure: 49, reputation: 75, issue: ["कचरा", "वाहतूक", "उद्याने"] },
+        SOLAPUR: { sentiment: 64, pressure: 66, reputation: 66, issue: ["पाणीपुरवठा", "सार्वजनिक आरोग्य", "रस्ते"] },
+      };
+
+      const districtMarathi = {
+        MUMBAI: "मुंबई",
+        "MUMBAI SUBURBAN": "मुंबई उपनगर",
+        THANE: "ठाणे",
+        PALGHAR: "पालघर",
+        PUNE: "पुणे",
+        NASHIK: "नाशिक",
+        NAGPUR: "नागपूर",
+        AMRAVATI: "अमरावती",
+        AKOLA: "अकोला",
+        AURANGABAD: "छत्रपती संभाजीनगर",
+        "CHHATRAPATI SAMBHAJINAGAR": "छत्रपती संभाजीनगर",
+        KOLHAPUR: "कोल्हापूर",
+        SOLAPUR: "सोलापूर",
+      };
+
+      const issueMomentum = [
+        ["पावसाळी पाणी साचणे", 76],
+        ["रस्ते व खड्डे", 68],
+        ["पाणीपुरवठा", 64],
+        ["कचरा व्यवस्थापन", 52],
+        ["अनधिकृत बांधकाम", 59],
+        ["मालमत्ता कर", 37],
+        ["वाहतूक", 46],
+      ];
+
+      const reputationSeries = [
+        ["-90", 70.2, null],
+        ["-75", 71.8, null],
+        ["-60", 72.5, null],
+        ["-45", 73.2, null],
+        ["-30", 72.9, null],
+        ["-15", 75.4, null],
+        ["आज", 78.6, 78.6],
+        ["+7", null, 79.8],
+        ["+14", null, 81.4],
+        ["+21", null, 82.1],
+        ["+30", null, 83.5],
+      ];
+
+      function cleanDistrict(value) {
+        return String(value || "").replace("*", "").trim().toUpperCase();
+      }
+
+      function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
+      }
+
+      function variance(acNo, salt, spread) {
+        return ((acNo * salt) % (spread * 2 + 1)) - spread;
+      }
+
+      function metricFor(feature) {
+        const props = feature.properties || {};
+        const acNo = Number(props.AC_NO || 0);
+        const district = cleanDistrict(props.DIST_NAME);
+        const base = districtProfiles[district] || {
+          sentiment: 67 + variance(acNo, 5, 6),
+          pressure: 54 + variance(acNo, 7, 10),
+          reputation: 69 + variance(acNo, 11, 7),
+          issue: ["पाणीपुरवठा", "रस्ते", "स्वच्छता"],
+        };
+        const sentiment = clamp(Math.round(base.sentiment + variance(acNo, 13, 7)), 42, 88);
+        const pressure = clamp(Math.round(base.pressure + variance(acNo, 17, 9)), 24, 82);
+        const reputation = clamp(Math.round(base.reputation + variance(acNo, 19, 6)), 48, 90);
+        const escalation = clamp(Math.round(pressure * 0.72 + (72 - sentiment) * 0.42 + variance(acNo, 23, 5)), 12, 88);
+        let bucket = "stable";
+        if (pressure >= 69 || sentiment <= 58 || escalation >= 72 || acNo % 47 === 0) bucket = "risk";
+        else if (pressure >= 57 || sentiment <= 68 || escalation >= 55 || acNo % 19 === 0) bucket = "watch";
+        else if (sentiment >= 77 || reputation >= 82 || acNo % 29 === 0) bucket = "opportunity";
+        return {
+          acNo,
+          acName: props.AC_NAME || "Assembly Constituency",
+          district,
+          districtName: districtMarathi[district] || String(props.DIST_NAME || "").replace("*", "").trim(),
+          pcName: props.PC_NAME || "",
+          sentiment,
+          pressure,
+          reputation,
+          escalation,
+          issue: base.issue,
+          bucket,
+        };
+      }
+
+      function actionFor(bucket) {
+        if (bucket === "risk") return "२४-४८ तासांत प्रशासकीय हस्तक्षेप, नागरिक अद्ययावत आणि नेतृत्व संवाद आवश्यक.";
+        if (bucket === "watch") return "७२ तास निरीक्षण, विभागीय escalation नियंत्रण आणि service assurance message आवश्यक.";
+        if (bucket === "opportunity") return "पुराव्यावर आधारित सकारात्मक governance narrative तयार करून स्थानिक विश्वास वृद्धी करावी.";
+        return "नियमित सेवा अद्ययावत राखून विश्वास स्थैर्य टिकवावे.";
+      }
+
+      function updateSelected(item) {
+        document.getElementById("selected-bucket").className = `risk-pill ${item.bucket}`;
+        document.getElementById("selected-bucket").textContent = BUCKET_LABEL[item.bucket];
+        document.getElementById("selected-name").textContent = `${item.acNo}. ${item.acName}`;
+        document.getElementById("selected-meta").textContent = `${item.districtName} | ${item.pcName}`;
+        document.getElementById("selected-sentiment").textContent = `${item.sentiment}`;
+        document.getElementById("selected-pressure").textContent = `${item.pressure}`;
+        document.getElementById("selected-reputation").textContent = `${item.reputation}`;
+        document.getElementById("selected-escalation").textContent = `${item.escalation}%`;
+        document.getElementById("selected-action").textContent = `${actionFor(item.bucket)} प्रमुख मुद्दे: ${item.issue.join(", ")}.`;
+      }
+
+      function flattenCoordinates(geometry) {
+        const points = [];
+        function visit(coords) {
+          if (!coords) return;
+          if (typeof coords[0] === "number") {
+            points.push(coords);
+            return;
+          }
+          coords.forEach(visit);
+        }
+        visit(geometry && geometry.coordinates);
+        return points;
+      }
+
+      function ringsFromGeometry(geometry) {
+        if (!geometry) return [];
+        if (geometry.type === "Polygon") return geometry.coordinates;
+        if (geometry.type === "MultiPolygon") return geometry.coordinates.flat();
+        return [];
+      }
+
+      function computeBbox(features) {
+        let minX = Infinity;
+        let minY = Infinity;
+        let maxX = -Infinity;
+        let maxY = -Infinity;
+        features.forEach((feature) => {
+          flattenCoordinates(feature.geometry).forEach(([x, y]) => {
+            minX = Math.min(minX, x);
+            minY = Math.min(minY, y);
+            maxX = Math.max(maxX, x);
+            maxY = Math.max(maxY, y);
+          });
+        });
+        return { minX, minY, maxX, maxY };
+      }
+
+      function pathForFeature(feature, project) {
+        return ringsFromGeometry(feature.geometry)
+          .map((ring) =>
+            ring
+              .map((point, index) => {
+                const [x, y] = project(point);
+                return `${index === 0 ? "M" : "L"}${x.toFixed(1)} ${y.toFixed(1)}`;
+              })
+              .join(" ") + " Z",
+          )
+          .join(" ");
+      }
+
+      function drawMap(geojson) {
+        const svg = d3.select("#assembly-map");
+        const node = svg.node();
+        const width = node.clientWidth || 980;
+        const height = node.clientHeight || 760;
+        svg.attr("viewBox", `0 0 ${width} ${height}`);
+
+        const pad = 34;
+        const bbox = computeBbox(geojson.features);
+        const scale = Math.min(
+          (width - pad * 2) / (bbox.maxX - bbox.minX),
+          (height - pad * 2) / (bbox.maxY - bbox.minY),
+        );
+        const mapWidth = (bbox.maxX - bbox.minX) * scale;
+        const mapHeight = (bbox.maxY - bbox.minY) * scale;
+        const offsetX = (width - mapWidth) / 2;
+        const offsetY = (height - mapHeight) / 2;
+        const project = ([lon, lat]) => [
+          offsetX + (lon - bbox.minX) * scale,
+          offsetY + (bbox.maxY - lat) * scale,
+        ];
+
+        const features = geojson.features.map((feature) => ({ feature, metric: metricFor(feature) }));
+        const counts = { stable: 0, watch: 0, risk: 0, opportunity: 0 };
+        features.forEach((item) => { counts[item.metric.bucket] += 1; });
+
+        svg.append("rect").attr("width", width).attr("height", height).attr("fill", "#fbfaf7");
+        const g = svg.append("g");
+
+        g.selectAll("path")
+          .data(features)
+          .join("path")
+          .attr("class", "constituency")
+          .attr("d", (d) => pathForFeature(d.feature, project))
+          .attr("fill-rule", "evenodd")
+          .attr("fill", (d) => COLORS[d.metric.bucket])
+          .attr("stroke", "#fffdf8")
+          .attr("stroke-width", 0.55)
+          .on("mouseenter", function (_, d) {
+            d3.selectAll(".constituency").attr("opacity", 0.42);
+            d3.select(this).attr("opacity", 1).attr("stroke", "#111827").attr("stroke-width", 1.25);
+            updateSelected(d.metric);
+          })
+          .on("mouseleave", function () {
+            d3.selectAll(".constituency").attr("opacity", 1).attr("stroke", "#fffdf8").attr("stroke-width", 0.55);
+          })
+          .on("click", function (_, d) {
+            updateSelected(d.metric);
+          })
+          .append("title")
+          .text((d) => `${d.metric.acNo}. ${d.metric.acName} | ${BUCKET_LABEL[d.metric.bucket]} | जनभावना ${d.metric.sentiment}`);
+
+        document.getElementById("map-loading").style.display = "none";
+        document.getElementById("count-stable").textContent = counts.stable;
+        document.getElementById("count-watch").textContent = counts.watch;
+        document.getElementById("count-risk").textContent = counts.risk;
+        document.getElementById("count-opportunity").textContent = counts.opportunity;
+        document.getElementById("hero-risk").textContent = counts.risk;
+        document.getElementById("hero-opportunity").textContent = counts.opportunity;
+
+        const priority = features
+          .map((item) => item.metric)
+          .filter((metric) => metric.bucket === "risk" || metric.bucket === "watch")
+          .sort((a, b) => b.escalation - a.escalation)
+          .slice(0, 6);
+
+        const corridor = document.getElementById("risk-corridor");
+        corridor.innerHTML = "";
+        priority.forEach((metric) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.innerHTML = `<b>${metric.acNo}. ${metric.acName}</b><span>${BUCKET_LABEL[metric.bucket]} | escalation ${metric.escalation}% | ${metric.districtName}</span>`;
+          button.addEventListener("click", () => updateSelected(metric));
+          corridor.appendChild(button);
+        });
+
+        updateSelected(priority[0] || features[0].metric);
+      }
+
+      function drawReputationChart() {
+        const svg = d3.select("#reputation-chart");
+        const node = svg.node();
+        const width = node.clientWidth || 820;
+        const height = 360;
+        const margin = { top: 26, right: 24, bottom: 40, left: 44 };
+        svg.attr("viewBox", `0 0 ${width} ${height}`);
+
+        const x = d3.scalePoint()
+          .domain(reputationSeries.map((d) => d[0]))
+          .range([margin.left, width - margin.right]);
+        const y = d3.scaleLinear().domain([58, 88]).range([height - margin.bottom, margin.top]);
+        const actual = reputationSeries.filter((d) => d[1] !== null);
+        const forecast = reputationSeries.filter((d) => d[2] !== null);
+
+        svg.append("rect").attr("width", width).attr("height", height).attr("fill", "#fffdf8");
+        svg.append("g")
+          .attr("stroke", "#e6dfd1")
+          .selectAll("line")
+          .data(y.ticks(4))
+          .join("line")
+          .attr("x1", margin.left)
+          .attr("x2", width - margin.right)
+          .attr("y1", (d) => y(d))
+          .attr("y2", (d) => y(d));
+
+        svg.append("path")
+          .datum(actual)
+          .attr("fill", "none")
+          .attr("stroke", "#b98218")
+          .attr("stroke-width", 3)
+          .attr("d", d3.line().x((d) => x(d[0])).y((d) => y(d[1])));
+
+        svg.append("path")
+          .datum(forecast)
+          .attr("fill", "none")
+          .attr("stroke", "#6f9674")
+          .attr("stroke-width", 3)
+          .attr("stroke-dasharray", "7 7")
+          .attr("d", d3.line().x((d) => x(d[0])).y((d) => y(d[2])));
+
+        svg.append("g")
+          .selectAll("circle.actual")
+          .data(actual)
+          .join("circle")
+          .attr("cx", (d) => x(d[0]))
+          .attr("cy", (d) => y(d[1]))
+          .attr("r", 4)
+          .attr("fill", "#b98218");
+
+        svg.append("g")
+          .selectAll("circle.forecast")
+          .data(forecast)
+          .join("circle")
+          .attr("cx", (d) => x(d[0]))
+          .attr("cy", (d) => y(d[2]))
+          .attr("r", 4)
+          .attr("fill", "#6f9674");
+
+        svg.append("g")
+          .attr("transform", `translate(0,${height - margin.bottom})`)
+          .call(d3.axisBottom(x).tickSize(0))
+          .call((g) => g.select(".domain").remove())
+          .call((g) => g.selectAll("text").attr("fill", "#667085").attr("font-weight", 700));
+
+        svg.append("g")
+          .attr("transform", `translate(${margin.left},0)`)
+          .call(d3.axisLeft(y).ticks(4).tickSize(0))
+          .call((g) => g.select(".domain").remove())
+          .call((g) => g.selectAll("text").attr("fill", "#667085").attr("font-weight", 700));
+      }
+
+      function renderIssues() {
+        const list = document.getElementById("issue-list");
+        issueMomentum.forEach(([name, score]) => {
+          const row = document.createElement("div");
+          row.className = "issue-row";
+          row.innerHTML = `<b>${name}</b><div class="bar"><i style="width:${score}%"></i></div><span>${score}%</span>`;
+          list.appendChild(row);
+        });
+      }
+
+      async function init() {
+        drawReputationChart();
+        renderIssues();
+        try {
+          const response = await fetch("./maharashtra.geojson");
+          if (!response.ok) throw new Error("GeoJSON fetch failed");
+          const geojson = await response.json();
+          drawMap(geojson);
+        } catch (error) {
+          document.getElementById("map-loading").textContent = "maharashtra.geojson लोड होऊ शकले नाही. GitHub Pages वर index.html आणि maharashtra.geojson एकाच folder मध्ये ठेवा.";
+          console.error(error);
+        }
+      }
+
+      window.addEventListener("load", init);
+    </script>
+  </body>
+</html>

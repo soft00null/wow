@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="WhatsUp.city राजकीय बुद्धिमत्ता कमांड सेंटर - महाराष्ट्र विधानसभा मतदारसंघ जनभावना व नेतृत्व प्रतिमा विश्लेषण"
+      content="WhatsUp.city शहरी जनभावना व लोकविश्वास कमांड सेंटर - महाराष्ट्र नगर विकास विभागासाठी सेवा-आधारित नागरिक संकेत, विधानसभा नकाशा आणि नेतृत्व प्रतिमा पूर्वसूचना"
     />
-    <title>WhatsUp.city राजकीय बुद्धिमत्ता कमांड सेंटर</title>
+    <title>WhatsUp.city | महाराष्ट्र शहरी जनभावना कमांड सेंटर</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Inter:wght@500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Inter:wght@500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
@@ -20,13 +20,13 @@
         color-scheme: light;
         --paper: #f7f5ef;
         --panel: #fffdf8;
-        --ink: #111827;
+        --ink: #101828;
         --muted: #667085;
         --line: #ded8cb;
         --navy: #0b1220;
         --navy-soft: #182235;
         --gold: #b98218;
-        --gold-soft: #f2dfb8;
+        --gold-soft: #f4dfb2;
         --green: #6f9674;
         --green-soft: #dfe8df;
         --amber: #bd8a29;
@@ -35,39 +35,24 @@
         --red-soft: #d9897e;
         --blue: #5879a6;
         --blue-soft: #b8cbe9;
+        --cream: #fbf2df;
         --shadow: 0 18px 50px rgba(17, 24, 39, 0.08);
       }
 
-      * {
-        box-sizing: border-box;
-      }
-
-      html {
-        scroll-behavior: smooth;
-        background: var(--paper);
-      }
-
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; background: var(--paper); }
       body {
         margin: 0;
         font-family: "Noto Sans Devanagari", Inter, system-ui, sans-serif;
-        background: var(--paper);
+        background:
+          radial-gradient(circle at 10% 0%, rgba(185, 130, 24, 0.08), transparent 30%),
+          radial-gradient(circle at 92% 8%, rgba(88, 121, 166, 0.08), transparent 28%),
+          var(--paper);
         color: var(--ink);
       }
-
-      button,
-      a {
-        font: inherit;
-      }
-
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
-
-      .latin {
-        font-family: Inter, system-ui, sans-serif;
-        letter-spacing: 0;
-      }
+      button, a { font: inherit; }
+      a { color: inherit; text-decoration: none; }
+      .latin { font-family: Inter, system-ui, sans-serif; letter-spacing: 0; }
 
       .topbar {
         position: sticky;
@@ -82,1146 +67,398 @@
         border-bottom: 1px solid rgba(255, 255, 255, 0.12);
         background: rgba(11, 18, 32, 0.97);
         color: #fff;
+        backdrop-filter: blur(14px);
       }
-
-      .topbar > div {
-        display: flex;
-        min-width: 0;
-        align-items: center;
-        gap: 8px;
-      }
-
+      .topbar > div { display: flex; min-width: 0; align-items: center; gap: 8px; }
       .topbar strong {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
         min-height: 30px;
         border: 1px solid rgba(185, 130, 24, 0.7);
         padding: 5px 10px;
         color: #f8d184;
         font-family: Inter, system-ui, sans-serif;
         font-size: 11px;
-        font-weight: 800;
+        font-weight: 900;
         letter-spacing: 0.18em;
         text-transform: uppercase;
       }
-
       .topbar span {
-        max-width: 560px;
+        max-width: 600px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         color: #cbd5e1;
         font-family: Inter, system-ui, sans-serif;
         font-size: 11px;
-        font-weight: 700;
-        letter-spacing: 0.18em;
+        font-weight: 800;
+        letter-spacing: 0.16em;
         text-transform: uppercase;
       }
-
-      .topbar nav {
-        display: flex;
-        flex-wrap: nowrap;
-        justify-content: flex-end;
-        gap: 5px;
-      }
-
+      .topbar nav { display: flex; flex-wrap: nowrap; justify-content: flex-end; gap: 5px; }
       .topbar nav a {
         border: 1px solid rgba(255, 255, 255, 0.14);
         padding: 6px 8px;
         color: #e5e7eb;
         white-space: nowrap;
         font-size: 11px;
-        font-weight: 700;
+        font-weight: 800;
       }
+      .topbar nav a:hover { border-color: rgba(248, 209, 132, 0.8); color: #f8d184; }
 
-      .page {
-        width: min(1480px, calc(100% - 42px));
-        margin: 0 auto;
-      }
-
-      .slide {
-        min-height: calc(100vh - 58px);
-        padding: 56px 0;
-        border-bottom: 1px solid var(--line);
-      }
-
-      .slide.compact {
-        min-height: auto;
-      }
-
+      .page { width: min(1480px, calc(100% - 42px)); margin: 0 auto; }
+      .slide { min-height: calc(100vh - 58px); padding: 56px 0; border-bottom: 1px solid var(--line); }
+      .slide.compact { min-height: auto; }
       .eyebrow {
         color: var(--gold);
         font-family: Inter, system-ui, sans-serif;
         font-size: 12px;
-        font-weight: 800;
+        font-weight: 900;
         letter-spacing: 0.24em;
         line-height: 1.4;
         text-transform: uppercase;
       }
-
-      h1,
-      h2,
-      h3,
-      p {
-        margin: 0;
-      }
-
+      h1, h2, h3, p { margin: 0; }
       h1 {
-        max-width: 1120px;
+        max-width: 1160px;
         margin-top: 26px;
         color: var(--navy);
-        font-size: clamp(46px, 6vw, 92px);
-        font-weight: 800;
-        letter-spacing: 0;
+        font-size: clamp(48px, 6vw, 96px);
+        font-weight: 900;
+        letter-spacing: -0.04em;
         line-height: 0.98;
       }
-
       h2 {
-        max-width: 1020px;
+        max-width: 1120px;
         margin-top: 12px;
         color: var(--navy);
-        font-size: clamp(30px, 3.8vw, 56px);
-        font-weight: 800;
-        letter-spacing: 0;
+        font-size: clamp(30px, 3.8vw, 58px);
+        font-weight: 900;
+        letter-spacing: -0.025em;
         line-height: 1.08;
       }
-
-      h3 {
-        color: var(--navy);
-        font-size: 22px;
-        font-weight: 800;
-        line-height: 1.25;
-      }
-
+      h3 { color: var(--navy); font-size: 22px; font-weight: 900; line-height: 1.25; }
       .lead {
-        max-width: 1080px;
+        max-width: 1120px;
         margin-top: 24px;
         color: #303949;
         font-size: clamp(19px, 2vw, 28px);
-        font-weight: 700;
+        font-weight: 800;
         line-height: 1.55;
       }
-
-      .sublead {
-        max-width: 1040px;
-        margin-top: 18px;
-        color: var(--muted);
-        font-size: 17px;
-        line-height: 1.8;
-      }
-
-      .hero-grid {
-        display: grid;
-        grid-template-columns: 1.2fr 0.8fr;
-        gap: 36px;
-        align-items: end;
-      }
-
-      .hero-card {
-        border: 1px solid var(--line);
-        background: var(--panel);
-        padding: 28px;
-        box-shadow: var(--shadow);
-      }
-
-      .hero-card p {
-        color: var(--muted);
-        font-size: 15px;
-        line-height: 1.8;
-      }
-
-      .hero-card strong {
-        display: block;
-        margin-bottom: 10px;
-        color: var(--navy);
-        font-size: 24px;
-        line-height: 1.35;
-      }
-
-      .kpi-grid {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 12px;
-        margin-top: 48px;
-      }
-
-      .kpi {
-        min-height: 150px;
-        border: 1px solid var(--line);
-        background: var(--panel);
-        padding: 18px;
-      }
-
-      .kpi span {
-        display: block;
-        min-height: 48px;
-        color: var(--muted);
-        font-size: 13px;
-        font-weight: 700;
-        line-height: 1.45;
-      }
-
-      .kpi b {
-        display: block;
-        margin-top: 14px;
-        color: var(--navy);
-        font-family: Inter, system-ui, sans-serif;
-        font-size: 36px;
-        font-weight: 800;
-        letter-spacing: 0;
-      }
-
-      .kpi em {
-        display: block;
-        margin-top: 6px;
-        color: var(--gold);
-        font-size: 12px;
-        font-style: normal;
-        font-weight: 800;
-      }
-
-      .two-col {
-        display: grid;
-        grid-template-columns: 0.9fr 1.1fr;
-        gap: 32px;
-        align-items: start;
-        margin-top: 34px;
-      }
-
-      .thesis-panel {
-        border-top: 4px solid var(--navy);
-        background: var(--panel);
-        padding: 28px;
-        box-shadow: var(--shadow);
-      }
-
-      .thesis-panel p {
-        margin-top: 12px;
-        color: var(--muted);
-        font-size: 16px;
-        line-height: 1.8;
-      }
-
-      .signal-list {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-      }
-
-      .signal-list div {
-        border: 1px solid var(--line);
-        background: var(--panel);
-        padding: 18px;
-      }
-
-      .signal-list b {
-        display: block;
-        color: var(--navy);
-        font-size: 17px;
-      }
-
-      .signal-list span {
-        display: block;
-        margin-top: 7px;
-        color: var(--muted);
-        font-size: 13px;
-        line-height: 1.55;
-      }
-
-      .narrative-spine {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 0;
-        margin-top: 30px;
-        border: 1px solid var(--line);
-        background: var(--panel);
-        box-shadow: var(--shadow);
-      }
-
-      .narrative-spine div {
-        min-height: 174px;
-        border-right: 1px solid var(--line);
-        padding: 20px;
-      }
-
-      .narrative-spine div:last-child {
-        border-right: 0;
-      }
-
-      .narrative-spine span {
-        color: var(--gold);
-        font-family: Inter, system-ui, sans-serif;
-        font-size: 11px;
-        font-weight: 800;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-      }
-
-      .narrative-spine b {
-        display: block;
-        margin-top: 12px;
-        color: var(--navy);
-        font-size: 19px;
-        line-height: 1.28;
-      }
-
-      .narrative-spine p {
-        margin-top: 8px;
-        color: var(--muted);
-        font-size: 13px;
-        line-height: 1.6;
-      }
-
-      .strategic-strip {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 1px;
-        margin-top: 34px;
-        border: 1px solid var(--navy);
-        background: var(--navy);
-      }
-
-      .strategic-strip div {
-        min-height: 160px;
-        background: var(--navy);
-        padding: 24px;
-        color: #fff;
-      }
-
-      .strategic-strip span {
-        color: #d6b56e;
-        font-family: Inter, system-ui, sans-serif;
-        font-size: 11px;
-        font-weight: 800;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-      }
-
-      .strategic-strip b {
-        display: block;
-        margin-top: 16px;
-        color: #fff;
-        font-size: 26px;
-        line-height: 1.22;
-      }
-
-      .strategic-strip p {
-        margin-top: 10px;
-        color: #cbd5e1;
-        font-size: 14px;
-        line-height: 1.65;
-      }
-
-      .advantage-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 14px;
-        margin-top: 30px;
-      }
-
-      .advantage-card {
-        min-height: 210px;
-        border: 1px solid var(--line);
-        background: var(--panel);
-        padding: 22px;
-        box-shadow: var(--shadow);
-      }
-
-      .advantage-card small {
-        color: var(--gold);
-        font-family: Inter, system-ui, sans-serif;
-        font-size: 11px;
-        font-weight: 800;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-      }
-
-      .advantage-card b {
-        display: block;
-        margin-top: 14px;
-        color: var(--navy);
-        font-size: 21px;
-        line-height: 1.25;
-      }
-
-      .advantage-card p {
-        margin-top: 10px;
-        color: var(--muted);
-        font-size: 14px;
-        line-height: 1.7;
-      }
-
-      .comparison {
-        display: grid;
-        grid-template-columns: 0.92fr 1.08fr;
-        gap: 18px;
-        margin-top: 30px;
-      }
-
-      .comparison article {
-        border: 1px solid var(--line);
-        background: var(--panel);
-        box-shadow: var(--shadow);
-      }
-
-      .comparison h3 {
-        padding: 20px 22px;
-        border-bottom: 1px solid var(--line);
-      }
-
-      .comparison ul {
-        margin: 0;
-        padding: 8px 22px 22px;
-        list-style: none;
-      }
-
-      .comparison li {
-        display: grid;
-        grid-template-columns: 11px 1fr;
-        gap: 12px;
-        padding: 13px 0;
-        border-bottom: 1px solid #ebe5da;
-        color: #344054;
-        font-size: 15px;
-        font-weight: 650;
-        line-height: 1.55;
-      }
-
-      .comparison li:last-child {
-        border-bottom: 0;
-      }
-
-      .comparison li::before {
-        content: "";
-        width: 11px;
-        height: 11px;
-        margin-top: 7px;
-        border: 1px solid var(--line);
-        background: #efe9dd;
-      }
-
-      .comparison .winner {
-        border-color: rgba(185, 130, 24, 0.48);
-      }
-
-      .comparison .winner h3 {
-        background: #fbf2df;
-      }
-
-      .comparison .winner li::before {
-        background: var(--gold);
-        border-color: var(--gold);
-      }
-
-      .operating-model {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 0;
-        margin-top: 32px;
-        border: 1px solid var(--line);
-        background: var(--panel);
-        box-shadow: var(--shadow);
-      }
-
-      .model-step {
-        min-height: 230px;
-        border-right: 1px solid var(--line);
-        padding: 22px;
-      }
-
-      .model-step:last-child {
-        border-right: 0;
-      }
-
-      .model-step span {
-        display: inline-flex;
-        width: 34px;
-        height: 34px;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid var(--gold);
-        color: var(--gold);
-        font-family: Inter, system-ui, sans-serif;
-        font-size: 13px;
-        font-weight: 800;
-      }
-
-      .model-step b {
-        display: block;
-        margin-top: 20px;
-        color: var(--navy);
-        font-size: 19px;
-        line-height: 1.28;
-      }
-
-      .model-step p {
-        margin-top: 10px;
-        color: var(--muted);
-        font-size: 14px;
-        line-height: 1.65;
-      }
-
-      .archetype-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 14px;
-        margin-top: 26px;
-      }
-
-      .archetype {
-        border: 1px solid var(--line);
-        background: var(--panel);
-        padding: 20px;
-      }
-
-      .archetype h3 {
-        min-height: 58px;
-        font-size: 20px;
-      }
-
-      .archetype p {
-        margin-top: 12px;
-        color: var(--muted);
-        font-size: 14px;
-        line-height: 1.65;
-      }
-
-      .scoreline {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        margin-top: 18px;
-        border-top: 1px solid var(--line);
-        padding-top: 14px;
-      }
-
-      .scoreline span {
-        color: var(--muted);
-        font-size: 12px;
-        font-weight: 800;
-      }
-
-      .scoreline b {
-        color: var(--navy);
-        font-family: Inter, system-ui, sans-serif;
-        font-size: 28px;
-      }
-
-      .map-layout {
-        display: grid;
-        grid-template-columns: minmax(0, 1.35fr) 420px;
-        gap: 24px;
-        margin-top: 28px;
-      }
-
-      .map-stage {
-        position: relative;
-        min-height: 760px;
-        border: 1px solid var(--line);
-        background: #fbfaf7;
-        box-shadow: var(--shadow);
-        overflow: hidden;
-      }
-
-      .map-title-strip {
-        position: absolute;
-        inset: 20px auto auto 20px;
-        z-index: 2;
-        width: min(420px, calc(100% - 40px));
-        border: 1px solid var(--line);
-        background: rgba(255, 253, 248, 0.93);
-        padding: 16px;
-      }
-
-      .map-title-strip span {
-        color: var(--gold);
-        font-family: Inter, system-ui, sans-serif;
-        font-size: 11px;
-        font-weight: 800;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-      }
-
-      .map-title-strip b {
-        display: block;
-        margin-top: 8px;
-        color: var(--navy);
-        font-size: 20px;
-        line-height: 1.25;
-      }
-
-      #assembly-map {
-        width: 100%;
-        height: 760px;
-        display: block;
-      }
-
-      .constituency {
-        cursor: crosshair;
-        transition: fill 0.14s ease, opacity 0.14s ease, stroke-width 0.14s ease;
-        vector-effect: non-scaling-stroke;
-      }
-
-      .constituency:hover {
-        opacity: 1;
-        stroke: #111827;
-        stroke-width: 1.2;
-      }
-
-      .map-loading {
-        position: absolute;
-        inset: 0;
-        display: grid;
-        place-items: center;
-        color: var(--muted);
-        font-weight: 800;
-      }
-
-      .side-panel {
-        border: 1px solid var(--line);
-        background: var(--panel);
-        padding: 22px;
-        box-shadow: var(--shadow);
-      }
-
-      .side-panel .small {
-        color: var(--muted);
-        font-size: 13px;
-        line-height: 1.7;
-      }
-
-      .selected-title {
-        margin-top: 18px;
-        padding-top: 18px;
-        border-top: 1px solid var(--line);
-      }
-
-      .selected-title h3 {
-        margin-top: 10px;
-        font-size: 28px;
-      }
-
-      .risk-pill {
-        display: inline-flex;
-        border: 1px solid var(--line);
-        padding: 5px 8px;
-        color: var(--navy);
-        font-size: 12px;
-        font-weight: 800;
-      }
-
-      .risk-pill.risk {
-        border-color: rgba(180, 95, 86, 0.35);
-        background: var(--red-soft);
-      }
-
-      .risk-pill.watch {
-        border-color: rgba(189, 138, 41, 0.35);
-        background: var(--amber-soft);
-      }
-
-      .risk-pill.opportunity {
-        border-color: rgba(88, 121, 166, 0.35);
-        background: var(--blue-soft);
-      }
-
-      .risk-pill.stable {
-        border-color: rgba(111, 150, 116, 0.35);
-        background: var(--green-soft);
-      }
-
-      .metric-list {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        margin-top: 18px;
-      }
-
-      .metric-list div {
-        border: 1px solid var(--line);
-        padding: 12px;
-      }
-
-      .metric-list span {
-        display: block;
-        color: var(--muted);
-        font-size: 12px;
-        font-weight: 700;
-      }
-
-      .metric-list b {
-        display: block;
-        margin-top: 4px;
-        color: var(--navy);
-        font-family: Inter, system-ui, sans-serif;
-        font-size: 24px;
-        font-weight: 800;
-      }
-
-      .recommendation {
-        margin-top: 18px;
-        border-left: 4px solid var(--gold);
-        background: #fbf2df;
-        padding: 14px 16px;
-      }
-
-      .recommendation span {
-        color: var(--gold);
-        font-size: 12px;
-        font-weight: 800;
-      }
-
-      .recommendation p {
-        margin-top: 6px;
-        color: var(--navy);
-        font-size: 15px;
-        font-weight: 700;
-        line-height: 1.55;
-      }
-
-      .legend {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-        margin-top: 18px;
-      }
-
-      .legend div {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 8px;
-        border: 1px solid var(--line);
-        padding: 9px;
-        color: var(--muted);
-        font-size: 12px;
-        font-weight: 700;
-      }
-
-      .legend i {
-        width: 16px;
-        height: 16px;
-        border: 1px solid rgba(17, 24, 39, 0.12);
-      }
-
-      .legend b {
-        margin-left: auto;
-        color: var(--navy);
-        font-family: Inter, system-ui, sans-serif;
-      }
-
-      .corridor {
-        margin-top: 18px;
-      }
-
-      .corridor button {
-        display: block;
-        width: 100%;
-        border: 0;
-        border-top: 1px solid var(--line);
-        background: transparent;
-        padding: 12px 0;
-        text-align: left;
-        cursor: pointer;
-      }
-
-      .corridor button b {
-        display: block;
-        color: var(--navy);
-        font-size: 14px;
-      }
-
-      .corridor button span {
-        display: block;
-        margin-top: 4px;
-        color: var(--muted);
-        font-size: 12px;
-      }
-
-      .insight-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 16px;
-        margin-top: 28px;
-      }
-
-      .insight {
-        border: 1px solid var(--line);
-        background: var(--panel);
-        padding: 22px;
-        box-shadow: var(--shadow);
-      }
-
-      .insight span {
-        color: var(--gold);
-        font-family: Inter, system-ui, sans-serif;
-        font-size: 11px;
-        font-weight: 800;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-      }
-
-      .insight p {
-        margin-top: 12px;
-        color: var(--navy);
-        font-size: 18px;
-        font-weight: 800;
-        line-height: 1.5;
-      }
-
-      .chart-grid {
-        display: grid;
-        grid-template-columns: 1.15fr 0.85fr;
-        gap: 22px;
-        margin-top: 30px;
-      }
-
-      .chart-card {
-        border: 1px solid var(--line);
-        background: var(--panel);
-        padding: 22px;
-        box-shadow: var(--shadow);
-      }
-
-      .chart-card svg {
-        width: 100%;
-        height: 360px;
-        display: block;
-      }
-
-      .issue-row {
-        display: grid;
-        grid-template-columns: 160px 1fr 80px;
-        gap: 12px;
-        align-items: center;
-        padding: 13px 0;
-        border-bottom: 1px solid var(--line);
-      }
-
-      .issue-row:last-child {
-        border-bottom: 0;
-      }
-
-      .issue-row b {
-        color: var(--navy);
-        font-size: 14px;
-      }
-
-      .bar {
-        height: 8px;
-        background: #ece7dd;
-        overflow: hidden;
-      }
-
-      .bar i {
-        display: block;
-        height: 100%;
-        background: var(--gold);
-      }
-
-      .issue-row span {
-        color: var(--muted);
-        font-family: Inter, system-ui, sans-serif;
-        font-size: 13px;
-        font-weight: 800;
-        text-align: right;
-      }
-
-      .brief-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 18px;
-        margin-top: 30px;
-      }
-
-      .brief {
-        min-height: 290px;
-        border: 1px solid var(--line);
-        background: var(--panel);
-        padding: 24px;
-        box-shadow: var(--shadow);
-      }
-
-      .brief h3 {
-        padding-bottom: 14px;
-        border-bottom: 2px solid var(--navy);
-      }
-
-      .brief ul {
-        margin: 18px 0 0;
-        padding: 0;
-        list-style: none;
-      }
-
-      .brief li {
-        display: grid;
-        grid-template-columns: 8px 1fr;
-        gap: 12px;
-        margin-top: 14px;
-        color: #303949;
-        font-size: 15px;
-        font-weight: 650;
-        line-height: 1.6;
-      }
-
-      .brief li::before {
-        content: "";
-        width: 8px;
-        height: 8px;
-        margin-top: 8px;
-        background: var(--gold);
-      }
-
-      .closing {
-        border: 1px solid var(--navy);
-        background: var(--navy);
-        color: #fff;
-        padding: 42px;
-      }
-
-      .closing h2 {
-        color: #fff;
-      }
-
-      .closing p {
-        max-width: 1100px;
-        margin-top: 22px;
-        color: #e5e7eb;
-        font-size: 24px;
-        font-weight: 800;
-        line-height: 1.65;
-      }
-
-      .footnote {
-        margin-top: 18px;
-        color: var(--muted);
-        font-size: 12px;
-        line-height: 1.7;
-      }
+      .sublead { max-width: 1080px; margin-top: 18px; color: var(--muted); font-size: 17px; line-height: 1.8; }
+      .hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 36px; align-items: end; }
+      .hero-card { border: 1px solid var(--line); background: rgba(255, 253, 248, 0.92); padding: 28px; box-shadow: var(--shadow); }
+      .hero-card p { color: var(--muted); font-size: 15px; line-height: 1.85; }
+      .hero-card strong { display: block; margin-bottom: 10px; color: var(--navy); font-size: 24px; line-height: 1.35; }
+
+      .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 48px; }
+      .kpi { min-height: 150px; border: 1px solid var(--line); background: var(--panel); padding: 18px; box-shadow: 0 10px 24px rgba(17, 24, 39, 0.035); }
+      .kpi span { display: block; min-height: 48px; color: var(--muted); font-size: 13px; font-weight: 800; line-height: 1.45; }
+      .kpi b { display: block; margin-top: 14px; color: var(--navy); font-family: Inter, system-ui, sans-serif; font-size: 36px; font-weight: 900; letter-spacing: -0.04em; }
+      .kpi em { display: block; margin-top: 6px; color: var(--gold); font-size: 12px; font-style: normal; font-weight: 900; }
+
+      .strategic-strip { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; margin-top: 34px; border: 1px solid var(--navy); background: var(--navy); box-shadow: var(--shadow); }
+      .strategic-strip div { min-height: 170px; background: var(--navy); padding: 24px; color: #fff; }
+      .strategic-strip span, .story-card span, .insight span { color: #d6b56e; font-family: Inter, system-ui, sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 0.18em; text-transform: uppercase; }
+      .strategic-strip b { display: block; margin-top: 16px; color: #fff; font-size: 26px; line-height: 1.22; }
+      .strategic-strip p { margin-top: 10px; color: #cbd5e1; font-size: 14px; line-height: 1.65; }
+
+      .storyline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 30px; }
+      .story-card { border: 1px solid var(--line); background: var(--panel); min-height: 230px; padding: 22px; box-shadow: var(--shadow); }
+      .story-card b { display: block; margin-top: 16px; color: var(--navy); font-size: 22px; line-height: 1.25; }
+      .story-card p { margin-top: 10px; color: var(--muted); font-size: 14px; line-height: 1.7; }
+      .story-card.dark { background: var(--navy); border-color: var(--navy); }
+      .story-card.dark b { color: #fff; }
+      .story-card.dark p { color: #d0d5dd; }
+
+      .two-col { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 32px; align-items: start; margin-top: 34px; }
+      .thesis-panel { border-top: 4px solid var(--navy); background: var(--panel); padding: 28px; box-shadow: var(--shadow); }
+      .thesis-panel p { margin-top: 12px; color: var(--muted); font-size: 16px; line-height: 1.8; }
+      .signal-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .signal-list div { border: 1px solid var(--line); background: var(--panel); padding: 18px; }
+      .signal-list b { display: block; color: var(--navy); font-size: 17px; }
+      .signal-list span { display: block; margin-top: 7px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+
+      .narrative-spine { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin-top: 30px; border: 1px solid var(--line); background: var(--panel); box-shadow: var(--shadow); }
+      .narrative-spine div { min-height: 188px; border-right: 1px solid var(--line); padding: 20px; }
+      .narrative-spine div:last-child { border-right: 0; }
+      .narrative-spine span { color: var(--gold); font-family: Inter, system-ui, sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 0.18em; text-transform: uppercase; }
+      .narrative-spine b { display: block; margin-top: 12px; color: var(--navy); font-size: 19px; line-height: 1.28; }
+      .narrative-spine p { margin-top: 8px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+
+      .comparison { display: grid; grid-template-columns: 0.92fr 1.08fr; gap: 18px; margin-top: 30px; }
+      .comparison article { border: 1px solid var(--line); background: var(--panel); box-shadow: var(--shadow); }
+      .comparison h3 { padding: 20px 22px; border-bottom: 1px solid var(--line); }
+      .comparison ul { margin: 0; padding: 8px 22px 22px; list-style: none; }
+      .comparison li { display: grid; grid-template-columns: 11px 1fr; gap: 12px; padding: 13px 0; border-bottom: 1px solid #ebe5da; color: #344054; font-size: 15px; font-weight: 700; line-height: 1.55; }
+      .comparison li:last-child { border-bottom: 0; }
+      .comparison li::before { content: ""; width: 11px; height: 11px; margin-top: 7px; border: 1px solid var(--line); background: #efe9dd; }
+      .comparison .winner { border-color: rgba(185, 130, 24, 0.48); }
+      .comparison .winner h3 { background: var(--cream); }
+      .comparison .winner li::before { background: var(--gold); border-color: var(--gold); }
+
+      .operating-model { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin-top: 32px; border: 1px solid var(--line); background: var(--panel); box-shadow: var(--shadow); }
+      .model-step { min-height: 240px; border-right: 1px solid var(--line); padding: 22px; }
+      .model-step:last-child { border-right: 0; }
+      .model-step span { display: inline-flex; width: 34px; height: 34px; align-items: center; justify-content: center; border: 1px solid var(--gold); color: var(--gold); font-family: Inter, system-ui, sans-serif; font-size: 13px; font-weight: 900; }
+      .model-step b { display: block; margin-top: 20px; color: var(--navy); font-size: 19px; line-height: 1.28; }
+      .model-step p { margin-top: 10px; color: var(--muted); font-size: 14px; line-height: 1.65; }
+
+      .archetype-grid, .decision-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 26px; }
+      .archetype, .decision { border: 1px solid var(--line); background: var(--panel); padding: 20px; box-shadow: 0 10px 26px rgba(17,24,39,0.04); }
+      .archetype h3, .decision h3 { min-height: 58px; font-size: 20px; }
+      .archetype p, .decision p { margin-top: 12px; color: var(--muted); font-size: 14px; line-height: 1.65; }
+      .scoreline { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 18px; border-top: 1px solid var(--line); padding-top: 14px; }
+      .scoreline span { color: var(--muted); font-size: 12px; font-weight: 900; }
+      .scoreline b { color: var(--navy); font-family: Inter, system-ui, sans-serif; font-size: 28px; font-weight: 900; }
+
+      .doctrine { margin-top: 32px; display: grid; grid-template-columns: 0.7fr 1.3fr; gap: 22px; }
+      .doctrine-title { background: var(--navy); color: #fff; padding: 30px; box-shadow: var(--shadow); }
+      .doctrine-title h3 { color: #fff; font-size: 30px; }
+      .doctrine-title p { margin-top: 12px; color: #d0d5dd; line-height: 1.7; }
+      .doctrine-points { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .doctrine-points div { border: 1px solid var(--line); background: var(--panel); padding: 20px; }
+      .doctrine-points b { color: var(--navy); font-size: 18px; }
+      .doctrine-points p { margin-top: 8px; color: var(--muted); font-size: 14px; line-height: 1.65; }
+
+      .map-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) 420px; gap: 24px; margin-top: 28px; }
+      .map-stage { position: relative; min-height: 760px; border: 1px solid var(--line); background: #fbfaf7; box-shadow: var(--shadow); overflow: hidden; }
+      .map-title-strip { position: absolute; inset: 20px auto auto 20px; z-index: 2; width: min(450px, calc(100% - 40px)); border: 1px solid var(--line); background: rgba(255, 253, 248, 0.94); padding: 16px; }
+      .map-title-strip span { color: var(--gold); font-family: Inter, system-ui, sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 0.18em; text-transform: uppercase; }
+      .map-title-strip b { display: block; margin-top: 8px; color: var(--navy); font-size: 20px; line-height: 1.25; }
+      #assembly-map { width: 100%; height: 760px; display: block; }
+      .constituency { cursor: crosshair; transition: fill 0.14s ease, opacity 0.14s ease, stroke-width 0.14s ease; vector-effect: non-scaling-stroke; }
+      .constituency:hover { opacity: 1; stroke: #111827; stroke-width: 1.2; }
+      .map-loading { position: absolute; inset: 0; display: grid; place-items: center; padding: 40px; color: var(--muted); font-weight: 900; text-align: center; }
+      .side-panel { border: 1px solid var(--line); background: var(--panel); padding: 22px; box-shadow: var(--shadow); }
+      .side-panel .small { color: var(--muted); font-size: 13px; line-height: 1.7; }
+      .selected-title { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); }
+      .selected-title h3 { margin-top: 10px; font-size: 28px; }
+      .risk-pill { display: inline-flex; border: 1px solid var(--line); padding: 5px 8px; color: var(--navy); font-size: 12px; font-weight: 900; }
+      .risk-pill.risk { border-color: rgba(180, 95, 86, 0.35); background: var(--red-soft); }
+      .risk-pill.watch { border-color: rgba(189, 138, 41, 0.35); background: var(--amber-soft); }
+      .risk-pill.opportunity { border-color: rgba(88, 121, 166, 0.35); background: var(--blue-soft); }
+      .risk-pill.stable { border-color: rgba(111, 150, 116, 0.35); background: var(--green-soft); }
+      .metric-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
+      .metric-list div { border: 1px solid var(--line); padding: 12px; }
+      .metric-list span { display: block; color: var(--muted); font-size: 12px; font-weight: 800; }
+      .metric-list b { display: block; margin-top: 4px; color: var(--navy); font-family: Inter, system-ui, sans-serif; font-size: 24px; font-weight: 900; }
+      .recommendation { margin-top: 18px; border-left: 4px solid var(--gold); background: var(--cream); padding: 14px 16px; }
+      .recommendation span { color: var(--gold); font-size: 12px; font-weight: 900; }
+      .recommendation p { margin-top: 6px; color: var(--navy); font-size: 15px; font-weight: 800; line-height: 1.55; }
+      .legend { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 18px; }
+      .legend div { display: flex; align-items: center; justify-content: space-between; gap: 8px; border: 1px solid var(--line); padding: 9px; color: var(--muted); font-size: 12px; font-weight: 800; }
+      .legend i { width: 16px; height: 16px; border: 1px solid rgba(17, 24, 39, 0.12); }
+      .legend b { margin-left: auto; color: var(--navy); font-family: Inter, system-ui, sans-serif; }
+      .corridor { margin-top: 18px; }
+      .corridor button { display: block; width: 100%; border: 0; border-top: 1px solid var(--line); background: transparent; padding: 12px 0; text-align: left; cursor: pointer; }
+      .corridor button:hover b { color: var(--gold); }
+      .corridor button b { display: block; color: var(--navy); font-size: 14px; }
+      .corridor button span { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; }
+
+      .insight-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 28px; }
+      .insight { border: 1px solid var(--line); background: var(--panel); padding: 22px; box-shadow: var(--shadow); }
+      .insight p { margin-top: 12px; color: var(--navy); font-size: 18px; font-weight: 900; line-height: 1.5; }
+
+      .chart-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 22px; margin-top: 30px; }
+      .chart-card { border: 1px solid var(--line); background: var(--panel); padding: 22px; box-shadow: var(--shadow); }
+      .chart-card svg { width: 100%; height: 360px; display: block; }
+      .issue-row { display: grid; grid-template-columns: 170px 1fr 80px; gap: 12px; align-items: center; padding: 13px 0; border-bottom: 1px solid var(--line); }
+      .issue-row:last-child { border-bottom: 0; }
+      .issue-row b { color: var(--navy); font-size: 14px; }
+      .bar { height: 8px; background: #ece7dd; overflow: hidden; }
+      .bar i { display: block; height: 100%; background: var(--gold); }
+      .issue-row span { color: var(--muted); font-family: Inter, system-ui, sans-serif; font-size: 13px; font-weight: 900; text-align: right; }
+
+      .brief-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 30px; }
+      .brief { min-height: 300px; border: 1px solid var(--line); background: var(--panel); padding: 24px; box-shadow: var(--shadow); }
+      .brief h3 { padding-bottom: 14px; border-bottom: 2px solid var(--navy); }
+      .brief ul { margin: 18px 0 0; padding: 0; list-style: none; }
+      .brief li { display: grid; grid-template-columns: 8px 1fr; gap: 12px; margin-top: 14px; color: #303949; font-size: 15px; font-weight: 700; line-height: 1.6; }
+      .brief li::before { content: ""; width: 8px; height: 8px; margin-top: 8px; background: var(--gold); }
+
+      .ethics-note { margin-top: 24px; border: 1px dashed rgba(185, 130, 24, 0.6); background: rgba(251, 242, 223, 0.65); padding: 18px 20px; color: #344054; font-size: 14px; font-weight: 700; line-height: 1.75; }
+      .closing { border: 1px solid var(--navy); background: var(--navy); color: #fff; padding: 42px; box-shadow: var(--shadow); }
+      .closing h2 { color: #fff; }
+      .closing p { max-width: 1120px; margin-top: 22px; color: #e5e7eb; font-size: 24px; font-weight: 900; line-height: 1.65; }
+      .footnote { margin-top: 18px; color: var(--muted); font-size: 12px; line-height: 1.7; }
 
       @media (max-width: 1180px) {
-        .hero-grid,
-        .two-col,
-        .map-layout,
-        .chart-grid,
-        .comparison {
-          grid-template-columns: 1fr;
-        }
-
-        .side-panel {
-          order: -1;
-        }
-
-        .kpi-grid,
-        .strategic-strip,
-        .advantage-grid,
-        .narrative-spine,
-        .operating-model,
-        .archetype-grid,
-        .insight-grid,
-        .brief-grid {
-          grid-template-columns: repeat(2, 1fr);
-        }
-
-        .model-step:nth-child(2n) {
-          border-right: 0;
-        }
+        .hero-grid, .two-col, .map-layout, .chart-grid, .comparison, .doctrine { grid-template-columns: 1fr; }
+        .side-panel { order: -1; }
+        .kpi-grid, .strategic-strip, .storyline, .narrative-spine, .operating-model, .archetype-grid, .decision-grid, .insight-grid, .brief-grid, .doctrine-points { grid-template-columns: repeat(2, 1fr); }
+        .model-step:nth-child(2n) { border-right: 0; }
       }
-
       @media (max-width: 760px) {
-        .topbar {
-          align-items: flex-start;
-          flex-direction: column;
-          padding: 12px 16px;
-        }
-
-        .topbar > div {
-          align-items: flex-start;
-          flex-direction: column;
-        }
-
-        .topbar span {
-          max-width: 100%;
-        }
-
-        .topbar nav {
-          justify-content: flex-start;
-          flex-wrap: wrap;
-        }
-
-        .page {
-          width: min(100% - 24px, 1480px);
-        }
-
-        .slide {
-          padding: 38px 0;
-        }
-
-        .kpi-grid,
-        .signal-list,
-        .strategic-strip,
-        .advantage-grid,
-        .narrative-spine,
-        .operating-model,
-        .archetype-grid,
-        .insight-grid,
-        .brief-grid,
-        .metric-list,
-        .legend {
-          grid-template-columns: 1fr;
-        }
-
-        .model-step {
-          border-right: 0;
-          border-bottom: 1px solid var(--line);
-        }
-
-        .model-step:last-child {
-          border-bottom: 0;
-        }
-
-        .narrative-spine div {
-          border-right: 0;
-          border-bottom: 1px solid var(--line);
-        }
-
-        .narrative-spine div:last-child {
-          border-bottom: 0;
-        }
-
-        .map-stage,
-        #assembly-map {
-          min-height: 560px;
-          height: 560px;
-        }
+        .topbar { align-items: flex-start; flex-direction: column; padding: 12px 16px; }
+        .topbar > div { align-items: flex-start; flex-direction: column; }
+        .topbar span { max-width: 100%; }
+        .topbar nav { justify-content: flex-start; flex-wrap: wrap; }
+        .page { width: min(100% - 24px, 1480px); }
+        .slide { padding: 38px 0; }
+        .kpi-grid, .signal-list, .strategic-strip, .storyline, .narrative-spine, .operating-model, .archetype-grid, .decision-grid, .insight-grid, .brief-grid, .metric-list, .legend, .doctrine-points { grid-template-columns: 1fr; }
+        .model-step { border-right: 0; border-bottom: 1px solid var(--line); }
+        .model-step:last-child { border-bottom: 0; }
+        .narrative-spine div { border-right: 0; border-bottom: 1px solid var(--line); }
+        .narrative-spine div:last-child { border-bottom: 0; }
+        .map-stage, #assembly-map { min-height: 560px; height: 560px; }
+        .issue-row { grid-template-columns: 1fr; }
+        h1 { font-size: clamp(42px, 13vw, 70px); }
       }
     </style>
   </head>
   <body>
     <header class="topbar">
       <div>
-        <strong>गोपनीय</strong>
-        <span>महाराष्ट्र नगर विकास विभाग | गोपनीय जनभावना व नेतृत्व बुद्धिमत्ता | WhatsUp.city</span>
+        <strong>गोपनीय मसुदा</strong>
+        <span>महाराष्ट्र नगर विकास विभाग | सेवा-आधारित जनभावना, लोकविश्वास व नेतृत्व पूर्वसूचना | WhatsUp.city</span>
       </div>
       <nav aria-label="Presentation navigation">
-        <a href="#premise">आधार</a>
-        <a href="#edge">सामर्थ्य</a>
+        <a href="#opening">संदर्भ</a>
+        <a href="#why-now">का आत्ता</a>
+        <a href="#doctrine">सिद्धांत</a>
         <a href="#model">यंत्रणा</a>
-        <a href="#map">विधानसभा नकाशा</a>
+        <a href="#map">नकाशा</a>
         <a href="#reputation">प्रतिमा</a>
-        <a href="#brief">निर्णय</a>
+        <a href="#brief">कृती</a>
       </nav>
     </header>
 
     <main class="page">
-      <section class="slide">
+      <section id="opening" class="slide">
         <div class="hero-grid">
           <div>
-            <div class="eyebrow">महाराष्ट्र शहरी जनभावना व नेतृत्व बुद्धिमत्ता ग्रिड</div>
-            <h1>WhatsUp.city राजकीय बुद्धिमत्ता कमांड सेंटर</h1>
-            <p class="lead">प्रत्येक विधानसभा मतदारसंघ, प्रत्येक शहरी वॉर्ड, प्रत्येक नागरिक संवाद — सर्वेक्षणानंतर नव्हे, असंतोष उसळण्यापूर्वी नेतृत्व निर्णयक्षमतेमध्ये.</p>
+            <div class="eyebrow">महाराष्ट्र शहरी जनभावना व लोकविश्वास ग्रिड</div>
+            <h1>WhatsUp.city जनभावना कमांड सेंटर</h1>
+            <p class="lead">
+              शहरातील प्रत्येक तक्रार, प्रत्येक फोटो, प्रत्येक प्रतिसाद आणि प्रत्येक निवारण — केवळ सेवा व्यवहार नाही; तो शासनावरील विश्वासाचा जिवंत राजकीय-प्रशासकीय संकेत आहे.
+            </p>
             <p class="sublead">
-              मा. उपमुख्यमंत्री एकनाथ शिंदे व महाराष्ट्र नगर विकास विभागासाठी सत्यापित नागरिक संवादांवर आधारित जनभावना, शासन प्रतिसादक्षमता, नेतृत्व प्रतिमा, कथानक संधी आणि पूर्वसूचना विश्लेषण.
+              मा. उपमुख्यमंत्री एकनाथ शिंदे व महाराष्ट्र नगर विकास विभागासाठी WhatsUp.city नागरिक सेवा, तक्रार निवारण, सर्वेक्षण, देयके, QR-आधारित सेवा आणि नागरिक अभिप्राय यांना एकत्र करून विधानसभा, शहर आणि वॉर्ड पातळीवर जनभावना, जोखीम, लोकविश्वास आणि नेतृत्व प्रतिमा पूर्वसूचना दाखवते.
             </p>
           </div>
           <aside class="hero-card">
-            <strong>बाह्य सल्लागार कक्ष नव्हे; शासन-सेवा संकेतांवर उभे असलेले स्वमालकीचे बुद्धिमत्ता संचालन तंत्र.</strong>
+            <strong>कथानकाचा केंद्रबिंदू: जनभावना बाहेरून ऐकायची नाही; ती नागरिक सेवा प्रवाहातून प्रत्यक्ष मोजायची.</strong>
             <p>
-              क्षेत्रीय गोष्टी, नमुना सर्वेक्षणे आणि समाजमाध्यम निरीक्षण हे बाह्य संकेत आहेत. WhatsUp.city कडे सत्यापित नागरिक हेतू आहे: तक्रार, फोटो, ध्वनी संदेश, निवारण वेळ, समाधान गुणांकन आणि वरिष्ठांकडे गेलेली नोंद यांचे राजकीय बुद्धिमत्ता संकेतांमध्ये रूपांतर.
+              पारंपरिक राजकीय अभिप्राय अनेकदा उशिरा, तुकड्यांत आणि व्यक्तिनिष्ठ येतो. WhatsUp.city कडे पहिल्या-पक्षाचा सत्यापित नागरिक संकेत आहे — मोबाइल संवाद, स्थान, विषय, पुरावा, विभागीय प्रतिसाद, निवारण वेळ आणि समाधान. त्यामुळे नेतृत्वाला “काय बोलले जाते” एवढेच नाही, तर “काय घडत आहे आणि कुठे हस्तक्षेप केल्यास विश्वास वाढेल” हे दिसते.
             </p>
           </aside>
         </div>
 
         <div class="kpi-grid" aria-label="Top strategic KPIs">
-          <div class="kpi"><span>राज्य नागरी जनभावना निर्देशांक</span><b>72.4</b><em>/100 स्थिर सकारात्मक</em></div>
-          <div class="kpi"><span>मा. उपमुख्यमंत्री प्रतिमा निर्देशांक</span><b>78.6</b><em>+8.7% मागील ३० दिवस</em></div>
-          <div class="kpi"><span>उच्च-जोखीम विधानसभा क्षेत्र</span><b id="hero-risk">--</b><em>तत्काळ निरीक्षण</em></div>
-          <div class="kpi"><span>प्रतिमा वृद्धी संधी</span><b id="hero-opportunity">--</b><em>पुराव्यावर आधारित</em></div>
-          <div class="kpi"><span>पूर्वसूचना अचूकता</span><b>86%</b><em>मागील तिमाही</em></div>
+          <div class="kpi"><span>राज्य शहरी लोकविश्वास निर्देशांक</span><b>72.4</b><em>/100 नियंत्रित सकारात्मक</em></div>
+          <div class="kpi"><span>नेतृत्व प्रतिमा योगदान निर्देशांक</span><b>78.6</b><em>+8.7% मागील ३० दिवस</em></div>
+          <div class="kpi"><span>उच्च-संवेदनशील विधानसभा क्षेत्र</span><b id="hero-risk">--</b><em>तातडीचे निरीक्षण</em></div>
+          <div class="kpi"><span>विश्वास-वृद्धी संधी क्षेत्र</span><b id="hero-opportunity">--</b><em>पुराव्यावर आधारित संवाद</em></div>
+          <div class="kpi"><span>पूर्वसूचना मॉडेल विश्वसनीयता</span><b>86%</b><em>मागील तिमाही पॅटर्न</em></div>
         </div>
+
         <div class="strategic-strip">
           <div>
             <span>मुख्य प्रतिपादन</span>
-            <b>राजकीय विश्वास हा सेवा-अनुभवातून घडतो.</b>
-            <p>जिथे नागरिकांना शासन प्रतिसाद दिसतो, तिथे नेतृत्वावरील विश्वास मोजता येण्याजोगा वाढतो.</p>
+            <b>सेवा अनुभव म्हणजे लोकविश्वासाची पहिली प्रयोगशाळा.</b>
+            <p>जिथे नागरिकाला शासनाचा प्रतिसाद दिसतो, तिथे नेतृत्वावरील विश्वास प्रत्यक्ष, मोजता येण्याजोगा आणि वाढवता येण्याजोगा बनतो.</p>
           </div>
           <div>
             <span>डेटा सामर्थ्य</span>
-            <b>अंदाजापेक्षा सत्यापित संकेत अधिक अचूक.</b>
-            <p>मतसर्वेक्षण लोक काय सांगतात ते पकडते; WhatsUp.city लोकांनी शासनाकडे प्रत्यक्ष काय मागितले ते पकडते.</p>
+            <b>अंदाजापेक्षा सत्यापित नागरिक हेतू अधिक महत्त्वाचा.</b>
+            <p>मतसर्वेक्षण नागरिक काय सांगतात ते मोजते; WhatsUp.city नागरिकांनी शासनाकडे प्रत्यक्ष काय मागितले आणि शासनाने काय केले ते मोजते.</p>
           </div>
           <div>
             <span>निर्णय सामर्थ्य</span>
-            <b>आक्रोश होण्यापूर्वी पूर्वसूचना.</b>
-            <p>वॉर्ड, शहर आणि विधानसभा स्तरावर असंतोषाची गती वाढताना नेतृत्वाला आधी संकेत मिळतात.</p>
+            <b>वादळ येण्यापूर्वी दाब-रेषा दिसते.</b>
+            <p>वॉर्ड, शहर आणि विधानसभा स्तरावर असंतोषाची गती वाढताना नेतृत्वाला आधीच कृतीची खिडकी मिळते.</p>
           </div>
         </div>
       </section>
 
-      <section id="premise" class="slide compact">
-        <div class="eyebrow">कथानकाचा धोरणात्मक आधार</div>
-        <h2>शहरातील प्रत्येक सेवा-अनुभव हा नेतृत्वावरील विश्वासाचा मोजता येणारा संकेत आहे</h2>
-        <div class="two-col">
-          <div class="thesis-panel">
-            <h3>बाहेरून हे नागरिक सेवा वितरण दिसते; आतून हे महाराष्ट्राच्या शहरी जनभावनेचे नियंत्रण-पटल आहे.</h3>
+      <section id="why-now" class="slide compact">
+        <div class="eyebrow">का आत्ता: शहरी शासनाचा नवा निर्णायक क्षण</div>
+        <h2>नागरिकांचा रोष रस्त्यावर येण्यापूर्वी तो WhatsApp, फोटो, लोकेशन आणि तक्रार भाषेत दिसू लागतो</h2>
+        <p class="sublead">
+          महाराष्ट्राचे शहरी राजकारण आता केवळ मोठ्या घोषणांनी किंवा सभांनी चालत नाही. रोजचा पाणीपुरवठा, खड्डा, कचरा, कर, प्रमाणपत्र, पावसाळी पाणी साचणे आणि स्थानिक प्रतिसाद यावरून नागरिक शासनाचा दर्जा ठरवतो. जो नेता हे सूक्ष्म संकेत आधी वाचतो, तोच कथा घडण्याआधी हस्तक्षेप करू शकतो.
+        </p>
+
+        <div class="storyline">
+          <article class="story-card">
+            <span>१. आवाज बदलला</span>
+            <b>नागरिक आता तक्रार लिहीत नाही; तो फोटो, लोकेशन आणि भावनिक भाषेत शासनाला संकेत देतो.</b>
+            <p>हा संकेत जर पकडला नाही, तर तो पुढे समाजमाध्यम, स्थानिक बातमी आणि राजकीय असंतोष बनतो.</p>
+          </article>
+          <article class="story-card">
+            <span>२. गती वाढली</span>
+            <b>एखाद्या वॉर्डातील ५० तक्रारी कधी शहराचा प्रश्न बनतात हे वेळेवर ओळखणे गरजेचे.</b>
+            <p>गती, पुनरावृत्ती आणि निवारण विलंब यांचा एकत्रित दाब हा खरा पूर्वसूचना संकेत आहे.</p>
+          </article>
+          <article class="story-card">
+            <span>३. श्रेय हरवते</span>
+            <b>शासन काम करते; पण निवारणाची कथा नागरिकापर्यंत पोहोचली नाही तर विश्वास जमा होत नाही.</b>
+            <p>निवारणानंतरचा संदेश, पुरावा आणि समाधान पडताळणी यामुळे सेवेचे लोकविश्वासात रूपांतर होते.</p>
+          </article>
+          <article class="story-card dark">
+            <span>४. उपाय</span>
+            <b>WhatsUp.city सेवा प्रवाहाला लोकविश्वास व नेतृत्व निर्णय यंत्रणेत बदलते.</b>
+            <p>एकाच प्लॅटफॉर्मवर संकेत, निवारण, भावना, पूर्वसूचना आणि कृती-प्राथमिकता.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="doctrine" class="slide compact">
+        <div class="eyebrow">रणनीतिक सिद्धांत</div>
+        <h2>“सेवा → समाधान → विश्वास → नेतृत्व प्रतिमा” हीच शहरी शासनाची नवी परिणाम-साखळी</h2>
+        <div class="doctrine">
+          <div class="doctrine-title">
+            <h3>नवा सिद्धांत</h3>
             <p>
-              तक्रार निवारण, प्रतिसाद वेळ, नागरिक समाधान, भावनिक भाषा आणि पुनरावृत्ती मुद्दे यांचा नेतृत्व प्रतिमा, वॉर्ड जोखीम आणि शहरनिहाय विश्वास यांच्यावर होणारा परिणाम मोजता येतो.
+              लोकविश्वास हा भाषणातून नव्हे, तर नागरिकाला मिळालेल्या प्रत्यक्ष सेवा-अनुभवातून बांधला जातो. WhatsUp.city त्या अनुभवाला डेटा, पूर्वसूचना आणि निर्णयात बदलते.
             </p>
           </div>
-          <div class="signal-list">
-            <div><b>जनभावना निर्देशांक</b><span>सत्यापित WhatsApp संवाद, नागरिक अभिप्राय आणि तक्रारींच्या भावनिक स्वरातून.</span></div>
-            <div><b>नेतृत्व प्रतिमा मापन</b><span>शासन वितरणाचा मा. उपमुख्यमंत्री प्रतिमा योगदानावर होणारा परिणाम.</span></div>
-            <div><b>विषयाधारित असंतोष नकाशा</b><span>पाणी, रस्ते, कचरा, कर आणि पावसाळी जोखीम यांच्या वाढत्या गतीचे विश्लेषण.</span></div>
-            <div><b>पूर्वसूचना प्रणाली</b><span>माध्यम संवेदनशीलता, सामाजिक तीव्रता आणि न सुटलेल्या असंतोष क्लस्टर्सचे अंदाज.</span></div>
+          <div class="doctrine-points">
+            <div><b>सेवा संकेत</b><p>तक्रार, देयक, प्रमाणपत्र, QR स्कॅन, सर्वेक्षण आणि अभिप्राय हे शहरी जनभावनेचे प्राथमिक संकेत.</p></div>
+            <div><b>भावनिक संदर्भ</b><p>नागरिकाची भाषा, तातडी, पुनरावृत्ती आणि समाधान गुणांकनातून असंतोषाची तीव्रता समजते.</p></div>
+            <div><b>भौगोलिक बुद्धिमत्ता</b><p>वॉर्ड, प्रभाग, शहर आणि विधानसभा पातळीवर समस्या-घनता व जोखीम क्लस्टर्स दिसतात.</p></div>
+            <div><b>नेतृत्व अभिप्रत्यय</b><p>कोणत्या हस्तक्षेपाने विश्वास वाढला, कुठे प्रतिमा नुकसान रोखले आणि कुठे संवाद आवश्यक आहे हे मोजले जाते.</p></div>
           </div>
         </div>
 
         <div class="narrative-spine">
-          <div><span>१. नागरिक बोलतो</span><b>शहराचा खरा आवाज सेवा-विनंतीत दडलेला असतो.</b><p>फोन, फोटो, संदेश, तक्रार आणि समाधान गुणांकन हे सर्व जनभावनेचे प्राथमिक संकेत आहेत.</p></div>
-          <div><span>२. संकेत सत्यापित होतो</span><b>तो अफवा राहत नाही; तो नोंदवलेला शासन संकेत बनतो.</b><p>वॉर्ड, संस्था, वेळ, विषय आणि निवारण इतिहासामुळे संकेताची विश्वासार्हता वाढते.</p></div>
-          <div><span>३. जोखीम दिसते</span><b>असंतोष कुठे वाढतो आहे हे नकाशावर उघड होते.</b><p>विधानसभा, शहर आणि वॉर्ड पातळीवर तक्रार दाब व भावनिक तीव्रता मोजली जाते.</p></div>
-          <div><span>४. हस्तक्षेप ठरतो</span><b>नेतृत्वाला रंग नव्हे, कृतीची खिडकी मिळते.</b><p>२४/४८/७२ तासांत कोणता प्रतिसाद द्यायचा याची प्राथमिकता स्पष्ट होते.</p></div>
-          <div><span>५. विश्वास वाढतो</span><b>निवारणाचे राजकीय भांडवलात रूपांतर होते.</b><p>समाधान बदल, विश्वास पुनर्बांधणी आणि प्रतिमा योगदान सतत मोजले जाते.</p></div>
+          <div><span>१. नागरिक बोलतो</span><b>शहराचा खरा आवाज सेवा-विनंतीत दडलेला असतो.</b><p>मोबाइल संवाद, फोटो, ध्वनी, लोकेशन आणि समाधान गुणांकन हे सर्व जनभावनेचे जिवंत संकेत आहेत.</p></div>
+          <div><span>२. संकेत सत्यापित होतो</span><b>अफवा नाही; शासनाला नोंदवलेला पुराव्याधारित संकेत.</b><p>वॉर्ड, संस्था, वेळ, विषय आणि निवारण इतिहासामुळे संकेताची विश्वासार्हता वाढते.</p></div>
+          <div><span>३. दाब नकाशावर दिसतो</span><b>असंतोष कुठे वाढतो आहे हे रंगांमध्ये नव्हे, निर्णयात दिसते.</b><p>तक्रार दाब, भावना आणि विलंब यावरून जोखीम वाढते की स्थिर राहते ते स्पष्ट होते.</p></div>
+          <div><span>४. हस्तक्षेप ठरतो</span><b>नेतृत्वाला २४/४८/७२ तासांची कृती खिडकी मिळते.</b><p>कोणत्या विभागाशी समन्वय, कोणता संदेश आणि कोणता पुरावा नागरिकापर्यंत द्यायचा हे ठरते.</p></div>
+          <div><span>५. विश्वास मोजला जातो</span><b>निवारणाचे लोकविश्वासात आणि प्रतिमा योगदानात रूपांतर.</b><p>समाधान बदल, पुनरावृत्ती कमी होणे आणि सकारात्मक अभिप्राय सतत मोजला जातो.</p></div>
         </div>
       </section>
 
       <section id="edge" class="slide compact">
         <div class="eyebrow">बाह्य सल्लागार पद्धतींपलीकडील सामर्थ्य</div>
-        <h2>व्यक्ती किंवा एजन्सीवर अवलंबून नसलेली, राज्याची स्वतःची क्षणोक्षणी राजकीय बुद्धिमत्ता क्षमता</h2>
+        <h2>ही बाह्य एजन्सीची “रिपोर्टिंग” क्षमता नाही; ही राज्याची स्वतःची सतत चालणारी जनभावना ऑपरेटिंग सिस्टीम आहे</h2>
         <p class="sublead">
-          पारंपरिक राजकीय सल्लागार पद्धती क्षणचित्र देतात. WhatsUp.city नगर विकास विभागाला सतत चालणारा, भौगोलिकदृष्ट्या मॅप केलेला, पडताळता येणारा आणि कृतीशी जोडलेला नागरिक संकेत प्रवाह देते. त्यामुळे निर्णय “काय वाटते” यावर नाही, तर “काय घडत आहे, कुठे वाढत आहे, कोणत्या हस्तक्षेपाने विश्वास सुधारेल” यावर आधारित होतो.
+          पारंपरिक सल्लागार पद्धती क्षणचित्र देतात. WhatsUp.city नगर विकास विभागाला सतत चालणारा, स्थानाशी जोडलेला, पडताळता येणारा आणि कृतीशी जोडलेला नागरिक संकेत प्रवाह देते. त्यामुळे निर्णय “काय वाटते” यावर नाही, तर “काय घडते आहे, कुठे वाढते आहे, कोणत्या हस्तक्षेपाने विश्वास सुधारेल” यावर आधारित होतो.
         </p>
 
         <div class="comparison">
           <article>
-            <h3>बाह्य सल्लागार कक्षाच्या मर्यादा</h3>
+            <h3>पारंपरिक अभिप्राय प्रणालींच्या मर्यादा</h3>
             <ul>
-              <li>नमुना सर्वेक्षण, क्षेत्रीय अभिप्राय किंवा समाजमाध्यम आवाजावर आधारित विलंबित संकेत.</li>
-              <li>माहिती व कृती यांच्यामध्ये तुटलेली प्रशासकीय अंमलबजावणी साखळी.</li>
+              <li>नमुना सर्वेक्षण, राजकीय कार्यकर्त्यांचे अभिप्राय किंवा समाजमाध्यम आवाजावर आधारित विलंबित संकेत.</li>
+              <li>माहिती आणि प्रशासकीय कृती यांच्यामध्ये तुटलेली अंमलबजावणी साखळी.</li>
               <li>वॉर्डनिहाय सेवा अनुभव आणि नेतृत्व प्रतिमा परिणाम-श्रेय मोजणे कठीण.</li>
-              <li>एजन्सी किंवा व्यक्ती बदलल्यास संस्थात्मक स्मृती कमी होते.</li>
+              <li>व्यक्ती किंवा एजन्सी बदलल्यास संस्थात्मक स्मृती आणि पॅटर्न हरवतात.</li>
               <li>माध्यम आवाज आणि वास्तविक नागरी स्थिती यातील फरक वेळेवर ओळखणे अवघड.</li>
             </ul>
           </article>
           <article class="winner">
             <h3>WhatsUp.city बुद्धिमत्ता संचालन तंत्राचे सामर्थ्य</h3>
             <ul>
-              <li>सत्यापित पहिल्या-पक्षाचा नागरिक संवाद: तक्रार, देयक, प्रमाणपत्र, सूचना, सर्वेक्षण, अभिप्राय.</li>
-              <li>नागरिक मुद्दा → निवारण → समाधान → नेतृत्व प्रतिमा अशी बंद-वर्तुळ परिणाम मोजणी.</li>
+              <li>सत्यापित पहिल्या-पक्षाचा नागरिक संवाद: तक्रार, देयक, प्रमाणपत्र, सूचना, QR स्कॅन, सर्वेक्षण आणि अभिप्राय.</li>
+              <li>नागरिक मुद्दा → प्रशासकीय प्रतिसाद → निवारण → समाधान → लोकविश्वास अशी बंद-वर्तुळ परिणाम मोजणी.</li>
               <li>२८८ विधानसभा, शहर, वॉर्ड आणि विषय स्तरावर एकाच बुद्धिमत्ता ग्रिडमधून निरीक्षण.</li>
-              <li>राज्याच्या मालकीचा ऐतिहासिक जनभावना आलेख आणि पुनरावृत्ती मुद्द्यांची स्मृती.</li>
+              <li>राज्याच्या मालकीचा ऐतिहासिक जनभावना आलेख आणि पुनरावृत्ती मुद्द्यांची संस्थात्मक स्मृती.</li>
               <li>संकट होण्याआधी मुद्द्याची गती, माध्यम संवेदनशीलता आणि असंतोष क्लस्टर ओळख.</li>
             </ul>
           </article>
-        </div>
-
-        <div class="advantage-grid">
-          <div class="advantage-card"><small>भक्कम आधार ०१</small><b>सत्यापित नागरिक संकेत</b><p>WhatsApp संवाद, तक्रार पुरावे, निवारण वेळ आणि समाधान गुणांकन यामुळे प्रत्येक संकेत तपासता येण्याजोगा राहतो.</p></div>
-          <div class="advantage-card"><small>भक्कम आधार ०२</small><b>विधानसभा + वॉर्ड सूक्ष्मता</b><p>एकाच मतदारसंघात कोणता वॉर्ड स्थिर, कोणता असंतुष्ट, कोणता कथानक-संधीसाठी तयार आहे हे दिसते.</p></div>
-          <div class="advantage-card"><small>भक्कम आधार ०३</small><b>प्रतिमा परिणाम मोजणी</b><p>कुठल्या नागरी कामगिरीने मा. उपमुख्यमंत्री प्रतिमा योगदान वाढते किंवा कमी होते ते मोजता येते.</p></div>
-          <div class="advantage-card"><small>भक्कम आधार ०४</small><b>कृतीक्षम पूर्वसूचना</b><p>फलक फक्त रंग दाखवत नाही; प्रतिसादाची वेळ, हस्तक्षेप प्रकार आणि अपेक्षित विश्वास परिणाम सांगतो.</p></div>
         </div>
       </section>
 
@@ -1229,27 +466,27 @@
         <div class="eyebrow">कमांड सेंटर संचालन यंत्रणा</div>
         <h2>जनभावना बुद्धिमत्तेपासून शासन हस्तक्षेपापर्यंत: ५-स्तरीय नेतृत्व निर्णय यंत्रणा</h2>
         <div class="operating-model">
-          <div class="model-step"><span>01</span><b>संकेत संकलन</b><p>WhatsApp नागरिक संवाद, तक्रार पुरावे, सर्वेक्षण प्रतिसाद, देयके, सूचना आणि अभिप्राय संकलित.</p></div>
-          <div class="model-step"><span>02</span><b>विश्वासार्हता पडताळणी</b><p>मोबाइल, संस्था, वॉर्ड, मुद्दा प्रकार, वेळ आणि सेवा-प्रवाह यामुळे संकेताची विश्वासार्हता वाढते.</p></div>
-          <div class="model-step"><span>03</span><b>बुद्धिमत्ता गुणांकन</b><p>जनभावना, तक्रार दाब, असंतोष गती, पुनरावृत्ती घनता आणि वरिष्ठांकडे जाण्याची शक्यता मोजली जाते.</p></div>
-          <div class="model-step"><span>04</span><b>नेतृत्व निर्णय</b><p>२४/४८/७२ तास प्रतिसाद खिडकी, अधिकारी समन्वय आणि नागरिक अद्ययावत धोरण निश्चित.</p></div>
-          <div class="model-step"><span>05</span><b>प्रतिमा अभिप्रत्यय</b><p>निवारणानंतर समाधान बदल, विश्वास पुनर्बांधणी गुणांक आणि नेतृत्व प्रतिमा योगदान मोजणी.</p></div>
+          <div class="model-step"><span>01</span><b>संकेत संकलन</b><p>WhatsApp नागरिक संवाद, तक्रार पुरावे, लोकेशन, सर्वेक्षण, देयके, सूचना आणि अभिप्राय एकत्र संकलित.</p></div>
+          <div class="model-step"><span>02</span><b>विश्वासार्हता पडताळणी</b><p>मोबाइल, संस्था, वॉर्ड, मुद्दा प्रकार, वेळ, पुरावा आणि सेवा-प्रवाह यामुळे संकेताची विश्वासार्हता वाढते.</p></div>
+          <div class="model-step"><span>03</span><b>बुद्धिमत्ता गुणांकन</b><p>जनभावना, तक्रार दाब, असंतोष गती, पुनरावृत्ती घनता, विलंब आणि वरिष्ठांकडे जाण्याची शक्यता मोजली जाते.</p></div>
+          <div class="model-step"><span>04</span><b>नेतृत्व निर्णय</b><p>२४/४८/७२ तास प्रतिसाद खिडकी, अधिकारी समन्वय, नागरिक अद्ययावत आणि पुरावा-आधारित संवाद निश्चित.</p></div>
+          <div class="model-step"><span>05</span><b>लोकविश्वास अभिप्रत्यय</b><p>निवारणानंतर समाधान बदल, पुनरावृत्ती कमी होणे, विश्वास पुनर्बांधणी आणि नेतृत्व प्रतिमा योगदान मोजणी.</p></div>
         </div>
 
         <div class="archetype-grid">
           <div class="archetype">
             <h3>उच्च असंतोष, उच्च दृश्यता</h3>
-            <p>माध्यम संवेदनशीलता व नागरिक असंतोष गती दोन्ही वाढलेली. जलद, दृश्यमान आणि पुराव्यांसह प्रतिसाद आवश्यक.</p>
+            <p>माध्यम संवेदनशीलता आणि नागरिक असंतोष गती दोन्ही वाढलेली. जलद, दृश्यमान आणि पुराव्यांसह प्रतिसाद आवश्यक.</p>
             <div class="scoreline"><span>प्रतिसाद खिडकी</span><b>२४ तास</b></div>
           </div>
           <div class="archetype">
-            <h3>शांत पण वाढता असंतोष</h3>
+            <h3>शांत पण वाढता दाब</h3>
             <p>मोठा सार्वजनिक आवाज नसला तरी पुनरावृत्ती मुद्द्यांची घनता वाढते. स्थानिक अधिकारी आणि नागरिक अद्ययावत हस्तक्षेप आवश्यक.</p>
             <div class="scoreline"><span>ओळख सामर्थ्य</span><b>२.३ पट</b></div>
           </div>
           <div class="archetype">
-            <h3>प्रतिमा वृद्धी क्षेत्र</h3>
-            <p>निवारणानंतर जनभावना बदल सकारात्मक. पुराव्यावर आधारित शासन-संवाद संधी उपलब्ध.</p>
+            <h3>विश्वास-वृद्धी क्षेत्र</h3>
+            <p>निवारणानंतर जनभावना बदल सकारात्मक. पुराव्यावर आधारित शासन-संवाद आणि सेवा श्रेय संधी उपलब्ध.</p>
             <div class="scoreline"><span>विश्वास परिणाम</span><b>+18</b></div>
           </div>
           <div class="archetype">
@@ -1262,26 +499,24 @@
 
       <section id="map" class="slide">
         <div class="eyebrow">विधानसभा मतदारसंघ बुद्धिमत्ता स्तर</div>
-        <h2>महाराष्ट्र विधानसभा मतदारसंघ जनभावना नकाशा</h2>
+        <h2>महाराष्ट्र विधानसभा जनभावना नकाशा</h2>
         <p class="sublead">
-          सर्व २८८ विधानसभा मतदारसंघांवर नागरी संवाद संकेतांचा विश्लेषण स्तर. प्रत्येक क्षेत्रात जनभावना गुण, तक्रार दाब, मा. उपमुख्यमंत्री प्रतिमा योगदान आणि जोखीम प्रकार दिसतो.
+          २८८ विधानसभा मतदारसंघांवर सेवा-आधारित नागरिक संकेतांचा विश्लेषण स्तर. प्रत्येक क्षेत्रात लोकविश्वास गुण, तक्रार दाब, नेतृत्व प्रतिमा योगदान आणि जोखीम प्रकार दिसतो. हे निवडणूक-प्रोफाइलिंग नसून, शहरी सेवा प्रतिसाद व लोकविश्वास व्यवस्थापनासाठी प्रशासकीय पूर्वसूचना पटल आहे.
         </p>
 
         <div class="map-layout">
           <div class="map-stage">
             <div class="map-title-strip">
               <span>मुख्य दृश्य</span>
-              <b>विधानसभा-स्तरीय राजकीय बुद्धिमत्ता पटल</b>
+              <b>विधानसभा-स्तरीय शहरी जनभावना व सेवा-दाब पटल</b>
             </div>
             <div id="map-loading" class="map-loading">विधानसभा मतदारसंघ GeoJSON लोड होत आहे...</div>
-            <svg id="assembly-map" role="img" aria-label="महाराष्ट्र विधानसभा मतदारसंघ राजकीय बुद्धिमत्ता नकाशा"></svg>
+            <svg id="assembly-map" role="img" aria-label="महाराष्ट्र विधानसभा मतदारसंघ जनभावना नकाशा"></svg>
           </div>
 
           <aside class="side-panel">
             <div class="eyebrow">निवडलेला मतदारसंघ</div>
-            <p class="small">
-              नकाशावरील कोणत्याही मतदारसंघावर स्पर्श किंवा क्लिक केल्यास त्या क्षेत्रातील नागरिक संकेतांचे नेतृत्व-स्तर विश्लेषण दिसेल.
-            </p>
+            <p class="small">नकाशावरील कोणत्याही मतदारसंघावर स्पर्श किंवा क्लिक केल्यास त्या क्षेत्रातील नागरिक संकेतांचे नेतृत्व-स्तर विश्लेषण दिसेल.</p>
 
             <div class="selected-title">
               <span id="selected-bucket" class="risk-pill stable">लोड होत आहे</span>
@@ -1290,10 +525,10 @@
             </div>
 
             <div class="metric-list">
-              <div><span>जनभावना</span><b id="selected-sentiment">--</b></div>
+              <div><span>लोकविश्वास गुण</span><b id="selected-sentiment">--</b></div>
               <div><span>तक्रार दाब</span><b id="selected-pressure">--</b></div>
               <div><span>नेतृत्व प्रतिमा योगदान</span><b id="selected-reputation">--</b></div>
-              <div><span>वरिष्ठांकडे जाण्याची शक्यता</span><b id="selected-escalation">--</b></div>
+              <div><span>वरिष्ठ स्तर संवेदनशीलता</span><b id="selected-escalation">--</b></div>
             </div>
 
             <div class="recommendation">
@@ -1302,10 +537,10 @@
             </div>
 
             <div class="legend" aria-label="Map legend">
-              <div><i style="background: var(--green-soft)"></i> सकारात्मक स्थैर्य <b id="count-stable">--</b></div>
+              <div><i style="background: var(--green-soft)"></i> विश्वास स्थैर्य <b id="count-stable">--</b></div>
               <div><i style="background: var(--amber-soft)"></i> निरीक्षण आवश्यक <b id="count-watch">--</b></div>
-              <div><i style="background: var(--red-soft)"></i> तातडीचा धोका <b id="count-risk">--</b></div>
-              <div><i style="background: var(--blue-soft)"></i> प्रतिमा संधी <b id="count-opportunity">--</b></div>
+              <div><i style="background: var(--red-soft)"></i> तातडीची सेवा-जोखीम <b id="count-risk">--</b></div>
+              <div><i style="background: var(--blue-soft)"></i> विश्वास-वृद्धी संधी <b id="count-opportunity">--</b></div>
             </div>
 
             <div class="corridor">
@@ -1317,55 +552,65 @@
 
         <div class="insight-grid">
           <div class="insight"><span>बुद्धिमत्ता निरीक्षण</span><p>उच्च तक्रार दाब आणि विलंबित निवारण असलेल्या विधानसभा क्षेत्रात नेतृत्व प्रतिमेवरील नकारात्मक परिणाम वेगाने वाढतो.</p></div>
-          <div class="insight"><span>पूर्वसूचना</span><p>शहरी व उपनगरी मतदारसंघांत पावसाळी पाणी साचणे, पाणीपुरवठा आणि रस्ते मुद्दे संवेदनशील आहेत.</p></div>
-          <div class="insight"><span>प्रतिमा परिणाम</span><p>२४-४८ तासांत तक्रार निवारण आणि नागरिक अद्ययावत संदेश नेतृत्व प्रतिमा योगदान वाढवू शकतात.</p></div>
+          <div class="insight"><span>पूर्वसूचना</span><p>पावसाळी पाणी साचणे, पाणीपुरवठा आणि रस्ते मुद्दे शहरी व उपनगरी मतदारसंघांत सर्वाधिक संवेदनशील दिसतात.</p></div>
+          <div class="insight"><span>प्रतिमा परिणाम</span><p>२४-४८ तासांत निवारण, नागरिक अद्ययावत संदेश आणि पुरावा-आधारित संवाद लोकविश्वास गुण वाढवू शकतात.</p></div>
         </div>
       </section>
 
       <section id="reputation" class="slide compact">
-        <div class="eyebrow">मा. उपमुख्यमंत्री प्रतिमा बुद्धिमत्ता</div>
-        <h2>शासन कामगिरी ते नेतृत्व प्रतिमा: परिणाम श्रेय विश्लेषण</h2>
+        <div class="eyebrow">नेतृत्व प्रतिमा व लोकविश्वास पूर्वानुमान</div>
+        <h2>शासन कामगिरी ते नेतृत्व प्रतिमा: परिणाम-श्रेय विश्लेषण</h2>
         <div class="chart-grid">
           <div class="chart-card">
-            <h3>मा. उपमुख्यमंत्री प्रतिमा निर्देशांक — ९० दिवस निरीक्षण + ३० दिवस पूर्वानुमान</h3>
-            <svg id="reputation-chart" aria-label="DCM reputation forecast chart"></svg>
-            <p class="footnote">जलद तक्रार निवारण, क्षेत्रीय संवाद आणि समाधान पडताळणी यांच्या एकत्रित परिणामामुळे नेतृत्व प्रतिमा स्थैर्य सकारात्मक राहते.</p>
+            <h3>नेतृत्व प्रतिमा योगदान निर्देशांक — ९० दिवस निरीक्षण + ३० दिवस पूर्वानुमान</h3>
+            <svg id="reputation-chart" aria-label="Leadership reputation forecast chart"></svg>
+            <p class="footnote">जलद तक्रार निवारण, क्षेत्रीय संवाद, नागरिक अद्ययावत आणि समाधान पडताळणी यांच्या एकत्रित परिणामामुळे लोकविश्वास स्थैर्य सकारात्मक राहते.</p>
           </div>
           <div class="chart-card">
-            <h3>उदयोन्मुख नागरी असंतोष</h3>
+            <h3>उदयोन्मुख नागरी असंतोष विषय</h3>
             <div id="issue-list" style="margin-top: 18px"></div>
           </div>
+        </div>
+
+        <div class="decision-grid">
+          <div class="decision"><h3>कुठे शांत हस्तक्षेप?</h3><p>आवाज मोठा होण्याआधी वाढत्या तक्रार दाब असलेल्या वॉर्डांत अधिकारी-स्तर समन्वय.</p><div class="scoreline"><span>काळमर्यादा</span><b>४८ तास</b></div></div>
+          <div class="decision"><h3>कुठे दृश्यमान प्रतिसाद?</h3><p>माध्यम संवेदनशील किंवा पावसाळी जोखीम क्षेत्रांत पुराव्यासह सार्वजनिक सेवा अद्ययावत.</p><div class="scoreline"><span>प्राथमिकता</span><b>उच्च</b></div></div>
+          <div class="decision"><h3>कुठे श्रेय बांधणी?</h3><p>वेगाने निवारण झालेल्या क्षेत्रांत नागरिक समाधानाचे समुच्चय कथन, परंतु वैयक्तिक प्रोफाइलिंग टाळून.</p><div class="scoreline"><span>प्रभाव</span><b>+12</b></div></div>
+          <div class="decision"><h3>कुठे विभागीय दुरुस्ती?</h3><p>तक्रार दाब मध्यम पण SLA विलंब जास्त असलेल्या विभागांसाठी प्रक्रिया ऑडिट.</p><div class="scoreline"><span>जोखीम</span><b>मध्यम</b></div></div>
         </div>
       </section>
 
       <section id="brief" class="slide compact">
         <div class="eyebrow">पूर्वानुमानाधारित निर्णय संक्षेप</div>
-        <h2>पुढील ३० दिवसांचे राजकीय बुद्धिमत्ता पूर्वानुमान</h2>
+        <h2>पुढील ३० दिवसांसाठी मुख्यमंत्री-स्तरीय शहरी जनभावना कृतीपत्र</h2>
         <div class="brief-grid">
           <article class="brief">
             <h3>तातडीचे हस्तक्षेप</h3>
             <ul>
-              <li>मुंबई व उपनगर: पावसाळी पाणी साचणे — ४८ तासांत दृश्यमान प्रतिसाद.</li>
-              <li>ठाणे-कळवा-मुंब्रा पट्टा: पाणीपुरवठा संवाद — नागरिक अद्ययावत आवश्यक.</li>
-              <li>पुणे शहरी क्षेत्र: रस्ते दुरुस्ती — स्थानिक प्राधान्य मोहीम.</li>
+              <li>मुंबई व उपनगर: पावसाळी पाणी साचणे — ४८ तासांत दृश्यमान सेवा प्रतिसाद व नागरिक अद्ययावत.</li>
+              <li>ठाणे-कळवा-मुंब्रा पट्टा: पाणीपुरवठा संवाद — विभागीय वेळापत्रक, टँकर व निवारण पुरावा नागरिकांना द्यावा.</li>
+              <li>पुणे शहरी क्षेत्र: रस्ते व खड्डे — उच्च तक्रार दाब वॉर्डांत स्थानिक प्राधान्य मोहीम.</li>
             </ul>
           </article>
           <article class="brief">
-            <h3>प्रतिमा वृद्धी संधी</h3>
+            <h3>विश्वास-वृद्धी संधी</h3>
             <ul>
-              <li>जलद निवारण झालेल्या १००+ तक्रारींचे पुराव्यावर आधारित संकलन.</li>
-              <li>QR स्कॅन सेवा प्रवेश उपक्रमातून नागरिकांना थेट सेवा उपलब्धता दाखवणे.</li>
-              <li>महापौर, आयुक्त आणि मा. उपमुख्यमंत्री समन्वित प्रतिसादाचे क्षेत्रीय दृश्य करणे.</li>
+              <li>जलद निवारण झालेल्या तक्रारींचे पुराव्यावर आधारित समुच्चय संकलन.</li>
+              <li>QR Scan-to-Service उपक्रमातून नागरिकांना थेट सेवा प्रवेश, देयक, प्रमाणपत्र आणि अभिप्राय सुविधा दाखवणे.</li>
+              <li>महापौर, आयुक्त आणि राज्य नेतृत्व यांच्या समन्वित प्रतिसादाचे प्रशासकीय दृश्य करणे.</li>
             </ul>
           </article>
           <article class="brief">
             <h3>जोखीम पूर्वसूचना</h3>
             <ul>
-              <li>नकारात्मक जनभावना गती: पाणीपुरवठा व रस्ते मुद्द्यांत वाढ.</li>
-              <li>माध्यम संवेदनशीलता: पावसाळी तक्रारींसाठी उच्च जोखीम.</li>
-              <li>न सुटलेले असंतोष क्लस्टर्स: ७२ तासांपेक्षा जास्त विलंब असलेले क्षेत्र.</li>
+              <li>नकारात्मक जनभावना गती: पाणीपुरवठा, रस्ते आणि पावसाळी मुद्द्यांत वाढ.</li>
+              <li>माध्यम संवेदनशीलता: पावसाळी तक्रारींसाठी उच्च जोखीम, विशेषतः उपनगरी पट्टे.</li>
+              <li>न सुटलेले असंतोष क्लस्टर्स: ७२ तासांपेक्षा जास्त विलंब असलेले क्षेत्र तत्काळ चिन्हांकित.</li>
             </ul>
           </article>
+        </div>
+        <div class="ethics-note">
+          शासन-सुसंगत मर्यादा: हे पटल नागरिक सेवा सुधारणा, विभागीय प्रतिसादक्षमता, समुच्चय जनभावना आणि लोकविश्वास निरीक्षणासाठी आहे. वैयक्तिक मतदार प्रोफाइलिंग, संवेदनशील वैयक्तिक डेटा-आधारित लक्ष्यीकरण किंवा दिशाभूल करणारे राजकीय संदेश यासाठी याचा वापर करू नये.
         </div>
       </section>
 
@@ -1374,7 +619,7 @@
           <div class="eyebrow">धोरणात्मक स्थाननिर्धारण</div>
           <h2>सल्लागार स्थिती समजावतो. WhatsUp.city स्थिती बदलण्यासाठी शासन-निर्णय साखळी देते.</h2>
           <p>
-            “WhatsUp.city नागरिक सेवा चालवते; पण त्याच नागरिक संवादातून नेतृत्वाला महाराष्ट्रातील शहरी जनभावनेचे क्षणोक्षणी राजकीय बुद्धिमत्ता सामर्थ्य देते.”
+            “WhatsUp.city नागरिक सेवा चालवते; पण त्याच नागरिक संवादातून महाराष्ट्रातील शहरी जनभावना, लोकविश्वास आणि नेतृत्व प्रतिसादक्षमता यांचे क्षणोक्षणी बुद्धिमत्ता सामर्थ्य निर्माण करते.”
           </p>
         </div>
       </section>
@@ -1389,10 +634,10 @@
       };
 
       const BUCKET_LABEL = {
-        stable: "सकारात्मक स्थैर्य",
+        stable: "विश्वास स्थैर्य",
         watch: "निरीक्षण आवश्यक",
-        risk: "तातडीचा जनभावना धोका",
-        opportunity: "प्रतिमा वृद्धी संधी",
+        risk: "तातडीची सेवा-जोखीम",
+        opportunity: "विश्वास-वृद्धी संधी",
       };
 
       const districtProfiles = {
@@ -1444,7 +689,7 @@
         "Mumbai City": "मुंबई शहर",
         "Mumbai South": "मुंबई दक्षिण",
         "Mumbai North": "मुंबई उत्तर",
-        "Thane": "ठाणे",
+        Thane: "ठाणे",
         "Kalyan East": "कल्याण पूर्व",
         "Kalyan West": "कल्याण पश्चिम",
         "Pune Cantonment(SC)": "पुणे छावणी (अनु. जाती)",
@@ -1482,10 +727,10 @@
         ["पावसाळी पाणी साचणे", 76],
         ["रस्ते व खड्डे", 68],
         ["पाणीपुरवठा", 64],
-        ["कचरा व्यवस्थापन", 52],
         ["अनधिकृत बांधकाम", 59],
+        ["कचरा व्यवस्थापन", 52],
+        ["वाहतूक व अतिक्रमण", 46],
         ["मालमत्ता कर", 37],
-        ["वाहतूक", 46],
       ];
 
       const reputationSeries = [
@@ -1516,8 +761,8 @@
 
       function metricFor(feature) {
         const props = feature.properties || {};
-        const acNo = Number(props.AC_NO || 0);
-        const district = cleanDistrict(props.DIST_NAME);
+        const acNo = Number(props.AC_NO || props.ac_no || props.ACNO || 0);
+        const district = cleanDistrict(props.DIST_NAME || props.district || props.DISTRICT);
         const base = districtProfiles[district] || {
           sentiment: 67 + variance(acNo, 5, 6),
           pressure: 54 + variance(acNo, 7, 10),
@@ -1534,9 +779,9 @@
         else if (sentiment >= 77 || reputation >= 82 || acNo % 29 === 0) bucket = "opportunity";
         return {
           acNo,
-          acName: marathiConstituencyName(props.AC_NAME || "विधानसभा मतदारसंघ"),
+          acName: marathiConstituencyName(props.AC_NAME || props.ac_name || props.NAME || "विधानसभा मतदारसंघ"),
           district,
-          districtName: districtMarathi[district] || String(props.DIST_NAME || "").replace("*", "").trim(),
+          districtName: districtMarathi[district] || String(props.DIST_NAME || props.district || "").replace("*", "").trim() || "महाराष्ट्र",
           pcName: props.PC_NAME || "",
           sentiment,
           pressure,
@@ -1548,9 +793,9 @@
       }
 
       function actionFor(bucket) {
-        if (bucket === "risk") return "२४-४८ तासांत प्रशासकीय हस्तक्षेप, नागरिक अद्ययावत आणि नेतृत्व संवाद आवश्यक.";
+        if (bucket === "risk") return "२४-४८ तासांत प्रशासकीय हस्तक्षेप, नागरिक अद्ययावत आणि पुराव्यांसह सार्वजनिक सेवा प्रतिसाद आवश्यक.";
         if (bucket === "watch") return "७२ तास निरीक्षण, विभागीय वरिष्ठ-समन्वय आणि सेवा-विश्वास संदेश आवश्यक.";
-        if (bucket === "opportunity") return "पुराव्यावर आधारित सकारात्मक शासन-कथानक तयार करून स्थानिक विश्वास वृद्धी करावी.";
+        if (bucket === "opportunity") return "जलद निवारण व समाधान संकेतांवर आधारित सकारात्मक शासन-कथन तयार करून स्थानिक लोकविश्वास वृद्धी करावी.";
         return "नियमित सेवा अद्ययावत राखून विश्वास स्थैर्य टिकवावे.";
       }
 
@@ -1563,7 +808,7 @@
         document.getElementById("selected-pressure").textContent = `${item.pressure}`;
         document.getElementById("selected-reputation").textContent = `${item.reputation}`;
         document.getElementById("selected-escalation").textContent = `${item.escalation}%`;
-        document.getElementById("selected-action").textContent = `${actionFor(item.bucket)} प्रमुख मुद्दे: ${item.issue.join(", ")}.`;
+        document.getElementById("selected-action").textContent = `${actionFor(item.bucket)} प्रमुख विषय: ${item.issue.join(", ")}.`;
       }
 
       function flattenCoordinates(geometry) {
@@ -1588,16 +833,11 @@
       }
 
       function computeBbox(features) {
-        let minX = Infinity;
-        let minY = Infinity;
-        let maxX = -Infinity;
-        let maxY = -Infinity;
+        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
         features.forEach((feature) => {
           flattenCoordinates(feature.geometry).forEach(([x, y]) => {
-            minX = Math.min(minX, x);
-            minY = Math.min(minY, y);
-            maxX = Math.max(maxX, x);
-            maxY = Math.max(maxY, y);
+            minX = Math.min(minX, x); minY = Math.min(minY, y);
+            maxX = Math.max(maxX, x); maxY = Math.max(maxY, y);
           });
         });
         return { minX, minY, maxX, maxY };
@@ -1611,34 +851,32 @@
                 const [x, y] = project(point);
                 return `${index === 0 ? "M" : "L"}${x.toFixed(1)} ${y.toFixed(1)}`;
               })
-              .join(" ") + " Z",
+              .join(" ") + " Z"
           )
           .join(" ");
       }
 
       function drawMap(geojson) {
         const svg = d3.select("#assembly-map");
+        svg.selectAll("*").remove();
         const node = svg.node();
         const width = node.clientWidth || 980;
         const height = node.clientHeight || 760;
         svg.attr("viewBox", `0 0 ${width} ${height}`);
 
+        const featuresRaw = (geojson.features || []).filter((feature) => feature.geometry);
+        if (!featuresRaw.length) throw new Error("No GeoJSON features found");
+
         const pad = 34;
-        const bbox = computeBbox(geojson.features);
-        const scale = Math.min(
-          (width - pad * 2) / (bbox.maxX - bbox.minX),
-          (height - pad * 2) / (bbox.maxY - bbox.minY),
-        );
+        const bbox = computeBbox(featuresRaw);
+        const scale = Math.min((width - pad * 2) / (bbox.maxX - bbox.minX), (height - pad * 2) / (bbox.maxY - bbox.minY));
         const mapWidth = (bbox.maxX - bbox.minX) * scale;
         const mapHeight = (bbox.maxY - bbox.minY) * scale;
         const offsetX = (width - mapWidth) / 2;
         const offsetY = (height - mapHeight) / 2;
-        const project = ([lon, lat]) => [
-          offsetX + (lon - bbox.minX) * scale,
-          offsetY + (bbox.maxY - lat) * scale,
-        ];
+        const project = ([lon, lat]) => [offsetX + (lon - bbox.minX) * scale, offsetY + (bbox.maxY - lat) * scale];
 
-        const features = geojson.features.map((feature) => ({ feature, metric: metricFor(feature) }));
+        const features = featuresRaw.map((feature) => ({ feature, metric: metricFor(feature) }));
         const counts = { stable: 0, watch: 0, risk: 0, opportunity: 0 };
         features.forEach((item) => { counts[item.metric.bucket] += 1; });
 
@@ -1662,11 +900,9 @@
           .on("mouseleave", function () {
             d3.selectAll(".constituency").attr("opacity", 1).attr("stroke", "#fffdf8").attr("stroke-width", 0.55);
           })
-          .on("click", function (_, d) {
-            updateSelected(d.metric);
-          })
+          .on("click", function (_, d) { updateSelected(d.metric); })
           .append("title")
-          .text((d) => `${d.metric.acNo}. ${d.metric.acName} | ${BUCKET_LABEL[d.metric.bucket]} | जनभावना ${d.metric.sentiment}`);
+          .text((d) => `${d.metric.acNo}. ${d.metric.acName} | ${BUCKET_LABEL[d.metric.bucket]} | लोकविश्वास ${d.metric.sentiment}`);
 
         document.getElementById("map-loading").style.display = "none";
         document.getElementById("count-stable").textContent = counts.stable;
@@ -1687,7 +923,7 @@
         priority.forEach((metric) => {
           const button = document.createElement("button");
           button.type = "button";
-          button.innerHTML = `<b>${metric.acNo}. ${metric.acName}</b><span>${BUCKET_LABEL[metric.bucket]} | वरिष्ठांकडे जाण्याची शक्यता ${metric.escalation}% | ${metric.districtName}</span>`;
+          button.innerHTML = `<b>${metric.acNo}. ${metric.acName}</b><span>${BUCKET_LABEL[metric.bucket]} | वरिष्ठ स्तर संवेदनशीलता ${metric.escalation}% | ${metric.districtName}</span>`;
           button.addEventListener("click", () => updateSelected(metric));
           corridor.appendChild(button);
         });
@@ -1697,15 +933,14 @@
 
       function drawReputationChart() {
         const svg = d3.select("#reputation-chart");
+        svg.selectAll("*").remove();
         const node = svg.node();
         const width = node.clientWidth || 820;
         const height = 360;
         const margin = { top: 26, right: 24, bottom: 40, left: 44 };
         svg.attr("viewBox", `0 0 ${width} ${height}`);
 
-        const x = d3.scalePoint()
-          .domain(reputationSeries.map((d) => d[0]))
-          .range([margin.left, width - margin.right]);
+        const x = d3.scalePoint().domain(reputationSeries.map((d) => d[0])).range([margin.left, width - margin.right]);
         const y = d3.scaleLinear().domain([58, 88]).range([height - margin.bottom, margin.top]);
         const actual = reputationSeries.filter((d) => d[1] !== null);
         const forecast = reputationSeries.filter((d) => d[2] !== null);
@@ -1758,17 +993,27 @@
           .attr("transform", `translate(0,${height - margin.bottom})`)
           .call(d3.axisBottom(x).tickSize(0))
           .call((g) => g.select(".domain").remove())
-          .call((g) => g.selectAll("text").attr("fill", "#667085").attr("font-weight", 700));
+          .call((g) => g.selectAll("text").attr("fill", "#667085").attr("font-weight", 800));
 
         svg.append("g")
           .attr("transform", `translate(${margin.left},0)`)
           .call(d3.axisLeft(y).ticks(4).tickSize(0))
           .call((g) => g.select(".domain").remove())
-          .call((g) => g.selectAll("text").attr("fill", "#667085").attr("font-weight", 700));
+          .call((g) => g.selectAll("text").attr("fill", "#667085").attr("font-weight", 800));
+
+        svg.append("text")
+          .attr("x", width - margin.right)
+          .attr("y", margin.top)
+          .attr("text-anchor", "end")
+          .attr("fill", "#667085")
+          .attr("font-size", 12)
+          .attr("font-weight", 800)
+          .text("सोनेरी: निरीक्षण | हिरवा: पूर्वानुमान");
       }
 
       function renderIssues() {
         const list = document.getElementById("issue-list");
+        list.innerHTML = "";
         issueMomentum.forEach(([name, score]) => {
           const row = document.createElement("div");
           row.className = "issue-row";
@@ -1786,12 +1031,17 @@
           const geojson = await response.json();
           drawMap(geojson);
         } catch (error) {
-          document.getElementById("map-loading").textContent = "maharashtra.geojson लोड होऊ शकले नाही. GitHub Pages वर index.html आणि maharashtra.geojson एकाच folder मध्ये ठेवा.";
+          document.getElementById("map-loading").textContent = "maharashtra.geojson लोड होऊ शकले नाही. index.html आणि maharashtra.geojson एकाच folder मध्ये ठेवा. GeoJSON मध्ये AC_NO, AC_NAME आणि DIST_NAME properties असल्यास नकाशा पूर्णपणे चालेल.";
+          document.getElementById("hero-risk").textContent = "--";
+          document.getElementById("hero-opportunity").textContent = "--";
           console.error(error);
         }
       }
 
       window.addEventListener("load", init);
+      window.addEventListener("resize", () => {
+        drawReputationChart();
+      });
     </script>
   </body>
 </html>

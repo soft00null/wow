@@ -12,7 +12,7 @@
     name: 'MMR SRA AI',
     fullName: 'Mumbai Metropolitan Region Slum Rehabilitation Authority',
     marathiName: 'मुंबई महानगर प्रदेश झोपडपट्टी पुनर्वसन प्राधिकरण',
-    phone: '8468897208',
+    phone: '+918468897208',
     welcome: '👋 नमस्कार! मी मुंबई महानगर प्रदेश झोपडपट्टी पुनर्वसन प्राधिकरणाचा AI असिस्टंट आहे. तुम्ही येथे Annexure II, झोपडपट्टी पुनर्वसन योजना, पात्रता, कागदपत्रे, प्रकरण स्थिती किंवा मदत याबद्दल माहिती मिळवू शकता. मला मराठी आणि इंग्रजी समजते. मी तुमची कशी मदत करू?',
     poweredBy: 'WoW-Strategies Private Limited',
     poweredByUrl: 'https://wow-strategies.com/',

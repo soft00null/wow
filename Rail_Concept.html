@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Concept Note — WhatsUp.Rail: A WhatsApp-Native AI Concierge for Indian Railways | WOW-Strategies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --midnight:#051C2C;
+  --electric:#2251FF;
+  --paper:#FFFFFF;
+  --panel:#F0F3F6;
+  --ink:#1A1F24;
+  --grey:#5B6771;
+  --rule:#D3D9DE;
+  --rule-soft:#E4E8EC;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Inter',-apple-system,sans-serif;
+  background:var(--paper);color:var(--ink);
+  font-size:14px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  font-feature-settings:'tnum';
+}
+.doc{max-width:800px;margin:0 auto;padding:44px 36px 56px}
+p{margin-bottom:12px}
+sup{font-size:9px;color:var(--electric);font-weight:600}
+
+/* ---------- Masthead ---------- */
+.mast{
+  display:flex;justify-content:space-between;align-items:baseline;
+  font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--grey);border-bottom:3px solid var(--midnight);
+  padding-bottom:12px;margin-bottom:36px;
+}
+.mast .left b{color:var(--midnight)}
+.mast .right{color:var(--electric)}
+
+h1{
+  font-family:'Source Serif 4',Georgia,serif;font-weight:700;
+  font-size:clamp(27px,5vw,36px);line-height:1.18;letter-spacing:-.01em;
+  color:var(--midnight);margin-bottom:14px;max-width:640px;
+}
+.deck{font-size:15.5px;line-height:1.65;color:var(--grey);max-width:620px;margin-bottom:22px}
+.byline{
+  display:flex;gap:36px;flex-wrap:wrap;
+  font-size:11px;color:var(--grey);
+  border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  padding:10px 0;margin-bottom:30px;
+}
+.byline b{color:var(--midnight);font-weight:600;display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px}
+
+/* ---------- Governing thought ---------- */
+.gov{
+  border-left:4px solid var(--electric);
+  background:var(--panel);
+  padding:20px 24px;margin:0 0 36px;
+  break-inside:avoid;
+}
+.gov .gov-label{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--electric);margin-bottom:8px}
+.gov p{
+  font-family:'Source Serif 4',Georgia,serif;font-weight:600;
+  font-size:16.5px;line-height:1.6;color:var(--midnight);margin:0;
+}
+
+/* ---------- Key facts strip ---------- */
+.facts{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+  border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  margin:0 0 40px;break-inside:avoid;
+}
+.fact{padding:16px 16px 14px;border-right:1px solid var(--rule-soft)}
+.fact:last-child{border-right:none}
+.fact .f-num{font-family:'Source Serif 4',Georgia,serif;font-size:24px;font-weight:700;color:var(--midnight);line-height:1}
+.fact .f-num span{color:var(--electric)}
+.fact .f-cap{font-size:10.5px;line-height:1.5;color:var(--grey);margin-top:7px}
+
+/* ---------- Sections with action titles ---------- */
+section{margin-bottom:38px}
+.sec-head{display:flex;gap:16px;align-items:flex-start;margin-bottom:14px;break-after:avoid}
+.sec-num{
+  font-family:'Source Serif 4',Georgia,serif;font-size:19px;font-weight:700;
+  color:var(--electric);line-height:1.35;min-width:22px;
+}
+h2{
+  font-family:'Source Serif 4',Georgia,serif;font-weight:700;
+  font-size:19px;line-height:1.35;color:var(--midnight);letter-spacing:-.005em;
+}
+section > p, section .body{padding-left:38px}
+.tight-list{padding-left:38px;margin-bottom:12px}
+.tight-list .li{
+  display:flex;gap:12px;margin-bottom:9px;font-size:13.5px;line-height:1.55;
+}
+.tight-list .li .dash{color:var(--electric);font-weight:700;flex:none}
+.tight-list .li b{color:var(--midnight);font-weight:600}
+
+/* ---------- Exhibits ---------- */
+.exhibit{
+  background:var(--panel);padding:20px 22px 14px;margin:20px 0 22px 38px;
+  break-inside:avoid;
+}
+.ex-label{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--electric);margin-bottom:3px}
+.ex-title{font-size:13.5px;font-weight:600;color:var(--midnight);margin-bottom:16px}
+.ex-source{font-size:10px;color:var(--grey);margin-top:12px;line-height:1.5}
+.ex-source b{font-weight:600}
+
+/* Loop flow */
+.flow{display:flex;gap:0;align-items:stretch}
+.flow .step{
+  flex:1;background:var(--paper);border:1px solid var(--rule);
+  padding:11px 10px 10px;position:relative;
+}
+.flow .step + .step{margin-left:14px}
+.flow .step + .step::before{
+  content:'▸';position:absolute;left:-13px;top:50%;transform:translateY(-50%);
+  color:var(--electric);font-size:12px;
+}
+.flow .s-name{font-size:11.5px;font-weight:700;color:var(--midnight);letter-spacing:.04em;text-transform:uppercase}
+.flow .s-desc{font-size:10.5px;color:var(--grey);line-height:1.45;margin-top:4px}
+.flow .step:last-child{border-color:var(--electric);border-width:1.5px}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;background:var(--paper);font-size:12.5px}
+th{
+  font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--paper);background:var(--midnight);text-align:left;padding:9px 12px;
+}
+td{padding:9px 12px;border-bottom:1px solid var(--rule-soft);vertical-align:top;line-height:1.5}
+tr:last-child td{border-bottom:none}
+td.dim{font-weight:600;color:var(--midnight);width:19%}
+td.today{color:var(--grey)}
+td.num{text-align:right;font-weight:600;color:var(--midnight);white-space:nowrap;width:15%}
+tr.total td{background:var(--midnight);color:#fff;font-weight:600}
+tr.total td.num{color:#fff}
+
+/* ---------- Recommendation box ---------- */
+.reco{
+  background:var(--midnight);color:#E8EDF2;
+  padding:24px 28px;margin-top:6px;break-inside:avoid;
+}
+.reco .r-label{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#7C97FF;margin-bottom:12px}
+.reco .r-item{display:flex;gap:14px;margin-bottom:9px;font-size:13.5px;line-height:1.55}
+.reco .r-item:last-child{margin-bottom:0}
+.reco .r-num{font-family:'Source Serif 4',Georgia,serif;font-weight:700;color:#7C97FF;flex:none}
+.reco b{color:#fff;font-weight:600}
+
+/* ---------- Footnotes / footer ---------- */
+.notes{
+  border-top:1px solid var(--rule);margin-top:40px;padding-top:12px;
+  font-size:10.5px;color:var(--grey);line-height:1.6;
+}
+.notes b{color:var(--electric);font-weight:700}
+.foot{
+  display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  border-top:3px solid var(--midnight);margin-top:16px;padding-top:12px;
+  font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);
+}
+.foot b{color:var(--midnight)}
+
+/* ---------- Responsive ---------- */
+@media(max-width:660px){
+  .doc{padding:32px 20px 44px}
+  .facts{grid-template-columns:1fr 1fr}
+  .fact:nth-child(2){border-right:none}
+  .fact{border-bottom:1px solid var(--rule-soft)}
+  .fact:nth-child(3),.fact:nth-child(4){border-bottom:none}
+  .flow{flex-direction:column}
+  .flow .step + .step{margin-left:0;margin-top:14px}
+  .flow .step + .step::before{content:'▾';left:50%;top:-14px;transform:translateX(-50%)}
+  section > p, section .body, .tight-list{padding-left:0}
+  .exhibit{margin-left:0}
+}
+
+/* ---------- Print ---------- */
+@media print{
+  @page{size:A4;margin:15mm 14mm}
+  body{font-size:11.5px}
+  .doc{padding:0;max-width:none}
+  th,tr.total td,.reco,.gov,.exhibit{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  section{margin-bottom:26px}
+}
+</style>
+</head>
+<body>
+<div class="doc">
+
+<div class="mast">
+  <div class="left"><b>WOW-STRATEGIES</b> · GOVERNMENT &amp; PUBLIC SECTOR</div>
+  <div class="right">CONCEPT NOTE · FOR DISCUSSION</div>
+</div>
+
+<h1>Closing the last twenty metres: a WhatsApp-native AI concierge for Indian Railways</h1>
+<p class="deck">Indian Railways has rebuilt its trains and stations. The unserved gap is the distance between a passenger's berth and the services on that very train. One QR scan can close it.</p>
+
+<div class="byline">
+  <div><b>Prepared for</b>Ministry of Railways · Zonal Railways · IRCTC / CRIS / RailTel</div>
+  <div><b>Prepared by</b>WOW-Strategies Private Limited, Mumbai</div>
+  <div><b>Date</b>July 2026 · v1.0 · Confidential</div>
+</div>
+
+<div class="gov">
+  <div class="gov-label">Governing Thought</div>
+  <p>Indian Railways should deploy WhatsUp.Rail — an AI concierge on WhatsApp, opened by one QR scan at every berth, routed to staff on the same train, and synced 100% to Rail Madad. We recommend a 90-day, four-train pilot on Mumbai Division at ≈₹1.4 crore<sup>1,2</sup>, with the scale decision gated on published evidence.</p>
+</div>
+
+<div class="facts">
+  <div class="fact"><div class="f-num">2<span>+</span> cr</div><div class="f-cap">Passenger journeys per day — every one a service moment</div></div>
+  <div class="fact"><div class="f-num">50<span>+</span> cr</div><div class="f-cap">Indians on WhatsApp; zero downloads, zero training required</div></div>
+  <div class="fact"><div class="f-num">&lt;20 <span>min</span></div><div class="f-cap">Target median resolution for onboard housekeeping requests</div></div>
+  <div class="fact"><div class="f-num">100<span>%</span></div><div class="f-cap">Grievance sync to Rail Madad — amplifier, not parallel system</div></div>
+</div>
+
+<!-- ============ 1 CONTEXT ============ -->
+<section>
+  <div class="sec-head">
+    <div class="sec-num">1.</div>
+    <h2>The railway has modernised its assets faster than its onboard service interface</h2>
+  </div>
+  <p>Vande Bharat has reset what passengers expect of a train; UPI has trained the nation to scan QR codes; WhatsApp is the default communication layer across every ticket class. Yet a passenger at 110 km/h still requests basic services the way the last generation did — find a staff member, or find a phone number. Every behaviour this concept requires already exists at national scale; only the connection is missing.</p>
+</section>
+
+<!-- ============ 2 PROBLEM ============ -->
+<section>
+  <div class="sec-head">
+    <div class="sec-num">2.</div>
+    <h2>Five structural gaps keep onboard service open-loop</h2>
+  </div>
+  <div class="tight-list">
+    <div class="li"><span class="dash">—</span><span><b>Fragmentation.</b> Cleanliness, catering and security run on separate channels; the passenger must know the org chart to be served by it.</span></div>
+    <div class="li"><span class="dash">—</span><span><b>Friction.</b> Mid-journey redressal means an app download or portal form, plus typing PNR, train and coach on patchy data.</span></div>
+    <div class="li"><span class="dash">—</span><span><b>Context blindness.</b> Every channel starts from zero — the system asks the passenger where they are instead of knowing.</span></div>
+    <div class="li"><span class="dash">—</span><span><b>The open loop.</b> A complaint returns a reference number, not a live status; the attendant two coaches away may never see it. Proof and rating are afterthoughts.</span></div>
+    <div class="li"><span class="dash">—</span><span><b>The silent majority.</b> Most dissatisfied passengers file nothing — friction filters them out, so official data understates the experience it is meant to manage.</span></div>
+  </div>
+</section>
+
+<!-- ============ 3 SOLUTION ============ -->
+<section>
+  <div class="sec-head">
+    <div class="sec-num">3.</div>
+    <h2>WhatsUp.Rail closes the loop: one scan opens a context-aware concierge on WhatsApp</h2>
+  </div>
+  <p>A durable QR panel at every berth bay encodes train and coach into a WhatsApp deep link. One scan opens <b>Sahyatri AI</b> (सहयात्री — the fellow traveller): a conversational concierge covering cleanliness, linen, water, food via IRCTC e-catering, medical, security, Divyangjan assistance and journey information — in 10+ Indian languages, text or voice note. Every request carries an SLA timer, an escalation ladder, photographic proof of resolution and a passenger rating; every grievance syncs to Rail Madad. Medical and security intents bypass AI and page humans immediately.</p>
+
+  <div class="exhibit">
+    <div class="ex-label">Exhibit 1</div>
+    <div class="ex-title">The closed-loop operating model — from berth to resolution in five steps</div>
+    <div class="flow">
+      <div class="step"><div class="s-name">Scan</div><div class="s-desc">QR at berth; train &amp; coach pre-identified</div></div>
+      <div class="step"><div class="s-name">Converse</div><div class="s-desc">Sahyatri AI; 10+ languages, voice notes</div></div>
+      <div class="step"><div class="s-name">Route</div><div class="s-desc">Task to staff app on the same rake</div></div>
+      <div class="step"><div class="s-name">Resolve</div><div class="s-desc">SLA timer; photo proof; escalation ladder</div></div>
+      <div class="step"><div class="s-name">Learn</div><div class="s-desc">Rating → heatmaps, scorecards, sentiment</div></div>
+    </div>
+    <div class="ex-source"><b>Source:</b> WhatsUp.City operating architecture, in production across five Maharashtra municipal governments</div>
+  </div>
+
+  <div class="exhibit">
+    <div class="ex-label">Exhibit 2</div>
+    <div class="ex-title">From open loop to closed loop — what changes for the passenger and the railway</div>
+    <table>
+      <tr><th style="width:19%">Dimension</th><th>Today</th><th>With WhatsUp.Rail</th></tr>
+      <tr><td class="dim">Entry</td><td class="today">Dial 139, download app, type PNR</td><td>One QR scan; zero downloads</td></tr>
+      <tr><td class="dim">Context</td><td class="today">Passenger supplies all details</td><td>Train, coach, berth known at hello</td></tr>
+      <tr><td class="dim">Routing</td><td class="today">Call centre relays to division</td><td>Direct task to staff on the same train</td></tr>
+      <tr><td class="dim">Closure</td><td class="today">Reference number; no visibility</td><td>Live status, photo proof, rating, SLA</td></tr>
+      <tr><td class="dim">Insight</td><td class="today">Complaint counts</td><td>Coach-level heatmaps, contractor scorecards, train sentiment index</td></tr>
+    </table>
+    <div class="ex-source"><b>Note:</b> Not a Rail Madad replacement — its highest-adoption front end. Not a passenger app. No coach hardware beyond a printed panel.</div>
+  </div>
+</section>
+
+<!-- ============ 4 PILOT ============ -->
+<section>
+  <div class="sec-head">
+    <div class="sec-num">4.</div>
+    <h2>A four-train, 90-day pilot proves the loop for ≈₹1.4 crore — under the innovation-route ceiling</h2>
+  </div>
+  <p>Passenger behaviour needs no testing; QR and WhatsApp are proven at national scale. The pilot tests the railway-side loop — routing accuracy, staff adoption, SLA discipline, data quality — on two Vande Bharat and two LHB Mail/Express rakes, Mumbai Division (Central Railway). Success gates: ≥15% scan-to-chat adoption; median housekeeping resolution &lt;20 minutes; CSAT ≥4.2/5; 100% Rail Madad sync.</p>
+
+  <div class="exhibit">
+    <div class="ex-label">Exhibit 3</div>
+    <div class="ex-title">Pilot economics — bottom-up, all-inclusive, 12 months<sup>1</sup></div>
+    <table>
+      <tr><th>Component</th><th>Scope</th><th style="text-align:right">₹ lakh</th></tr>
+      <tr><td class="dim">Sahyatri AI build</td><td>Rail conversation design, 10+ languages, voice, guardrails</td><td class="num">42.0</td></tr>
+      <tr><td class="dim">Staff app + dashboard</td><td>Offline-first Android task app; TS console; division command view</td><td class="num">40.0</td></tr>
+      <tr><td class="dim">Integrations</td><td>Rail Madad two-way sync, NTES, consent-based PNR, e-catering</td><td class="num">14.0</td></tr>
+      <tr><td class="dim">QR panels</td><td>≈90 coaches × 4 durable, coach-coded panels</td><td class="num">1.5</td></tr>
+      <tr><td class="dim">Cloud &amp; AI ops</td><td>India-region hosting, LLM inference, WhatsApp charges — 12 months</td><td class="num">19.0</td></tr>
+      <tr><td class="dim">Programme pod</td><td>On-division delivery team, staff training — 12 months</td><td class="num">22.0</td></tr>
+      <tr class="total"><td>Pilot total — 4 rakes, 12 months</td><td>Structured within Innovation Policy ceiling<sup>2</sup></td><td class="num">≈138.5</td></tr>
+    </table>
+    <div class="ex-source"><b>Scale economics:</b> ₹22,000–28,000 per rake per month, all-inclusive SaaS at 500+ rakes; e-catering commission share and destination-concierge partnerships move the programme toward self-funding.</div>
+  </div>
+</section>
+
+<!-- ============ 5 CREDENTIALS ============ -->
+<section>
+  <div class="sec-head">
+    <div class="sec-num">5.</div>
+    <h2>The platform is in government production today — this is a railway edition, not a concept</h2>
+  </div>
+  <p>WhatsUp.City runs live across <b>five Maharashtra municipal governments</b> — PCMC, PMC, TMC, BMC and MMR-SRA — with SLA-governed grievance loops, field-staff task apps, in-chat payments and document delivery, and commissioner-grade MIS. The Wari 2026 pilgrimage AI helpline for Pune Zilla Parishad, inaugurated by the Hon'ble Chief Minister, operates at 10-lakh-pilgrim scale in Marathi, Hindi and English with voice-note understanding. Our consistent model: <b>WOW-Strategies as product and IP partner; institutional partners (RailTel / CRIS / IRCTC) provide scale and balance sheet.</b></p>
+</section>
+
+<!-- ============ RECOMMENDATION ============ -->
+<div class="reco">
+  <div class="r-label">Recommendation — Four Decisions Requested</div>
+  <div class="r-item"><span class="r-num">1</span><span><b>Sanction the 90-day pilot</b> — four trains, Mumbai Division, under the Innovation Policy route or a zonal MoU.</span></div>
+  <div class="r-item"><span class="r-num">2</span><span><b>Nominate a nodal officer</b> and constitute a joint PMU with commercial, mechanical and IT representation.</span></div>
+  <div class="r-item"><span class="r-num">3</span><span><b>Grant sandbox API access</b> — Rail Madad, NTES, read-only PNR — under CRIS oversight.</span></div>
+  <div class="r-item"><span class="r-num">4</span><span><b>Review at Day 90</b> against published success gates; take the scale decision on evidence.</span></div>
+</div>
+
+<div class="notes">
+  <b>1.</b> Indicative, exclusive of GST; bottom-up estimates to be jointly refined with zonal inputs.&ensp;
+  <b>2.</b> Indian Railways Innovation Policy ('Startups for Railways') supports milestone-funded pilots up to ₹1.5 crore; figures and current provisions to be verified at submission.
+</div>
+
+<div class="foot">
+  <div><b>WhatsUp.Rail</b> · A WOW-Strategies Platform</div>
+  <div>Confidential · Concept Note v1.0 · July 2026</div>
+</div>
+
+</div>
+</body>
+</html>

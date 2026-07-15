@@ -1,0 +1,935 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="description" content="WhatsUp.city Police — AI-assisted citizen reporting, geospatial jurisdiction intelligence and field response for Pune Police" />
+  <title>WhatsUp.city Police | Pune Police — McKinsey-style executive deck</title>
+  <style>
+    :root{
+      --navy-950:#071c2e;
+      --navy-900:#0d2b47;
+      --navy-800:#143b5e;
+      --blue-700:#1468aa;
+      --blue-600:#1d7bc1;
+      --blue-100:#e6f1f8;
+      --blue-050:#f2f8fb;
+      --orange:#f1842d;
+      --orange-100:#fff0e4;
+      --teal:#2e7867;
+      --teal-100:#e9f4f1;
+      --red:#bd493f;
+      --ink:#13273a;
+      --muted:#566a7a;
+      --line:#ccd7df;
+      --soft:#f4f7f9;
+      --white:#fff;
+      --shadow:0 20px 70px rgba(4,20,35,.28);
+    }
+    *{box-sizing:border-box}
+    html,body{width:100%;height:100%;margin:0;overflow:hidden}
+    body{
+      display:grid;
+      place-items:center;
+      color:var(--ink);
+      background:radial-gradient(circle at 50% 12%,#183b58 0,#091b2d 48%,#05111c 100%);
+      font-family:Arial,"Helvetica Neue",Helvetica,sans-serif;
+      -webkit-font-smoothing:antialiased;
+    }
+    button{font:inherit}
+    .deck-stage{
+      position:fixed;
+      top:50%;
+      left:50%;
+      width:1280px;
+      height:720px;
+      transform:translate(-50%,-50%) scale(1);
+      transform-origin:center;
+      overflow:hidden;
+      background:var(--white);
+      box-shadow:var(--shadow);
+    }
+    .deck{position:absolute;inset:0}
+    .slide{
+      position:absolute;
+      inset:0;
+      display:grid;
+      grid-template-rows:auto 1fr auto;
+      gap:12px;
+      padding:34px 54px 24px;
+      visibility:hidden;
+      opacity:0;
+      transform:translateX(30px);
+      pointer-events:none;
+      background:var(--white);
+      transition:opacity 220ms ease,transform 260ms ease;
+    }
+    .slide.active{visibility:visible;opacity:1;transform:none;pointer-events:auto}
+    .slide.before{transform:translateX(-30px)}
+    .slide::before{
+      content:"";
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:5px;
+      background:linear-gradient(90deg,var(--orange) 0 22%,var(--blue-600) 22% 100%);
+    }
+    .slide-header{display:flex;justify-content:space-between;align-items:flex-start;gap:32px}
+    .header-copy{max-width:1080px}
+    .eyebrow{
+      display:flex;
+      align-items:center;
+      gap:9px;
+      margin-bottom:9px;
+      color:#9a4d16;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+    .eyebrow::before{content:"";width:22px;height:2px;background:var(--orange)}
+    h1,h2,h3,p{margin:0}
+    h2{
+      color:var(--navy-950);
+      font-size:38px;
+      font-weight:460;
+      line-height:1.08;
+      letter-spacing:-.035em;
+    }
+    h2 strong{font-weight:800}
+    .chapter{
+      flex:none;
+      margin-top:5px;
+      color:#718493;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.17em;
+      text-transform:uppercase;
+    }
+    .slide-body{min-height:0}
+    .slide-footer{
+      display:flex;
+      align-items:center;
+      min-height:22px;
+      padding-top:8px;
+      border-top:1px solid var(--line);
+      color:#617382;
+      font-size:11px;
+      font-weight:700;
+    }
+    .brand-foot strong{color:var(--navy-900)}
+    .takeaway{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      padding:13px 18px;
+      border-left:5px solid var(--orange);
+      color:var(--navy-900);
+      background:var(--orange-100);
+      font-size:16px;
+      font-weight:740;
+      line-height:1.3;
+    }
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      min-height:24px;
+      padding:4px 8px;
+      border:1px solid #adc1d0;
+      border-radius:4px;
+      color:var(--blue-700);
+      background:var(--white);
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+
+    /* Cover */
+    .cover{
+      grid-template-rows:1fr auto;
+      padding:48px 64px 32px;
+      color:var(--white);
+      background:
+        linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),
+        radial-gradient(circle at 78% 42%,rgba(29,123,193,.33),transparent 34%),
+        linear-gradient(135deg,var(--navy-950),#0b3152);
+      background-size:54px 54px,54px 54px,auto,auto;
+    }
+    .cover::before{background:var(--orange)}
+    .cover-main{display:grid;grid-template-columns:1.12fr .88fr;align-items:center;gap:42px}
+    .cover-brand{display:flex;align-items:center;gap:13px;color:#d7e4ed;font-size:13px;font-weight:780;letter-spacing:.12em;text-transform:uppercase}
+    .brand-mark{display:grid;place-items:center;width:42px;height:42px;color:var(--navy-950);background:var(--orange);font-size:13px;font-weight:900}
+    .cover-kicker{margin-top:42px;color:var(--orange);font-size:13px;font-weight:850;letter-spacing:.17em;text-transform:uppercase}
+    .cover h1{margin-top:12px;color:var(--white);font-size:67px;line-height:.98;letter-spacing:-.045em}
+    .cover h1 span{display:block;margin-top:13px;color:#cfe2ef;font-size:27px;font-weight:450;line-height:1.18;letter-spacing:-.02em}
+    .cover-promise{max-width:680px;margin-top:25px;color:#d7e4ec;font-size:19px;line-height:1.45}
+    .cover-by{margin-top:27px;color:#aebfca;font-size:14px}
+    .cover-by strong{color:var(--white)}
+    .response-network{position:relative;width:470px;height:420px;margin-left:auto}
+    .network-core{
+      position:absolute;
+      z-index:4;
+      top:50%;
+      left:50%;
+      display:grid;
+      place-items:center;
+      width:154px;
+      height:154px;
+      transform:translate(-50%,-50%);
+      border:1px solid rgba(255,255,255,.38);
+      border-radius:50%;
+      color:var(--white);
+      background:radial-gradient(circle at 38% 30%,#278bd0,#0c4a7a 68%);
+      box-shadow:0 0 0 18px rgba(29,123,193,.12),0 16px 40px rgba(0,0,0,.24);
+      text-align:center;
+      font-size:19px;
+      font-weight:850;
+      line-height:1.14;
+    }
+    .network-ring{position:absolute;inset:37px;border:1px solid rgba(255,255,255,.18);border-radius:50%}
+    .network-node{
+      position:absolute;
+      z-index:5;
+      display:grid;
+      place-items:center;
+      width:118px;
+      min-height:54px;
+      padding:9px 12px;
+      border:1px solid rgba(255,255,255,.25);
+      color:var(--white);
+      background:rgba(8,31,51,.84);
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+      font-size:12px;
+      font-weight:820;
+      line-height:1.25;
+      text-align:center;
+      text-transform:uppercase;
+    }
+    .nn1{top:18px;left:176px}.nn2{top:98px;right:0}.nn3{bottom:62px;right:7px}.nn4{bottom:5px;left:176px}.nn5{bottom:62px;left:4px}.nn6{top:98px;left:0}
+    .network-line{position:absolute;z-index:2;height:2px;background:linear-gradient(90deg,rgba(255,255,255,.08),rgba(241,132,45,.9));transform-origin:left center}
+    .nl1{top:96px;left:235px;width:135px;transform:rotate(48deg)}.nl2{top:153px;left:284px;width:139px;transform:rotate(11deg)}
+    .nl3{top:249px;left:279px;width:146px;transform:rotate(-14deg)}.nl4{top:285px;left:235px;width:135px;transform:rotate(130deg)}
+    .nl5{top:250px;left:189px;width:145px;transform:rotate(194deg)}.nl6{top:154px;left:190px;width:145px;transform:rotate(166deg)}
+    .cover-footer{display:flex;align-items:end;justify-content:space-between;gap:32px;padding-top:19px;border-top:1px solid rgba(255,255,255,.18);color:#aebfca;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+    .cover-footer strong{color:var(--white);font-size:14px}
+    .cover-footer span:last-child,.close-footer span:last-child{display:none}
+
+    /* Executive proposition */
+    .exec-layout{display:grid;grid-template-rows:1fr auto;gap:18px;height:100%}
+    .exec-flow{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:15px;align-items:stretch;padding-top:18px}
+    .exec-flow::before{content:"";position:absolute;top:90px;left:8%;right:8%;height:3px;background:#b7c9d6}
+    .exec-stage{position:relative;z-index:2;padding:21px 17px 18px;background:var(--white)}
+    .exec-node{display:grid;place-items:center;width:56px;height:56px;margin-bottom:18px;border-radius:50%;color:var(--white);background:var(--blue-700);box-shadow:0 0 0 7px var(--blue-100);font-size:17px;font-weight:900}
+    .exec-stage:nth-child(3) .exec-node{background:var(--orange);box-shadow:0 0 0 7px var(--orange-100)}
+    .exec-stage:nth-child(4) .exec-node,.exec-stage:nth-child(5) .exec-node{background:var(--navy-900);box-shadow:0 0 0 7px #e4eaef}
+    .exec-stage h3{color:var(--navy-950);font-size:20px;line-height:1.15}
+    .exec-stage p{margin-top:8px;color:var(--muted);font-size:15px;line-height:1.4}
+    .exec-owner{margin-top:13px;color:var(--blue-700);font-size:12px;font-weight:850;letter-spacing:.07em;text-transform:uppercase}
+    .exec-outcomes{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#547085}
+    .exec-outcomes div{padding:15px 20px;color:#d9e7ef;background:var(--navy-900);font-size:14px;line-height:1.35}
+    .exec-outcomes strong{display:block;margin-bottom:4px;color:var(--orange);font-size:17px}
+
+    /* Middle mile */
+    .middle-layout{display:grid;grid-template-rows:1fr auto;gap:18px;height:100%}
+    .middle-mile{display:grid;grid-template-columns:.82fr 1.28fr .9fr;gap:24px;align-items:stretch}
+    .signal-cloud{position:relative;padding:22px;background:var(--blue-050);overflow:hidden}
+    .signal-cloud h3,.police-record h3{color:var(--navy-950);font-size:20px}
+    .signal-cloud p{margin-top:7px;color:var(--muted);font-size:15px;line-height:1.4}
+    .signal-items{display:flex;flex-wrap:wrap;align-content:flex-start;gap:10px;margin-top:24px}
+    .signal-item{padding:11px 13px;border-left:4px solid var(--blue-600);color:var(--navy-900);background:var(--white);font-size:14px;font-weight:760;box-shadow:0 4px 15px rgba(12,52,82,.06)}
+    .signal-item:nth-child(2){margin-top:22px;border-color:var(--orange)}.signal-item:nth-child(4){border-color:var(--teal)}
+    .conversion{display:flex;flex-direction:column;justify-content:center;padding:8px 4px}
+    .conversion-label{margin-bottom:12px;color:#9a4d16;font-size:12px;font-weight:850;letter-spacing:.12em;text-transform:uppercase}
+    .conversion-step{display:grid;grid-template-columns:52px 1fr;gap:16px;align-items:center;padding:16px 0;border-top:1px solid var(--line)}
+    .conversion-step:last-child{border-bottom:1px solid var(--line)}
+    .conversion-step b{display:grid;place-items:center;width:42px;height:42px;color:var(--white);background:var(--orange);font-size:16px}
+    .conversion-step strong{display:block;color:var(--navy-950);font-size:18px}
+    .conversion-step span{display:block;margin-top:4px;color:var(--muted);font-size:14px;line-height:1.35}
+    .police-record{padding:22px;color:var(--white);background:linear-gradient(145deg,var(--navy-950),var(--navy-800))}
+    .police-record h3{color:var(--white)}
+    .record-list{display:grid;gap:0;margin-top:20px}
+    .record-list div{display:flex;align-items:center;gap:11px;padding:12px 0;border-top:1px solid rgba(255,255,255,.16);color:#d3e1ea;font-size:14px}
+    .record-list i{display:grid;place-items:center;width:27px;height:27px;border-radius:50%;color:var(--navy-950);background:var(--orange);font-size:12px;font-style:normal;font-weight:900}
+
+    /* Operating flow */
+    .flow-layout{display:grid;grid-template-rows:auto 1fr auto;gap:10px;height:100%}
+    .flow-head{display:grid;grid-template-columns:142px repeat(5,1fr);gap:1px;color:#dbe6ed;background:#607687}
+    .flow-head div{display:grid;place-items:center;min-height:42px;padding:7px 10px;background:var(--navy-900);font-size:12px;font-weight:850;letter-spacing:.05em;text-align:center;text-transform:uppercase}
+    .flow-head .blank{background:var(--navy-950)}
+    .flow-lanes{display:grid;grid-template-rows:repeat(3,1fr);gap:8px}
+    .flow-lane{display:grid;grid-template-columns:142px repeat(5,1fr);gap:1px;background:var(--line)}
+    .lane-name{display:flex;flex-direction:column;justify-content:center;padding:14px 16px;color:var(--white);background:var(--blue-700)}
+    .flow-lane:nth-child(2) .lane-name{background:var(--orange)}.flow-lane:nth-child(3) .lane-name{background:var(--navy-900)}
+    .lane-name strong{font-size:17px}.lane-name span{margin-top:4px;font-size:12px;line-height:1.3;opacity:.82}
+    .lane-cell{position:relative;display:flex;flex-direction:column;justify-content:center;padding:12px 13px;background:var(--white)}
+    .lane-cell strong{color:var(--navy-950);font-size:15px;line-height:1.2}.lane-cell span{margin-top:5px;color:var(--muted);font-size:13px;line-height:1.3}
+    .lane-cell.empty{background:var(--soft)}
+    .ticket-spine{display:grid;grid-template-columns:142px 1fr;gap:1px;color:var(--white);background:#667d8e}
+    .ticket-spine strong{display:grid;place-items:center;padding:12px;background:var(--teal);font-size:13px;letter-spacing:.05em;text-transform:uppercase}
+    .ticket-spine span{display:flex;align-items:center;padding:12px 18px;background:var(--navy-900);font-size:15px;font-weight:720}
+
+    /* Citizen intake */
+    .intake-layout{display:grid;grid-template-columns:390px 1fr;gap:34px;height:100%}
+    .phone{align-self:stretch;margin-left:32px;border:4px solid var(--navy-900);border-radius:29px;background:#e8eff3;box-shadow:0 17px 28px rgba(7,28,46,.15);overflow:hidden}
+    .phone-top{height:58px;padding:15px 18px;color:var(--white);background:var(--navy-900)}
+    .phone-top strong{display:block;font-size:15px}.phone-top span{display:block;margin-top:2px;color:#bcd0de;font-size:11px}
+    .chat{display:flex;flex-direction:column;gap:9px;padding:15px}
+    .msg{max-width:86%;padding:9px 11px;border-radius:9px;color:var(--ink);background:var(--white);font-size:12px;line-height:1.33;box-shadow:0 2px 6px rgba(8,30,48,.07)}
+    .msg.user{align-self:flex-end;background:#dff3c8}.msg.summary{border-left:4px solid var(--orange)}
+    .msg b{display:block;margin-bottom:3px;color:var(--navy-900)}
+    .chat-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+    .chat-actions span{padding:7px;border:1px solid #9eb2c0;border-radius:5px;color:var(--blue-700);background:var(--white);font-size:11px;font-weight:800;text-align:center}
+    .intake-side{display:grid;grid-template-rows:1fr auto;gap:16px}
+    .intake-steps{display:grid;grid-template-rows:repeat(3,1fr);gap:0}
+    .intake-step{display:grid;grid-template-columns:56px 1fr;gap:18px;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}
+    .intake-step:first-child{border-top:1px solid var(--line)}
+    .intake-num{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;color:var(--white);background:var(--blue-700);font-size:16px;font-weight:900}
+    .intake-step:nth-child(2) .intake-num{background:var(--orange)}.intake-step:nth-child(3) .intake-num{background:var(--teal)}
+    .intake-step h3{color:var(--navy-950);font-size:19px}
+    .intake-step p{margin-top:5px;color:var(--muted);font-size:15px;line-height:1.38}
+    .formats{display:flex;gap:8px;margin-top:10px}.formats span{padding:6px 9px;color:var(--blue-700);background:var(--blue-100);font-size:11px;font-weight:850;text-transform:uppercase}
+    .confidential-lane{display:grid;grid-template-columns:155px 1fr;align-items:center;gap:16px;padding:13px 16px;border-left:5px solid var(--teal);background:var(--teal-100)}
+    .confidential-lane strong{color:var(--teal);font-size:15px}.confidential-lane span{color:#3f6259;font-size:14px;line-height:1.35}
+
+    /* AI actionability */
+    .ai-layout{display:grid;grid-template-rows:1fr auto;gap:15px;height:100%}
+    .ai-main{display:grid;grid-template-columns:.72fr 1fr .92fr;gap:20px;align-items:stretch}
+    .input-stack{display:flex;flex-direction:column;justify-content:center;gap:10px;padding:14px 0}
+    .input-stack h3,.brief h3{margin-bottom:7px;color:var(--navy-950);font-size:19px}
+    .input-item{display:grid;grid-template-columns:35px 1fr;gap:11px;align-items:center;padding:11px 12px;border-left:4px solid var(--blue-600);background:var(--blue-050)}
+    .input-item:nth-child(3){border-color:var(--orange)}.input-item:nth-child(4){border-color:var(--teal)}
+    .input-item b{display:grid;place-items:center;width:29px;height:29px;color:var(--white);background:var(--navy-900);font-size:11px}
+    .input-item span{color:var(--ink);font-size:14px;font-weight:720}
+    .ai-engine{display:flex;flex-direction:column;justify-content:center;padding:21px 24px;color:var(--white);background:linear-gradient(150deg,var(--navy-950),#0f568c)}
+    .ai-engine .label{color:var(--orange);font-size:12px;font-weight:850;letter-spacing:.13em;text-transform:uppercase}
+    .ai-engine h3{margin-top:7px;color:var(--white);font-size:25px}
+    .checks{display:grid;gap:0;margin-top:15px}
+    .check{display:grid;grid-template-columns:27px 1fr;gap:10px;align-items:center;padding:9px 0;border-top:1px solid rgba(255,255,255,.16);color:#d8e5ed;font-size:14px;line-height:1.3}
+    .check b{display:grid;place-items:center;width:23px;height:23px;border-radius:50%;color:var(--navy-950);background:var(--orange);font-size:11px}
+    .brief{padding:19px 21px;border:1px solid var(--line);background:var(--white)}
+    .brief-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:2px solid var(--navy-900)}
+    .brief-head span{color:var(--teal);font-size:11px;font-weight:850;letter-spacing:.06em;text-transform:uppercase}
+    .brief-list{display:grid;margin-top:6px}
+    .brief-row{display:grid;grid-template-columns:105px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px;line-height:1.3}
+    .brief-row strong{color:var(--muted);font-size:11px;letter-spacing:.04em;text-transform:uppercase}.brief-row span{color:var(--navy-900);font-weight:720}
+    .verified-strip{display:grid;grid-template-columns:1.55fr repeat(3,.55fr);gap:1px;color:var(--white);background:#668091}
+    .verified-strip div{padding:12px 15px;background:var(--navy-900);font-size:13px;line-height:1.3}
+    .verified-strip .definition{background:var(--teal);font-size:14px;font-weight:760}
+    .verified-strip strong{display:block;color:var(--orange);font-size:18px}
+
+    /* Geospatial */
+    .geo-layout{display:grid;grid-template-columns:1.22fr .78fr;gap:28px;height:100%}
+    .geo-map{position:relative;border:1px solid var(--line);background:linear-gradient(135deg,#e9f3f7,#f9fbfc);overflow:hidden}
+    .zone{position:absolute;border:1px solid rgba(20,104,169,.42);background:rgba(29,123,193,.09);clip-path:polygon(16% 0,84% 7%,100% 46%,76% 100%,21% 87%,0 42%)}
+    .z1{top:7%;left:5%;width:45%;height:39%}.z2{top:12%;right:5%;width:43%;height:42%;border-color:rgba(46,120,103,.5);background:rgba(46,120,103,.09)}
+    .z3{bottom:4%;left:18%;width:49%;height:46%;border-color:rgba(241,132,45,.5);background:rgba(241,132,45,.09)}.z4{right:5%;bottom:3%;width:31%;height:38%}
+    .road{position:absolute;height:3px;background:#fff;box-shadow:0 0 0 1px rgba(64,98,122,.08);transform-origin:left center}
+    .road1{top:18%;left:0;width:100%;transform:rotate(16deg)}.road2{top:47%;left:0;width:100%;transform:rotate(-10deg)}.road3{top:71%;left:2%;width:96%;transform:rotate(6deg)}.road4{top:4%;left:38%;width:68%;transform:rotate(84deg)}
+    .citizen-pin{position:absolute;z-index:4;top:46%;left:55%;display:grid;place-items:center;width:42px;height:42px;transform:translate(-50%,-50%) rotate(45deg);border-radius:50% 50% 50% 0;color:var(--white);background:var(--red);box-shadow:0 8px 20px rgba(189,73,63,.28)}
+    .citizen-pin span{transform:rotate(-45deg);font-size:13px;font-weight:900}
+    .pin-label{position:absolute;z-index:5;top:51%;left:49%;padding:8px 10px;color:var(--red);background:var(--white);box-shadow:0 5px 14px rgba(5,31,51,.11);font-size:11px;font-weight:850;text-transform:uppercase}
+    .station-label{position:absolute;z-index:5;top:23%;right:14%;padding:10px 13px;color:var(--white);background:var(--navy-900);box-shadow:0 5px 14px rgba(5,31,51,.16);font-size:12px;font-weight:850;text-transform:uppercase}
+    .route-line{position:absolute;z-index:3;top:37%;left:57%;width:172px;border-top:3px dashed var(--orange);transform:rotate(-20deg);transform-origin:left center}
+    .geo-side{display:grid;grid-template-rows:auto 1fr auto;gap:14px}
+    .geo-intro{color:var(--muted);font-size:15px;line-height:1.42}
+    .geo-intro strong{display:block;margin-bottom:4px;color:var(--navy-950);font-size:19px}
+    .geo-steps{display:grid;align-content:start}
+    .geo-step{display:grid;grid-template-columns:43px 1fr;gap:13px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line)}
+    .geo-step b{display:grid;place-items:center;width:35px;height:35px;border-radius:50%;color:var(--white);background:var(--blue-700);font-size:13px}
+    .geo-step strong{display:block;color:var(--navy-950);font-size:16px}.geo-step span{display:block;margin-top:3px;color:var(--muted);font-size:13px;line-height:1.3}
+
+    /* Station */
+    .station-layout{display:grid;grid-template-columns:1.12fr .88fr;gap:28px;height:100%}
+    .case-file{display:grid;grid-template-rows:auto 1fr auto;border:1px solid var(--line);background:var(--white)}
+    .case-head{display:flex;justify-content:space-between;align-items:center;padding:16px 19px;color:var(--white);background:var(--navy-900)}
+    .case-head strong{font-size:16px}.case-head span{padding:5px 8px;border-radius:4px;color:var(--navy-950);background:var(--orange);font-size:11px;font-weight:850;text-transform:uppercase}
+    .case-grid{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:1px;background:var(--line)}
+    .case-field{padding:16px 18px;background:var(--white)}
+    .case-field b{display:block;color:var(--muted);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+    .case-field strong{display:block;margin-top:6px;color:var(--navy-950);font-size:16px;line-height:1.3}
+    .case-field span{display:block;margin-top:5px;color:var(--muted);font-size:13px;line-height:1.3}
+    .case-media{display:flex;gap:8px;padding:12px 18px;background:var(--soft)}
+    .station-side{display:grid;grid-template-rows:auto 1fr auto;gap:12px}
+    .station-side h3{color:var(--navy-950);font-size:20px;line-height:1.25}
+    .station-actions{display:grid;grid-template-rows:repeat(4,1fr)}
+    .station-action{display:grid;grid-template-columns:47px 1fr;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+    .station-action b{display:grid;place-items:center;width:39px;height:39px;color:var(--white);background:var(--blue-700);font-size:13px}
+    .station-action:nth-child(2) b{background:var(--orange)}.station-action:nth-child(3) b{background:var(--navy-900)}.station-action:nth-child(4) b{background:var(--teal)}
+    .station-action strong{display:block;color:var(--navy-950);font-size:16px}.station-action span{display:block;margin-top:4px;color:var(--muted);font-size:13px;line-height:1.3}
+    .station-callout{padding:13px 16px;color:var(--white);background:var(--teal);font-size:14px;font-weight:760;line-height:1.35}
+
+    /* Field */
+    .field-layout{display:grid;grid-template-rows:auto 1fr auto;gap:15px;height:100%}
+    .ownership-strip{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;color:var(--navy-900);background:var(--blue-100);font-size:14px;font-weight:750}
+    .ownership-strip strong{color:var(--blue-700);font-size:15px}
+    .field-main{display:grid;grid-template-columns:310px 1fr;gap:28px;align-items:stretch}
+    .mission-card{display:flex;flex-direction:column;color:var(--white);background:linear-gradient(150deg,var(--navy-950),var(--navy-800));box-shadow:0 14px 28px rgba(5,31,51,.14)}
+    .mission-head{padding:15px 17px;border-bottom:1px solid rgba(255,255,255,.18)}
+    .mission-head span{color:var(--orange);font-size:11px;font-weight:850;letter-spacing:.08em;text-transform:uppercase}.mission-head h3{margin-top:5px;color:var(--white);font-size:19px}
+    .mission-map{position:relative;height:115px;background:linear-gradient(135deg,#dbe8ee,#f0f5f7)}
+    .mission-map::before,.mission-map::after{content:"";position:absolute;height:3px;background:#fff;box-shadow:0 0 0 1px rgba(64,98,122,.09)}
+    .mission-map::before{top:42px;left:-4px;width:320px;transform:rotate(12deg)}.mission-map::after{top:62px;left:10px;width:295px;transform:rotate(-11deg)}
+    .mini-pin{position:absolute;z-index:2;top:52px;left:150px;width:24px;height:24px;transform:rotate(45deg);border-radius:50% 50% 50% 0;background:var(--red)}
+    .mission-list{display:grid;padding:8px 17px 14px}
+    .mission-list div{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.14);color:#cbdbe6;font-size:12px}
+    .mission-list b{color:var(--white)}
+    .field-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;align-items:stretch}
+    .field-action{position:relative;padding:19px 16px 16px;border-top:5px solid var(--blue-600);background:var(--soft)}
+    .field-action:nth-child(2){border-color:var(--orange)}.field-action:nth-child(3){border-color:var(--navy-900)}.field-action:nth-child(4){border-color:var(--teal)}
+    .field-action:not(:last-child)::after{content:"›";position:absolute;top:46%;right:-13px;color:var(--orange);background:var(--white);font-size:28px;font-weight:300}
+    .field-action .num{color:#90a2af;font-size:13px;font-weight:850}
+    .field-action h3{margin-top:21px;color:var(--navy-950);font-size:19px;line-height:1.15}
+    .field-action p{margin-top:8px;color:var(--muted);font-size:14px;line-height:1.38}
+    .field-bottom{display:flex;align-items:center;gap:18px;padding:12px 16px;color:var(--white);background:var(--navy-900);font-size:14px}
+    .field-bottom strong{color:var(--orange);font-size:14px;text-transform:uppercase}
+
+    /* Command */
+    .command-layout{display:grid;grid-template-columns:1.16fr .84fr;gap:28px;height:100%}
+    .command-view{display:grid;grid-template-rows:auto 1fr;border:1px solid var(--line);background:var(--soft)}
+    .command-head{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;color:var(--white);background:var(--navy-900)}
+    .command-head strong{font-size:13px}.command-head span{color:#bfd0dc;font-size:11px}
+    .city-map{position:relative;margin:12px;background:
+      linear-gradient(rgba(35,80,110,.07) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(35,80,110,.07) 1px,transparent 1px),
+      linear-gradient(135deg,#edf4f7,#f9fbfc);
+      background-size:38px 38px,38px 38px,auto;
+      overflow:hidden;
+    }
+    .city-road{position:absolute;height:5px;background:#fff;box-shadow:0 0 0 1px rgba(64,98,122,.06);transform-origin:left center}
+    .cr1{top:32%;left:0;width:100%;transform:rotate(16deg)}.cr2{top:63%;left:0;width:100%;transform:rotate(-13deg)}.cr3{top:4%;left:47%;width:65%;transform:rotate(87deg)}
+    .signal{position:absolute;z-index:3;width:22px;height:22px;border-radius:50%;box-shadow:0 0 0 10px rgba(29,123,193,.14)}
+    .s1{top:27%;left:28%;background:var(--red);box-shadow:0 0 0 10px rgba(189,73,63,.14)}.s2{top:56%;left:62%;background:var(--orange);box-shadow:0 0 0 13px rgba(241,132,45,.15)}.s3{top:72%;left:35%;background:var(--blue-700)}.s4{top:34%;left:76%;background:var(--teal);box-shadow:0 0 0 10px rgba(46,120,103,.14)}
+    .signal-label{position:absolute;z-index:4;padding:7px 9px;color:var(--white);background:var(--navy-900);font-size:10px;font-weight:850;text-transform:uppercase;box-shadow:0 5px 12px rgba(5,31,51,.12)}
+    .sl1{top:17%;left:17%}.sl2{top:63%;left:65%}.sl3{top:77%;left:38%}.sl4{top:24%;left:79%}
+    .command-side{display:grid;grid-template-rows:auto 1fr auto;gap:12px}
+    .command-side h3{color:var(--navy-950);font-size:20px;line-height:1.25}
+    .command-questions{display:grid;grid-template-rows:repeat(3,1fr)}
+    .command-q{display:grid;grid-template-columns:46px 1fr;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+    .command-q b{display:grid;place-items:center;width:39px;height:39px;border-radius:50%;color:var(--white);background:var(--blue-700);font-size:14px}
+    .command-q:nth-child(2) b{background:var(--orange)}.command-q:nth-child(3) b{background:var(--teal)}
+    .command-q strong{display:block;color:var(--navy-950);font-size:17px}.command-q span{display:block;margin-top:5px;color:var(--muted);font-size:14px;line-height:1.35}
+    .command-note{padding:13px 15px;border-left:5px solid var(--orange);color:#70411e;background:var(--orange-100);font-size:14px;font-weight:750;line-height:1.35}
+
+    /* Scenario */
+    .scenario-layout{display:grid;grid-template-rows:auto 1fr auto;gap:17px;height:100%}
+    .scenario-banner{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;padding:16px 20px;color:var(--white);background:var(--navy-900)}
+    .scenario-banner .label{color:var(--orange);font-size:11px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+    .scenario-banner blockquote{margin:6px 0 0;color:var(--white);font-size:24px;font-weight:720;line-height:1.22}
+    .scenario-media{display:flex;gap:8px}.scenario-media span{padding:8px 10px;border:1px solid rgba(255,255,255,.35);font-size:11px;font-weight:850;text-transform:uppercase}
+    .journey{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:18px;align-items:stretch}
+    .journey::before{content:"";position:absolute;top:50px;left:8%;right:8%;height:3px;background:#b7c9d6}
+    .journey-step{position:relative;z-index:2;padding:11px 10px 10px;background:var(--white)}
+    .journey-node{display:grid;place-items:center;width:56px;height:56px;margin-bottom:18px;border-radius:50%;color:var(--white);background:var(--blue-700);box-shadow:0 0 0 7px var(--blue-100);font-size:17px;font-weight:900}
+    .journey-step:nth-child(2) .journey-node{background:var(--orange);box-shadow:0 0 0 7px var(--orange-100)}.journey-step:nth-child(3) .journey-node{background:var(--teal);box-shadow:0 0 0 7px var(--teal-100)}.journey-step:nth-child(4) .journey-node,.journey-step:nth-child(5) .journey-node{background:var(--navy-900);box-shadow:0 0 0 7px #e4eaef}
+    .journey-step .actor{color:#7b8c99;font-size:11px;font-weight:850;letter-spacing:.08em;text-transform:uppercase}
+    .journey-step h3{margin-top:5px;color:var(--navy-950);font-size:18px;line-height:1.2}
+    .journey-step p{margin-top:7px;color:var(--muted);font-size:14px;line-height:1.38}
+    .chain-callout{display:flex;justify-content:space-between;align-items:center;padding:13px 17px;color:var(--white);background:var(--teal);font-size:15px;font-weight:770}
+    .chain-callout span{font-weight:500}
+
+    /* Close */
+    .close{
+      grid-template-rows:1fr auto;
+      padding:48px 64px 32px;
+      color:var(--white);
+      background:
+        radial-gradient(circle at 78% 34%,rgba(29,123,193,.35),transparent 32%),
+        linear-gradient(135deg,var(--navy-950),#0b3152);
+    }
+    .close::before{background:var(--orange)}
+    .close-main{display:grid;grid-template-columns:1.12fr .88fr;align-items:center;gap:50px}
+    .close h2{max-width:690px;color:var(--white);font-size:51px;line-height:1.04}
+    .close h2 strong{color:var(--orange)}
+    .close-sub{max-width:690px;margin-top:22px;color:#d5e3eb;font-size:19px;line-height:1.45}
+    .close-brand{margin-top:30px;color:#aebfca;font-size:14px}.close-brand strong{color:var(--white)}
+    .outcome-path{display:grid;gap:2px;background:rgba(255,255,255,.14)}
+    .outcome-row{display:grid;grid-template-columns:95px 1fr;gap:16px;align-items:center;padding:17px 18px;background:rgba(8,31,51,.82)}
+    .outcome-row b{color:var(--orange);font-size:12px;letter-spacing:.08em;text-transform:uppercase}.outcome-row strong{display:block;color:var(--white);font-size:17px}.outcome-row span{display:block;margin-top:3px;color:#bdcfdb;font-size:13px;line-height:1.3}
+    .close-footer{display:flex;justify-content:space-between;align-items:end;padding-top:20px;border-top:1px solid rgba(255,255,255,.18);color:#aebfca;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+    .close-footer strong{color:var(--white);font-size:14px}
+
+    /* Presentation controls */
+    .progress{position:absolute;z-index:40;top:0;left:0;width:0;height:5px;background:var(--orange);transition:width 180ms ease}
+    .controls{
+      position:absolute;
+      z-index:50;
+      right:20px;
+      bottom:4px;
+      display:flex;
+      align-items:center;
+      min-height:46px;
+      border:1px solid rgba(13,43,71,.18);
+      border-radius:24px;
+      background:rgba(255,255,255,.96);
+      box-shadow:0 7px 22px rgba(7,28,46,.15);
+      overflow:hidden;
+    }
+    .control-btn{display:grid;place-items:center;width:45px;height:45px;padding:0;border:0;color:var(--navy-900);background:transparent;cursor:pointer;font-size:20px;font-weight:850}
+    .control-btn:hover{color:var(--white);background:var(--navy-900)}.control-btn:disabled{color:#aebbc5;background:#f1f4f6;cursor:default}
+    .current-slide{display:flex;align-items:center;min-width:186px;height:45px;padding:0 13px;border-left:1px solid var(--line);border-right:1px solid var(--line);color:var(--navy-900);font-size:12px;font-weight:780;white-space:nowrap}
+    .help{position:absolute;z-index:55;right:24px;bottom:71px;display:none;width:300px;padding:12px 15px;border-radius:7px;color:var(--white);background:rgba(7,28,46,.96);font-size:12px;line-height:1.45;box-shadow:0 9px 24px rgba(0,0,0,.2)}
+    .help.show{display:block}
+    .control-btn:focus-visible{outline:3px solid var(--orange);outline-offset:-3px}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+    @media print{
+      @page{size:13.333in 7.5in;margin:0}
+      html,body{width:auto;height:auto;overflow:visible;background:#fff}
+      body{display:block}.deck-stage{position:static;width:1280px;height:auto;transform:none!important;overflow:visible;box-shadow:none}
+      .deck{position:static}.slide{position:relative;width:1280px;height:720px;visibility:visible!important;opacity:1!important;transform:none!important;break-after:page;page-break-after:always}
+      .controls,.progress,.help{display:none!important}
+    }
+
+
+    /* =========================================================
+       McKinsey-style premium UI/UX upgrade by ChatGPT
+       Focus: sharper executive hierarchy, better spacing,
+       premium visual language, more legible slide controls,
+       stronger print/export fidelity.
+    ========================================================= */
+    :root{
+      --navy-950:#031728;
+      --navy-900:#08233d;
+      --navy-800:#0f3355;
+      --blue-700:#0b67b2;
+      --blue-600:#147fc8;
+      --blue-100:#e9f3fb;
+      --blue-050:#f6fbff;
+      --orange:#ff8b2b;
+      --orange-100:#fff2e7;
+      --teal:#1e7f73;
+      --teal-100:#e8f5f3;
+      --red:#c9433e;
+      --ink:#0b1f33;
+      --muted:#536678;
+      --line:#dbe4ea;
+      --soft:#f7f9fb;
+      --white:#fff;
+      --shadow:0 28px 90px rgba(0,0,0,.34);
+      --radius:18px;
+      --radius-sm:10px;
+    }
+    body{
+      background:
+        radial-gradient(circle at 18% 8%,rgba(255,139,43,.18),transparent 28%),
+        radial-gradient(circle at 88% 72%,rgba(20,127,200,.20),transparent 30%),
+        linear-gradient(135deg,#05111f 0%,#071c2e 58%,#020913 100%);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    }
+    .deck-stage{
+      border-radius:16px;
+      box-shadow:0 30px 80px rgba(0,0,0,.42),0 0 0 1px rgba(255,255,255,.08);
+      background:var(--white);
+    }
+    .slide{
+      padding:36px 58px 26px;
+      gap:14px;
+      background:
+        linear-gradient(90deg,rgba(255,139,43,.055),transparent 26%),
+        radial-gradient(circle at 94% 6%,rgba(11,103,178,.085),transparent 26%),
+        #fff;
+    }
+    .slide::before{height:7px;background:linear-gradient(90deg,var(--orange) 0 17%,var(--navy-900) 17% 42%,var(--blue-600) 42% 100%)}
+    .slide::after{
+      content:"";
+      position:absolute;
+      right:0;bottom:0;
+      width:340px;height:340px;
+      background:radial-gradient(circle at bottom right,rgba(11,103,178,.10),transparent 62%);
+      pointer-events:none;
+    }
+    .slide-header{position:relative;z-index:2;padding-bottom:6px;border-bottom:1px solid rgba(219,228,234,.82)}
+    .eyebrow{margin-bottom:11px;color:#a54f11;font-size:11px;letter-spacing:.18em}
+    .eyebrow::before{width:30px;height:3px;border-radius:99px;background:linear-gradient(90deg,var(--orange),#f7bf73)}
+    h2{max-width:980px;font-size:40px;line-height:1.04;font-weight:520;letter-spacing:-.052em;color:#061a2d}
+    h2 strong{font-weight:840;color:#041728}
+    .chapter{padding-top:5px;color:#7b8b98;font-size:10px;letter-spacing:.20em}
+    .slide-body{position:relative;z-index:2}
+    .slide-footer{position:relative;z-index:2;min-height:24px;padding-top:9px;border-top:1px solid rgba(219,228,234,.95);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#7b8b98}
+    .slide-footer::after{content:attr(data-slide);margin-left:auto;color:#9aa9b4}
+    .takeaway{border:0;border-left:6px solid var(--orange);border-radius:0 var(--radius-sm) var(--radius-sm) 0;background:linear-gradient(90deg,var(--orange-100),#fff);box-shadow:0 8px 24px rgba(255,139,43,.08);font-size:16px;color:#071c2e}
+    .tag{border-radius:999px;border-color:#b9c8d5;background:#fff;font-size:10px;letter-spacing:.08em}
+
+    .cover,.close{
+      background:
+        linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px),
+        radial-gradient(circle at 80% 44%,rgba(20,127,200,.36),transparent 35%),
+        radial-gradient(circle at 16% 8%,rgba(255,139,43,.18),transparent 26%),
+        linear-gradient(135deg,#031321,#082a48 60%,#031321);
+      background-size:42px 42px,42px 42px,auto,auto,auto;
+    }
+    .cover::before,.close::before{height:8px;background:linear-gradient(90deg,var(--orange),#ffb66d 18%,transparent 18%)}
+    .cover h1{font-size:68px;line-height:.96;letter-spacing:-.062em;max-width:760px}
+    .cover h1 span{margin-top:16px;color:#d9ecf8;font-size:30px;font-weight:520;letter-spacing:-.035em}
+    .cover-promise,.close-sub{max-width:730px;color:#dce8f0;font-size:20px;line-height:1.42}
+    .cover-brand,.cover-footer,.close-footer{letter-spacing:.12em}
+    .brand-mark{border-radius:12px;box-shadow:0 12px 24px rgba(255,139,43,.20)}
+    .response-network{filter:drop-shadow(0 28px 42px rgba(0,0,0,.22))}
+    .network-core{border:1px solid rgba(255,255,255,.45);background:radial-gradient(circle at 28% 22%,#4db2ff,#075188 70%);box-shadow:0 0 0 20px rgba(20,127,200,.10),0 20px 48px rgba(0,0,0,.24)}
+    .network-node{border-radius:14px;background:rgba(5,19,35,.82);backdrop-filter:blur(6px);box-shadow:0 14px 32px rgba(0,0,0,.22)}
+
+    .exec-stage,.journey-step{border-radius:16px;background:#fff;box-shadow:0 12px 34px rgba(6,32,54,.07);padding:22px 18px}
+    .exec-flow::before,.journey::before{height:2px;background:linear-gradient(90deg,transparent,#9eb4c5 14%,#9eb4c5 86%,transparent)}
+    .exec-node,.journey-node{box-shadow:0 0 0 8px rgba(11,103,178,.12),0 12px 25px rgba(11,103,178,.18)}
+    .exec-stage h3,.conversion-step strong,.intake-step h3,.geo-step strong,.station-action strong,.command-q strong,.journey-step h3{letter-spacing:-.02em}
+    .exec-outcomes,.verified-strip{border-radius:14px;overflow:hidden;background:#d7e2ea;box-shadow:0 14px 28px rgba(6,32,54,.08)}
+    .exec-outcomes div,.verified-strip div{background:#071c2e}
+
+    .signal-cloud,.police-record,.brief,.case-file,.command-view,.mission-card{border-radius:18px;overflow:hidden;box-shadow:0 16px 38px rgba(5,31,51,.08);border:1px solid rgba(219,228,234,.84)}
+    .signal-item{border-radius:10px;border-left-width:5px;box-shadow:0 10px 24px rgba(6,32,54,.06)}
+    .conversion-step{padding:15px 0}
+    .record-list div,.check,.mission-list div{border-color:rgba(255,255,255,.18)}
+
+    .flow-head{border-radius:12px 12px 0 0;overflow:hidden;background:#d7e2ea}
+    .flow-lane{border-radius:12px;overflow:hidden;box-shadow:0 8px 22px rgba(6,32,54,.05)}
+    .lane-cell{padding:12px 14px}
+    .ticket-spine{border-radius:12px;overflow:hidden;box-shadow:0 12px 26px rgba(6,32,54,.07)}
+
+    .phone{border-width:3px;border-radius:34px;box-shadow:0 24px 50px rgba(7,28,46,.20);background:#eef4f8}
+    .phone-top{height:62px;background:linear-gradient(135deg,#071c2e,#0e4168)}
+    .msg{border-radius:14px;font-size:12.5px;box-shadow:0 5px 14px rgba(8,30,48,.08)}
+    .msg.user{background:#d9f1d1}
+    .chat-actions span{border-radius:999px}
+    .confidential-lane{border-radius:14px;border-left-width:6px;box-shadow:0 12px 26px rgba(30,127,115,.08)}
+
+    .ai-engine{border-radius:20px;box-shadow:0 24px 48px rgba(5,31,51,.16);background:linear-gradient(150deg,#061a2d,#0b67b2)}
+    .input-item{border-radius:12px;border-left-width:5px;box-shadow:0 8px 22px rgba(6,32,54,.05)}
+    .brief-head{border-bottom-color:#071c2e}
+    .geo-map,.city-map,.mission-map{border-radius:18px;background:linear-gradient(135deg,#edf6fb,#fff)}
+    .geo-map{box-shadow:inset 0 0 0 1px rgba(219,228,234,.8),0 16px 36px rgba(6,32,54,.07)}
+    .pin-label,.station-label,.signal-label{border-radius:999px}
+    .station-callout,.field-bottom,.command-note,.chain-callout{border-radius:12px;box-shadow:0 12px 28px rgba(6,32,54,.08)}
+    .case-field{padding:17px 19px}
+    .field-action{border-radius:16px;background:#fff;box-shadow:0 12px 30px rgba(6,32,54,.06)}
+    .field-action:not(:last-child)::after{right:-16px;color:#e77b21}
+    .ownership-strip{border-radius:12px;background:linear-gradient(90deg,#e7f2fb,#fff2e7)}
+    .outcome-path{border-radius:18px;overflow:hidden;box-shadow:0 20px 46px rgba(0,0,0,.20)}
+    .outcome-row{background:rgba(4,18,32,.86);backdrop-filter:blur(4px)}
+
+    .controls{right:22px;bottom:10px;border-radius:999px;box-shadow:0 16px 36px rgba(7,28,46,.18);border:1px solid rgba(7,28,46,.15)}
+    .control-btn{width:46px;height:44px}
+    .current-slide{height:44px;min-width:205px;font-size:11px;letter-spacing:.02em}
+    .help{border-radius:14px}
+    @media print{
+      .deck-stage{border-radius:0!important;box-shadow:none!important}
+      .slide{box-shadow:none!important;background:#fff!important}
+      .cover,.close{background:linear-gradient(135deg,#031321,#082a48 60%,#031321)!important;color:#fff!important}
+      .slide::after{display:none!important}
+    }
+
+  </style>
+</head>
+<body>
+  <div class="deck-stage" id="deckStage" aria-label="WhatsUp.city Police presentation for Pune Police">
+    <div class="progress" id="progress" aria-hidden="true"></div>
+    <main class="deck" id="deck">
+
+      <section class="slide cover active" data-title="WhatsUp.city Police">
+        <div class="cover-main">
+          <div>
+            <div class="cover-brand"><span class="brand-mark">WU</span> WoW-Strategies Private Limited</div>
+            <div class="cover-kicker">Executive proposal · Pune Police</div>
+            <h1>WhatsUp.city Police<span>Citizen Signal → Coordinated Police Action</span></h1>
+            <p class="cover-promise">An AI + geospatial operating layer that converts WhatsApp citizen reports into station-owned, field-ready police response.</p>
+            <p class="cover-by">Presented by <strong>WoW-Strategies Private Limited</strong></p>
+          </div>
+          <div class="response-network" aria-hidden="true">
+            <div class="network-ring"></div>
+            <span class="network-line nl1"></span><span class="network-line nl2"></span><span class="network-line nl3"></span><span class="network-line nl4"></span><span class="network-line nl5"></span><span class="network-line nl6"></span>
+            <div class="network-core">WhatsUp.city<br />AI</div>
+            <div class="network-node nn1">Citizen signal</div><div class="network-node nn2">Assess & verify</div><div class="network-node nn3">Jurisdiction</div>
+            <div class="network-node nn4">Police station</div><div class="network-node nn5">Field action</div><div class="network-node nn6">Command view</div>
+          </div>
+        </div>
+        <div class="cover-footer"><strong>Signal → Brief → Jurisdiction → Station → Field → Command</strong><span>Pune Police proposal</span></div>
+      </section>
+
+      <section class="slide" data-title="Executive proposition">
+        <header class="slide-header"><div class="header-copy"><div class="eyebrow">Executive proposition</div><h2>WhatsUp.city Police turns every citizen signal into <strong>owned, on-ground action</strong></h2></div><div class="chapter">01 · Need</div></header>
+        <div class="slide-body exec-layout">
+          <div class="exec-flow">
+            <article class="exec-stage"><div class="exec-node">1</div><h3>Citizen access</h3><p>Complaints, incidents and confidential tips through familiar WhatsApp conversations.</p><div class="exec-owner">Citizen</div></article>
+            <article class="exec-stage"><div class="exec-node">2</div><h3>AI actionability</h3><p>Text, voice, photographs and location become one structured incident brief.</p><div class="exec-owner">WhatsUp.city AI</div></article>
+            <article class="exec-stage"><div class="exec-node">3</div><h3>Geospatial ownership</h3><p>The location is matched to the responsible police-station jurisdiction.</p><div class="exec-owner">Geo engine</div></article>
+            <article class="exec-stage"><div class="exec-node">4</div><h3>Station assignment</h3><p>The concerned station receives context, priority, map and supporting media.</p><div class="exec-owner">Police station</div></article>
+            <article class="exec-stage"><div class="exec-node">5</div><h3>Field & command</h3><p>Officers act and escalate while station and leadership retain visibility.</p><div class="exec-owner">Pune Police</div></article>
+          </div>
+          <div class="exec-outcomes">
+            <div><strong>Right information</strong>Structured before it reaches the station queue.</div>
+            <div><strong>Right owner</strong>Jurisdiction is determined at intake.</div>
+            <div><strong>Visible action</strong>One ticket carries the response through closure.</div>
+          </div>
+        </div>
+        <footer class="slide-footer"><span class="brand-foot"><strong>WoW-Strategies</strong> · WhatsUp.city Police</span></footer>
+      </section>
+
+      <section class="slide" data-title="The response opportunity">
+        <header class="slide-header"><div class="header-copy"><div class="eyebrow">The response opportunity</div><h2>Citizen signals become actionable only when <strong>context, location and ownership converge</strong></h2></div><div class="chapter">01 · Need</div></header>
+        <div class="slide-body middle-layout">
+          <div class="middle-mile">
+            <div class="signal-cloud">
+              <h3>Citizens report naturally</h3>
+              <p>Important details often arrive across formats, messages and languages.</p>
+              <div class="signal-items"><div class="signal-item">Free-form message</div><div class="signal-item">Voice note</div><div class="signal-item">Photograph</div><div class="signal-item">Location pin</div><div class="signal-item">Follow-up detail</div></div>
+            </div>
+            <div class="conversion">
+              <div class="conversion-label">The middle mile to police action</div>
+              <div class="conversion-step"><b>1</b><div><strong>Build actionable context</strong><span>Clarify what happened, where, when and the identifying details that matter.</span></div></div>
+              <div class="conversion-step"><b>2</b><div><strong>Apply consistent triage</strong><span>Identify incident type, priority and confidential treatment.</span></div></div>
+              <div class="conversion-step"><b>3</b><div><strong>Fix operational ownership</strong><span>Resolve jurisdiction and move the full record into a station-owned response.</span></div></div>
+            </div>
+            <div class="police-record">
+              <h3>Police needs one action-ready record</h3>
+              <div class="record-list"><div><i>✓</i>Citizen-confirmed summary</div><div><i>✓</i>Incident type and priority</div><div><i>✓</i>Exact location and jurisdiction</div><div><i>✓</i>Supporting media and conversation</div><div><i>✓</i>Clear owner and status trail</div></div>
+            </div>
+          </div>
+          <div class="takeaway">The opportunity is to digitize the conversion from a natural citizen report to an assigned police response.</div>
+        </div>
+        <footer class="slide-footer"><span class="brand-foot"><strong>WoW-Strategies</strong> · WhatsUp.city Police</span></footer>
+      </section>
+
+      <section class="slide" data-title="One connected operating flow">
+        <header class="slide-header"><div class="header-copy"><div class="eyebrow">One connected operating flow</div><h2>A single incident record connects the <strong>citizen, AI, station, field officer and command</strong></h2></div><div class="chapter">02 · How it works</div></header>
+        <div class="slide-body flow-layout">
+          <div class="flow-head"><div class="blank">Owner</div><div>Report</div><div>Verify</div><div>Locate & route</div><div>Assign & act</div><div>Close & update</div></div>
+          <div class="flow-lanes">
+            <div class="flow-lane"><div class="lane-name"><strong>Citizen</strong><span>Familiar access</span></div><div class="lane-cell"><strong>Describe the incident</strong><span>Text, voice, photo or tip</span></div><div class="lane-cell"><strong>Add missing detail</strong><span>Review and confirm summary</span></div><div class="lane-cell"><strong>Share location</strong><span>Pin, address or landmark</span></div><div class="lane-cell empty"><strong>Stay informed</strong><span>Ticket acknowledgement</span></div><div class="lane-cell"><strong>Track status</strong><span>Updates through the same channel</span></div></div>
+            <div class="flow-lane"><div class="lane-name"><strong>WhatsUp.city</strong><span>AI + geospatial</span></div><div class="lane-cell"><strong>Understand intent</strong><span>Complaint, emergency or tip</span></div><div class="lane-cell"><strong>Structure & triage</strong><span>Completeness, type and priority</span></div><div class="lane-cell"><strong>Resolve jurisdiction</strong><span>Boundary match and station owner</span></div><div class="lane-cell"><strong>Route full packet</strong><span>Summary, map and media</span></div><div class="lane-cell"><strong>Maintain the trail</strong><span>Status and escalation history</span></div></div>
+            <div class="flow-lane"><div class="lane-name"><strong>Pune Police</strong><span>Station to field</span></div><div class="lane-cell empty"><strong>Receive signal</strong><span>Urgent attention where required</span></div><div class="lane-cell empty"><strong>Review context</strong><span>Priority and confidentiality</span></div><div class="lane-cell"><strong>Accept ownership</strong><span>Concerned station queue</span></div><div class="lane-cell"><strong>Assign & respond</strong><span>Field action and escalation</span></div><div class="lane-cell"><strong>Update & close</strong><span>Station and command visibility</span></div></div>
+          </div>
+          <div class="ticket-spine"><strong>Persistent ticket</strong><span>The incident record—not the original message—becomes the unit of police action across every handoff.</span></div>
+        </div>
+        <footer class="slide-footer"><span class="brand-foot"><strong>WoW-Strategies</strong> · WhatsUp.city Police</span></footer>
+      </section>
+
+      <section class="slide" data-title="Citizen reporting">
+        <header class="slide-header"><div class="header-copy"><div class="eyebrow">Citizen reporting</div><h2>Citizens report naturally; <strong>WhatsUp.city AI structures the incident</strong></h2></div><div class="chapter">02 · How it works</div></header>
+        <div class="slide-body intake-layout">
+          <div class="phone" aria-label="Illustrative WhatsApp reporting conversation">
+            <div class="phone-top"><strong>Pune Police on WhatsApp</strong><span>Illustrative experience · Powered by WhatsUp.city AI</span></div>
+            <div class="chat">
+              <div class="msg user">Two groups are fighting near the market. I am sharing a voice note and location.</div>
+              <div class="msg">Is anyone injured? Are any weapons visible?</div>
+              <div class="msg user">No weapon seen. One person may be injured.</div>
+              <div class="msg summary"><b>Report summary</b>Public disturbance · Location captured · Priority assessed</div>
+              <div class="chat-actions"><span>Confirm report</span><span>Edit details</span></div>
+              <div class="msg">Report submitted. Your ticket and status will remain available here.</div>
+            </div>
+          </div>
+          <div class="intake-side">
+            <div class="intake-steps">
+              <div class="intake-step"><div class="intake-num">1</div><div><h3>Share what happened</h3><p>Citizens use Marathi or English and combine related messages into one conversation.</p><div class="formats"><span>Text</span><span>Voice</span><span>Photo</span><span>Location</span></div></div></div>
+              <div class="intake-step"><div class="intake-num">2</div><div><h3>Answer only what is missing</h3><p>AI asks focused follow-up questions to make the report sufficiently detailed for police action.</p></div></div>
+              <div class="intake-step"><div class="intake-num">3</div><div><h3>Review, submit and track</h3><p>The citizen confirms the structured summary and receives a ticket through the same channel.</p></div></div>
+            </div>
+            <div class="confidential-lane"><strong>Confidential tips</strong><span>Identity treatment remains confidential while incident type, priority and location continue to the concerned police response lane.</span></div>
+          </div>
+        </div>
+        <footer class="slide-footer"><span class="brand-foot"><strong>WoW-Strategies</strong> · WhatsUp.city Police</span></footer>
+      </section>
+
+      <section class="slide" data-title="AI actionability assessment">
+        <header class="slide-header"><div class="header-copy"><div class="eyebrow">WhatsUp.city AI</div><h2>AI makes each report <strong>action-ready before police time is engaged</strong></h2></div><div class="chapter">02 · How it works</div></header>
+        <div class="slide-body ai-layout">
+          <div class="ai-main">
+            <div class="input-stack"><h3>Natural citizen input</h3><div class="input-item"><b>Aa</b><span>Free-form message</span></div><div class="input-item"><b>▶</b><span>Voice note</span></div><div class="input-item"><b>▣</b><span>Photograph</span></div><div class="input-item"><b>⌖</b><span>Location</span></div></div>
+            <div class="ai-engine"><div class="label">Actionability assessment</div><h3>WhatsUp.city AI</h3><div class="checks"><div class="check"><b>1</b>Understand intent and confidential handling</div><div class="check"><b>2</b>Identify missing what, where, when and who</div><div class="check"><b>3</b>Synthesize related messages and media</div><div class="check"><b>4</b>Apply incident type, priority and routing rules</div><div class="check"><b>5</b>Present the structured summary for confirmation</div></div></div>
+            <div class="brief"><div class="brief-head"><h3>Action-ready incident brief</h3><span>Citizen confirmed</span></div><div class="brief-list"><div class="brief-row"><strong>Summary</strong><span>Coherent incident narrative</span></div><div class="brief-row"><strong>Classification</strong><span>Type, priority and confidentiality</span></div><div class="brief-row"><strong>Key details</strong><span>People, vehicle, time and landmarks</span></div><div class="brief-row"><strong>Location</strong><span>Coordinates and resolved address</span></div><div class="brief-row"><strong>Attachments</strong><span>Voice, photographs and conversation</span></div></div></div>
+          </div>
+          <div class="verified-strip"><div class="definition">Verified for action = sufficiently detailed + citizen-confirmed + location-ready</div><div><strong>18</strong>incident types</div><div><strong>4</strong>priority levels</div><div><strong>2</strong>languages</div></div>
+        </div>
+        <footer class="slide-footer"><span class="brand-foot"><strong>WoW-Strategies</strong> · WhatsUp.city Police</span></footer>
+      </section>
+
+      <section class="slide" data-title="Geospatial jurisdiction">
+        <header class="slide-header"><div class="header-copy"><div class="eyebrow">Geospatial jurisdiction intelligence</div><h2>Geospatial intelligence resolves the <strong>responsible police station at intake</strong></h2></div><div class="chapter">02 · How it works</div></header>
+        <div class="slide-body geo-layout">
+          <div class="geo-map" aria-label="Illustrative station-jurisdiction map">
+            <div class="zone z1"></div><div class="zone z2"></div><div class="zone z3"></div><div class="zone z4"></div>
+            <div class="road road1"></div><div class="road road2"></div><div class="road road3"></div><div class="road road4"></div>
+            <div class="citizen-pin"><span>●</span></div><div class="pin-label">Citizen location</div><div class="route-line"></div><div class="station-label">Concerned police station</div>
+          </div>
+          <div class="geo-side">
+            <div class="geo-intro"><strong>Location becomes operational ownership</strong>Every confirmed report is checked against Pune Police’s approved station-jurisdiction layer before routing.</div>
+            <div class="geo-steps">
+              <div class="geo-step"><b>1</b><div><strong>Receive the pin</strong><span>Latitude and longitude from the citizen’s shared location.</span></div></div>
+              <div class="geo-step"><b>2</b><div><strong>Resolve the place</strong><span>Address, area, pincode and available landmarks.</span></div></div>
+              <div class="geo-step"><b>3</b><div><strong>Match the boundary</strong><span>Point-in-polygon check against police-station jurisdictions.</span></div></div>
+              <div class="geo-step"><b>4</b><div><strong>Route the packet</strong><span>Station name, map, ticket and supporting media enter the owned queue.</span></div></div>
+            </div>
+            <div class="takeaway">Jurisdiction becomes a system decision—not a citizen burden.</div>
+          </div>
+        </div>
+        <footer class="slide-footer"><span class="brand-foot"><strong>WoW-Strategies</strong> · WhatsUp.city Police</span></footer>
+      </section>
+
+      <section class="slide" data-title="Police-station ownership">
+        <header class="slide-header"><div class="header-copy"><div class="eyebrow">Police-station ownership</div><h2>The concerned station receives a prioritized packet it can <strong>assign immediately</strong></h2></div><div class="chapter">03 · Police execution</div></header>
+        <div class="slide-body station-layout">
+          <div class="case-file">
+            <div class="case-head"><strong>WHATSUP.CITY POLICE · INCIDENT PACKET</strong><span>Priority assigned</span></div>
+            <div class="case-grid">
+              <div class="case-field"><b>Citizen-confirmed summary</b><strong>One coherent description of the reported incident</strong><span>Conversation is preserved with the case.</span></div>
+              <div class="case-field"><b>Type & priority</b><strong>Fixed incident taxonomy with rule-informed urgency</strong><span>Confidential handling travels with the record.</span></div>
+              <div class="case-field"><b>Location & jurisdiction</b><strong>Exact pin, address, map link and concerned station</strong><span>Ownership is resolved before assignment.</span></div>
+              <div class="case-field"><b>Supporting context</b><strong>Photographs, voice and identifying details</strong><span>Status and assignment history remain visible.</span></div>
+            </div>
+            <div class="case-media"><span class="tag">Photo</span><span class="tag">Voice</span><span class="tag">Location</span><span class="tag">Conversation</span></div>
+          </div>
+          <div class="station-side">
+            <h3>Station command converts the packet into owned action</h3>
+            <div class="station-actions"><div class="station-action"><b>1</b><div><strong>Accept ownership</strong><span>The concerned station acknowledges the routed incident.</span></div></div><div class="station-action"><b>2</b><div><strong>Assign officer or unit</strong><span>Priority, type and context guide the assignment.</span></div></div><div class="station-action"><b>3</b><div><strong>Escalate and coordinate</strong><span>Additional support or specialist response can be engaged.</span></div></div><div class="station-action"><b>4</b><div><strong>Update and close</strong><span>Field action returns to the same ticket and status trail.</span></div></div></div>
+            <div class="station-callout">Context, location, priority and supporting media arrive together—without re-keying.</div>
+          </div>
+        </div>
+        <footer class="slide-footer"><span class="brand-foot"><strong>WoW-Strategies</strong> · WhatsUp.city Police</span></footer>
+      </section>
+
+      <section class="slide" data-title="Field response">
+        <header class="slide-header"><div class="header-copy"><div class="eyebrow">Field response</div><h2>Field officers act with full context while the <strong>station retains ownership</strong></h2></div><div class="chapter">03 · Police execution</div></header>
+        <div class="slide-body field-layout">
+          <div class="ownership-strip"><strong>Station-owned assignment</strong><span>Priority · incident brief · exact location · supporting media · escalation path</span></div>
+          <div class="field-main">
+            <div class="mission-card"><div class="mission-head"><span>Officer mission brief</span><h3>Incident assigned</h3></div><div class="mission-map"><div class="mini-pin"></div></div><div class="mission-list"><div><b>Priority</b><span>Rule-informed</span></div><div><b>Location</b><span>Map + landmarks</span></div><div><b>Context</b><span>Summary + media</span></div><div><b>Owner</b><span>Concerned station</span></div></div></div>
+            <div class="field-actions"><div class="field-action"><div class="num">01</div><h3>Receive</h3><p>Owned assignment, priority and precise location reach the field officer.</p></div><div class="field-action"><div class="num">02</div><h3>Arrive informed</h3><p>Narrative, map, supporting media and identifying details travel together.</p></div><div class="field-action"><div class="num">03</div><h3>Act & escalate</h3><p>The officer responds and requests additional or specialist support as required.</p></div><div class="field-action"><div class="num">04</div><h3>Update & close</h3><p>Action, disposition and next step return to the same station-owned ticket.</p></div></div>
+          </div>
+          <div class="field-bottom"><strong>Continuity principle</strong><span>The incident narrative travels intact from citizen intake to on-ground action—and every field update returns through the same response chain.</span></div>
+        </div>
+        <footer class="slide-footer"><span class="brand-foot"><strong>WoW-Strategies</strong> · WhatsUp.city Police</span></footer>
+      </section>
+
+      <section class="slide" data-title="Command intelligence">
+        <header class="slide-header"><div class="header-copy"><div class="eyebrow">Pune Police command intelligence</div><h2>Every response builds <strong>live geospatial command intelligence</strong></h2></div><div class="chapter">03 · Police execution</div></header>
+        <div class="slide-body command-layout">
+          <div class="command-view"><div class="command-head"><strong>ILLUSTRATIVE OPERATING VIEW</strong><span>Location · priority · station · status</span></div><div class="city-map"><div class="city-road cr1"></div><div class="city-road cr2"></div><div class="city-road cr3"></div><div class="signal s1"></div><div class="signal s2"></div><div class="signal s3"></div><div class="signal s4"></div><div class="signal-label sl1">Critical alert</div><div class="signal-label sl2">Repeat location</div><div class="signal-label sl3">Active response</div><div class="signal-label sl4">Station owned</div></div></div>
+          <div class="command-side">
+            <h3>Structured station and field updates answer three command questions</h3>
+            <div class="command-questions"><div class="command-q"><b>1</b><div><strong>Where is attention needed now?</strong><span>Active incidents by location, priority and category.</span></div></div><div class="command-q"><b>2</b><div><strong>Who owns the response?</strong><span>Open workload, station ownership and assignment status.</span></div></div><div class="command-q"><b>3</b><div><strong>What needs escalation?</strong><span>Critical alerts, aging cases and repeat-location patterns.</span></div></div></div>
+            <div class="command-note">Each ticket adds structured, geospatial context to one connected Pune Police operating picture.</div>
+          </div>
+        </div>
+        <footer class="slide-footer"><span class="brand-foot"><strong>WoW-Strategies</strong> · WhatsUp.city Police</span></footer>
+      </section>
+
+      <section class="slide" data-title="One incident in motion">
+        <header class="slide-header"><div class="header-copy"><div class="eyebrow">One incident in motion</div><h2>One citizen message becomes <strong>one traceable response chain</strong></h2></div><div class="chapter">04 · In action</div></header>
+        <div class="slide-body scenario-layout">
+          <div class="scenario-banner"><div><div class="label">Illustrative public-disturbance report</div><blockquote>“Two groups are fighting near the market.”</blockquote></div><div class="scenario-media"><span>Voice</span><span>Photo</span><span>Location</span></div></div>
+          <div class="journey">
+            <div class="journey-step"><div class="journey-node">1</div><div class="actor">Citizen</div><h3>Reports naturally</h3><p>Sends a voice note, photograph and incident location through WhatsApp.</p></div>
+            <div class="journey-step"><div class="journey-node">2</div><div class="actor">WhatsUp.city AI</div><h3>Structures the report</h3><p>Assesses completeness, public-disturbance type and priority; citizen confirms.</p></div>
+            <div class="journey-step"><div class="journey-node">3</div><div class="actor">Geo engine</div><h3>Resolves the owner</h3><p>Maps the location to the concerned Pune Police station jurisdiction.</p></div>
+            <div class="journey-step"><div class="journey-node">4</div><div class="actor">Station + field</div><h3>Assigns and acts</h3><p>The station assigns an officer; on-ground action and escalation stay on the ticket.</p></div>
+            <div class="journey-step"><div class="journey-node">5</div><div class="actor">Closed loop</div><h3>Returns status</h3><p>Station and command see progress; the citizen can check the response status.</p></div>
+          </div>
+          <div class="chain-callout"><strong>No re-keying. No jurisdiction ambiguity.</strong><span>One narrative · One accountable owner · One visible response chain</span></div>
+        </div>
+        <footer class="slide-footer"><span class="brand-foot"><strong>WoW-Strategies</strong> · WhatsUp.city Police</span></footer>
+      </section>
+
+      <section class="slide close" data-title="A connected Pune Police response network">
+        <div class="close-main">
+          <div>
+            <div class="eyebrow">Pune Police × WoW-Strategies Private Limited</div>
+            <h2>Pune Police can connect every citizen signal to <strong>coordinated police action</strong></h2>
+            <p class="close-sub">WhatsUp.city Police is the AI-and-geospatial operating layer between natural citizen reporting and station-owned, field-connected response.</p>
+            <p class="close-brand">Presented by <strong>WoW-Strategies Private Limited</strong></p>
+          </div>
+          <div class="outcome-path">
+            <div class="outcome-row"><b>Citizen</b><div><strong>Report naturally</strong><span>Familiar WhatsApp access in Marathi and English.</span></div></div>
+            <div class="outcome-row"><b>Station</b><div><strong>Own correctly</strong><span>Structured, prioritized and jurisdiction-aware intake.</span></div></div>
+            <div class="outcome-row"><b>Field</b><div><strong>Act with context</strong><span>Map-led assignment, supporting media and escalation path.</span></div></div>
+            <div class="outcome-row"><b>Command</b><div><strong>See citywide</strong><span>Priority, ownership, action and closure visibility.</span></div></div>
+          </div>
+        </div>
+        <div class="close-footer"><strong>Signal → Brief → Jurisdiction → Station → Field → Command</strong><span>WhatsUp.city Police</span></div>
+      </section>
+
+    </main>
+    <div class="controls" aria-label="Presentation controls">
+      <button class="control-btn" id="prevBtn" type="button" aria-label="Previous slide" title="Previous slide">‹</button>
+      <div class="current-slide" id="currentSlide" aria-live="polite">01 / 12 · WhatsUp.city Police</div>
+      <button class="control-btn" id="nextBtn" type="button" aria-label="Next slide" title="Next slide">›</button>
+      <button class="control-btn" id="fullBtn" type="button" aria-label="Toggle fullscreen" title="Fullscreen">⛶</button>
+      <button class="control-btn" id="helpBtn" type="button" aria-label="Show keyboard help" title="Keyboard help">?</button>
+    </div>
+    <div class="help" id="help" role="status">Use ← → or Space to navigate · Home / End to jump · F for fullscreen · P to print · Swipe on touch screens.</div>
+  </div>
+  <script>
+    (function(){
+      var stage=document.getElementById("deckStage");
+      var slides=Array.from(document.querySelectorAll(".slide"));
+      var progress=document.getElementById("progress");
+      var current=document.getElementById("currentSlide");
+      var prev=document.getElementById("prevBtn");
+      var next=document.getElementById("nextBtn");
+      var full=document.getElementById("fullBtn");
+      var helpBtn=document.getElementById("helpBtn");
+      var help=document.getElementById("help");
+      var index=0;
+      var touchStart=null;
+      function fit(){
+        var scale=Math.min(window.innerWidth/1280,window.innerHeight/720);
+        stage.style.transform="translate(-50%,-50%) scale("+scale+")";
+      }
+      function fromHash(){
+        var match=location.hash.match(/^#(?:slide-?)?(\d+)$/i);
+        return match?Math.min(slides.length-1,Math.max(0,Number(match[1])-1)):0;
+      }
+      function show(n,updateHash){
+        index=Math.min(slides.length-1,Math.max(0,n));
+        slides.forEach(function(slide,i){
+          slide.classList.toggle("active",i===index);
+          slide.classList.toggle("before",i<index);
+          slide.setAttribute("aria-hidden",i===index?"false":"true");
+        });
+        progress.style.width=((index+1)/slides.length*100)+"%";
+        prev.disabled=index===0;
+        next.disabled=index===slides.length-1;
+        var title=slides[index].dataset.title||"";
+        current.textContent=String(index+1).padStart(2,"0")+" / "+String(slides.length).padStart(2,"0")+" · "+title;
+        document.title=String(index+1).padStart(2,"0")+" · "+title+" | WhatsUp.city Police";
+        if(updateHash!==false)history.replaceState(null,"","#slide-"+(index+1));
+      }
+      async function toggleFullscreen(){
+        try{
+          if(!document.fullscreenElement)await stage.requestFullscreen();
+          else await document.exitFullscreen();
+        }catch(_){}
+      }
+      prev.addEventListener("click",function(){show(index-1)});
+      next.addEventListener("click",function(){show(index+1)});
+      full.addEventListener("click",toggleFullscreen);
+      helpBtn.addEventListener("click",function(){help.classList.toggle("show")});
+      document.addEventListener("keydown",function(event){
+        if(event.metaKey||event.ctrlKey||event.altKey)return;
+        if(["ArrowRight","PageDown"," "].includes(event.key)){event.preventDefault();show(index+1)}
+        else if(["ArrowLeft","PageUp"].includes(event.key)){event.preventDefault();show(index-1)}
+        else if(event.key==="Home"){event.preventDefault();show(0)}
+        else if(event.key==="End"){event.preventDefault();show(slides.length-1)}
+        else if(event.key.toLowerCase()==="f"){event.preventDefault();toggleFullscreen()}
+        else if(event.key.toLowerCase()==="p"){event.preventDefault();window.print()}
+        else if(event.key==="?"){event.preventDefault();help.classList.toggle("show")}
+      });
+      stage.addEventListener("touchstart",function(event){touchStart=event.changedTouches[0].clientX},{passive:true});
+      stage.addEventListener("touchend",function(event){
+        if(touchStart===null)return;
+        var delta=event.changedTouches[0].clientX-touchStart;
+        if(Math.abs(delta)>48)show(index+(delta<0?1:-1));
+        touchStart=null;
+      },{passive:true});
+      window.addEventListener("resize",fit);
+      window.addEventListener("hashchange",function(){show(fromHash(),false)});
+      slides.forEach(function(slide,i){
+        var footer=slide.querySelector(".slide-footer");
+        if(footer) footer.setAttribute("data-slide", String(i+1).padStart(2,"0")+" / "+String(slides.length).padStart(2,"0"));
+      });
+      fit();
+      show(fromHash(),false);
+    })();
+  </script>
+</body>
+</html>

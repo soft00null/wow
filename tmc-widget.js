@@ -32,12 +32,12 @@
       message: 'मला मालमत्ता कर भरायचा आहे', 
       highlight: true 
     },
-    { id: 'pothole', label: 'खड्ड्याची तक्रार (Report Pothole)', icon: '🚧', message: 'मला रस्त्यावरील खड्ड्याची तक्रार करायची आहे' },
+    //{ id: 'pothole', label: 'खड्ड्याची तक्रार (Report Pothole)', icon: '🚧', message: 'मला रस्त्यावरील खड्ड्याची तक्रार करायची आहे' },
     { id: 'garbage', label: 'कचरा समस्या (Garbage Dump)', icon: '🗑️', message: 'मला न उचललेल्या कचऱ्याची तक्रार करायची आहे' },
-    { id: 'light', label: 'पथदिवे (Street Light)', icon: '💡', message: 'पथदिवे बंद असल्याची तक्रार करायची आहे' },
-    { id: 'drain', label: 'गटार समस्या (Drainage Issue)', icon: '💧', message: 'गटार तुंबल्याची तक्रार करायची आहे' },
+    //{ id: 'light', label: 'पथदिवे (Street Light)', icon: '💡', message: 'पथदिवे बंद असल्याची तक्रार करायची आहे' },
+    //{ id: 'drain', label: 'गटार समस्या (Drainage Issue)', icon: '💧', message: 'गटार तुंबल्याची तक्रार करायची आहे' },
     { id: 'tree', label: 'झाडांची छाटणी (Tree Trimming)', icon: '🌳', message: 'झाडाची फांदी छाटणीसाठी विनंती करायची आहे' },
-    { id: 'animal', label: 'मृत प्राणी (Dead Animal)', icon: '🐄', message: 'मृत प्राण्याची नोंद करायची आहे' }
+    //{ id: 'animal', label: 'मृत प्राणी (Dead Animal)', icon: '🐄', message: 'मृत प्राण्याची नोंद करायची आहे' }
   ];
 
   // Helper functions

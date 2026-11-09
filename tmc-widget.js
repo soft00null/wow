@@ -16,7 +16,7 @@
     welcome: '👋 नमस्कार! मी ठाणे महानगरपालिकेचा (TMC) AI असिस्टंट आहे. तुम्ही येथे 💳 मालमत्ता कर (Property Tax) भरू शकता किंवा तुमच्या तक्रारी नोंदवू शकता. मला मराठी आणि इंग्रजी समजते. मी तुमची कशी मदत करू?',
     poweredBy: 'WoW-Strategies Private Limited',
     poweredByUrl: 'https://wow-strategies.com/',
-    autoOpen: true,
+    autoOpen: false,
     openDelay: 1800,
     forceGreet: false,
     suppressGreet: false,

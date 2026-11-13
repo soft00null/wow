@@ -14,8 +14,8 @@
     phone: '912225331590',
     // Default language shifted to Marathi with strong focus on Property Tax
     welcome: '👋 नमस्कार! मी ठाणे महानगरपालिकेचा (TMC) AI असिस्टंट आहे. तुम्ही येथे 💳 मालमत्ता कर (Property Tax) भरू शकता किंवा तुमच्या तक्रारी नोंदवू शकता. मला मराठी आणि इंग्रजी समजते. मी तुमची कशी मदत करू?',
-    poweredBy: 'WoW-Strategies Private Limited',
-    poweredByUrl: 'https://wow-strategies.com/',
+    poweredBy: 'IT Department, TMC',
+    poweredByUrl: '#',
     autoOpen: false,
     openDelay: 1800,
     forceGreet: false,
@@ -595,7 +595,7 @@
 
 
 
-    /* Comment FOOTER POWERED BY
+  
     
       const footer = document.createElement('div');
       footer.className = 'wa-footer';
@@ -609,7 +609,7 @@
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
         </a>
       `;
-    */
+
       
       shelf.appendChild(footer);
 

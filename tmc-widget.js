@@ -14,7 +14,7 @@
     phone: '912225331590',
     // Default language shifted to Marathi with strong focus on Property Tax
     welcome: '👋 नमस्कार! मी ठाणे महानगरपालिकेचा (TMC) AI असिस्टंट आहे. तुम्ही येथे 💳 मालमत्ता कर (Property Tax) भरू शकता किंवा तुमच्या तक्रारी नोंदवू शकता. मला मराठी आणि इंग्रजी समजते. मी तुमची कशी मदत करू?',
-    poweredBy: 'IT Department, TMC',
+    poweredBy: 'Thane Municipal Corporation',
     poweredByUrl: '#',
     autoOpen: false,
     openDelay: 1800,

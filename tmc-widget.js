@@ -593,10 +593,14 @@
       shelf.appendChild(qrToggle);
       shelf.appendChild(qrPanel);
 
+
+
+    /* Comment FOOTER POWERED BY
+    
       const footer = document.createElement('div');
       footer.className = 'wa-footer';
 
-   /* Comment FOOTER POWERED BY
+   
       footer.innerHTML = `
 
         

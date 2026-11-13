@@ -595,13 +595,18 @@
 
       const footer = document.createElement('div');
       footer.className = 'wa-footer';
+
+   /* Comment FOOTER POWERED BY
       footer.innerHTML = `
+
         
         <a class="wa-powered-link" href="${TMC_CONFIG.poweredByUrl}" target="_blank" rel="noopener" aria-label="Visit WoW-Strategies website">
           <span>Powered by <strong>${TMC_CONFIG.poweredBy}</strong></span>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
         </a>
       `;
+    */
+      
       shelf.appendChild(footer);
 
       shadow.appendChild(shelf);
